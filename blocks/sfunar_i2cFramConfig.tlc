@@ -1,0 +1,87 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% FRAM Modifications by Axel Utech 2014, HS Wismar
+
+%implements sfunar_i2cFramConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+
+  %if !SLibCodeGenForSim()
+    %openfile declbuf
+    %%
+    #if !defined(I2C_INTERFACE_DEFINED)
+        #error "No I2C Interface defined! Add a \"I2C-Config\" Block!"
+    #endif
+
+#if defined(I2C_FRAM_BASEADDR)
+    #error "Multiple I2C FRAM Config blocks!"
+#endif
+
+#define I2C_FRAM_BASEADDR (0xA) // A7 .. A4
+uint8_t fram_calcAddr(uint8_t pageAdr, bool receiveBit) {
+	return I2C_FRAM_BASEADDR << 4 | ((pageAdr << 1) & 0xf) | receiveBit;
+}
+
+bool fram_sendAddr(uint8_t pageAdr, uint8_t wordAdr, bool receiveBit) {
+	return !i2c.write(fram_calcAddr(pageAdr, receiveBit),
+			(const char*) &wordAdr, 1, 1);
+}
+
+bool fram_write(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
+		uint16_t dataLength) {
+	int ret;
+
+	ret = fram_sendAddr(pageAdr, wordAdr, false);
+	if (ret != 1) {
+		i2c.stop();
+		return false;
+	}
+
+	for (int i = 0; i < dataLength; ++i) {
+		ret = i2c.write(buf[i]);
+		if (ret != 1) {
+			i2c.stop();
+			return false;
+		}
+	}
+	i2c.stop();
+	return true;
+}
+
+bool fram_read(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
+		uint16_t dataLength) {
+	int ret;
+
+	ret = fram_sendAddr(pageAdr, wordAdr, false);
+	if (ret != 1) {
+		i2c.stop();
+		return false;
+	}
+
+	ret = i2c.read(fram_calcAddr(pageAdr, true), (char*) buf, dataLength, 0);
+	if (ret != 0) {
+		return false;
+	}
+
+	return true;
+}
+    %%
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+    
+  %endif
+%endfunction

@@ -1,0 +1,142 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Abstract:
+%%   Custom file processing to generate a "main" file.
+%%   ExternalMode included
+%% Copyright 1994-2014 The MathWorks, Inc.
+%%           2014 Dr. Olaf Hagendorf, HS Wismar
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%selectfile NULL_FILE
+
+%function FcnSingleTaskingMain() void
+
+  %if GenerateSampleERTMain
+    %assign CompiledModel.GenerateSampleERTMain = TLC_FALSE
+  %endif
+
+  %if LibIsModelReferenceTarget()
+    %return
+  %endif
+
+  %assign cFile = LibCreateSourceFile("Source", "Custom", "ert_main")
+  %openfile tmpBuf
+  #include "%<LibGetMdlPubHdrBaseName()>.h"
+  #include "wirish.h"
+  %if ExtMode
+    #include <ext_work.h>          /* External mode header files */
+    #include <ext_svr.h>
+    #include <ext_share.h>
+    #include <updown.h>
+  %endif
+  %closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Includes", tmpBuf)>
+
+  %% Unused, but prepared
+  %openfile tmpBuf
+  %closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Declarations", tmpBuf)>
+
+  %% Unused, but prepared
+  %openfile tmpBuf
+  %closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Definitions", tmpBuf)>
+
+  %openfile tmpBuf
+  void __cxa_pure_virtual(void){}
+  
+  /* Overrun counter */
+  static uint8_t uOverrunCounter;
+
+  uint8_t GetOverrunCounter(void)
+  {
+  	return uOverrunCounter;
+  }
+
+  %% Get fundamental step time
+  %assign SAMPLETIME = CompiledModel.FundamentalStepSize
+  %if SAMPLETIME < 0.00005
+      %% Even 50 microseconds is too quick for Arduino
+      %<LibReportError("The minimum supported sample time is 50 microseconds. Change the Sample time parameter in blocks that use incorrect sample times.")>
+  %endif
+  %assign SampleRate  = CAST("Number", %<SAMPLETIME> * 1000000)
+  #define STEP_SIZE %<SampleRate>UL /* Sample Time in microseconds */
+
+  void setup(void)
+  {
+    
+    /* Initialize model -- */
+    %<LibCallModelInitialize()>\
+
+    %if ExtMode
+        %<SLibGenERTExtModeInit()>
+    %endif
+    
+  }
+
+  void loop(void)
+  {
+    unsigned long oldtime;
+    unsigned long actualtime;
+
+   %if ExtMode
+        /* initialize external mode */
+        ExtParseArgsAndInitUD(0, NULL);
+   %endif
+
+    oldtime = micros();
+    /* The main step loop */
+    while (%<ERTStopCheck()>) {
+        %if ExtMode
+ 	        %<FcnGenerateExtModeOneStep()>
+        %endif
+        %<LibCallModelStep(0)>\
+        %if ExtMode
+            rtExtModeCheckEndTrigger();
+        %endif
+
+        actualtime = micros();
+        /* Overrun check */
+        if ((actualtime - oldtime) >= STEP_SIZE) {
+            /* We missed our time slot for actual step, report it! */
+            if(uOverrunCounter < 255U){
+                uOverrunCounter++;
+            }
+            oldtime = actualtime;               /* Update time stamp of last step */
+            continue;                           /* We are late, continue with next step */
+        }
+
+        /* Waiting with pooling method */
+        while((actualtime - oldtime) < STEP_SIZE){
+            actualtime = micros();                  /* Get actual time */
+        }
+        oldtime = actualtime;                       /* Update time stamp of last step */
+    }
+
+    %if ExtMode
+    	rtExtModeShutdown(%<NumSynchronousSampleTimes>);
+    	%% This delay ensures that the serial data are sent
+        delay(1000);
+    %endif
+
+    %<LibCallModelTerminate()>\
+  }
+
+  __attribute__((constructor)) void premain() {
+		init();
+	}
+	
+	int main(void) {
+		setup();
+	
+		while (true) {
+			loop();
+		}
+	
+		return 0;
+	}
+
+	%closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Functions", tmpBuf)>
+
+%endfunction

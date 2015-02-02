@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Abstract:
+%%   Custom file processing to generate a "main" file.
+%%
+%% Copyright 1994-2014 The MathWorks, Inc.
+%%           2014 Dr. Olaf Hagendorf, HS Wismar
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%selectfile NULL_FILE
+
+%function FcnSingleTaskingMain() void
+
+  %if GenerateSampleERTMain
+    %assign CompiledModel.GenerateSampleERTMain = TLC_FALSE
+  %endif
+
+  %if LibIsModelReferenceTarget()
+    %return
+  %endif
+
+  %assign cFile = LibCreateSourceFile("Source", "Custom", "ert_main")
+  %openfile tmpBuf
+  #include "%<LibGetMdlPubHdrBaseName()>.h"
+  #include "mbed.h"
+  %closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Includes", tmpBuf)>
+
+  %openfile tmpBuf
+
+  /* Overrun counter */
+  static uint8_t uOverrunCounter;
+
+  %% Get fundamental step time
+  %assign SAMPLETIME = CompiledModel.FundamentalStepSize
+  %if SAMPLETIME < 0.00005
+      %% Even 50 microseconds is too quick for Arduino
+      %<LibReportError("The minimum supported sample time is 50 microseconds. Change the Sample time parameter in blocks that use incorrect sample times.")>
+  %endif
+  %assign SampleRate  = CAST("Number", %<SAMPLETIME> * 1000000)
+  /* Sample Time in microseconds */
+  #define STEP_SIZE %<SampleRate>UL 
+
+  %closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Declarations", tmpBuf)>
+
+  %openfile tmpBuf
+
+  uint8_t GetOverrunCounter(void)
+  {
+  	return uOverrunCounter;
+  }
+
+  int main(void)
+  {
+    unsigned long oldTime;
+    unsigned long actualTime;
+    
+    /* Initialize model -- */
+    %<LibCallModelInitialize()>\
+
+    %if ExtMode
+        %<SLibGenERTExtModeInit()>
+    %endif
+
+    oldTime = us_ticker_read();
+    while (true) {
+	    %<LibCallModelStep(0)>\
+
+        actualTime = us_ticker_read();
+        /* Overrun check */
+        if ((actualTime - oldTime) >= STEP_SIZE) {
+            /* We missed our time slot for actual step, report it! */
+            if(uOverrunCounter < 255U){
+                uOverrunCounter++;
+            }
+            oldTime = actualTime;               /* Update time stamp of last step */
+            continue;                           /* We are late, continue with next step */
+        }
+
+        /* Waiting with pooling method */
+        while((actualTime - oldTime) < STEP_SIZE){
+            actualTime = us_ticker_read();                  /* Get actual time */
+        }
+        oldTime = actualTime;                       /* Update time stamp of last step */
+    }
+    %<LibCallModelTerminate()>\
+	
+	return 0;
+  }
+	
+  %closefile tmpBuf
+  %<LibSetSourceFileSection(cFile, "Functions", tmpBuf)>
+
+%endfunction

@@ -1,0 +1,69 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% PCF8574 Modifications by Axel Utech 2014, HS Wismar
+
+%implements sfunar_pcf8574Config "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %assign p1_val = LibBlockParameterValue(p1,0)
+
+  %if !SLibCodeGenForSim()
+    %openfile declbuf
+    %%
+    #if !defined(I2C_INTERFACE_DEFINED)
+        #error "No I2C Interface defined! Add a \"I2C-Config\" Block!"
+    #endif
+
+#if defined(PCF8574_ADDR_DEVICE)
+    #error "Multiple PCF8574 Config blocks!"
+#endif
+
+#define PCF8574_ADDR_DEVICE (%<p1_val>)
+#define PCF8574_ADDR (0x40 | PCF8574_ADDR_DEVICE)
+
+
+bool pcf8574_write(uint8_t data){
+    return i2c.write(PCF8574_ADDR, (char*) &data, 1, 0) == 0;
+}
+
+bool pcf8574_read(uint8_t* data){
+    return i2c.read(PCF8574_ADDR, (char*) data, 1, 0) == 0;
+}
+
+bool pcf8574_getChannel(boolean_T* value, uint8_t channel){
+        uint8_t data;
+        bool success;
+        success = pcf8574_read(&data);
+	*value = !!(data & (1<<channel));
+	return success;
+}
+
+bool pcf8574_setChannel(bool value, uint8_t channel){
+	static uint8_t channel_state = 0xff; //startup: all channels high (pull up)
+	if(value){
+		channel_state |= (1<<channel);
+	}else{
+		channel_state &= ~(1<<channel);
+	}
+	return pcf8574_write(channel_state);
+}
+    %%
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+    
+  %endif
+%endfunction

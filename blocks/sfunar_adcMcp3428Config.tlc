@@ -1,0 +1,116 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% MCP3428 Modifications by Axel Utech 2014, HS Wismar
+
+%implements sfunar_adcMcp3428Config "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %assign p1_val = LibBlockParameterValue(p1,0)
+
+  %if !SLibCodeGenForSim()
+    %openfile declbuf
+    %%
+    #if !defined(I2C_INTERFACE_DEFINED)
+        #error "No I2C Interface defined! Add a \"I2C-Config\" Block!"
+    #endif
+
+#if defined(MCP3428_ADDR_DEVICE)
+    #error "Multiple ADC MCP3428 Config blocks!"
+#endif
+
+#define MCP3428_ADDR_DEVICE (%<p1_val>)
+#define MCP3428_ADDR (0xD0 | MCP3428_ADDR_DEVICE)
+
+#define MCP3428_SAMPLERATE_240SPS (0)
+#define MCP3428_SAMPLERATE_60SPS (1)
+#define MCP3428_SAMPLERATE_15SPS (2)
+
+#define MCP3428_PGA_GAIN_1X (0)
+#define MCP3428_PGA_GAIN_2X (1)
+#define MCP3428_PGA_GAIN_4X (2)
+#define MCP3428_PGA_GAIN_8X (3)
+
+#define MCP3428_nRDY_BIT (1<<7)
+
+bool mcp3428_write(uint8_t conf){
+    return i2c.write(MCP3428_ADDR, (char*) &conf, 1, 0) == 0;
+}
+
+bool mcp3428_writeConfig(uint8_t channel, uint8_t sampleRate, uint8_t pgaGain, bool continuousMode=true){
+	uint8_t conf = 0;
+	conf |= ((channel & 3) << 5) | (continuousMode << 4) | MCP3428_nRDY_BIT;
+	conf |= ((sampleRate & 3) << 2) | ((pgaGain & 3) << 0);
+	return mcp3428_write(conf);
+}
+
+bool mcp3428_read(uint16_t* data, uint8_t* conf){
+    char buf[3];
+    int ret = i2c.read(MCP3428_ADDR, buf, 3, 0);
+    
+    if(ret != 0)
+        return false;
+    
+    *data = buf[0] << 8 | buf[1];
+    *conf = buf[2];
+    
+    return true;
+}
+
+bool mcp3428_oneShot(uint8_t channel, uint8_t sampleRate, uint8_t pgaGain, uint16_t* data, uint8_t* conf){
+	if(!mcp3428_writeConfig(channel, sampleRate, pgaGain, false))
+		return false;
+
+	*conf = 0xff;
+
+	while(*conf & MCP3428_nRDY_BIT){
+		if(!mcp3428_read(data, conf))
+			return false;
+	}
+	return true;
+}
+
+//returns: analog input voltage in volt
+double mcp3428_calculateVoltage(uint16_t data, uint8_t conf){
+	uint8_t pgaGain = conf & 3;
+	const uint8_t gains[4] = {1, 2, 4, 8};
+	uint8_t gain = gains[pgaGain];
+
+	uint8_t sampleRate = (conf >> 2) & 3;
+
+	const double lsbs_uV[4] = {1000, 250, 65.5, 0}; // lsb in uV depending on sampleRate
+	double lsb_uV = lsbs_uV[sampleRate];
+	double result = data * lsb_uV / gain / 1000 / 1000;
+	return result;
+}
+double mcp3428_calculateRelative(uint16_t data, uint8_t conf){
+	uint8_t sampleRate = (conf >> 2) & 3;
+	const uint8_t resulutions[4] = {12, 14, 16, 0}; // mapping: sampleRate => resulution
+	uint8_t res = resulutions[sampleRate];
+
+	double result = data / (pow(2, res-1)-1);
+	return result;
+}
+
+    %%
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+    
+    %%
+    mcp3428_writeConfig(0, 0, 0, 0);
+    %%
+  %endif
+%endfunction

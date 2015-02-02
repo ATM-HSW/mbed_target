@@ -1,0 +1,84 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% FRAM Modifications by Axel Utech 2014, HS Wismar
+
+%implements sfunar_i2cFram_read "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+%%  %<LibBlockSetIsExpressionCompliant(block)> 
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+      %assign readContinous = LibBlockParameterValue(p1, 0)
+  %if !SLibCodeGenForSim()
+    #if !defined(I2C_FRAM_BASEADDR)
+        #error "No I2C FRAM defined! Add a \"FRAM-Config\" Block!"
+    #endif
+    %if !readContinous
+        %assign name = FEVAL("strrep",FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_"), " ", "_")    
+
+        %openfile declbuf
+        %%
+        uint8_t %<name>_staticData;
+         bool %<name>_staticSuccess;
+        %closefile declbuf
+        %assign srcFile = LibGetModelDotCFile()
+        %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+    
+        %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+        %assign u2_val = LibBlockInputSignal(1, "", "", 0)
+        
+        %<name>_staticSuccess = fram_read(%<u1_val>, %<u2_val>, &%<name>_staticData, 1);
+        
+    %endif
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+      %assign readContinous = LibBlockParameterValue(p1, 0)
+      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+
+    %assign errorOutputEnable = LibBlockParameterValue(p2, 0)
+    %if errorOutputEnable
+        %assign ret_assign = LibBlockOutputSignal(1, "", "", 0) + "= !"
+    %else
+        %assign ret_assign = "(void)"
+    %endif
+
+
+    %if !readContinous
+        %assign name = FEVAL("strrep",FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_"), " ", "_")    
+        %<ret_assign> %<name>_staticSuccess;
+        %<y1_val> = %<name>_staticData;
+        
+    %else
+        %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+        %assign u2_val = LibBlockInputSignal(1, "", "", 0)
+        %<ret_assign> fram_read(%<u1_val>, %<u2_val>, &%<y1_val>, 1);
+    %endif
+
+      %%
+      %%
+  %endif
+%endfunction

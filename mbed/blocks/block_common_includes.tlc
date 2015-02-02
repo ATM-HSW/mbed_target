@@ -1,0 +1,30 @@
+%% File: block_common_includes.tlc
+%%
+%% Copyright 2002-2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.Olaf Hagendorf, HS Wismar
+
+%function SLibCodeGenForSim() void
+  %if (CompiledModel.TargetStyle=="SimulationTarget")
+    %return 1
+  %else
+    %return 0
+  %endif
+%endfunction
+
+%function MbedCommonBlockTypeSetup(block, system) void
+
+  %if EXISTS("_DONE_COMMON_BLOCK_TYPE_SETUP_") == 0
+    %assign _DONE_COMMON_BLOCK_TYPE_SETUP_ = 1
+
+    %if !SLibCodeGenForSim()
+      %if ExtMode
+        %% Remove double re-definition in Integer-only case
+        %<LibAddToCommonIncludes("remDouble.h")>
+      %endif
+      %%
+      %<LibAddToCommonIncludes("mbed.h")>
+      %<LibAddToCommonIncludes("cstdio")>
+      %%
+    %endif
+  %endif
+%endfunction

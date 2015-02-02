@@ -1,0 +1,77 @@
+%% File : sfunar_analogInput.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_analogInput "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign p1_val = LibBlockParameterValue(p1, 0)
+    %assign p2_val = LibBlockParameterValue(p2, 0)
+    %%
+    pinMode(Port2Pin(%<p2_val>+64,%<p1_val>), INPUT_ANALOG);
+    %%
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %if !LibBlockOutputSignalIsExpr(0)
+      %assign p1_val = LibBlockParameterValue(p1, 0)
+      %assign p2_val = LibBlockParameterValue(p2, 0)
+      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+      %%
+      %<y1_val> = analogRead(Port2Pin(%<p2_val>+64,%<p1_val>));
+      %%
+    %endif 
+  %endif
+%endfunction
+
+
+%% Function: BlockOutputSignal ============================================
+%function BlockOutputSignal(block,system,portIdx,ucv,lcv,idx,retType) void
+
+  %assign retVal = 0U
+
+  %if !SLibCodeGenForSim()
+    %switch retType
+      %case "Signal"
+        %assign p1_val = LibBlockParameterValue(p1, 0)
+        %assign p2_val = LibBlockParameterValue(p2, 0)
+        %%
+        %assign retVal =  "analogRead(Port2Pin(%<p2_val>+64,%<p1_val>))"
+        %%
+        %break
+      %default
+        %assign errTxt = "Unsupported return type: %<retType>"
+        %<LibBlockReportError(block,errTxt)>
+        %break
+    %endswitch
+  %endif
+  %return retVal
+%endfunction

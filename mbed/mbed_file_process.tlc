@@ -1,0 +1,43 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Abstract:
+%%   Code generation custom file processing template.
+%%
+%%   Note: This file can contain any valid TLC code, which is
+%%   executed just prior to writing the generated source files to disk.
+%%
+%% Copyright 1994-2014 The MathWorks, Inc.
+%%           2014 Dr. Olaf Hagendorf, HS Wismar
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%selectfile NULL_FILE
+
+%% Need to set the template compliance flag before you can use the API
+%<LibSetCodeTemplateComplianceLevel(1)>
+
+%% Create a simple main.
+%if UseRTOS == 0
+
+  %if LibIsSingleRateModel() || LibIsSingleTasking()
+  	%if ExtMode
+        %% We use extra file for main generation with External Mode
+    	%include "mbed_srmain_ExtMode.tlc"
+    %else
+        %% Simplified main generation w/o External Mode
+    	%include "mbed_srmain.tlc"
+    %endif
+    %<FcnSingleTaskingMain()>
+  %else
+  	%% For the moment, multitasking is not supported
+    %include "mbed_srmain.tlc"
+    %<FcnSingleTaskingMain()>
+  %endif
+%else
+   %% Prepared for the future
+   %% %include "mbed_ec_RTOS_main.tlc"
+   %% %<FcnSingleTaskingMain()>
+
+   %assign errTxt = "RTOS not yet supported"
+   %<LibReportError(errTxt)>         
+
+%endif

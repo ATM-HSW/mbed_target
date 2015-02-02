@@ -1,0 +1,42 @@
+%% File : sfunar_serialConfig.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_serialConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %assign p1_val = LibBlockParameterValue(p1,0)
+  %assign p2_val = LibBlockParameterValue(p2,0)
+  %if !SLibCodeGenForSim()
+    %%
+    switch(%<p1_val>) {
+      case 1:
+        SerialUSB.begin();
+        break;
+      case 2:
+        Serial2.begin(%<p2_val>);
+        break;
+      case 3:
+        Serial3.begin(%<p2_val>);
+        break;
+      default:
+        SerialUSB.begin(%<p2_val>);
+        break;
+    }
+    %%
+  %endif
+%endfunction

@@ -1,0 +1,52 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% I2C Modifications by Axel Utech 2014, HS Wismar
+
+%implements sfunar_spiConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %assign p2_val = LibBlockParameterValue(p2,0)
+  %assign p3_val = LibBlockParameterValue(p3,0)
+  %assign mosi_name = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p3_val-1)
+
+  %assign p4_val = LibBlockParameterValue(p4,0)
+  %assign p5_val = LibBlockParameterValue(p5,0)
+  %assign miso_name = "P" + FEVAL("char",p4_val+64) + "_" + FEVAL("int2str",p5_val-1)
+
+  %assign p7_val = LibBlockParameterValue(p7,0)
+  %assign p8_val = LibBlockParameterValue(p8,0)
+  %assign sck_name = "P" + FEVAL("char",p7_val+64) + "_" + FEVAL("int2str",p8_val-1)
+
+  %assign freq = LibBlockParameterValue(p6,0)
+
+  %if !SLibCodeGenForSim()
+    %openfile declbuf
+    %%
+    #if defined(SPI_INTERFACE_DEFINED)
+        #error "Two or more SPI-Interfaces defined!"
+    #endif
+    SPI spi(%<mosi_name>, %<miso_name>, %<sck_name>);
+    #define SPI_INTERFACE_DEFINED
+    %%
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    
+    %%
+    spi.frequency(%<freq>);
+    %%
+  %endif
+%endfunction

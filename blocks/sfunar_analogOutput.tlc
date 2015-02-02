@@ -1,0 +1,57 @@
+%% File : sfunar_analogOutput.tlc
+%%
+%% Copyright 2010-2011 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_analogOutput "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  %%
+  %<LibAddToCommonIncludes("dac.h")>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign p1_val = LibBlockParameterValue(p1, 0)
+    %%
+    switch(%<p1_val>) { 
+      case 1:
+        dac_init(DAC, DAC_CH1);
+        break;
+      case 2:
+        dac_init(DAC, DAC_CH2);
+        break;
+    }
+    %%
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign p1_val = LibBlockParameterValue(p1, 0)
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+    %%
+    switch(%<p1_val>) { 
+      case 1:
+        dac_write_channel(DAC, 1, %<u1_val>);
+        break;
+      case 2:
+        dac_write_channel(DAC, 2, %<u1_val>);
+        break;
+    }
+    %%
+  %endif
+%endfunction
