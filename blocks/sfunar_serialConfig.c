@@ -56,6 +56,42 @@ static void mdlCheckParameters(SimStruct *S)
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
+  /*
+   * Check the parameter 3
+   */
+  if EDIT_OK(S, 2) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 4
+   */
+  if EDIT_OK(S, 3) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 3, "P4", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 5
+   */
+  if EDIT_OK(S, 4) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 4, "P5", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 6
+   */
+  if EDIT_OK(S, 5) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 5, "P6", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
 }
 
 #endif
@@ -68,7 +104,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 2);
+  ssSetNumSFcnParams(S, 6);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -93,6 +129,10 @@ static void mdlInitializeSizes(SimStruct *S)
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 1);
   ssSetSFcnParamTunable(S, 1, 1);
+  ssSetSFcnParamTunable(S, 2, 1);
+  ssSetSFcnParamTunable(S, 3, 1);
+  ssSetSFcnParamTunable(S, 4, 1);
+  ssSetSFcnParamTunable(S, 5, 1);
 
   ssSetNumPWork(S, 0);
 
@@ -171,7 +211,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 6))
     return;
 
   /*
@@ -181,7 +221,23 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 2
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "p2", ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "p2", ssGetDataTypeId(S, "int8"));
+  /*
+   * Register the run-time parameter 3
+   */
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "p3", ssGetDataTypeId(S, "int8"));
+  /*
+   * Register the run-time parameter 4
+   */
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "p4", ssGetDataTypeId(S, "int8"));
+  /*
+   * Register the run-time parameter 5
+   */
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "p5", ssGetDataTypeId(S, "int8"));
+  /*
+   * Register the run-time parameter 6
+   */
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "p6", ssGetDataTypeId(S, "int32"));
 }
 
 #endif

@@ -1,4 +1,3 @@
-mex sfunar_servoOutput.org.c
 mex sfunar_analogInput.c
 mex sfunar_analogOutput.c
 mex sfunar_digitalInput.c
@@ -7,7 +6,7 @@ mex sfunar_lcdOutput.c
 mex sfunar_serialConfig.c
 mex sfunar_serialRead.c
 mex sfunar_serialWrite.c
-mex sfunar_servoOutput.c
+mex sfunar_PWMOutput.c
 
 
 mex sfunar_i2cConfig.c

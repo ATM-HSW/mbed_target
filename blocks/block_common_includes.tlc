@@ -23,7 +23,6 @@
       %endif
       %%
       %<LibAddToCommonIncludes("mbed.h")>
-      %<LibAddToCommonIncludes("cstdio")>
       %%
     %endif
   %endif

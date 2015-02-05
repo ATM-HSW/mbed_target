@@ -105,6 +105,16 @@ static void mdlCheckParameters(SimStruct *S)
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 2, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
+  
+  /*
+   * Check the parameter 4
+   */
+  if EDIT_OK(S, 3) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 3, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
 }
 
 #endif
@@ -116,8 +126,15 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
+  uint8_T inputVariant;
+  const DTypeId typeMapping[]={
+      SS_UINT16, /* 0x0YYY */
+      SS_SINGLE  /* 0.. 1.0f */
+  };
+  DTypeId inputType;
+
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 4);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -143,6 +160,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 1);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 1);
+  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -158,7 +176,14 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Configure the input port 1
    */
-  ssSetInputPortDataType(S, 0, SS_UINT16);
+  inputVariant = (uint8_T)mxGetScalar(ssGetSFcnParam(S,3));
+  if(inputVariant > (sizeof(typeMapping)/sizeof(typeMapping[0]))){
+      ssSetErrorStatus(S,"Input variant is not valid!");
+      return;
+  }
+  
+  inputType = typeMapping[inputVariant-1];
+  ssSetInputPortDataType(S, 0, inputType);
   ssSetInputPortWidth(S, 0, 1);
   ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetInputPortDirectFeedThrough(S, 0, 1);
@@ -240,7 +265,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   /*
@@ -252,6 +277,11 @@ static void mdlSetWorkWidths(SimStruct *S)
    * Register the run-time parameter 3
    */
   ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "int16"));
+
+  /*
+   * Register the run-time parameter 4
+   */
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "p3", ssGetDataTypeId(S, "int16"));
 }
 
 #endif

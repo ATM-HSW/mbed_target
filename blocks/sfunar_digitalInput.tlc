@@ -30,10 +30,11 @@
   %if !SLibCodeGenForSim()
       %assign p1_val = LibBlockParameterValue(p1, 0)
       %assign p2_val = LibBlockParameterValue(p2, 0)
+      %assign p3_val = LibBlockParameterValue(p3, 0)
 
       %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
-      %assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val)
+      %assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val-1)
       %openfile declbuf
 
       DigitalIn %<name>(%<pname>);
@@ -41,6 +42,27 @@
       %closefile declbuf
       %assign srcFile = LibGetModelDotCFile()
       %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+
+  %if !SLibCodeGenForSim()
+      %% PullDefault, PullUp, PullDown, PullNone
+      %switch(p3_val)
+        %case 1
+          %<name>.mode(PullDefault);
+          %break
+        %case 2
+          %<name>.mode(PullUp);
+          %break
+        %case 3
+          %<name>.mode(PullDown);
+          %break
+        %case 4
+          %<name>.mode(PullNone);
+          %break
+        %default
+          %<name>.mode(PullDefault);
+          %break
+      %endswitch
   %endif
 %endfunction
 

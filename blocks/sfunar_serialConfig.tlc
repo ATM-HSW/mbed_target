@@ -15,28 +15,36 @@
 
 %endfunction
 
-
 %% Function: Start ========================================================
 %function Start(block, system) Output
 
   %assign p1_val = LibBlockParameterValue(p1,0)
-  %assign p2_val = LibBlockParameterValue(p2,0)
+  %assign p6_val = LibBlockParameterValue(p6,0)
+  %assign name = "serial" + FEVAL("int2str",p1_val)
+
   %if !SLibCodeGenForSim()
     %%
-    switch(%<p1_val>) {
-      case 1:
-        SerialUSB.begin();
-        break;
-      case 2:
-        Serial2.begin(%<p2_val>);
-        break;
-      case 3:
-        Serial3.begin(%<p2_val>);
-        break;
-      default:
-        SerialUSB.begin(%<p2_val>);
-        break;
-    }
+    %<name>.baud(%<p6_val>);
     %%
   %endif
+
+  %if !SLibCodeGenForSim()
+      %assign p1_val = LibBlockParameterValue(p1, 0)
+      %assign p2_val = LibBlockParameterValue(p2, 0)
+      %assign p3_val = LibBlockParameterValue(p3, 0)
+      %assign p4_val = LibBlockParameterValue(p4, 0)
+      %assign p5_val = LibBlockParameterValue(p5, 0)
+
+      %assign name = "serial" + FEVAL("int2str",p1_val)
+      %assign pname1 = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p3_val-1)
+      %assign pname2 = "P" + FEVAL("char",p4_val+64) + "_" + FEVAL("int2str",p5_val-1)
+      %openfile declbuf
+
+      Serial %<name>(%<pname1>, %<pname2>);
+
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+
 %endfunction

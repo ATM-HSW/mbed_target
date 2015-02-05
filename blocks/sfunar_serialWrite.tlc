@@ -19,25 +19,16 @@
 %function Outputs(block, system) Output
 
   %if !SLibCodeGenForSim()
+    %assign p1_val = LibBlockParameterValue(p1,0)
+    %assign name = "serial" + FEVAL("int2str",p1_val)
+
     %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
     %assign u1_dim1_val = LibBlockInputSignalWidth(0)
-    %assign p1_val = LibBlockParameterValue(p1,0)
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
 
     %%
-    switch(%<p1_val>) {
-      case 1:
-        SerialUSB.write( %<u1_ptr>, (int16_T)%<u1_dim1_val>);
-        break;
-      case 2:
-        Serial2.write( %<u1_ptr>, (int16_T)%<u1_dim1_val>);
-        break;
-      case 3:
-        Serial3.write( %<u1_ptr>, (int16_T)%<u1_dim1_val>);
-        break;
-      default:
-        SerialUSB.write( %<u1_ptr>, (int16_T)%<u1_dim1_val>);
-        break;
-    }
+    %% %<name>.write( %<u1_ptr>, (int16_T)%<u1_dim1_val>);
+    %<name>.putc(%<u1_val>);
     %%
   %endif
 %endfunction

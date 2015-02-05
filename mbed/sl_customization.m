@@ -4,7 +4,7 @@ function sl_customization(cm)
 % Copyright 2008-2014 The MathWorks, Inc.
 %           2014 Dr. Olaf Hagendorf, HS Wismar
 
-disp('Mbed sl_customization called');
+% disp('Mbed sl_customization called');
 
 cm.registerTargetInfo(@loc_createSerialConfig);
 cm.ExtModeTransports.add('mbed.tlc', 'tcpip',  'ext_comm', 'Level1');
