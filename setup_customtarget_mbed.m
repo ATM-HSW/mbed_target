@@ -14,16 +14,11 @@ else
     disp(' ');
 end
 
-mbed.Prefs.setMbedPath('E:\GitHub\mbed');
-mbed.Prefs.setGccPath('C:\Program Files (x86)\GNU Tools ARM Embedded\4.8 2014q3\bin');
-mbed.Prefs.setPythonPath('C:\Python27');
-
-
 %% Register PIL/ExtMode communication interface
 sl_refresh_customizations
 
-
-mbed.Prefs.setMbedPath('E:\GitHub\mbed')
-mbed.Prefs.setGccPath('C:\Program Files (x86)\GNU Tools ARM Embedded\4.8 2014q3\bin')
+mbed.Prefs.setMbedPath('E:\GitSynology\mbed_target\targets\DISCO_F407VG')
+mbed.Prefs.setGccPath('C:\Program Files (x86)\GNU Tools ARM Embedded\4.9 2014q4\bin')
 mbed.Prefs.setPythonPath('C:\Python27')
-mbed.Prefs.setComPort('COM3');
+mbed.Prefs.setComPort('COM26');
+mbed.Prefs.setMbedDrive('D:');

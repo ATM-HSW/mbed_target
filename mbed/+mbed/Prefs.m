@@ -72,16 +72,14 @@ classdef Prefs
             
             if ~exist('toolPath', 'var') || ~ischar(toolPath) 
                nl = sprintf('\n');
-               error('RTW:mbed:invalidMbedPath', ...
-                      ['Mbed path must be a string, e.g.' nl ...
-                       '   mbed.Prefs.setMbedPath(''c:\\GitHub\\mbed'')']);
+               error('RTW:mbed:invalidMbedPath', ['Mbed path must be a string, e.g.' nl '   mbed.Prefs.setMbedPath(''c:\\GitHub\\mbed'')']);
             end
                 
             if ~exist(toolPath,'dir')
                 error('RTW:mbed:invalidMbedPath', 'The specified folder (%s) does not exist', toolPath);
             end
                         
-            if ~exist(fullfile(toolPath, 'libraries'), 'dir')
+            if ~exist(fullfile(toolPath, 'mbed'), 'dir')
                 error('RTW:mbed:invalidMbedPath', 'The specified folder (%s) does not contain library folder', toolPath);
             end
             
@@ -89,9 +87,9 @@ classdef Prefs
             toolPath = regexprep(toolPath, '\\+$', '');            
             
             % Alternate form of path to handle spaces
-            altPath = RTW.transformPaths(toolPath,'pathType','alternate');            
+            % altPath = RTW.transformPaths(toolPath,'pathType','alternate');            
             
-            mbed.Prefs.setPref('MbedPath', altPath);
+            mbed.Prefs.setPref('MbedPath', toolPath);
             %disp(mbed.Prefs.getPref('MbedPath'));
         end
         
@@ -113,24 +111,24 @@ classdef Prefs
         %%
         function setMbedDrive(devicePath) 
             
-            if ~exist('devicePath', 'var') || ~ischar(devicePath) 
-               nl = sprintf('\n');
-               error('RTW:mbed:invalidMbedDrive', ...
-                      ['Mbed drive must be a string, e.g.' nl ...
-                       '   mbed.Prefs.setMbedDrive(''c:\\'')']);
-            end
-                
-            if ~exist(devicePath,'dir')
-                error('RTW:mbed:invalidMbedPath', 'The specified folder (%s) does not exist', devicePath);
-            end
+%             if ~exist('devicePath', 'var') || ~ischar(devicePath) 
+%                nl = sprintf('\n');
+%                error('RTW:mbed:invalidMbedDrive', ...
+%                       ['Mbed drive must be a string, e.g.' nl ...
+%                        '   mbed.Prefs.setMbedDrive(''c:\\'')']);
+%             end
+%                 
+%             if ~exist(devicePath,'dir')
+%                 error('RTW:mbed:invalidMbedPath', 'The specified folder (%s) does not exist', devicePath);
+%             end
                         
             % remove trailing backslashes
             devicePath = regexprep(devicePath, '\\+$', '');            
             
             % Alternate form of path to handle spaces
-            altPath = RTW.transformPaths(devicePath,'pathType','alternate');            
+            % altPath = RTW.transformPaths(devicePath,'pathType','alternate');            
             
-            mbed.Prefs.setPref('MbedDrive', altPath);
+            mbed.Prefs.setPref('MbedDrive', devicePath);
             %disp(mbed.Prefs.getPref('MbedPath'));
         end
         
@@ -139,13 +137,13 @@ classdef Prefs
             devicePath = mbed.Prefs.getPref('MbedDrive');
             % check validity of path (in case the folder got deleted between
             % after setMbedDrive and before getMbedDrive)
-            if ~exist(devicePath,'dir') 
-                nl = sprintf('\n');
-                error('RTW:mbed:invalidMbedDrive', ...
-                      ['Mbed Drive is unspecified or invalid: "' devicePath '"' nl ...
-                       'Specify a valid path using mbed.Prefs.setMbedDrive, e.g.' nl ...
-                       '   mbed.Prefs.setMbedDrive(''E:\\'')']);
-            end
+%             if ~exist(devicePath,'dir') 
+%                 nl = sprintf('\n');
+%                 error('RTW:mbed:invalidMbedDrive', ...
+%                       ['Mbed Drive is unspecified or invalid: "' devicePath '"' nl ...
+%                        'Specify a valid path using mbed.Prefs.setMbedDrive, e.g.' nl ...
+%                        '   mbed.Prefs.setMbedDrive(''E:\\'')']);
+%             end
         end
 
         %%
@@ -291,12 +289,12 @@ classdef Prefs
 %%
         function mcu = getMCU
             %mcu = mbed.Prefs.getKey('mcu');
-            mcu = 'STM32F406VG'; %board.build.mcu;
+            mcu = 'STM32F407VG'; %board.build.mcu;
         end
 %%
         function cpu = getCPU
             %cpu = mbed.Prefs.getKey('cpu');
-            cpu = 'STM32F406VG'; %board.build.mcu;
+            cpu = 'STM32F407VG'; %board.build.mcu;
         end
 %%
         function uploadRate = getUploadRate

@@ -1,47 +1,30 @@
 function ret = postprocessingMbed(modelName, bBuildApplication, bDownloadApplication, bGetMakeCmd)
-disp('postprocessingMbed');
-%currentPath = pwd;
+%disp('postprocessingMbed');
 ret = '';
 mbedPath = get_param(modelName,'MbedPath');
 a=find(mbedPath, filesep);
 d=[mbedPath(1:a(1)) ':'];
-% sourcePath = fullfile(mbedPath, 'embeddedcoder');
 sourcePath = mbedPath;
-%gccPath = get_param(modelName,'GccPath');
-%pythonPath = get_param(modelName,'PythonPath');
-%DelDestPath = get_param(modelName,'DelDestPath');
 comPort = get_param(modelName,'ComPort');
 
-disp(['start copying files to "' sourcePath '"']);
+% Get the current configuration
+lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
+[modelFolder,modelName,ext] = fileparts( which (bdroot));
+srcFolder = fullfile(lCodeGenFolder, [modelName '_slprj']);
+cfg = Simulink.fileGenControl('getConfig');
+disp(['start copying files from ' srcFolder ' to "' sourcePath '"']);
 
 if ~exist(sourcePath,'dir')
     mkdir(sourcePath);
-%else
-%    if strcmp(DelDestPath, 'on')
-%        try
-%            delete([sourcePath filesep '*.*']);
-%        catch err
-%            disp(err);
-%        end
-%    end
 end
 if ~exist(sourcePath,'dir')
     error(['could not access or create ' sourcePath]);
 end
-try
-    disp(['copy ' modelName '.mk']);
-    [status,message,messageid] = copyfile([modelName '.mk'],[sourcePath '\rules.mk'],'f');
-    if status==0
-        disp(message);
-    end
-catch err
-    disp(err);
-end
 
 try
     disp(['copy *.c to ' sourcePath]);
-    [status,message,messageid] = copyfile('*.c',sourcePath,'f');
-    if status==0
+    [status,message,messageid] = copyfile('*.c',[sourcePath 'cc'],'f');
+    if status==0 & ~isequal(messageid, 'MATLAB:COPYFILE:FileDoesNotExist')
         disp(message);
     end
 catch err

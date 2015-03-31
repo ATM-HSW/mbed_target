@@ -123,7 +123,17 @@ endif
 # BINARY_FILE_EXT - Binary file extension (e.g. .hex or .mot)
 # EXE_FILE_EXT = $(BINARY_FILE_EXT) or $(PROGRAM_FILE_EXT) - build product ext.
 
-include $(START_DIR)/slprj/target_tools.mk
+LDOUTPUTFLAG = -o
+CCOUTPUTFLAG = -o
+OBJDUMPFLAGS = -d
+OBJCOPYFLAGS = -O binary
+
+OBJ_EXT = .o
+BINARY_FILE_EXT = .bin
+PROGRAM_FILE_EXT = .elf
+EXE_FILE_EXT = .exe
+
+include target_tools.mk
 
 #------------------------------ Includes -------------------------------------
 # Place -I options here
@@ -138,6 +148,8 @@ MATLAB_INCLUDES = \
 ADD_INCLUDES = \
 |>START_EXPAND_INCLUDES<|	-I|>EXPAND_DIR_NAME<| \
 |>END_EXPAND_INCLUDES<|
+
+ADD_INCLUDES += $(MBED_INCLUDE_PATHS)
 
 SHARED_INCLUDES =
 ifneq ($(SHARED_SRC_DIR),)
@@ -169,6 +181,7 @@ CFLAGS += $(CDEBUG)
 CXXFLAGS += $(CXXDEBUG)
 LDFLAGS += $(LDDEBUG)
 endif
+
 #-------------------------------- Target application --------------------------------------
 # Define the type of build
 
@@ -184,7 +197,7 @@ BUILD_PRODUCT_TYPE = object modules
 else
 # Building executable for real-time deployment
 BUILD_MODE=real_time
-PRODUCT = $(MODEL)$(EXE_FILE_EXT)
+PRODUCT = $(MODEL)$(BINARY_FILE_EXT)
 BUILD_PRODUCT_TYPE = executable
 endif
 else
@@ -224,7 +237,7 @@ ifeq ($(BUILD_MODE), model_reference)
   SRCS += $(MODULES)
 endif
 
-USER_SRCS =
+USER_SRCS = $(MBED_SOURCEN)
 
 USER_OBJS       = $(addsuffix $(OBJ_EXT), $(basename $(USER_SRCS)))
 LOCAL_USER_OBJS = $(notdir $(USER_OBJS))
@@ -247,9 +260,13 @@ all: $(TARGETS)
 all : $(PRODUCT)
 	@echo ### Created $(PRODUCT) successfully (or it was already up to date)
 
+clean:
+	@echo ### Cleaning $(MODEL)
+	@rm -f $(MODEL).bin $(MODEL).elf $(MODEL).hex $(MODEL).map $(MODEL).lst $(MODEL).d ert_main.d $(OBJS) $(DEPS) core.a $(addsuffix .d, $(basename $(MODULES)))
+
 #----------------------------- Dependencies ------------------------------------
 
-$(OBJS) : $(MAKEFILE) rtw_proj.tmw
+#--$(OBJS) : $(MAKEFILE) rtw_proj.tmw
 
 $(SHARED_LIB) : $(SHARED_OBJS)
 	@echo ### Creating $@
@@ -271,6 +288,7 @@ $(PRODUCT) : $(MODEL)$(PROGRAM_FILE_EXT)
 	@$(SIZE) $<
 	@$(SIZE) $< >code_size_$(TARGET_LANG_EXT).txt
 	@$(OBJDUMP) $(OBJDUMPFLAGS) $< > disassembly.txt
+	@$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 endif
 
 ifeq ($(BUILD_MODE), pil_application)
@@ -302,34 +320,39 @@ endif
 ifeq ($(BUILD_MODE), real_time)
 $(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS)
 	@echo ### BUILD_MODE $(BUILD_MODE)
-	@$(AR) $(ARFLAGS) core.a $(filter-out ert_main.o,$^)
-	@$(LD) ert_main.o core.a $(LDFLAGS) $(filter-out %.o,$^) $(SHARED_LIB) $(LDOUTPUTFLAG) $@
+	@$(LD) $(MBED_LD_FLAGS) -T$(MBED_LINKER_SCRIPT) $(LDOUTPUTFLAG) $@ $^ $(MBED_LD_SYS_LIBS)
 	@echo ### Generated $@
 endif
 
+%$(OBJ_EXT): %.s
+	@echo Assembling: $<
+	@$(AS) $(CPU) -o $@ $<
+	
 %$(OBJ_EXT) : $(RELATIVE_PATH_TO_ANCHOR)/%.c
 	@echo Compiling: $<
-	@$(CC) -c $(CFLAGS) $< $(CCOUTPUTFLAG) $@
-
-%$(OBJ_EXT): $(RELATIVE_PATH_TO_ANCHOR)/%.cpp
-	@echo Compiling: $<
-	@$(CXX) -c $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
-
-%$(OBJ_EXT): %.cpp
-	@echo Compiling: $<
-	@$(CXX) -c $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
+	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) -std=gnu99 $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): %.c
 	@echo Compiling: $<
-	@$(CC) -c $(CFLAGS) $< $(CCOUTPUTFLAG) $@
-
-%$(OBJ_EXT): $(TARGET_SRC_DIR)/%.cpp
-	@echo Compiling: $<
-	@$(CXX) -c $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
+	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) -std=gnu99 $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): $(TARGET_SRC_DIR)/%.c
 	@echo Compiling: $<
-	@$(CC) -c $(CFLAGS) $< $(CCOUTPUTFLAG) $@
+	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) -std=gnu99 $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
+
+%$(OBJ_EXT): $(RELATIVE_PATH_TO_ANCHOR)/%.cpp
+	@echo Compiling: $<
+	@$(CXX) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) -std=gnu++98 -fno-rtti $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
+
+%$(OBJ_EXT): %.cpp
+	@echo Compiling: $<
+	@$(CXX) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) -std=gnu++98 -fno-rtti $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
+
+%$(OBJ_EXT): $(TARGET_SRC_DIR)/%.cpp
+	@echo Compiling: $<
+	@$(CXX) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) -std=gnu++98 -fno-rtti $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
+
+
 
 |>START_EXPAND_RULES<|%$(OBJ_EXT) : |>EXPAND_DIR_NAME<|/%.cpp
 	@echo Compiling: $<

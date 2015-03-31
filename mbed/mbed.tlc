@@ -57,18 +57,7 @@
   rtwoptions(oIdx).makevariable   = 'MBEDPATH';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Path for mbed Project folder e.g. C:\\...\\mbed']);
-  rtwoptions(oIdx).callback      = '';
-
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'Build Application';
-  rtwoptions(oIdx).type           = 'Checkbox';
-  rtwoptions(oIdx).default        = 'on';
-  rtwoptions(oIdx).tlcvariable    = 'BuildApplication';
-  rtwoptions(oIdx).makevariable   = 'BUILDAPPLICATION';
-  rtwoptions(oIdx).tooltip        = ['Compile and link application'];
-  rtwoptions(oIdx).callback       = '';
+  rtwoptions(oIdx).callback      = 'getpath_callback(hDlg, hSrc, ''MbedPath'')';
 
 
   oIdx = oIdx + 1;
@@ -103,13 +92,13 @@
   rtwoptions(oIdx).makevariable   = 'MBEDDRIVE';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
-  rtwoptions(oIdx).callback       = '';
+  rtwoptions(oIdx).callback       = 'getpath_callback(hDlg, hSrc, ''MbedDrive'')';
 
   %------------------------------------%
   % Configure code generation settings %
   %------------------------------------%
 
-  rtwgensettings.BuildDirSuffix = '_mbed';
+  rtwgensettings.BuildDirSuffix = '_slprj';
   rtwgensettings.Version = '1';
   rtwgensettings.DerivedFrom = 'ert.tlc';
   rtwgensettings.SelectCallback = 'mbed_select_callback_handler(hDlg, hSrc)';

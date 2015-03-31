@@ -2,7 +2,7 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
 % MBED_MAKE_RTW_HOOK
 
 %   Copyright 1996-2014 The MathWorks, Inc.
-%             2014 Dr. Olaf Hagendorf, HS Wismar
+%             2014-2015 Dr. Olaf Hagendorf, HS Wismar
 
   switch hookMethod
    case 'error'
@@ -10,8 +10,7 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     % during the build, then this hook will not be called.  Valid arguments
     % at this stage are hookMethod and modelName. This enables cleaning up
     % any static or global data used by this hook file.
-    disp(['### Build procedure for model: ''' modelName...
-          ''' aborted due to an error.']);
+    disp(['### Build procedure for model: ''' modelName ''' aborted due to an error.']);
 
    case 'entry'
     % Called at start of code generation process (before anything happens.)
@@ -23,13 +22,13 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     % Called just prior to invoking TLC Compiler (actual code generation.)
     % Valid arguments at this stage are hookMethod, modelName, and
     % buildArgs
-    disp('before_tlc');
+    %disp('before_tlc');
 
    case 'after_tlc'
     % Called just after to invoking TLC Compiler (actual code generation.)
     % Valid arguments at this stage are hookMethod, modelName, and
     % buildArgs
-    disp('after_tlc');
+    %disp('after_tlc');
 
     % Safely check if model contains property 'UseRTOS'
     param = get_param(modelName, 'ObjectParameters');
@@ -49,19 +48,20 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     % Called after code generation is complete, and just prior to kicking
     % off make process (assuming code generation only is not selected.)  All
     % arguments are valid at this stage.
-    disp('before_make');
+    %disp('before_make');
     % if ( strcmp(get_param(gcs,'ParallelExecution'),'on') )
     %    args = get_param(modelName, 'RTWBuildArgs');
     %    args = [args, ' -j4'];  % run makefile in 4 threads
     %    set_param(modelName, 'RTWBuildArgs', args);
     % end     
-    %oh 18.05.2014 i_write_mbed_makefiles;
+    i_write_mbed_makefiles;
+	postprocessingMbed(modelName, 0, 1, 0);
     disp(sprintf(['\n### Code Format : %s'],buildOpts.codeFormat));%#ok
 
    case 'after_make'
     % Called after make process is complete. All arguments are valid at
     % this stage.
-    disp('after_make');
+    %disp('after_make');
     if ( strcmp(get_param(gcs,'DownloadApplication'),'on') )
         downloadToMbedHardware = 1;
     else
@@ -69,7 +69,7 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     end
 
     if ~i_isPilSim && ~i_isModelReferenceBuild(modelName) && downloadToMbedHardware
-        disp('i_download');
+        %disp('i_download');
         i_download(modelName)
     end
 
@@ -84,24 +84,22 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
         fileDis = fullfile(rtw.BuildDirectory, 'disassembly.txt');
         fileMap = fullfile(rtw.BuildDirectory, 'mapFile.map');
     end
-    fprintf('### Disassembling project code into <a href="matlab:edit %s">disassembly.txt</a>\n', fileDis);
-    fprintf('### Linker Map file <a href="matlab:edit %s">mapFile.map</a>\n', fileMap);
+    %fprintf('### Disassembling project code into <a href="matlab:edit %s">disassembly.txt</a>\n', fileDis);
+    %fprintf('### Linker Map file <a href="matlab:edit %s">mapFile.map</a>\n', fileMap);
     
-    disp(['### Successful completion of build procedure for model: ', ...
-        modelName]);
+    disp(['### Successful completion of build procedure for model: ', modelName]);
   end
 end
 
+
 function i_mbed_setup(modelName)
-if ~i_isPilSim
-        % Check that the main function will be generated using the correct
-        % .tlc file
+
+    if ~i_isPilSim
+        % Check that the main function will be generated using the correct .tlc file
         if bdIsLoaded(modelName) && ~i_isModelReferenceBuild(modelName)
             requiredSetting = 'mbed_file_process.tlc';
-            assert(strcmp(get_param(modelName, 'ERTCustomFileTemplate'), ...
-                          requiredSetting),...
-                   'The model %s must have ERTCustomFileTemplate set to %s.',...
-                   modelName, requiredSetting);
+            assert(strcmp(get_param(modelName, 'ERTCustomFileTemplate'), requiredSetting),...
+             'The model %s must have ERTCustomFileTemplate set to %s.', modelName, requiredSetting);
         end
     end
 
@@ -115,14 +113,7 @@ if ~i_isPilSim
                'window.']);
     end
 
-    disp(['### Starting mbed build procedure for ', ...
-          'model: ',modelName]);
-
-    mbed_path = RTW.transformPaths(mbed.Prefs.getMbedPath)
-    % gcc_path = RTW.transformPaths(mbed.Prefs.getGccPath)
-    % python_path = RTW.transformPaths(mbed.Prefs.getPythonPath)
-    % mcu = mbed.Prefs.getMCU
-    % f_cpu = mbed.Prefs.getCpuFrequency
+    disp(['### Starting mbed build procedure for ', 'model: ',modelName]);
 
     if ~isempty(strfind(pwd,' ')) || ~isempty(strfind(pwd,'&'))
         error('RTW:mbed:pwdHasSpaces',...
@@ -137,12 +128,7 @@ if ~i_isPilSim
     disp('### mbed environment settings:')
     disp('###')
     fprintf('###     Name:           %s\n', mbed.Prefs.getName);
-    fprintf('###     Board:          %s\n', mbed.Prefs.getBoard)
-    fprintf('###     MBED_ROOT:      %s\n', mbed_path)
-    % fprintf('###     MCU:            %s\n', mcu)
-    % fprintf('###     F_CPU:          %s\n', f_cpu)
-    % fprintf('###     GCC_BIN:        %s\n', gcc_path)
-    % fprintf('###     PYTHON_ROOT:    %s\n', python_path)
+    fprintf('###     MBED_ROOT:      %s\n', mbed.Prefs.getMbedPath)
     disp('###')
 end
 
@@ -165,7 +151,11 @@ end
 function i_write_mbed_makefiles
 
     lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
-    buildAreaDstFolder = fullfile(lCodeGenFolder, 'slprj');
+    [modelFolder,modelName,ext] = fileparts( which (bdroot));
+    buildAreaDstFolder = fullfile(lCodeGenFolder, [modelName '_slprj']);
+    if ~exist(buildAreaDstFolder, 'dir')
+      mkdir (buildAreaDstFolder);
+    end
 
     % Copy the mbed version of target_tools.mk into the build area
     tgtToolsFile = 'target_tools.mk';
@@ -181,29 +171,37 @@ function i_write_mbed_makefiles
     mbed_path = strrep(mbed_path, '\', '/');
 
     % Write out the makefile
-    makefileName = fullfile(buildAreaDstFolder, 'mbed_prefs.mk');
-    fid = fopen(makefileName,'w');
-    fwrite(fid, sprintf('%s\n\n', '# Mbed build preferences'));
-    fwrite(fid, sprintf('# %s\n', mbed.Prefs.getKey('name')));
-    fwrite(fid, sprintf('BOARD_TYPE=%s\n', mbed.Prefs.getBoard));
-    fwrite(fid, sprintf('MBED_ROOT=%s\n', mbed_path));
-    fwrite(fid, sprintf('MCU=%s\n', mbed.Prefs.getMCU));
-    fwrite(fid, sprintf('F_CPU=%s\n', mbed.Prefs.getCpuFrequency));
-    fwrite(fid, sprintf('MBED_SL=%s\n',  strrep(fileparts(mfilename('fullpath')),'\', '/')));
-    fwrite(fid, sprintf('PIL_SPEED=%d\n',   mbed.Prefs.getPILSpeed));
-
-    variant = mbed.Prefs.getKey('variant');
-    if isempty(variant)
-        variant = 'standard';
-    end
-    fwrite(fid, sprintf('VARIANT=%s\n', variant));
-    fclose(fid);
+%    makefileName = fullfile(buildAreaDstFolder, 'mbed_prefs.mk');
+%    fid = fopen(makefileName,'w');
+%    fwrite(fid, sprintf('%s\n\n', '# Mbed build preferences'));
+%    % fwrite(fid, sprintf('# %s\n', mbed.Prefs.getKey('name')));
+%    fwrite(fid, sprintf('BOARD_TYPE=%s\n', mbed.Prefs.getBoard));
+%    fwrite(fid, sprintf('MBED_ROOT=%s\n', mbed_path));
+%    fwrite(fid, sprintf('MCU=%s\n', mbed.Prefs.getMCU));
+%    fwrite(fid, sprintf('F_CPU=%s\n', mbed.Prefs.getCpuFrequency));
+%    fwrite(fid, sprintf('MBED_SL=%s\n',  strrep(fileparts(mfilename('fullpath')),'\', '/')));
+%    fwrite(fid, sprintf('PIL_SPEED=%d\n',   mbed.Prefs.getPILSpeed));
+%
+%    variant = ''; % mbed.Prefs.getKey('variant');
+%    if isempty(variant)
+%        variant = 'standard';
+%    end
+%    fwrite(fid, sprintf('VARIANT=%s\n', variant));
+%    fclose(fid);
 end
 
 function i_download(modelName)
-    %hexFile = fullfile('.',[modelName '.hex']);
-    %mbed.runAvrDude(hexFile);
-	postprocessingMbed(modelName, 0, 1, 0);
+	destname = get_param(modelName,'MbedDrive');
+    try
+        srcname = fullfile(mbed.Prefs.getMbedPath,[modelName '.bin']);
+	    disp(['copy ' srcname ' to ' destname]);
+        [status,message,messageid] = copyfile(srcname,destname,'f');
+        if status==0
+            disp(message);
+        end
+    catch err
+        disp(err);
+    end
 end
 
 function isPilSim = i_isPilSim
