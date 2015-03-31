@@ -14,22 +14,10 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-<part id="1"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="ert_main.cpp" partName="ert_main.cpp" path="E:/GitSynology/mbed_target/targets/DISCO_F407VG/ert_main.cpp" title="ert_main.cpp" tooltip="E:/GitSynology/mbed_target/targets/DISCO_F407VG/ert_main.cpp" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/DISCO_F407VG/sources/ert_main.cpp"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="789" selectionTopPixel="0"/>
-</editor>
-<editor activePart="true" focus="true" id="org.coocox.builder.ui.editors.ConfigEditor" name="" partName="Configuration" title="Configuration" tooltip="" workbook="DefaultEditorWorkbook">
-<input factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory">
-<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
-</input>
-</editor>
 </editors>
 <views>
 <view id="org.coocox.builder.ui.views.ProjectView" partName="Project">
@@ -39,9 +27,6 @@
 <element path="/DISCO_F407VG/headers"/>
 <element path="/DISCO_F407VG/sources"/>
 </expanded>
-<selection>
-<element path="/DISCO_F407VG"/>
-</selection>
 </viewState>
 </view>
 <view id="org.coocox.codebugger.trace.ui.traceview" partName="Semihosting">
@@ -57,7 +42,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.coocox.builder.ui.editors.ConfigEditor" activePerspective="org.coocox.builder.perspective.CoBuilder">
+<perspectives activePart="org.coocox.builder.ui.views.ProjectView" activePerspective="org.coocox.builder.perspective.CoBuilder">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.coocox.builder.ui.PerspectiveCoBuilder" id="org.coocox.builder.perspective.CoBuilder" label="CooCox CoBuilder"/>
 <alwaysOnActionSet id="org.coocox.welcome.ui.actionSet"/>
@@ -235,51 +220,27 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory>
-<editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/DISCO_F407VG/sources/mbed_SerialLoop.cpp"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.asm.AsmEditor" path="/DISCO_F407VG/sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_STM32F407VG/TOOLCHAIN_GCC_ARM/startup_stm32f407xx.s"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/DISCO_F407VG/sources/ert_main.cpp"/>
-<editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
-<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
-</editor>
-</editors>
-<item historyLabel="mbed_SerialLoop.cpp" index="0">
-<position info="not_deleted" x="974" y="0"/>
-</item>
-<item historyLabel="startup_stm32f407xx.s" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="ert_main.cpp" index="2">
-<position info="not_deleted" x="789" y="0"/>
-</item>
-<item historyLabel="mbed_SerialLoop.cpp" index="0">
-<position info="not_deleted" x="974" y="0"/>
-</item>
-<item historyLabel="mbed_SerialLoop.cpp" index="0">
-<position info="not_deleted" x="893" y="0"/>
-</item>
-<item historyLabel="mbed_SerialLoop.cpp" index="0">
-<position info="not_deleted" x="1152" y="0"/>
-</item>
-<item historyLabel="ert_main.cpp" index="2">
-<position info="not_deleted" x="789" y="0"/>
-</item>
-<item active="true" historyLabel="Configuration" index="3"/>
-</navigationHistory>
+<navigationHistory/>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 </window>
 <mruList>
-<file factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor" name="" tooltip="">
+<file factoryID="org.coocox.component.ui.editors.repository.RepositoryElementFactory" id="org.coocox.builder.ui.editors.repository.RepositoryBrowser" name="Repository" tooltip="Repository">
 <persistable>
-<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
+<subPage/>
 </persistable>
 </file>
-<file factoryID="org.coocox.component.ui.editors.repository.RepositoryElementFactory" id="org.coocox.builder.ui.editors.repository.RepositoryBrowser" name="Repository" tooltip="Repository">
-<persistable>&#x0A;<subPage/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="BusInOut.cpp" tooltip="MBED_BLINKY/sources/mbed/common/BusInOut.cpp">
+<persistable path="/MBED_BLINKY/sources/mbed/common/BusInOut.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="core_ca_mmu.h" tooltip="MBED_BLINKY/headers/mbed/targets/cmsis/core_ca_mmu.h">
+<persistable path="/MBED_BLINKY/headers/mbed/targets/cmsis/core_ca_mmu.h"/>
+</file>
+<file factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.welcome.ui.WelcomePage" name="" tooltip="">
+<persistable>
+<org.coocox.welcome.ui.WelcomePage/>
 </persistable>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="MBED_BLINKY/sources/main.cpp">
@@ -311,12 +272,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="syscalls.c" tooltip="test/components/C_library/syscalls.c">
 <persistable path="/test/components/C_library/syscalls.c"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="printf.c" tooltip="test/components/Retarget_printf/printf.c">
-<persistable path="/test/components/Retarget_printf/printf.c"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="MBED_BLINKY/sources/main.cpp">
-<persistable path="/MBED_BLINKY/sources/main.cpp"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ert_main.cpp" tooltip="MBED_ANALOGINOUT/sources/ert_main.cpp">
 <persistable path="/MBED_ANALOGINOUT/sources/ert_main.cpp"/>

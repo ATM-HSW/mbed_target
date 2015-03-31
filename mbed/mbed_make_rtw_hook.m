@@ -162,9 +162,9 @@ function i_write_mbed_makefiles
     target_tools_folder = fileparts(mfilename('fullpath'));
     srcFile = fullfile(target_tools_folder, tgtToolsFile);
     dstFile = fullfile(buildAreaDstFolder, tgtToolsFile);
-    copyfile(srcFile, dstFile, 'f');
+    %copyfile(srcFile, dstFile, 'f');
     % Make sure the file is not read-only
-    fileattrib(dstFile, '+w');
+    %fileattrib(dstFile, '+w');
 
     mbed_path = RTW.transformPaths(mbed.Prefs.getMbedPath);
     % gmake needs forward slash as path separator

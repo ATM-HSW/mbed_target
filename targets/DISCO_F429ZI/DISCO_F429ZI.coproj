@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Project version="2G - 1.7.5" name="DISCO_F429ZI">
+  <Target name="Debug" isCurrent="1">
+    <Device manufacturerId="9" manufacturerName="ST" chipId="775" chipName="STM32F429ZI" boardId="" boardName=""/>
+    <BuildOption>
+      <Compile>
+        <Option name="OptimizationLevel" value="0"/>
+        <Option name="UseFPU" value="0"/>
+        <Option name="UserEditCompiler" value="-fno-common; -fmessage-length=0; -Wall; -fno-strict-aliasing; -fno-rtti; -fno-exceptions; -ffunction-sections; -fdata-sections; -std=gnu++98"/>
+        <Option name="FPU" value="1"/>
+        <Option name="SupportCPlusplus" value="1"/>
+        <Includepaths>
+          <Includepath path="."/>
+          <Includepath path="env"/>
+          <Includepath path="mbed"/>
+          <Includepath path="mbed/api"/>
+          <Includepath path="mbed/common"/>
+          <Includepath path="mbed/hal"/>
+          <Includepath path="mbed/targets"/>
+          <Includepath path="mbed/targets/cmsis"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM"/>
+          <Includepath path="mbed/targets/hal"/>
+          <Includepath path="mbed/targets/hal/TARGET_STM"/>
+          <Includepath path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4"/>
+          <Includepath path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI"/>
+        </Includepaths>
+        <DefinedSymbols>
+          <Define name="TARGET_DISCO_F429ZI"/>
+          <Define name="TARGET_M4"/>
+          <Define name="TARGET_CORTEX_M"/>
+          <Define name="TARGET_STM"/>
+          <Define name="TARGET_STM32F4"/>
+          <Define name="TARGET_STM32F429"/>
+          <Define name="TARGET_STM32F429ZI"/>
+          <Define name="TOOLCHAIN_GCC_ARM"/>
+          <Define name="TOOLCHAIN_GCC"/>
+          <Define name="__CORTEX_M4"/>
+          <Define name="ARM_MATH_CM4"/>
+          <Define name="__FPU_PRESENT=1"/>
+          <Define name="MBED_BUILD_TIMESTAMP=1421871477.16"/>
+          <Define name="__MBED__=1"/>
+        </DefinedSymbols>
+      </Compile>
+      <Link useDefault="0">
+        <Option name="DiscardUnusedSection" value="1"/>
+        <Option name="UserEditLinkder" value=""/>
+        <Option name="UseMemoryLayout" value="0"/>
+        <Option name="LTO" value="0"/>
+        <Option name="IsNewStartupCode" value="1"/>
+        <Option name="Library" value="Not use C Library"/>
+        <Option name="nostartfiles" value="0"/>
+        <Option name="UserEditLinker" value="-Wl,--wrap,main; --specs=nano.specs; -u_printf_float; -u_scanf_float;  "/>
+        <LinkedLibraries>
+          <Libset dir="" libs="stdc++"/>
+          <Libset dir="" libs="supc++"/>
+          <Libset dir="" libs="m"/>
+          <Libset dir="" libs="gcc"/>
+          <Libset dir="" libs="c"/>
+          <Libset dir="" libs="nosys"/>
+        </LinkedLibraries>
+        <MemoryAreas debugInFlashNotRAM="1">
+          <Memory name="IROM1" type="ReadOnly" size="0x00200000" startValue="0x08000000"/>
+          <Memory name="IRAM1" type="ReadWrite" size="0x0002FE54" startValue="0x200001AC"/>
+          <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
+          <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
+        </MemoryAreas>
+        <LocateLinkFile path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/STM32F429ZI.ld" type="0"/>
+      </Link>
+      <Output>
+        <Option name="OutputFileType" value="0"/>
+        <Option name="Path" value="./"/>
+        <Option name="Name" value="MBED_BLINKY"/>
+        <Option name="HEX" value="1"/>
+        <Option name="BIN" value="1"/>
+      </Output>
+      <User>
+        <UserRun name="Run#1" type="Before" checked="0" value=""/>
+        <UserRun name="Run#1" type="After" checked="0" value=""/>
+      </User>
+    </BuildOption>
+    <DebugOption>
+      <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="ST-Link"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
+      <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.userDefineGDBScript" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.targetEndianess" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkResetMode" value="Type 0: Normal"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="SYSRESETREQ"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifSemihost" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifCacheRom" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ipAddress" value="127.0.0.1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.portNumber" value="2009"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="./stm32f4xx_2048.elf"/>
+    </DebugOption>
+    <ExcludeFile/>
+  </Target>
+  <Target name="Release" isCurrent="0">
+    <Device manufacturerId="9" manufacturerName="ST" chipId="775" chipName="STM32F429ZI" boardId="" boardName=""/>
+    <BuildOption>
+      <Compile>
+        <Option name="OptimizationLevel" value="4"/>
+        <Option name="UseFPU" value="0"/>
+        <Option name="UserEditCompiler" value="-fno-common; -fmessage-length=0; -Wall; -fno-strict-aliasing; -fno-rtti; -fno-exceptions; -ffunction-sections; -fdata-sections; -std=gnu++98"/>
+        <Option name="FPU" value="1"/>
+        <Option name="SupportCPlusplus" value="1"/>
+        <Includepaths>
+          <Includepath path="."/>
+          <Includepath path="env"/>
+          <Includepath path="mbed"/>
+          <Includepath path="mbed/api"/>
+          <Includepath path="mbed/common"/>
+          <Includepath path="mbed/hal"/>
+          <Includepath path="mbed/targets"/>
+          <Includepath path="mbed/targets/cmsis"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI"/>
+          <Includepath path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM"/>
+          <Includepath path="mbed/targets/hal"/>
+          <Includepath path="mbed/targets/hal/TARGET_STM"/>
+          <Includepath path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4"/>
+          <Includepath path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI"/>
+        </Includepaths>
+        <DefinedSymbols>
+          <Define name="TARGET_DISCO_F429ZI"/>
+          <Define name="TARGET_M4"/>
+          <Define name="TARGET_CORTEX_M"/>
+          <Define name="TARGET_STM"/>
+          <Define name="TARGET_STM32F4"/>
+          <Define name="TARGET_STM32F429"/>
+          <Define name="TARGET_STM32F429ZI"/>
+          <Define name="TOOLCHAIN_GCC_ARM"/>
+          <Define name="TOOLCHAIN_GCC"/>
+          <Define name="__CORTEX_M4"/>
+          <Define name="ARM_MATH_CM4"/>
+          <Define name="__FPU_PRESENT=1"/>
+          <Define name="MBED_BUILD_TIMESTAMP=1421871477.16"/>
+          <Define name="__MBED__=1"/>
+        </DefinedSymbols>
+      </Compile>
+      <Link useDefault="0">
+        <Option name="DiscardUnusedSection" value="1"/>
+        <Option name="UserEditLinkder" value=""/>
+        <Option name="UseMemoryLayout" value="0"/>
+        <Option name="LTO" value="0"/>
+        <Option name="IsNewStartupCode" value="1"/>
+        <Option name="Library" value="Not use C Library"/>
+        <Option name="nostartfiles" value="0"/>
+        <Option name="UserEditLinker" value="-Wl,--wrap,main; --specs=nano.specs; -u_printf_float; -u_scanf_float;  "/>
+        <LinkedLibraries>
+          <Libset dir="" libs="stdc++"/>
+          <Libset dir="" libs="supc++"/>
+          <Libset dir="" libs="m"/>
+          <Libset dir="" libs="gcc"/>
+          <Libset dir="" libs="c"/>
+          <Libset dir="" libs="nosys"/>
+        </LinkedLibraries>
+        <MemoryAreas debugInFlashNotRAM="1">
+          <Memory name="IROM1" type="ReadOnly" size="0x00200000" startValue="0x08000000"/>
+          <Memory name="IRAM1" type="ReadWrite" size="0x0002FE54" startValue="0x200001AC"/>
+          <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
+          <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
+        </MemoryAreas>
+        <LocateLinkFile path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/STM32F429ZI.ld" type="0"/>
+      </Link>
+      <Output>
+        <Option name="OutputFileType" value="0"/>
+        <Option name="Path" value="./"/>
+        <Option name="Name" value="MBED_BLINKY"/>
+        <Option name="HEX" value="1"/>
+        <Option name="BIN" value="1"/>
+      </Output>
+      <User>
+        <UserRun name="Run#1" type="Before" checked="0" value=""/>
+        <UserRun name="Run#1" type="After" checked="0" value=""/>
+      </User>
+    </BuildOption>
+    <DebugOption>
+      <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="ST-Link"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
+      <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.userDefineGDBScript" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.targetEndianess" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkResetMode" value="Type 0: Normal"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="SYSRESETREQ"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifSemihost" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifCacheRom" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ipAddress" value="127.0.0.1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.portNumber" value="2009"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="./stm32f4xx_2048.elf"/>
+    </DebugOption>
+    <ExcludeFile/>
+  </Target>
+  <Components path="./"/>
+  <Files>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/port_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/port_api.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc_ex.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma_ex.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_sdmmc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_sdmmc.c" type="1"/>
+    <File name="headers/mbed/api/AnalogIn.h" path="mbed/api/AnalogIn.h" type="1"/>
+    <File name="headers/mbed/api/PortOut.h" path="mbed/api/PortOut.h" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4" path="" type="2"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc_ex.c" type="1"/>
+    <File name="sources/mbed/common/BusIn.cpp" path="mbed/common/BusIn.cpp" type="1"/>
+    <File name="headers" path="" type="2"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_iwdg.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_iwdg.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nand.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nand.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_eth.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_eth.h" type="1"/>
+    <File name="headers/mbed/api/PwmOut.h" path="mbed/api/PwmOut.h" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/PeripheralPins.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/PeripheralPins.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ramfunc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ramfunc.c" type="1"/>
+    <File name="headers/mbed/api/InterruptIn.h" path="mbed/api/InterruptIn.h" type="1"/>
+    <File name="headers/mbed/api/PortInOut.h" path="mbed/api/PortInOut.h" type="1"/>
+    <File name="sources/mbed/common/RawSerial.cpp" path="mbed/common/RawSerial.cpp" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/system_stm32f4xx.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/system_stm32f4xx.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c.c" type="1"/>
+    <File name="headers/mbed/api/mbed_interface.h" path="mbed/api/mbed_interface.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/rtc_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/rtc_api.c" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogin_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogin_api.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nor.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nor.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_uart.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_uart.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/serial_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/serial_api.c" type="1"/>
+    <File name="sources/mbed/common/FileBase.cpp" path="mbed/common/FileBase.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio_ex.h" type="1"/>
+    <File name="sources/mbed/common/semihost_api.c" path="mbed/common/semihost_api.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nand.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nand.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_cm0plus.h" path="mbed/targets/cmsis/core_cm0plus.h" type="1"/>
+    <File name="headers/mbed/api/mbed_assert.h" path="mbed/api/mbed_assert.h" type="1"/>
+    <File name="sources/mbed/common/gpio.c" path="mbed/common/gpio.c" type="1"/>
+    <File name="headers/mbed/api" path="" type="2"/>
+    <File name="sources/mbed/common/I2C.cpp" path="mbed/common/I2C.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_cm0.h" path="mbed/targets/cmsis/core_cm0.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis" path="" type="2"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogout_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogout_api.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc_ex.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fmc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fmc.c" type="1"/>
+    <File name="sources/mbed/common/Ticker.cpp" path="mbed/common/Ticker.cpp" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c_ex.c" type="1"/>
+    <File name="sources/mbed/common/Ethernet.cpp" path="mbed/common/Ethernet.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spi.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spi.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc_ex.c" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PortNames.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PortNames.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/hal_tick.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/hal_tick.h" type="1"/>
+    <File name="sources/mbed/common/BusInOut.cpp" path="mbed/common/BusInOut.cpp" type="1"/>
+    <File name="headers/mbed/api/Timeout.h" path="mbed/api/Timeout.h" type="1"/>
+    <File name="sources/mbed/common/CallChain.cpp" path="mbed/common/CallChain.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash_ex.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/cmsis_nvic.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/cmsis_nvic.c" type="1"/>
+    <File name="headers/mbed/api/SPISlave.h" path="mbed/api/SPISlave.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_eth.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_eth.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma.c" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PinNames.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PinNames.h" type="1"/>
+    <File name="headers/mbed/api/FileLike.h" path="mbed/api/FileLike.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ramfunc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ramfunc.h" type="1"/>
+    <File name="sources/mbed/common/Timeout.cpp" path="mbed/common/Timeout.cpp" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_object.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_object.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI" path="" type="2"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/objects.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/objects.h" type="1"/>
+    <File name="sources/mbed/common/LocalFileSystem.cpp" path="mbed/common/LocalFileSystem.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_irda.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_irda.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_conf.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_conf.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac_ex.c" type="1"/>
+    <File name="headers/mbed/api/SerialBase.h" path="mbed/api/SerialBase.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma2d.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma2d.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_iwdg.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_iwdg.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ex.h" type="1"/>
+    <File name="sources/mbed/common/us_ticker_api.c" path="mbed/common/us_ticker_api.c" type="1"/>
+    <File name="headers/mbed/hal/sleep_api.h" path="mbed/hal/sleep_api.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sdram.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sdram.c" type="1"/>
+    <File name="headers/mbed/hal/ethernet_api.h" path="mbed/hal/ethernet_api.h" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/device.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/device.h" type="1"/>
+    <File name="sources/mbed/common/SerialBase.cpp" path="mbed/common/SerialBase.cpp" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd_ex.c" type="1"/>
+    <File name="headers/mbed/api/TimerEvent.h" path="mbed/api/TimerEvent.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fsmc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fsmc.h" type="1"/>
+    <File name="sources/mbed/common/InterruptManager.cpp" path="mbed/common/InterruptManager.cpp" type="1"/>
+    <File name="headers/mbed/hal/analogout_api.h" path="mbed/hal/analogout_api.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac.h" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PeripheralNames.h" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PeripheralNames.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cortex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cortex.h" type="1"/>
+    <File name="sources/mbed/common" path="" type="2"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_crc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_crc.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/stm32f429xx.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/stm32f429xx.h" type="1"/>
+    <File name="headers/mbed/hal/rtc_api.h" path="mbed/hal/rtc_api.h" type="1"/>
+    <File name="headers/mbed/api/BusInOut.h" path="mbed/api/BusInOut.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp_ex.c" type="1"/>
+    <File name="sources/mbed/common/retarget.cpp" path="mbed/common/retarget.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac_ex.h" type="1"/>
+    <File name="headers/mbed/api/semihost_api.h" path="mbed/api/semihost_api.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim.c" type="1"/>
+    <File name="headers/mbed/api/CAN.h" path="mbed/api/CAN.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc_ex.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sram.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sram.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai.h" type="1"/>
+    <File name="headers/mbed/hal/serial_api.h" path="mbed/hal/serial_api.h" type="1"/>
+    <File name="sources/mbed/common/I2CSlave.cpp" path="mbed/common/I2CSlave.cpp" type="1"/>
+    <File name="sources/mbed/common/mbed_interface.c" path="mbed/common/mbed_interface.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr.c" type="1"/>
+    <File name="sources/mbed/common/TimerEvent.cpp" path="mbed/common/TimerEvent.cpp" type="1"/>
+    <File name="headers/mbed/api/Ticker.h" path="mbed/api/Ticker.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc.h" type="1"/>
+    <File name="sources/mbed/common/SPISlave.cpp" path="mbed/common/SPISlave.cpp" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio.c" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/us_ticker.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/us_ticker.c" type="1"/>
+    <File name="headers/mbed/api/toolchain.h" path="mbed/api/toolchain.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pccard.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pccard.h" type="1"/>
+    <File name="sources" path="" type="2"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fsmc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fsmc.c" type="1"/>
+    <File name="headers/mbed/api/BusOut.h" path="mbed/api/BusOut.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis" path="" type="2"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4" path="" type="2"/>
+    <File name="sources/mbed/common/wait_api.c" path="mbed/common/wait_api.c" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/sleep.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/sleep.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/startup_stm32f429xx.s" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/startup_stm32f429xx.s" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hcd.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hcd.h" type="1"/>
+    <File name="headers/mbed/api/mbed_error.h" path="mbed/api/mbed_error.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma2d.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma2d.h" type="1"/>
+    <File name="headers/mbed/api/FileBase.h" path="mbed/api/FileBase.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sram.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sram.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma_ex.h" type="1"/>
+    <File name="headers/mbed/api/can_helper.h" path="mbed/api/can_helper.h" type="1"/>
+    <File name="sources/mbed/common/FileLike.cpp" path="mbed/common/FileLike.cpp" type="1"/>
+    <File name="headers/mbed/api/Timer.h" path="mbed/api/Timer.h" type="1"/>
+    <File name="headers/mbed/hal/us_ticker_api.h" path="mbed/hal/us_ticker_api.h" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI" path="" type="2"/>
+    <File name="headers/mbed/api/AnalogOut.h" path="mbed/api/AnalogOut.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/i2c_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/i2c_api.c" type="1"/>
+    <File name="sources/mbed/common/FunctionPointer.cpp" path="mbed/common/FunctionPointer.cpp" type="1"/>
+    <File name="sources/mbed/common/SPI.cpp" path="mbed/common/SPI.cpp" type="1"/>
+    <File name="headers/mbed/api/DirHandle.h" path="mbed/api/DirHandle.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s_ex.c" type="1"/>
+    <File name="headers/mbed/api/Stream.h" path="mbed/api/Stream.h" type="1"/>
+    <File name="sources/mbed" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_irda.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_irda.c" type="1"/>
+    <File name="headers/mbed/api/FunctionPointer.h" path="mbed/api/FunctionPointer.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash.c" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/core_caFunc.h" path="mbed/targets/cmsis/core_caFunc.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr_ex.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_usb.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_usb.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_usb.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_usb.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/system_stm32f4xx.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/system_stm32f4xx.h" type="1"/>
+    <File name="headers/mbed/api/I2CSlave.h" path="mbed/api/I2CSlave.h" type="1"/>
+    <File name="headers/mbed/api/I2C.h" path="mbed/api/I2C.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_usart.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_usart.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc.h" type="1"/>
+    <File name="headers/mbed/hal/pinmap.h" path="mbed/hal/pinmap.h" type="1"/>
+    <File name="headers/mbed/hal/pwmout_api.h" path="mbed/hal/pwmout_api.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_uart.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_uart.c" type="1"/>
+    <File name="headers/mbed/api/DigitalIn.h" path="mbed/api/DigitalIn.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr_ex.h" type="1"/>
+    <File name="headers/mbed/targets/hal" path="" type="2"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pwmout_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pwmout_api.c" type="1"/>
+    <File name="headers/mbed/hal/spi_api.h" path="mbed/hal/spi_api.h" type="1"/>
+    <File name="sources/mbed/common/error.c" path="mbed/common/error.c" type="1"/>
+    <File name="sources/mbed/common/CAN.cpp" path="mbed/common/CAN.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_caInstr.h" path="mbed/targets/cmsis/core_caInstr.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pinmap.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pinmap.c" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/mbed_overrides.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/mbed_overrides.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fmc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fmc.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/stm32f4xx.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/stm32f4xx.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s_ex.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_crc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_crc.h" type="1"/>
+    <File name="sources/mbed/common/FileSystemLike.cpp" path="mbed/common/FileSystemLike.cpp" type="1"/>
+    <File name="headers/mbed/api/CallChain.h" path="mbed/api/CallChain.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pccard.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pccard.c" type="1"/>
+    <File name="sources/mbed/common/Stream.cpp" path="mbed/common/Stream.cpp" type="1"/>
+    <File name="headers/mbed/hal/analogin_api.h" path="mbed/hal/analogin_api.h" type="1"/>
+    <File name="sources/mbed/common/assert.c" path="mbed/common/assert.c" type="1"/>
+    <File name="headers/mbed/api/wait_api.h" path="mbed/api/wait_api.h" type="1"/>
+    <File name="sources/mbed/common/Timer.cpp" path="mbed/common/Timer.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal.h" type="1"/>
+    <File name="headers/mbed/api/Ethernet.h" path="mbed/api/Ethernet.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr.h" type="1"/>
+    <File name="headers/mbed" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_smartcard.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_smartcard.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_cmFunc.h" path="mbed/targets/cmsis/core_cmFunc.h" type="1"/>
+    <File name="headers/mbed/api/LocalFileSystem.h" path="mbed/api/LocalFileSystem.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd_ex.h" type="1"/>
+    <File name="sources/mbed/common/exit.c" path="mbed/common/exit.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_cm4_simd.h" path="mbed/targets/cmsis/core_cm4_simd.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s.c" type="1"/>
+    <File name="headers/mbed/api/SPI.h" path="mbed/api/SPI.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi.c" type="1"/>
+    <File name="headers/mbed/hal/gpio_api.h" path="mbed/hal/gpio_api.h" type="1"/>
+    <File name="headers/mbed/hal/gpio_irq_api.h" path="mbed/hal/gpio_irq_api.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash_ex.h" type="1"/>
+    <File name="sources/mbed/common/FilePath.cpp" path="mbed/common/FilePath.cpp" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp_ex.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_sdmmc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_sdmmc.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc.c" type="1"/>
+    <File name="headers/mbed/hal/can_api.h" path="mbed/hal/can_api.h" type="1"/>
+    <File name="headers/mbed/api/mbed.h" path="mbed/api/mbed.h" type="1"/>
+    <File name="headers/mbed/api/mbed_debug.h" path="mbed/api/mbed_debug.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PeripheralPins.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/PeripheralPins.c" type="1"/>
+    <File name="sources/mbed/common/pinmap_common.c" path="mbed/common/pinmap_common.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_can.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_can.c" type="1"/>
+    <File name="sources/mbed/targets" path="" type="2"/>
+    <File name="sources/mbed/common/board.c" path="mbed/common/board.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim_ex.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c_ex.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_def.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_def.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sdram.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sdram.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_usart.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_usart.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd.h" type="1"/>
+    <File name="headers/mbed/api/RawSerial.h" path="mbed/api/RawSerial.h" type="1"/>
+    <File name="headers/mbed/api/PortIn.h" path="mbed/api/PortIn.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sd.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sd.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_irq_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_irq_api.c" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_api.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_can.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_can.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rng.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rng.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/core_ca_mmu.h" path="mbed/targets/cmsis/core_ca_mmu.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hcd.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hcd.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nor.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nor.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/cmsis.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/cmsis.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim_ex.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash.h" type="1"/>
+    <File name="headers/mbed/api/FilePath.h" path="mbed/api/FilePath.h" type="1"/>
+    <File name="headers/mbed/targets" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_cmInstr.h" path="mbed/targets/cmsis/core_cmInstr.h" type="1"/>
+    <File name="headers/mbed/api/FileHandle.h" path="mbed/api/FileHandle.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_ca9.h" path="mbed/targets/cmsis/core_ca9.h" type="1"/>
+    <File name="headers/mbed/hal/port_api.h" path="mbed/hal/port_api.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/hal_tick.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/hal_tick.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM" path="" type="2"/>
+    <File name="headers/mbed/hal" path="" type="2"/>
+    <File name="headers/mbed/api/DigitalOut.h" path="mbed/api/DigitalOut.h" type="1"/>
+    <File name="sources/mbed/common/Serial.cpp" path="mbed/common/Serial.cpp" type="1"/>
+    <File name="sources/mbed/common/BusOut.cpp" path="mbed/common/BusOut.cpp" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai.c" type="1"/>
+    <File name="sources/mbed/common/rtc_time.c" path="mbed/common/rtc_time.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c.h" type="1"/>
+    <File name="headers/mbed/api/rtc_time.h" path="mbed/api/rtc_time.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_wwdg.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_wwdg.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/cmsis_nvic.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/cmsis_nvic.h" type="1"/>
+    <File name="sources/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/spi_api.c" path="mbed/targets/hal/TARGET_STM/TARGET_STM32F4/spi_api.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sd.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sd.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc.h" type="1"/>
+    <File name="headers/mbed/hal/i2c_api.h" path="mbed/hal/i2c_api.h" type="1"/>
+    <File name="headers/mbed/api/Serial.h" path="mbed/api/Serial.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc_ex.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc_ex.h" type="1"/>
+    <File name="sources/mbed/common/InterruptIn.cpp" path="mbed/common/InterruptIn.cpp" type="1"/>
+    <File name="headers/mbed/targets/hal/TARGET_STM" path="" type="2"/>
+    <File name="headers/mbed/targets/cmsis/core_cm4.h" path="mbed/targets/cmsis/core_cm4.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/core_cm3.h" path="mbed/targets/cmsis/core_cm3.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM" path="" type="2"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_wwdg.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_wwdg.c" type="1"/>
+    <File name="headers/mbed/api/platform.h" path="mbed/api/platform.h" type="1"/>
+    <File name="sources/mbed/targets/hal" path="" type="2"/>
+    <File name="headers/mbed/api/FileSystemLike.h" path="mbed/api/FileSystemLike.h" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s.h" type="1"/>
+    <File name="headers/mbed/api/InterruptManager.h" path="mbed/api/InterruptManager.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ex.c" type="1"/>
+    <File name="headers/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rng.h" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rng.h" type="1"/>
+    <File name="headers/mbed/api/DigitalInOut.h" path="mbed/api/DigitalInOut.h" type="1"/>
+    <File name="headers/mbed/api/BusIn.h" path="mbed/api/BusIn.h" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_smartcard.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_smartcard.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cortex.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cortex.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spi.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spi.c" type="1"/>
+    <File name="sources/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd.c" path="mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd.c" type="1"/>
+  </Files>
+</Project>
