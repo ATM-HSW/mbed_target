@@ -85,3 +85,31 @@
   %endif
 %endfunction
 
+%% Function: BlockOutputSignal =================================================
+%% Abstract:
+%%      Return an output expression.  This function *may*
+%%      be used by Simulink when optimizing the Block IO data structure.
+%%
+%function BlockOutputSignal(block,system,portIdx,ucv,lcv,idx,retType) void
+  
+  %assign retVal = "0U"
+  %if !SLibCodeGenForSim()
+    %switch retType
+      %case "Signal"
+        %assign p1_val = LibBlockParameterValue(p1, 0)
+        %assign p2_val = LibBlockParameterValue(p2, 0)
+
+        %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+        %assign name = FEVAL("strrep",name," ","_")
+        %%
+        %assign retVal = "%<name>"
+        %break
+      %default
+        %assign errTxt = "Unsupported return type: %<retType>"
+        %<LibBlockReportError(block,errTxt)>
+        %break
+    %endswitch
+  %endif
+  %return retVal
+  
+%endfunction

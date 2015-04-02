@@ -20,10 +20,13 @@
   %endif
 
   %assign cFile = LibCreateSourceFile("Source", "Custom", "ert_main")
+
   %openfile tmpBuf
   #include "%<LibGetMdlPubHdrBaseName()>.h"
   #include "mbed.h"
+  #include "rtos.h"
   %closefile tmpBuf
+
   %<LibSetSourceFileSection(cFile, "Includes", tmpBuf)>
 
   %openfile tmpBuf
@@ -37,26 +40,69 @@
       %% Even 50 microseconds is too quick for Arduino
       %<LibReportError("The minimum supported sample time is 50 microseconds. Change the Sample time parameter in blocks that use incorrect sample times.")>
   %endif
-  %assign SampleRate  = CAST("Number", %<SAMPLETIME> * 1000000)
-  /* Sample Time in microseconds */
-  #define STEP_SIZE %<SampleRate>UL 
+  %assign SampleRate_us  = CAST("Number", %<SAMPLETIME> * 1000000)
+  %assign SampleRate_ms  = CAST("Number", %<SAMPLETIME> * 1000)
+  
+  #define STEP_SIZE_US %<SampleRate_us>UL /* Sample Time in microseconds */
+  #define STEP_SIZE_MS %<SampleRate_ms>UL /* and in milliseconds */
 
   %closefile tmpBuf
+
   %<LibSetSourceFileSection(cFile, "Declarations", tmpBuf)>
 
+  %if UseMbedRTOS
+  
   %openfile tmpBuf
 
+
+  void step(void const *param) {
+    %<LibCallModelStep(0)>
+  }
+  
+  /* with RTOS */
+  int main(void) {
+    unsigned long oldTime;
+    unsigned long actualTime;
+    
+    RtosTimer step_1_timer(step, osTimerPeriodic, (void *)0);
+
+    /* initialize model */
+    %<LibCallModelInitialize()>\
+
+    %if ExtMode
+        %<SLibGenERTExtModeInit()>
+    %endif
+
+
+    /* start Timer for main step function */
+    step_1_timer.start(STEP_SIZE_MS);
+
+    /* main task waits forever */
+    Thread::wait(osWaitForever);
+
+    /* deinitialize model */
+    %<LibCallModelTerminate()>\
+	
+	return 0;
+  }
+  %closefile tmpBuf
+
+  %else
+
+  %openfile tmpBuf
+  
   uint8_t GetOverrunCounter(void)
   {
   	return uOverrunCounter;
   }
 
+  // without RTOS
   int main(void)
   {
     unsigned long oldTime;
     unsigned long actualTime;
     
-    /* Initialize model -- */
+    /* initialize model */
     %<LibCallModelInitialize()>\
 
     %if ExtMode
@@ -65,31 +111,37 @@
 
     oldTime = us_ticker_read();
     while (true) {
+        /* call main step function */
 	    %<LibCallModelStep(0)>\
 
         actualTime = us_ticker_read();
         /* Overrun check */
-        if ((actualTime - oldTime) >= STEP_SIZE) {
+        if ((actualTime - oldTime) >= STEP_SIZE_US) {
             /* We missed our time slot for actual step, report it! */
             if(uOverrunCounter < 255U){
                 uOverrunCounter++;
             }
             oldTime = actualTime;               /* Update time stamp of last step */
             continue;                           /* We are late, continue with next step */
-        }
+        }\
 
         /* Waiting with pooling method */
-        while((actualTime - oldTime) < STEP_SIZE){
+        while((actualTime - oldTime) < STEP_SIZE_US){
             actualTime = us_ticker_read();                  /* Get actual time */
         }
         oldTime = actualTime;                       /* Update time stamp of last step */
     }
+
+    /* deinitialize model */
     %<LibCallModelTerminate()>\
 	
 	return 0;
   }
 	
   %closefile tmpBuf
+  
+  %endif
+  
   %<LibSetSourceFileSection(cFile, "Functions", tmpBuf)>
 
 %endfunction

@@ -94,6 +94,21 @@
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
   rtwoptions(oIdx).callback       = 'getpath_callback(hDlg, hSrc, ''MbedDrive'')';
 
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'Use mbed RTOS';
+  rtwoptions(oIdx).type           = 'Checkbox';
+  rtwoptions(oIdx).default        = 'off';
+  rtwoptions(oIdx).tlcvariable    = 'UseMbedRTOS';
+  rtwoptions(oIdx).makevariable   = 'USEMBEDRTOS';
+  rtwoptions(oIdx).tooltip        = sprintf(['Add mbed RTOS.']);
+  rtwoptions(oIdx).callback       = '';
+
+
+  oIdx = oIdx + 1;
+
+
   %------------------------------------%
   % Configure code generation settings %
   %------------------------------------%
