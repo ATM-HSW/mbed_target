@@ -54,7 +54,7 @@
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
     %%
-    %<name>.pulsewidth_us(%<u1_val>);
+    %<name>.write(%<u1_val>);
 
   %endif
 %endfunction

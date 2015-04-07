@@ -108,6 +108,7 @@ void pwmout_write(pwmout_t* obj, float value)
         case PB_4:
         case PB_6:
         case PC_6:
+        case PD_12:
             channel = TIM_CHANNEL_1;
             break;
 
@@ -125,6 +126,7 @@ void pwmout_write(pwmout_t* obj, float value)
         case PB_5:
         case PB_7:
         case PC_7:
+        case PD_13:
             channel = TIM_CHANNEL_2;
             break;
 
@@ -141,6 +143,7 @@ void pwmout_write(pwmout_t* obj, float value)
         case PB_8:
         case PB_10:
         case PC_8:
+        case PD_14:
             channel = TIM_CHANNEL_3;
             break;
 
@@ -156,6 +159,7 @@ void pwmout_write(pwmout_t* obj, float value)
         case PA_11:
         case PB_9:
         case PC_9:
+        case PD_15:
             channel = TIM_CHANNEL_4;
             break;
 

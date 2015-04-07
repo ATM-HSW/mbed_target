@@ -60,6 +60,7 @@ OPTIMIZATION_FLAGS      = |>OPTIMIZATION_FLAGS<|
 ADDITIONAL_LDFLAGS      = |>ADDITIONAL_LDFLAGS<|
 MAKEFILEBUILDER_TGT     = |>MAKEFILEBUILDER_TGT<|
 STANDALONE_SUPPRESS_EXE = |>STANDALONE_SUPPRESS_EXE<|
+MBED_DRIVE              = |>MBEDDRIVE<|
 
 #--------------------------- Model and reference models -----------------------
 MODELLIB                  = |>MODELLIB<|
@@ -263,6 +264,10 @@ all : $(PRODUCT)
 clean:
 	@echo ### Cleaning $(MODEL)
 	@rm -f $(MODEL).bin $(MODEL).elf $(MODEL).hex $(MODEL).map $(MODEL).lst $(MODEL).d ert_main.d $(OBJS) $(DEPS) core.a $(addsuffix .d, $(basename $(MODULES)))
+
+flash:
+	@echo ### Flashing $(MODEL)
+	@cp $(MODEL).bin $(MBED_DRIVE)
 
 #----------------------------- Dependencies ------------------------------------
 
