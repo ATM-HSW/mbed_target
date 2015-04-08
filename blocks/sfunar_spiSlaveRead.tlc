@@ -1,0 +1,30 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_spiSlaveRead "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+	%if !SLibCodeGenForSim()
+		%assign y_val = LibBlockOutputSignal(0, "", "", 0)
+		
+		if(spi_slave.receive())
+		{
+			%<y_val> = (uint8_t) spi_slave.read();
+		}
+  %endif
+%endfunction

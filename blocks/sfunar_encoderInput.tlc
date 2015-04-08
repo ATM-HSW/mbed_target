@@ -1,0 +1,175 @@
+%% File : sfunar_encoderInput.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_encoderInput "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %%%openfile buffer1
+  %%/* %<Type> block: %<Name> */
+  %%  TIM_Encoder_InitTypeDef sConfig_encoder;
+  %%  TIM_MasterConfigTypeDef sMasterConfig_encoder;
+  %%  GPIO_InitTypeDef %<name>_GPIO_InitStruct;
+  %%%closefile buffer1
+  %%%<LibMdlRegCustomCode(buffer1, "declaration")>
+  
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  
+  %assign p1_val = CAST("Number",LibBlockParameterValue(p1, 0))
+  %assign p2_val = LibBlockParameterValue(p2, 0)
+  %assign p3_val = LibBlockParameterValue(p3, 0)
+  %assign p4_val = CAST("Number",LibBlockParameterValue(p4, 0))
+
+  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign name = FEVAL("strrep",name," ","_")
+  %assign pname = "P" + FEVAL("char",p1_val+64) + "_" + FEVAL("int2str",p2_val-1)
+
+  %switch(p2_val)
+	%case 1
+		%assign encodermode = "TIM_ENCODERMODE_TI1"
+		%break
+	%case 2
+		%assign encodermode = "TIM_ENCODERMODE_TI2"
+		%break
+	%case 3
+		%assign encodermode = "TIM_ENCODERMODE_TI12"
+		%break
+	%default
+		%assign encodermode = "TIM_ENCODERMODE_TI1"
+		%break
+  %endswitch
+  
+  %switch(p3_val)
+	%case 1
+		%assign pulltype = "GPIO_NOPULL"
+		%break
+	%case 2
+		%assign pulltype = "GPIO_PULLUP"
+		%break
+	%case 3
+		%assign pulltype = "GPIO_PULLDOWN"
+		%break
+	%default
+		%assign pulltype = "GPIO_NOPULL"
+		%break
+  %endswitch
+  
+  %if !SLibCodeGenForSim()
+    /* %<Type> block: %<Name> */
+    TIM_Encoder_InitTypeDef %<name>_sConfig;
+    TIM_MasterConfigTypeDef %<name>_sMasterConfig;
+    GPIO_InitTypeDef %<name>_GPIO_InitStruct;
+
+	__TIM%<p1_val>_CLK_ENABLE();
+	%switch(p1_val)
+		%case 1
+			__GPIOE_CLK_ENABLE();
+			
+			%<name>_GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_11;			
+			%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+			%<name>_GPIO_InitStruct.Pull = %<pulltype>;
+			%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+			%<name>_GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
+			HAL_GPIO_Init(GPIOE, &%<name>_GPIO_InitStruct);
+			%break
+		%case 2
+			__GPIOA_CLK_ENABLE();
+			
+			%<name>_GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_15;
+			%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+			%<name>_GPIO_InitStruct.Pull = %<pulltype>;
+			%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+			%<name>_GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
+			HAL_GPIO_Init(GPIOA, &%<name>_GPIO_InitStruct);
+			%break
+		%case 3
+			__GPIOB_CLK_ENABLE();
+			
+			%<name>_GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5;
+			%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+			%<name>_GPIO_InitStruct.Pull = %<pulltype>;
+			%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+			%<name>_GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+			HAL_GPIO_Init(GPIOB, &%<name>_GPIO_InitStruct);
+			%break
+		%default
+			%break
+	%endswitch
+	
+	%<name>.Instance = TIM%<p1_val>;
+	%<name>.Init.Prescaler = 0;
+	%<name>.Init.CounterMode = TIM_COUNTERMODE_UP;
+	%<name>.Init.Period = %<p4_val>;
+	%<name>.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	%<name>.Init.RepetitionCounter = 0;
+	%<name>_sConfig.EncoderMode = %<encodermode>;
+	%<name>_sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+	%<name>_sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+	%<name>_sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+	%<name>_sConfig.IC1Filter = 0;
+	%<name>_sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+	%<name>_sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+	%<name>_sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+	%<name>_sConfig.IC2Filter = 0;
+	HAL_TIM_Encoder_Init(&%<name>, &%<name>_sConfig);
+
+	%<name>_sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	%<name>_sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&%<name>, &%<name>_sMasterConfig);
+
+	HAL_TIM_Encoder_Start(&%<name>,TIM_CHANNEL_ALL);
+    %%
+  %endif
+
+  
+  %if !SLibCodeGenForSim()
+      %openfile declbuf
+
+      TIM_HandleTypeDef %<name>;
+
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+  
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%%
+%function Outputs(block, system) Output
+
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+	%assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+	%assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+
+    %assign p2_val = CAST("Number",LibBlockParameterValue(p2, 0))	
+    %assign p4_val = CAST("Real",LibBlockParameterValue(p4, 0))
+
+    %assign anglePerTick = 360/p4_val   
+    %%assign anglePerTick = 6.2831853/p4_val %%in rad
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %%
+    %if !SLibCodeGenForSim()
+        if(%<u1_val>) {
+            __HAL_TIM_SetCounter(&%<name>, 0);
+        }
+
+        %<y2_val> = __HAL_TIM_GetCounter(&%<name>);
+        %<y1_val> = %<y2_val>*%<anglePerTick>;
+    %endif
+%endfunction

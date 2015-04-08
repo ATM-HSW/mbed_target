@@ -1,0 +1,45 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_spi_csConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+		
+	%assign p1_val = LibBlockParameterValue(p1,0)
+	%assign p2_val = LibBlockParameterValue(p2,0)
+	%assign name = "P" + FEVAL("char",p1_val+64) + "_" + FEVAL("int2str",p2_val-1)
+	
+	%if !SLibCodeGenForSim()
+	
+		%openfile declbuf
+			DigitalOut	cs(%<name>);
+			
+			void spiWrite(uint8_t* buf, uint16_t length)
+			{
+				cs = 0;
+				for (int i = 0; i < length; i++)
+				{
+					spi.write(buf[i]);
+				}
+				cs = 1;
+			}
+		%closefile declbuf
+		
+		%assign srcFile = LibGetModelDotCFile()
+		%<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>    
+  %endif
+	
+%endfunction

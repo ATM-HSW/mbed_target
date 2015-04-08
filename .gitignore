@@ -10,5 +10,14 @@
 *.mex*
 
 *.bak
+*.o
+*.elf
+*.d
+*.bin
+**/slprj/*
+**/*_slprj/*
+**/Debug/*
+
 *~
 *.autosave
+.gitignore
