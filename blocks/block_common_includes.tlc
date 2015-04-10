@@ -2,6 +2,7 @@
 %%
 %% Copyright 2002-2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.Olaf Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %function SLibCodeGenForSim() void
   %if (CompiledModel.TargetStyle=="SimulationTarget")
@@ -23,6 +24,12 @@
       %endif
       %%
       %<LibAddToCommonIncludes("mbed.h")>
+	  
+	  %% mm
+	  %if UseMbedRTOS
+		%<LibAddToCommonIncludes("rtos.h")>
+	  %endif
+	  %% /mm
       %%
     %endif
   %endif

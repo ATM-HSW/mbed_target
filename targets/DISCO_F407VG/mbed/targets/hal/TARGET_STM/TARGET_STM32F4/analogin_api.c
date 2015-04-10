@@ -45,10 +45,10 @@ void analogin_init(analogin_t *obj, PinName pin)
     obj->adc = (ADCName)pinmap_peripheral(pin, PinMap_ADC);
     MBED_ASSERT(obj->adc != (ADCName)NC);
 
-    // Get the peripheral name from the pin and assign it to the object
+    // Get the functions (adc channel) from the pin and assign it to the object
     uint32_t function = pinmap_function(pin, PinMap_ADC);
     MBED_ASSERT(function != (uint32_t)NC);
-    adc->channel = STM_PIN_CHANNEL(function);
+    obj->channel = STM_PIN_CHANNEL(function);
 
     // Configure GPIO
     pinmap_pinout(pin, PinMap_ADC);
