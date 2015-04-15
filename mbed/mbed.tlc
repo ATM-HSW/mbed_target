@@ -43,10 +43,21 @@
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
   rtwoptions(oIdx).callback      = '';
-  rtwoptions(oIdx).opencallback  = '';
   rtwoptions(oIdx).closecallback = '';
   rtwoptions(oIdx).makevariable  = '';
 
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'mbed Targets: ';
+  rtwoptions(oIdx).opencallback  = 'mbed_tlc_opencallback()';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets();
+  rtwoptions(oIdx).tlcvariable    = 'MbedTarget';
+  rtwoptions(oIdx).makevariable   = 'MBEDTARGET';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
+ 
 
   oIdx = oIdx + 1;
 

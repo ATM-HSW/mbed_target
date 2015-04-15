@@ -17,6 +17,7 @@ end
 %% Register PIL/ExtMode communication interface
 sl_refresh_customizations
 
+mbed.Prefs.setTargetPath(pwd);
 mbed.Prefs.setMbedPath('E:\GitSynology\mbed_target\targets\DISCO_F407VG')
 mbed.Prefs.setGccPath('C:\Program Files (x86)\GNU Tools ARM Embedded\4.9 2014q4\bin')
 mbed.Prefs.setPythonPath('C:\Python27')
