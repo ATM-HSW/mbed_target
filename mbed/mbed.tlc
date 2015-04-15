@@ -49,15 +49,15 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Targets: ';
-  rtwoptions(oIdx).opencallback  = 'mbed_tlc_opencallback()';
+  rtwoptions(oIdx).prompt         = 'mbed Target: ';
   rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets();
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets();mbed_tlc_opencallback();
   rtwoptions(oIdx).tlcvariable    = 'MbedTarget';
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
- 
+   rtwoptions(oIdx).callback      = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
+
 
   oIdx = oIdx + 1;
 
@@ -68,30 +68,18 @@
   rtwoptions(oIdx).makevariable   = 'MBEDPATH';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Path for mbed Project folder e.g. C:\\...\\mbed']);
-  rtwoptions(oIdx).callback      = 'getpath_callback(hDlg, hSrc, ''MbedPath'')';
+  rtwoptions(oIdx).callback      = 'mbed_tlc_callback(hDlg, hSrc, ''MbedPath'')';
 
 
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'Download Application';
   rtwoptions(oIdx).type           = 'Checkbox';
-  rtwoptions(oIdx).default        = 'on';
+  rtwoptions(oIdx).default        = mbed.Prefs.getMbedDownload();
   rtwoptions(oIdx).tlcvariable    = 'DownloadApplication';
   rtwoptions(oIdx).makevariable   = 'DOWNLOADAPPLICATION';
   rtwoptions(oIdx).tooltip        = ['Flash application'];
-  rtwoptions(oIdx).callback      = '';
-
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbed Virtual COM Port: ';
-  rtwoptions(oIdx).type           = 'Edit';
-  rtwoptions(oIdx).default        = mbed.Prefs.getComPort();
-  rtwoptions(oIdx).tlcvariable    = 'ComPort';
-  rtwoptions(oIdx).makevariable   = 'COMPORT';
-  rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['Virtual COM Port (COMx)']);
-  rtwoptions(oIdx).callback      = '';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadApplication'')';
 
 
   oIdx = oIdx + 1;
@@ -103,18 +91,29 @@
   rtwoptions(oIdx).makevariable   = 'MBEDDRIVE';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
-  rtwoptions(oIdx).callback       = 'getpath_callback(hDlg, hSrc, ''MbedDrive'')';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedDrive'')';
 
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'mbed Virtual COM Port: ';
+  rtwoptions(oIdx).type           = 'Edit';
+  rtwoptions(oIdx).default        = mbed.Prefs.getComPort();
+  rtwoptions(oIdx).tlcvariable    = 'ComPort';
+  rtwoptions(oIdx).makevariable   = 'COMPORT';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['Virtual COM Port (COMx)']);
+  rtwoptions(oIdx).callback      = '';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''ComPort'')';
 
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'Use mbed RTOS';
   rtwoptions(oIdx).type           = 'Checkbox';
-  rtwoptions(oIdx).default        = 'off';
+  rtwoptions(oIdx).default        = mbed.Prefs.getMbedRTOS();
   rtwoptions(oIdx).tlcvariable    = 'UseMbedRTOS';
   rtwoptions(oIdx).makevariable   = 'USEMBEDRTOS';
   rtwoptions(oIdx).tooltip        = sprintf(['Add mbed RTOS.']);
-  rtwoptions(oIdx).callback       = '';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''UseMbedRTOS'')';
 
 
   oIdx = oIdx + 1;

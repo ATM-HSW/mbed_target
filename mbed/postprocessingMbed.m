@@ -5,7 +5,7 @@ mbedPath = get_param(modelName,'MbedPath');
 a=find(mbedPath, filesep);
 d=[mbedPath(1:a(1)) ':'];
 sourcePath = mbedPath;
-comPort = get_param(modelName,'ComPort');
+%comPort = get_param(modelName,'ComPort');
 
 % Get the current configuration
 lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;

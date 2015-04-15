@@ -127,8 +127,8 @@ function i_mbed_setup(modelName)
     disp('###')
     disp('### mbed environment settings:')
     disp('###')
-    fprintf('###     Name:           %s\n', mbed.Prefs.getName);
-    fprintf('###     MBED_ROOT:      %s\n', mbed.Prefs.getMbedPath)
+    fprintf('###     Name:           %s\n', get_param(bdroot,'MbedTarget'));
+    %fprintf('###     MBED_ROOT:      %s\n', mbed.Prefs.getMbedPath)
     disp('###')
 end
 
@@ -151,43 +151,22 @@ end
 function i_write_mbed_makefiles
 
     lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
-    [modelFolder,modelName,ext] = fileparts( which (bdroot));
+    [~,modelName,~] = fileparts( which (bdroot));
     buildAreaDstFolder = fullfile(lCodeGenFolder, [modelName '_slprj']);
     if ~exist(buildAreaDstFolder, 'dir')
       mkdir (buildAreaDstFolder);
     end
+    
+    target = get_param(bdroot,'MbedTarget');
 
-    % Copy the mbed version of target_tools.mk into the build area
-    tgtToolsFile = 'target_tools.mk';
-    target_tools_folder = fileparts(mfilename('fullpath'));
-    srcFile = fullfile(target_tools_folder, tgtToolsFile);
-    dstFile = fullfile(buildAreaDstFolder, tgtToolsFile);
-    %copyfile(srcFile, dstFile, 'f');
+    % Copy the mbed target into the build area
+    % target_tools_folder = fileparts(mfilename('fullpath'));
+    srcFile = fullfile(getMbedTargetPath(), 'targets', [target '.zip']);
+    %dstFile = buildAreaDstFolder;
+    unzip(srcFile, buildAreaDstFolder);
     % Make sure the file is not read-only
     %fileattrib(dstFile, '+w');
 
-    mbed_path = RTW.transformPaths(mbed.Prefs.getMbedPath);
-    % gmake needs forward slash as path separator
-    mbed_path = strrep(mbed_path, '\', '/');
-
-    % Write out the makefile
-%    makefileName = fullfile(buildAreaDstFolder, 'mbed_prefs.mk');
-%    fid = fopen(makefileName,'w');
-%    fwrite(fid, sprintf('%s\n\n', '# Mbed build preferences'));
-%    % fwrite(fid, sprintf('# %s\n', mbed.Prefs.getKey('name')));
-%    fwrite(fid, sprintf('BOARD_TYPE=%s\n', mbed.Prefs.getBoard));
-%    fwrite(fid, sprintf('MBED_ROOT=%s\n', mbed_path));
-%    fwrite(fid, sprintf('MCU=%s\n', mbed.Prefs.getMCU));
-%    fwrite(fid, sprintf('F_CPU=%s\n', mbed.Prefs.getCpuFrequency));
-%    fwrite(fid, sprintf('MBED_SL=%s\n',  strrep(fileparts(mfilename('fullpath')),'\', '/')));
-%    fwrite(fid, sprintf('PIL_SPEED=%d\n',   mbed.Prefs.getPILSpeed));
-%
-%    variant = ''; % mbed.Prefs.getKey('variant');
-%    if isempty(variant)
-%        variant = 'standard';
-%    end
-%    fwrite(fid, sprintf('VARIANT=%s\n', variant));
-%    fclose(fid);
 end
 
 function i_download(modelName)

@@ -17,9 +17,13 @@ end
 %% Register PIL/ExtMode communication interface
 sl_refresh_customizations
 
-mbed.Prefs.setTargetPath(pwd);
+%% setting the default configuration for a new Simulink model
+mbed.Prefs.setMbedTarget('DISCO_F407VG');
 mbed.Prefs.setMbedPath('E:\GitSynology\mbed_target\targets\DISCO_F407VG')
+mbed.Prefs.setMbedDrive('D:');
+mbed.Prefs.setMbedDownload('on');
+mbed.Prefs.setMbedRTOS('off');
+mbed.Prefs.setMbedProgrammer('mbed');
+
 mbed.Prefs.setGccPath('C:\Program Files (x86)\GNU Tools ARM Embedded\4.9 2014q4\bin')
 mbed.Prefs.setPythonPath('C:\Python27')
-mbed.Prefs.setComPort('COM26');
-mbed.Prefs.setMbedDrive('D:');
