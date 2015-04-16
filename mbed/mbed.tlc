@@ -61,18 +61,6 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Path: ';
-  rtwoptions(oIdx).type           = 'Edit';
-  rtwoptions(oIdx).default        = mbed.Prefs.getMbedPath();
-  rtwoptions(oIdx).tlcvariable    = 'MbedPath';
-  rtwoptions(oIdx).makevariable   = 'MBEDPATH';
-  rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['Path for mbed Project folder e.g. C:\\...\\mbed']);
-  rtwoptions(oIdx).callback      = 'mbed_tlc_callback(hDlg, hSrc, ''MbedPath'')';
-
-
-  oIdx = oIdx + 1;
-
   rtwoptions(oIdx).prompt         = 'Download Application';
   rtwoptions(oIdx).type           = 'Checkbox';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedDownload();

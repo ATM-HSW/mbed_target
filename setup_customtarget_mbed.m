@@ -19,7 +19,6 @@ sl_refresh_customizations
 
 %% setting the default configuration for a new Simulink model
 mbed.Prefs.setMbedTarget('DISCO_F407VG');
-mbed.Prefs.setMbedPath('E:\GitSynology\mbed_target\targets\DISCO_F407VG')
 mbed.Prefs.setMbedDrive('D:');
 mbed.Prefs.setMbedDownload('on');
 mbed.Prefs.setMbedRTOS('off');

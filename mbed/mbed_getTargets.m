@@ -1,5 +1,4 @@
 function ret = mbed_getTargets()
-disp 'mbed_getTargets called';
 pathstr = getMbedTargetPath();
 targetsfiles = ls(fullfile(pathstr,'targets','*.zip'));
 ret=[];

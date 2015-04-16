@@ -54,8 +54,7 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     %    args = [args, ' -j4'];  % run makefile in 4 threads
     %    set_param(modelName, 'RTWBuildArgs', args);
     % end     
-    i_write_mbed_makefiles;
-	postprocessingMbed(modelName, 0, 1, 0);
+    i_write_mbed_files();
     disp(sprintf(['\n### Code Format : %s'],buildOpts.codeFormat));%#ok
 
    case 'after_make'
@@ -113,7 +112,7 @@ function i_mbed_setup(modelName)
                'window.']);
     end
 
-    disp(['### Starting mbed build procedure for ', 'model: ',modelName]);
+    disp(['### Starting mbed build procedure for ', 'model: ',modelName, ' Target: ', get_param(bdroot,'MbedTarget')]);
 
     if ~isempty(strfind(pwd,' ')) || ~isempty(strfind(pwd,'&'))
         error('RTW:mbed:pwdHasSpaces',...
@@ -128,7 +127,10 @@ function i_mbed_setup(modelName)
     disp('### mbed environment settings:')
     disp('###')
     fprintf('###     Name:           %s\n', get_param(bdroot,'MbedTarget'));
-    %fprintf('###     MBED_ROOT:      %s\n', mbed.Prefs.getMbedPath)
+    fprintf('###     RTOS:           %s\n', get_param(bdroot,'UseMbedRTOS'));
+    fprintf('###     mbed Drive:     %s\n', get_param(bdroot,'MbedDrive'));
+    fprintf('###     Com Port:       %s\n', get_param(bdroot,'ComPort'));
+    fprintf('###     Programmer:     %s\n', mbed.Prefs.getMbedProgrammer()); %get_param(bdroot,'MbedProgrammer'))
     disp('###')
 end
 
@@ -148,7 +150,7 @@ function i_check_tasking_mode(modelName)
     end
 end
 
-function i_write_mbed_makefiles
+function i_write_mbed_files()
 
     lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
     [~,modelName,~] = fileparts( which (bdroot));
@@ -160,19 +162,16 @@ function i_write_mbed_makefiles
     target = get_param(bdroot,'MbedTarget');
 
     % Copy the mbed target into the build area
-    % target_tools_folder = fileparts(mfilename('fullpath'));
     srcFile = fullfile(getMbedTargetPath(), 'targets', [target '.zip']);
-    %dstFile = buildAreaDstFolder;
     unzip(srcFile, buildAreaDstFolder);
-    % Make sure the file is not read-only
-    %fileattrib(dstFile, '+w');
 
 end
 
 function i_download(modelName)
 	destname = get_param(modelName,'MbedDrive');
+    lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
     try
-        srcname = fullfile(mbed.Prefs.getMbedPath,[modelName '.bin']);
+        srcname = fullfile(lCodeGenFolder,[modelName '.bin']);
 	    disp(['copy ' srcname ' to ' destname]);
         [status,message,messageid] = copyfile(srcname,destname,'f');
         if status==0

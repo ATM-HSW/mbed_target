@@ -112,15 +112,6 @@ end
 %%
 function devicePath = getMbedDrive
     devicePath = mbed.Prefs.getPref('MbedDrive');
-    % check validity of path (in case the folder got deleted between
-    % after setMbedDrive and before getMbedDrive)
-%             if ~exist(devicePath,'dir') 
-%                 nl = sprintf('\n');
-%                 error('RTW:mbed:invalidMbedDrive', ...
-%                       ['Mbed Drive is unspecified or invalid: "' devicePath '"' nl ...
-%                        'Specify a valid path using mbed.Prefs.setMbedDrive, e.g.' nl ...
-%                        '   mbed.Prefs.setMbedDrive(''E:\\'')']);
-%             end
 end
 
 %%
