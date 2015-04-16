@@ -54,7 +54,7 @@
   %endswitch
 
   %if p3_val == 1
-    %assign StackSize = DEFAULT_STACK_SIZE
+    %assign StackSize = "DEFAULT_STACK_SIZE"
   %else
     %assign StackSize = p4_val
   %endif

@@ -9,6 +9,7 @@ mex sfunar_analogOutput.c
 mex sfunar_analogOutput_max11300.c
 mex sfunar_analogOutput_mcp4728.c
 mex sfunar_analogOutput_mcp4822.c
+mex sfunar_createThread.c
 mex sfunar_digitalInput.c
 mex sfunar_digitalInput_max11300.c
 mex sfunar_digitalInput_pcf8574.c
