@@ -170,8 +170,9 @@ end
 function i_download(modelName)
 	destname = get_param(modelName,'MbedDrive');
     lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
+    [~,modelName,~] = fileparts( which (bdroot));
     try
-        srcname = fullfile(lCodeGenFolder,[modelName '.bin']);
+        srcname = fullfile(lCodeGenFolder, [modelName '_slprj'], [modelName '.bin']);
 	    disp(['copy ' srcname ' to ' destname]);
         [status,message,messageid] = copyfile(srcname,destname,'f');
         if status==0
