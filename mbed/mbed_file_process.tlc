@@ -33,11 +33,6 @@
     %<FcnSingleTaskingMain()>
   %endif
 %else
-   %% Prepared for the future
-   %% %include "mbed_ec_RTOS_main.tlc"
+   %% %include "mbed_srmain.tlc"
    %% %<FcnSingleTaskingMain()>
-
-   %assign errTxt = "RTOS not yet supported"
-   %<LibReportError(errTxt)>         
-
 %endif

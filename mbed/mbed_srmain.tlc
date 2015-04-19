@@ -31,8 +31,10 @@
 
   %openfile tmpBuf
 
-  /* Overrun counter */
-  static uint8_t uOverrunCounter;
+  %if !UseMbedRTOS
+    /* Overrun counter */
+    static uint8_t uOverrunCounter;
+  %endif
 
   %% Get fundamental step time
   %assign SAMPLETIME = CompiledModel.FundamentalStepSize
@@ -52,93 +54,95 @@
 
   %if UseMbedRTOS
   
-  %openfile tmpBuf
-
-
-  void step(void const *param) {
-    %<LibCallModelStep(0)>
-  }
-  
-  /* with RTOS */
-  int main(void) {
-    unsigned long oldTime;
-    unsigned long actualTime;
+    %openfile tmpBuf
+    void step(void const *param) {
+      %<LibCallModelStep(0)>
+    }
     
-    RtosTimer step_1_timer(step, osTimerPeriodic, (void *)0);
+    %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_glob_decl")>
+    %<LibGetSourceFileCustomSection(cFile,"Ert_main_glob_decl")>
+  
+    /* with RTOS */
+    int main(void) {
+      
+      RtosTimer step_1_timer(step, osTimerPeriodic, (void *)0);
+      %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_loc_decl")>
+      %<LibGetSourceFileCustomSection(cFile,"Ert_main_loc_decl")>
+  
+      /* initialize model */
+      %<LibCallModelInitialize()>\
+  
+      %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_after_init")>
+      %<LibGetSourceFileCustomSection(cFile,"Ert_main_after_init")>
 
-    /* initialize model */
-    %<LibCallModelInitialize()>\
-
-    %if ExtMode
-        %<SLibGenERTExtModeInit()>
-    %endif
-
-
-    /* start Timer for main step function */
-    step_1_timer.start(STEP_SIZE_MS);
-
-    /* main task waits forever */
-    Thread::wait(osWaitForever);
-
-    /* deinitialize model */
-    %<LibCallModelTerminate()>\
-	
-	return 0;
-  }
-  %closefile tmpBuf
+      %if ExtMode
+          %<SLibGenERTExtModeInit()>
+      %endif
+  
+  
+      /* start Timer for main step function */
+      step_1_timer.start(STEP_SIZE_MS);
+  
+      /* main task waits forever */
+      Thread::wait(osWaitForever);
+  
+      /* deinitialize model */
+      %<LibCallModelTerminate()>\
+  	
+  	return 0;
+    }
+    %closefile tmpBuf
 
   %else
 
-  %openfile tmpBuf
-  
-  uint8_t GetOverrunCounter(void)
-  {
-  	return uOverrunCounter;
-  }
-
-  // without RTOS
-  int main(void)
-  {
-    unsigned long oldTime;
-    unsigned long actualTime;
-    
-    /* initialize model */
-    %<LibCallModelInitialize()>\
-
-    %if ExtMode
-        %<SLibGenERTExtModeInit()>
-    %endif
-
-    oldTime = us_ticker_read();
-    while (true) {
-        /* call main step function */
-	    %<LibCallModelStep(0)>\
-
-        actualTime = us_ticker_read();
-        /* Overrun check */
-        if ((actualTime - oldTime) >= STEP_SIZE_US) {
-            /* We missed our time slot for actual step, report it! */
-            if(uOverrunCounter < 255U){
-                uOverrunCounter++;
-            }
-            oldTime = actualTime;               /* Update time stamp of last step */
-            continue;                           /* We are late, continue with next step */
-        }\
-
-        /* Waiting with pooling method */
-        while((actualTime - oldTime) < STEP_SIZE_US){
-            actualTime = us_ticker_read();                  /* Get actual time */
-        }
-        oldTime = actualTime;                       /* Update time stamp of last step */
+    %openfile tmpBuf    
+    uint8_t GetOverrunCounter(void)
+    {
+    	return uOverrunCounter;
     }
-
-    /* deinitialize model */
-    %<LibCallModelTerminate()>\
-	
-	return 0;
-  }
-	
-  %closefile tmpBuf
+  
+    // without RTOS
+    int main(void)
+    {
+      unsigned long oldTime;
+      unsigned long actualTime;
+      
+      /* initialize model */
+      %<LibCallModelInitialize()>\
+  
+      %if ExtMode
+          %<SLibGenERTExtModeInit()>
+      %endif
+  
+      oldTime = us_ticker_read();
+      while (true) {
+          /* call main step function */
+  	    %<LibCallModelStep(0)>\
+  
+          actualTime = us_ticker_read();
+          /* Overrun check */
+          if ((actualTime - oldTime) >= STEP_SIZE_US) {
+              /* We missed our time slot for actual step, report it! */
+              if(uOverrunCounter < 255U){
+                  uOverrunCounter++;
+              }
+              oldTime = actualTime;               /* Update time stamp of last step */
+              continue;                           /* We are late, continue with next step */
+          }\
+  
+          /* Waiting with pooling method */
+          while((actualTime - oldTime) < STEP_SIZE_US){
+              actualTime = us_ticker_read();                  /* Get actual time */
+          }
+          oldTime = actualTime;                       /* Update time stamp of last step */
+      }
+  
+      /* deinitialize model */
+      %<LibCallModelTerminate()>\
+  	
+  	return 0;
+    }
+    %closefile tmpBuf
   
   %endif
   

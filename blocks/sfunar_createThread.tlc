@@ -23,6 +23,7 @@
   %assign p2_val = LibBlockParameterValue(p2, 0)
   %assign p3_val = LibBlockParameterValue(p3, 0)
   %assign p4_val = CAST("Number",LibBlockParameterValue(p4, 0))
+  %assign p5_val = CAST("Number",LibBlockParameterValue(p5, 0))
    
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
@@ -60,37 +61,62 @@
   %endif
 
   %if !SLibCodeGenForSim()
-    %openfile buff
+    %assign ertMainFile = LibCreateSourceFile("Source", "Custom", "ert_main")
+
+    %openfile declbuf
     /* %<Type> block: %<Name> */
-    
+    %if p2_val == 0
+        extern void %<name>_thread(void const *);
+    %else
+        extern void %<name>_thread(void const *);
+    %endif
+    %closefile declbuf
+    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_glob_decl")>
+    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_glob_decl",declbuf)>
+
+    %openfile declbuf
+    /* %<Type> block: %<Name> */
     %if p2_val == 0
         Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);
     %else
         RtosTimer %<name>(%<name>_thread, osTimerPeriodic, NULL);
-        %<name>.start(1);
+    %endif
+    %closefile declbuf
+    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
+    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
+
+    %openfile buff
+    %if p2_val == 1
+        /* %<Type> block: %<Name> */    
+        %<name>.start(%<p5_val>);
     %endif
     %closefile buff
-    %<LibMdlRegCustomCode(buff,"execution")>
+    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
+    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
+
   %endif
 
   
   %if !SLibCodeGenForSim()
-      %openfile declbuf
-      /* %<Type> block: %<Name> */
-      %if p2_val == 0
-        void %<name>_thread(void const *argument)
-        {
-          while(1)
-              %<LibBlockExecuteFcnCall(block,0)>
+    %openfile declbuf
+    /* %<Type> block: %<Name> */
+    %if p2_val == 0
+      void %<name>_thread(void const *argument) {
+        while(1) {
+          %<LibBlockExecuteFcnCall(block,0)>
+          %if p5_val > 0
+            Thread::wait(%<p5_val>);
+          %endif
         }
-      %else
-        void %<name>_thread(void const *argument)
-            %<LibBlockExecuteFcnCall(block,0)>
-      %endif
+      }
+    %else
+      void %<name>_thread(void const *argument)
+        %<LibBlockExecuteFcnCall(block,0)>
+    %endif
 
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
   %endif
   
 %endfunction
