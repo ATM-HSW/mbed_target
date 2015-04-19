@@ -190,7 +190,7 @@ static void mdlInitializeSizes(SimStruct *S)
  */
 static void mdlInitializeSampleTimes(SimStruct *S)
 {
-  ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
+  ssSetSampleTime(S, 0, 2);
   ssSetOffsetTime(S, 0, FIXED_IN_MINOR_STEP_OFFSET);
   
   ssSetCallSystemOutput(S,0);
