@@ -86,7 +86,7 @@
 			%assign rx_dma_stream = "DMA2_Stream2"
 			%assign alternate_function = "GPIO_AF8_USART6"
 			%break
-	%endswitch
+		%endswitch
 	
 	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 		%assign UartDiv = 36000000/(BaudRate_val*16)
@@ -94,7 +94,7 @@
 		%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*16 + 0.5)
 
 	%else
-	%exit "Serial DMA Config Block not supported by this target"
+	%<LibReportFatalError("Serial DMA Config Block not supported by this target")>
 	%endif
 
 	%switch TxPort_val

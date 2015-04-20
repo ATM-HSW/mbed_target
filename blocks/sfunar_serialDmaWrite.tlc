@@ -83,7 +83,7 @@
 	%%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 
 	%else
-	%exit "Serial DMA Write Block not supported by this target"
+	%<LibReportFatalError("Serial DMA Write Block not supported by this target")>
 	%endif	
 	
 	%if !SLibCodeGenForSim()	

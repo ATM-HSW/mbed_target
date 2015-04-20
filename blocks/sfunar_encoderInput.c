@@ -86,7 +86,7 @@ static void mdlCheckParameters(SimStruct *S)
     }
   }
     /*
-    * Check the parameter 2 (timer number (TIM1 ... TIM3))
+    * Check the parameter 2 (TimerNumber)
     */
     if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
@@ -96,7 +96,7 @@ static void mdlCheckParameters(SimStruct *S)
     }
 
     /*
-     * Check the parameter 3  (Encoder Mode)
+     * Check the parameter 3  (EncoderMode)
      */
     if EDIT_OK(S, 2) {
       int_T dimsArray[2] = { 1, 1 };
@@ -106,7 +106,7 @@ static void mdlCheckParameters(SimStruct *S)
     }
   
     /*
-     * Check the parameter 4  (Input Mode)
+     * Check the parameter 4  (Ti1Port)
      */
     if EDIT_OK(S, 3) {
       int_T dimsArray[2] = { 1, 1 };
@@ -116,13 +116,53 @@ static void mdlCheckParameters(SimStruct *S)
     }
   
     /*
-     * Check the parameter 5  (Resolution)
+     * Check the parameter 5  (Ti1Pin)
      */
     if EDIT_OK(S, 4) {
       int_T dimsArray[2] = { 1, 1 };
 
       /* Check the parameter attributes */
       ssCheckSFcnParamValueAttribs(S, 4, "P4", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    }
+  
+    /*
+     * Check the parameter 6  (Ti2Port)
+     */
+    if EDIT_OK(S, 5) {
+      int_T dimsArray[2] = { 1, 1 };
+
+      /* Check the parameter attributes */
+      ssCheckSFcnParamValueAttribs(S, 5, "P5", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    }
+  
+    /*
+     * Check the parameter 7  (Ti2Pin)
+     */
+    if EDIT_OK(S, 6) {
+      int_T dimsArray[2] = { 1, 1 };
+
+      /* Check the parameter attributes */
+      ssCheckSFcnParamValueAttribs(S, 6, "P6", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    }
+  
+    /*
+     * Check the parameter 8  (InputMode)
+     */
+    if EDIT_OK(S, 7) {
+      int_T dimsArray[2] = { 1, 1 };
+
+      /* Check the parameter attributes */
+      ssCheckSFcnParamValueAttribs(S, 7, "P7", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    }
+  
+    /*
+     * Check the parameter 9  (Resolution)
+     */
+    if EDIT_OK(S, 8) {
+      int_T dimsArray[2] = { 1, 1 };
+
+      /* Check the parameter attributes */
+      ssCheckSFcnParamValueAttribs(S, 8, "P8", DYNAMICALLY_TYPED, 2, dimsArray, 0);
     }
 	
 }
@@ -137,7 +177,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 5);
+  ssSetNumSFcnParams(S, 9);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -161,10 +201,14 @@ static void mdlInitializeSizes(SimStruct *S)
 
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
-  ssSetSFcnParamTunable(S, 1, 1);
-  ssSetSFcnParamTunable(S, 2, 1);
-  ssSetSFcnParamTunable(S, 3, 1);
-  ssSetSFcnParamTunable(S, 4, 1);
+  ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
+  ssSetSFcnParamTunable(S, 6, 0);
+  ssSetSFcnParamTunable(S, 7, 0);
+  ssSetSFcnParamTunable(S, 8, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -280,7 +324,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 4))
+  if (!ssSetNumRunTimeParams(S, 8))
     return;
 
   /*
@@ -298,7 +342,23 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 4
    */
-  ssRegDlgParamAsRunTimeParam(S, 4, 3, "p4", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 3, "p4", ssGetDataTypeId(S, "uint8"));
+  /*
+   * Register the run-time parameter 5
+   */
+  ssRegDlgParamAsRunTimeParam(S, 5, 4, "p5", ssGetDataTypeId(S, "uint8"));
+  /*
+   * Register the run-time parameter 6
+   */
+  ssRegDlgParamAsRunTimeParam(S, 6, 5, "p6", ssGetDataTypeId(S, "uint8"));
+  /*
+   * Register the run-time parameter 7
+   */
+  ssRegDlgParamAsRunTimeParam(S, 7, 6, "p7", ssGetDataTypeId(S, "uint8"));
+  /*
+   * Register the run-time parameter 8
+   */
+  ssRegDlgParamAsRunTimeParam(S, 8, 7, "p8", ssGetDataTypeId(S, "uint16"));
 }
 
 #endif
