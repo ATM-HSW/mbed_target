@@ -133,7 +133,7 @@ static void mdlInitializeSizes(SimStruct *S)
 
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
-  ssSetSFcnParamTunable(S, 1, 1);
+  ssSetSFcnParamTunable(S, 1, 0);
 
   ssSetNumPWork(S, 0);
 

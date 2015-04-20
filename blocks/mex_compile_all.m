@@ -28,6 +28,9 @@ mex sfunar_mcp3204Config.c
 mex sfunar_mcp4822Config.c
 mex sfunar_pcf8574Config.c
 mex sfunar_serialConfig.c
+mex sfunar_serialDmaConfig.c
+mex sfunar_serialDmaRead.c
+mex sfunar_serialDmaWrite.c
 mex sfunar_serialRead.c
 mex sfunar_serialWrite.c
 mex sfunar_servoOutput.c

@@ -13,6 +13,11 @@
 
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %% global string buffers for rtos thread instances and thread function prototypes
+  %% for insertion in mbed_srmain.tlc
+  %assign ::ThreadInstances = ""
+  %assign ::ThreadPrototypes = ""
     
 %endfunction
 
@@ -22,7 +27,8 @@
   %assign p1_val = LibBlockParameterValue(p1, 0)
   %assign p2_val = LibBlockParameterValue(p2, 0)
   %assign p3_val = LibBlockParameterValue(p3, 0)
-  %assign p4_val = CAST("Number",LibBlockParameterValue(p4, 0))
+  %assign p4_val = CAST("Number",LibBlockParameterValue(p4, 0))  
+  %assign p5_val = CAST("Number",LibBlockParameterValue(p5, 0))
    
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
@@ -58,21 +64,29 @@
   %else
     %assign StackSize = p4_val
   %endif
-
+  
   %if !SLibCodeGenForSim()
-    %openfile buff
-    /* %<Type> block: %<Name> */
-    
+	%% if thread is asynchronous create normal rtos thread instance
     %if p2_val == 0
-        Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);
+		%openfile ::ThreadInstances, "a"
+		/* %<Type> block: %<Name> */    
+		Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);		
+		%closefile ::ThreadInstances
+	%% if thread is synchronous create periodic rtos timer to call thread function
     %else
-        RtosTimer %<name>(%<name>_thread, osTimerPeriodic, NULL);
-        %<name>.start(1);
+		%openfile ::ThreadInstances, "a"
+		/* %<Type> block: %<Name> */		
+        RtosTimer %<name>(%<name>_thread, osTimerPeriodic, NULL);		
+		%<name>.start(%<p5_val>);
+		%closefile ::ThreadInstances
     %endif
-    %closefile buff
-    %<LibMdlRegCustomCode(buff,"execution")>
   %endif
 
+  %if !SLibCodeGenForSim()
+	%openfile ::ThreadPrototypes, "a"		
+        extern void %<name>_thread(void const *argument);
+	%closefile ::ThreadPrototypes
+  %endif
   
   %if !SLibCodeGenForSim()
       %openfile declbuf
@@ -92,22 +106,5 @@
       %assign srcFile = LibGetModelDotCFile()
       %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
   %endif
-  
-%endfunction
-
-
-%% Function: Outputs ======================================================
-%%
-%function Outputs(block, system) Output
-
-    %%assign u1_val = LibBlockInputSignal(0, "", "", 0)
-	%%assign y1_val = LibBlockOutputSignal(0, "", "", 0)
-
-    %%assign p2_val = CAST("Number",LibBlockParameterValue(p2, 0))	
-    %%assign p4_val = CAST("Real",LibBlockParameterValue(p4, 0))
-
-    %%
-    %if !SLibCodeGenForSim()
-        
-    %endif
+    
 %endfunction

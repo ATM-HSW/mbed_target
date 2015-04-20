@@ -54,6 +54,9 @@
   
   %openfile tmpBuf
 
+	%if EXISTS(::ThreadPrototypes)
+		%<::ThreadPrototypes>
+	%endif
 
   void step(void const *param) {
     %<LibCallModelStep(0)>
@@ -61,18 +64,19 @@
   
   /* with RTOS */
   int main(void) {
-    unsigned long oldTime;
-    unsigned long actualTime;
-    
-    RtosTimer step_1_timer(step, osTimerPeriodic, (void *)0);
 
     /* initialize model */
     %<LibCallModelInitialize()>\
+	
+    RtosTimer step_1_timer(step, osTimerPeriodic, (void *)0);
+	
+	%if EXISTS(::ThreadInstances)
+		%<::ThreadInstances>
+	%endif
 
     %if ExtMode
         %<SLibGenERTExtModeInit()>
     %endif
-
 
     /* start Timer for main step function */
     step_1_timer.start(STEP_SIZE_MS);

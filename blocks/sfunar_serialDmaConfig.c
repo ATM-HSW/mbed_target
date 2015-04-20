@@ -12,7 +12,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_createThread
+#define S_FUNCTION_NAME                sfunar_serialDmaConfig
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -41,7 +41,7 @@ static bool IsRealMatrix(const mxArray * const m);
 static void mdlCheckParameters(SimStruct *S)
 {  
   /*
-   * Check the parameter 0	(Thread Priority)
+   * Check the parameter 1 (SerialPort)
    */
   if EDIT_OK(S, 0) {
     int_T dimsArray[2] = { 1, 1 };
@@ -51,17 +51,17 @@ static void mdlCheckParameters(SimStruct *S)
   }
   
   /*
-   * Check the parameter 1	(SyncFlag)
+   * Check the parameter 2 (TxPort)
    */
   if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P2", SS_BOOLEAN, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
   
   /*
-   * Check the parameter 2	(StackOption)
+   * Check the parameter 3 (TxPin)
    */
   if EDIT_OK(S, 2) {
     int_T dimsArray[2] = { 1, 1 };
@@ -71,23 +71,33 @@ static void mdlCheckParameters(SimStruct *S)
   }
   
   /*
-   * Check the parameter 3	(StackSize)
+   * Check the parameter 4 (RxPort)
    */
   if EDIT_OK(S, 3) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 3, "P4", SS_UINT32, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 3, "P4", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
   
   /*
-   * Check the parameter 4	(SampleTime)
+   * Check the parameter 5 (RxPin)
    */
   if EDIT_OK(S, 4) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 4, "P5", SS_UINT32, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 4, "P5", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  
+  /*
+   * Check the parameter 6 (BaudRate)
+   */
+  if EDIT_OK(S, 5) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 5, "P6", SS_UINT32, 2, dimsArray, 0);
   }
 }
 
@@ -102,7 +112,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 5);
+  ssSetNumSFcnParams(S, 6);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -130,6 +140,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 2, 0);
   ssSetSFcnParamTunable(S, 3, 0);
   ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -142,20 +153,11 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumInputPorts(S, 0))
     return;
 
-	/*
+  /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 1))
+  if (!ssSetNumOutputPorts(S, 0))
     return;
-	
-  /*
-   * Configure the output port 1
-   */
-  ssSetOutputPortDataType(S, 0, SS_FCN_CALL);
-  ssSetOutputPortWidth(S, 0, 1);
-  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-  ssSetOutputPortOutputExprInRTW(S, 0, 1);
 	
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -193,8 +195,6 @@ static void mdlInitializeSampleTimes(SimStruct *S)
   ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
   ssSetOffsetTime(S, 0, FIXED_IN_MINOR_STEP_OFFSET);
   
-  ssSetCallSystemOutput(S,0);
-
 #if defined(ssSetModelReferenceSampleTimeDefaultInheritance)
 
   ssSetModelReferenceSampleTimeDefaultInheritance(S);
@@ -219,7 +219,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 5))
+  if (!ssSetNumRunTimeParams(S, 6))
     return;
 
   /*
@@ -237,11 +237,15 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 4
    */
-  ssRegDlgParamAsRunTimeParam(S, 3, 3, "p4", SS_UINT32);
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "p4", DYNAMICALLY_TYPED);
   /*
-   * Register the run-time parameter 4
+   * Register the run-time parameter 5
    */
-  ssRegDlgParamAsRunTimeParam(S, 4, 4, "p5", SS_UINT32);
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "p5", DYNAMICALLY_TYPED);
+  /*
+   * Register the run-time parameter 6
+   */
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "p6", SS_UINT32);
 }
 
 #endif
