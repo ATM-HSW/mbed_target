@@ -21,17 +21,58 @@
 %% Initialisierung für den Block
 %% wird in die model_initialize() Funktion generiert
   
-  %assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
-  %assign TxPort_val = CAST("Number",LibBlockParameterValue(p2, 0))
-  %assign TxPin_val = CAST("Number",LibBlockParameterValue(p3, 0))-1
-  %assign RxPort_val = CAST("Number",LibBlockParameterValue(p4, 0))
-  %assign RxPin_val = CAST("Number",LibBlockParameterValue(p5, 0))-1
-  %assign BaudRate_val = CAST("Real", LibBlockParameterValue(p6, 0))
+	%assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
+	%assign TxPort_val = CAST("Number",LibBlockParameterValue(p2, 0))
+	%assign TxPin_val = CAST("Number",LibBlockParameterValue(p3, 0))-1
+	%assign RxPort_val = CAST("Number",LibBlockParameterValue(p4, 0))
+	%assign RxPin_val = CAST("Number",LibBlockParameterValue(p5, 0))-1
+	%assign BaudRate_val = CAST("Real", LibBlockParameterValue(p6, 0))
+
+	%assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+	%assign name = FEVAL("strrep",name," ","_")
   
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-  
-  
+	%switch TxPort_val
+		%case 1
+			%assign txgpio_name = "GPIOA"
+			%break
+		%case 2
+			%assign txgpio_name = "GPIOB"
+			%break
+		%case 3
+			%assign txgpio_name = "GPIOC"
+			%break
+		%case 4
+			%assign txgpio_name = "GPIOD"
+			%break
+		%case 5
+			%assign txgpio_name = "GPIOE"
+			%break
+		%case 6
+			%assign txgpio_name = "GPIOF"
+			%break
+	%endswitch
+
+	%switch RxPort_val
+		%case 1
+			%assign rxgpio_name = "GPIOA"
+			%break
+		%case 2
+			%assign rxgpio_name = "GPIOB"
+			%break
+		%case 3
+			%assign rxgpio_name = "GPIOC"
+			%break
+		%case 4
+			%assign rxgpio_name = "GPIOD"
+			%break
+		%case 5
+			%assign rxgpio_name = "GPIOE"
+			%break
+		%case 6
+			%assign rxgpio_name = "GPIOF"
+			%break
+	%endswitch
+	
 	%if ISEQUAL(MbedTarget,"DISCO_F407VG")
 				
 		%switch SerialPort_val
@@ -91,126 +132,187 @@
 			%break
 		%endswitch
 	
-	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
-		%assign UartDiv = 36000000/(BaudRate_val*16)
+		%assign UartDiv = fck/(BaudRate_val*16)
 		%assign Mantissa = CAST("Number", UartDiv)
 		%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*16 + 0.5)
 
+		%if !SLibCodeGenForSim()
+			%openfile buffer
+				%if ISEQUAL(txgpio_name,rxgpio_name)
+					__%<txgpio_name>_CLK_ENABLE();				
+				%else
+					__%<txgpio_name>_CLK_ENABLE();
+					__%<rxgpio_name>_CLK_ENABLE();
+				%endif			
+				
+				%<txgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<TxPin_val*2>));
+				%<txgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<TxPin_val>);
+				%<txgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<TxPin_val*2>));
+				%<txgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<TxPin_val*2>));
+				%if TxPin_val > 7
+					%assign TxPin_val = TxPin_val - 8
+					%<txgpio_name>->AFR[1] |= (%<alternate_function> << (%<TxPin_val*4>));
+				%else
+					%<txgpio_name>->AFR[0] |= (%<alternate_function> << (%<TxPin_val*4>));
+				%endif
+						
+				%<rxgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<RxPin_val*2>));
+				%<rxgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<RxPin_val>);
+				%<rxgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<RxPin_val*2>));
+				%<rxgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<RxPin_val*2>));
+				%if RxPin_val > 7
+					%assign RxPin_val = RxPin_val - 8
+					%<rxgpio_name>->AFR[1] |= (%<alternate_function> << (%<RxPin_val*4>));
+				%else
+					%<rxgpio_name>->AFR[0] |= (%<alternate_function> << (%<RxPin_val*4>));
+				%endif
+					
+				__%<uart_name>_CLK_ENABLE();
+
+				%<uart_name>->BRR = %<(Mantissa<<4) + Fraction>;
+				%<uart_name>->CR1 = (USART_CR1_TE | USART_CR1_RE);
+				%<uart_name>->CR2 = 0;
+				%<uart_name>->CR3 = (USART_CR3_DMAT | USART_CR3_DMAR);
+				%<uart_name>->GTPR = 0;
+
+				%<uart_name>->CR1 |= USART_CR1_UE;
+				
+				__%<dma_name>_CLK_ENABLE();
+				
+				if(%<tx_dma_stream>->CR & DMA_SxCR_EN)
+				{
+					%<tx_dma_stream>->CR &= ~(DMA_SxCR_EN);
+					while(%<tx_dma_stream>->CR & DMA_SxCR_EN);
+				}
+				%<tx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_MEMORY_TO_PERIPH;
+				%<tx_dma_stream>->PAR = (uint32_t)&%<uart_name>->DR;
+				
+				if(%<rx_dma_stream>->CR & DMA_SxCR_EN)
+				{
+					%<rx_dma_stream>->CR &= ~(DMA_SxCR_EN);
+					while(%<rx_dma_stream>->CR & DMA_SxCR_EN);
+				}
+				%<rx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
+				%<rx_dma_stream>->PAR = (uint32_t)&%<uart_name>->DR;			
+				%% Dma für empfang enablen wird im Serial Read Block gemacht
+				%%<rx_dma_stream>->CR |= DMA_SxCR_EN;			
+			%closefile buffer		
+			%<LibMdlRegCustomCode(buffer, "execution")>
+		%endif
+	
+	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+		%assign fck = 72000000
+
+		%switch SerialPort_val
+		%case 1
+			%assign uart_name = "USART1"
+			%assign dma_name = "DMA1"
+			%assign tx_dma_channel = "DMA1_Channel4"
+			%assign rx_dma_channel = "DMA1_Channel5"
+			%assign alternate_function = "GPIO_AF7_USART1"
+			RCC->CFGR3 |= (1<<0);
+			%break
+		%case 2
+			%assign uart_name = "USART2"
+			%assign dma_name = "DMA1"
+			%assign tx_dma_channel = "DMA1_Channel7"
+			%assign rx_dma_channel = "DMA1_Channel6"
+			%assign alternate_function = "GPIO_AF7_USART2"
+			RCC->CFGR3 |= (1<<16);
+			%break		
+		%case 3
+			%assign uart_name = "USART3"
+			%assign dma_name = "DMA1"
+			%assign tx_dma_channel = "DMA1_Channel2"
+			%assign rx_dma_channel = "DMA1_Channel3"
+			%assign alternate_function = "GPIO_AF7_USART3"
+			RCC->CFGR3 |= (1<<18);
+			%break
+		%case 4
+			%assign uart_name = "UART4"
+			%assign dma_name = "DMA2"
+			%assign tx_dma_channel = "DMA2_Channel5"
+			%assign rx_dma_channel = "DMA2_Channel3"
+			%assign alternate_function = "GPIO_AF5_UART4"
+			RCC->CFGR3 |= (1<<20);
+			%break
+		%default
+			%<LibReportError("Uart%<SerialPort_val> Peripheral not supported!")>
+			%break
+		%endswitch
+		
+		%assign UartDiv = fck/(BaudRate_val)
+		%assign Mantissa = CAST("Number", UartDiv)
+		%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*16 + 0.5)
+
+		%if !SLibCodeGenForSim()
+			%openfile buffer
+				%if ISEQUAL(txgpio_name,rxgpio_name)
+					__%<txgpio_name>_CLK_ENABLE();				
+				%else
+					__%<txgpio_name>_CLK_ENABLE();
+					__%<rxgpio_name>_CLK_ENABLE();
+				%endif			
+				
+				%<txgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<TxPin_val*2>));
+				%<txgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<TxPin_val>);
+				%<txgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<TxPin_val*2>));
+				%<txgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<TxPin_val*2>));
+				%if TxPin_val > 7
+					%assign TxPin_val = TxPin_val - 8
+					%<txgpio_name>->AFR[1] |= (%<alternate_function> << (%<TxPin_val*4>));
+				%else
+					%<txgpio_name>->AFR[0] |= (%<alternate_function> << (%<TxPin_val*4>));
+				%endif
+						
+				%<rxgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<RxPin_val*2>));
+				%<rxgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<RxPin_val>);
+				%<rxgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<RxPin_val*2>));
+				%<rxgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<RxPin_val*2>));
+				%if RxPin_val > 7
+					%assign RxPin_val = RxPin_val - 8
+					%<rxgpio_name>->AFR[1] |= (%<alternate_function> << (%<RxPin_val*4>));
+				%else
+					%<rxgpio_name>->AFR[0] |= (%<alternate_function> << (%<RxPin_val*4>));
+				%endif
+					
+				__%<uart_name>_CLK_ENABLE();
+
+				%<uart_name>->BRR = %<(Mantissa<<4) + Fraction>;
+				%<uart_name>->CR1 = (USART_CR1_TE | USART_CR1_RE);
+				%<uart_name>->CR2 = 0;
+				%<uart_name>->CR3 = (USART_CR3_DMAT | USART_CR3_DMAR);
+				%<uart_name>->GTPR = 0;
+
+				%<uart_name>->CR1 |= USART_CR1_UE;
+				
+				__%<dma_name>_CLK_ENABLE();
+				
+				if(%<tx_dma_channel>->CCR & DMA_CCR_EN)
+				{
+					%<tx_dma_channel>->CCR &= ~(DMA_CCR_EN);
+					while(%<tx_dma_channel>->CCR & DMA_CCR_EN);
+				}
+				%<tx_dma_channel>->CCR = DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_MEMORY_TO_PERIPH;
+				%<tx_dma_channel>->CPAR = (uint32_t)&%<uart_name>->TDR;
+				
+				if(%<rx_dma_channel>->CCR & DMA_CCR_EN)
+				{
+					%<rx_dma_channel>->CCR &= ~(DMA_CCR_EN);
+					while(%<rx_dma_channel>->CCR & DMA_CCR_EN);
+				}
+				%<rx_dma_channel>->CCR = DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
+				%<rx_dma_channel>->CPAR = (uint32_t)&%<uart_name>->RDR;			
+				%% Dma für empfang enablen wird im Serial Read Block gemacht
+				%%<rx_dma_channel>->CCR |= DMA_CCR_EN;			
+			%closefile buffer		
+			%<LibMdlRegCustomCode(buffer, "execution")>
+		%endif
 	%else
 	%<LibReportFatalError("Serial DMA Config Block not supported by this target")>
 	%endif
-
 	
-	%assign UartDiv = fck/(BaudRate_val*16)
-	%assign Mantissa = CAST("Number", UartDiv)
-	%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*16 + 0.5)
-		
-	%switch TxPort_val
-		%case 1
-			%assign txgpio_name = "GPIOA"
-			%break
-		%case 2
-			%assign txgpio_name = "GPIOB"
-			%break
-		%case 3
-			%assign txgpio_name = "GPIOC"
-			%break
-		%case 4
-			%assign txgpio_name = "GPIOD"
-			%break
-		%case 5
-			%assign txgpio_name = "GPIOE"
-			%break
-		%case 6
-			%assign txgpio_name = "GPIOF"
-			%break
-	%endswitch
-
-
-	%switch RxPort_val
-		%case 1
-			%assign rxgpio_name = "GPIOA"
-			%break
-		%case 2
-			%assign rxgpio_name = "GPIOB"
-			%break
-		%case 3
-			%assign rxgpio_name = "GPIOC"
-			%break
-		%case 4
-			%assign rxgpio_name = "GPIOD"
-			%break
-		%case 5
-			%assign rxgpio_name = "GPIOE"
-			%break
-		%case 6
-			%assign rxgpio_name = "GPIOF"
-			%break
-	%endswitch
-  
-	%if !SLibCodeGenForSim()
-		%openfile buffer
-			%if ISEQUAL(txgpio_name,rxgpio_name)
-				__%<txgpio_name>_CLK_ENABLE();				
-			%else
-				__%<txgpio_name>_CLK_ENABLE();
-				__%<rxgpio_name>_CLK_ENABLE();
-			%endif			
-			
-			%<txgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<TxPin_val*2>));
-			%<txgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<TxPin_val>);
-			%<txgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<TxPin_val*2>));
-			%<txgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<TxPin_val*2>));
-			%if TxPin_val > 7
-				%assign TxPin_val = TxPin_val - 8
-				%<txgpio_name>->AFR[1] |= (%<alternate_function> << (%<TxPin_val*4>));
-			%else
-				%<txgpio_name>->AFR[0] |= (%<alternate_function> << (%<TxPin_val*4>));
-			%endif
-					
-			%<rxgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<RxPin_val*2>));
-			%<rxgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<RxPin_val>);
-			%<rxgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<RxPin_val*2>));
-			%<rxgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<RxPin_val*2>));
-			%if RxPin_val > 7
-				%assign RxPin_val = RxPin_val - 8
-				%<rxgpio_name>->AFR[1] |= (%<alternate_function> << (%<RxPin_val*4>));
-			%else
-				%<rxgpio_name>->AFR[0] |= (%<alternate_function> << (%<RxPin_val*4>));
-			%endif
-				
-			__%<uart_name>_CLK_ENABLE();
-
-			%<uart_name>->BRR = %<(Mantissa<<4) + Fraction>;
-			%<uart_name>->CR1 = (USART_CR1_TE | USART_CR1_RE);
-			%<uart_name>->CR2 = 0;
-			%<uart_name>->CR3 = (USART_CR3_DMAT | USART_CR3_DMAR);
-			%<uart_name>->GTPR = 0;
-
-			%<uart_name>->CR1 |= USART_CR1_UE;
-			
-			__%<dma_name>_CLK_ENABLE();
-			
-			if(%<tx_dma_stream>->CR & DMA_SxCR_EN)
-			{
-				%<tx_dma_stream>->CR &= ~(DMA_SxCR_EN);
-				while(%<tx_dma_stream>->CR & DMA_SxCR_EN);
-			}
-			%<tx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_MEMORY_TO_PERIPH;
-			%<tx_dma_stream>->PAR = (uint32_t)&%<uart_name>->DR;
-			
-			if(%<rx_dma_stream>->CR & DMA_SxCR_EN)
-			{
-				%<rx_dma_stream>->CR &= ~(DMA_SxCR_EN);
-				while(%<rx_dma_stream>->CR & DMA_SxCR_EN);
-			}
-			%<rx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
-			%<rx_dma_stream>->PAR = (uint32_t)&%<uart_name>->DR;			
-			%% Dma für empfang enablen wird im Serial Read Block gemacht
-			%%<rx_dma_stream>->CR |= DMA_SxCR_EN;			
-		%closefile buffer		
-		%<LibMdlRegCustomCode(buffer, "execution")>
-	%endif
+	
 	
   
 %endfunction

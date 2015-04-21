@@ -44,28 +44,54 @@
 				%assign rx_dma_stream = "DMA2_Stream2"
 				%break
 		%endswitch
-		
+				
+		%if !SLibCodeGenForSim()
+			%openfile buffer
+				%<rx_dma_stream>->M0AR = (uint32_T)serial%<SerialPort_val>_RxBuffer;
+				%<rx_dma_stream>->NDTR = %<RxBuffer_val>;
+				%<rx_dma_stream>->CR |= DMA_SxCR_EN;
+			%closefile buffer
+			%<LibMdlRegCustomCode(buffer, "trailer")>		
+		%endif
 			
 	%%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 
+		%switch SerialPort_val
+			%case 1
+				%assign rx_dma_channel = "DMA1_Channel5"
+				%break
+			%case 2
+				%assign rx_dma_channel = "DMA1_Channel6"
+				%break		
+			%case 3
+				%assign rx_dma_channel = "DMA1_Channel3"
+				%break
+			%case 4
+				%assign rx_dma_channel = "DMA2_Channel3"
+				%break
+			%default
+				%<LibReportError("Uart%<SerialPort_val> Peripheral not supported!")>
+				%break
+		%endswitch
+				
+		%if !SLibCodeGenForSim()
+			%openfile buffer
+				%<rx_dma_channel>->CMAR = (uint32_T)serial%<SerialPort_val>_RxBuffer;
+				%<rx_dma_channel>->CNDTR = %<RxBuffer_val>;
+				%<rx_dma_channel>->CCR |= DMA_CCR_EN;
+			%closefile buffer
+			%<LibMdlRegCustomCode(buffer, "trailer")>
+		
+		%endif
 	%else
 	%<LibReportFatalError("Serial DMA Read Block not supported for this target")>
-	%endif
-    
-	%if !SLibCodeGenForSim()
-		%openfile buffer
-			%<rx_dma_stream>->M0AR = (uint32_T)serial%<SerialPort_val>_RxBuffer;
-			%<rx_dma_stream>->NDTR = %<RxBuffer_val>;
-			%<rx_dma_stream>->CR |= DMA_SxCR_EN;
-		%closefile buffer
-		%<LibMdlRegCustomCode(buffer, "trailer")>
+	%endif    
 	
-		%openfile declbuf
-			uint8_T serial%<SerialPort_val>_RxBuffer[%<RxBuffer_val>];
-		%closefile declbuf
-		%assign srcFile = LibGetModelDotCFile()
-		%<LibSetSourceFileSection(srcFile, "Declarations", declbuf)> 
-	%endif
+	%openfile declbuf
+		uint8_T serial%<SerialPort_val>_RxBuffer[%<RxBuffer_val>];
+	%closefile declbuf
+	%assign srcFile = LibGetModelDotCFile()
+	%<LibSetSourceFileSection(srcFile, "Declarations", declbuf)> 
 	
 %endfunction
 
@@ -105,8 +131,30 @@
 				%break
 		%endswitch
 	
+		%assign dma_mar_access = "%<rx_dma_stream>->M0AR"
+		%assign dma_ndtr_access = "%<rx_dma_stream>->NDTR"
 	%%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 
+		%switch SerialPort_val
+			%case 1
+				%assign rx_dma_channel = "DMA1_Channel5"
+				%break
+			%case 2
+				%assign rx_dma_channel = "DMA1_Channel6"
+				%break		
+			%case 3
+				%assign rx_dma_channel = "DMA1_Channel3"
+				%break
+			%case 4
+				%assign rx_dma_channel = "DMA2_Channel3"
+				%break
+			%default
+				%<LibReportError("Uart%<SerialPort_val> Peripheral not supported!")>
+				%break
+		%endswitch
+		
+		%assign dma_mar_access = "%<rx_dma_channel>->CMAR"
+		%assign dma_ndtr_access = "%<rx_dma_channel>->CNDTR"
 	%else
 	%<LibReportFatalError("Serial DMA Read Block not supported for this target")>
 	%endif
@@ -114,9 +162,9 @@
     %if !SLibCodeGenForSim()
 		%openfile buffer
 			static uint32_T %<name>_actual_pos = %<RxBuffer_val>;
-			uint32_T %<name>_new_pos = %<rx_dma_stream>->NDTR;
+			uint32_T %<name>_new_pos = %<dma_ndtr_access>;
 			uint32_T %<name>_avail = 0;
-			static uint32_T %<name>_buff_ptr = %<rx_dma_stream>->M0AR;
+			static uint32_T %<name>_buff_ptr = %<dma_mar_access>;
 			uint8_T *%<name>_data_ptr;
 		%closefile buffer
 		%<LibSystemOutputCustomCode(system, buffer, "declaration")>
@@ -141,7 +189,7 @@
 			if(%<name>_actual_pos == 0)
 			{
 				%<name>_actual_pos = %<RxBuffer_val>;
-				%<name>_buff_ptr = %<rx_dma_stream>->M0AR;
+				%<name>_buff_ptr = %<dma_mar_access>;
 			}
 			%<name>_data_ptr[k] = *(uint8_T*)%<name>_buff_ptr++;
 			
