@@ -13,58 +13,215 @@
 
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
-  
-  %%%openfile buffer1
-  %%/* %<Type> block: %<Name> */
-  %%  TIM_Encoder_InitTypeDef sConfig_encoder;
-  %%  TIM_MasterConfigTypeDef sMasterConfig_encoder;
-  %%  GPIO_InitTypeDef %<name>_GPIO_InitStruct;
-  %%%closefile buffer1
-  %%%<LibMdlRegCustomCode(buffer1, "declaration")>
-  
+    
 %endfunction
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
   
-  %assign p1_val = CAST("Number",LibBlockParameterValue(p1, 0))
-  %assign p2_val = LibBlockParameterValue(p2, 0)
-  %assign p3_val = LibBlockParameterValue(p3, 0)
-  %assign p4_val = CAST("Number",LibBlockParameterValue(p4, 0))
+  %assign TimerNumber_val = CAST("Number",LibBlockParameterValue(p1, 0))
+  %assign EncoderMode_val = CAST("Number",LibBlockParameterValue(p2, 0))
+  %assign Ti1Port_val = CAST("Number",LibBlockParameterValue(p3, 0))
+  %assign Ti1Pin_val = CAST("Number",LibBlockParameterValue(p4, 0))-1
+  %assign Ti2Port_val = CAST("Number",LibBlockParameterValue(p5, 0))
+  %assign Ti2Pin_val = CAST("Number",LibBlockParameterValue(p6, 0))-1  
+  %assign InputMode_val = CAST("Number",LibBlockParameterValue(p7, 0))
+  %assign Resolution_val = CAST("Number",LibBlockParameterValue(p8, 0))
 
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
-  %assign pname = "P" + FEVAL("char",p1_val+64) + "_" + FEVAL("int2str",p2_val-1)
-
-  %switch(p2_val)
-	%case 1
-		%assign encodermode = "TIM_ENCODERMODE_TI1"
-		%break
-	%case 2
-		%assign encodermode = "TIM_ENCODERMODE_TI2"
-		%break
-	%case 3
-		%assign encodermode = "TIM_ENCODERMODE_TI12"
-		%break
-	%default
-		%assign encodermode = "TIM_ENCODERMODE_TI1"
-		%break
-  %endswitch
+	
+	%switch(EncoderMode_val)
+		%case 1
+			%assign encodermode = "TIM_ENCODERMODE_TI1"
+			%break
+		%case 2
+			%assign encodermode = "TIM_ENCODERMODE_TI2"
+			%break
+		%case 3
+			%assign encodermode = "TIM_ENCODERMODE_TI12"
+			%break
+		%default
+			%assign encodermode = "TIM_ENCODERMODE_TI1"
+			%break
+	%endswitch
   
-  %switch(p3_val)
-	%case 1
-		%assign pulltype = "GPIO_NOPULL"
-		%break
-	%case 2
-		%assign pulltype = "GPIO_PULLUP"
-		%break
-	%case 3
-		%assign pulltype = "GPIO_PULLDOWN"
-		%break
-	%default
-		%assign pulltype = "GPIO_NOPULL"
-		%break
-  %endswitch
+	%switch(InputMode_val)
+		%case 1
+			%assign pulltype = "GPIO_NOPULL"
+			%break
+		%case 2
+			%assign pulltype = "GPIO_PULLUP"
+			%break
+		%case 3
+			%assign pulltype = "GPIO_PULLDOWN"
+			%break
+		%default
+			%assign pulltype = "GPIO_NOPULL"
+			%break
+	%endswitch
+  
+	%switch Ti1Port_val
+		%case 1
+			%assign ti1gpio_name = "GPIOA"
+			%break
+		%case 2
+			%assign ti1gpio_name = "GPIOB"
+			%break
+		%case 3
+			%assign ti1gpio_name = "GPIOC"
+			%break
+		%case 4
+			%assign ti1gpio_name = "GPIOD"
+			%break
+		%case 5
+			%assign ti1gpio_name = "GPIOE"
+			%break
+		%case 6
+			%assign ti1gpio_name = "GPIOF"
+			%break
+	%endswitch  
+  
+	%switch Ti2Port_val
+		%case 1
+			%assign ti2gpio_name = "GPIOA"
+			%break
+		%case 2
+			%assign ti2gpio_name = "GPIOB"
+			%break
+		%case 3
+			%assign ti2gpio_name = "GPIOC"
+			%break
+		%case 4
+			%assign ti2gpio_name = "GPIOD"
+			%break
+		%case 5
+			%assign ti2gpio_name = "GPIOE"
+			%break
+		%case 6
+			%assign ti2gpio_name = "GPIOF"
+			%break
+	%endswitch
+
+
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI")
+	
+		%switch(TimerNumber_val)
+			%case 1
+				%assign timer_name = "TIM1"				
+				%assign ti1_alternate_function = "GPIO_AF1_TIM1"
+				%assign ti2_alternate_function = "GPIO_AF1_TIM1"
+				%break
+			%case 2
+				%assign timer_name = "TIM2"
+				%assign ti1_alternate_function = "GPIO_AF1_TIM2"
+				%assign ti2_alternate_function = "GPIO_AF1_TIM2"
+				%break
+			%case 3
+				%assign timer_name = "TIM3"
+				%assign ti1_alternate_function = "GPIO_AF2_TIM3"
+				%assign ti2_alternate_function = "GPIO_AF2_TIM3"
+				%break
+			%case 4
+				%assign timer_name = "TIM4"
+				%assign ti1_alternate_function = "GPIO_AF2_TIM4"
+				%assign ti2_alternate_function = "GPIO_AF2_TIM4"
+				%break
+			%case 6
+				%assign timer_name = "TIM8"
+				%assign ti1_alternate_function = "GPIO_AF3_TIM8"
+				%assign ti2_alternate_function = "GPIO_AF3_TIM8"
+				%break
+			%default
+				%<LibReportFatalError("Timer Peripheral not supported for Encoder Mode")>
+				%break
+		%endswitch
+  	
+	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+	
+		%switch(TimerNumber_val)
+			%case 1
+				%assign timer_name = "TIM1"
+				%if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==8)
+					%assign ti1_alternate_function = "GPIO_AF6_TIM1"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOC") && (Ti1Pin_val==0)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM1"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOE") && (Ti1Pin_val==9)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM1"
+				%endif
+				%if ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==9)
+					%assign ti2_alternate_function = "GPIO_AF6_TIM1"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOC") && (Ti2Pin_val==1)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM1"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOE") && (Ti2Pin_val==11)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM1"
+				%endif
+				%break
+			%case 3
+				%assign timer_name = "TIM3"
+				%if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==6)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOB") && (Ti1Pin_val==4)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOC") && (Ti1Pin_val==6)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOE") && (Ti1Pin_val==2)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM3"
+				%endif
+				%if ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==4)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==7)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOB") && (Ti2Pin_val==5)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOC") && (Ti2Pin_val==7)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM3"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOE") && (Ti2Pin_val==3)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM3"
+				%endif
+				%break
+			%case 4
+				%assign timer_name = "TIM4"
+				%if ISEQUAL(ti1gpio_name,"GPIOB") && (Ti1Pin_val==6)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM4"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOD") && (Ti1Pin_val==12)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM4"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==11)
+					%assign ti1_alternate_function = "GPIO_AF10_TIM4"
+				%endif
+				%if ISEQUAL(ti2gpio_name,"GPIOB") && (Ti2Pin_val==7)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM4"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOD") && (Ti2Pin_val==13)
+					%assign ti2_alternate_function = "GPIO_AF2_TIM4"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==12)
+					%assign ti2_alternate_function = "GPIO_AF10_TIM4"
+				%endif
+				%break
+			%case 6
+				%assign timer_name = "TIM8"
+				%if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==15)
+					%assign ti1_alternate_function = "GPIO_AF2_TIM8"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOC") && (Ti1Pin_val==6)
+					%assign ti1_alternate_function = "GPIO_AF4_TIM8"
+				%elseif ISEQUAL(ti1gpio_name,"GPIOB") && (Ti1Pin_val==6)
+					%assign ti1_alternate_function = "GPIO_AF5_TIM8"
+				%endif
+				%if ISEQUAL(ti2gpio_name,"GPIOC") && (Ti2Pin_val==7)
+					%assign ti2_alternate_function = "GPIO_AF4_TIM8"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==14)
+					%assign ti2_alternate_function = "GPIO_AF5_TIM8"
+				%elseif ISEQUAL(ti2gpio_name,"GPIOB") && (Ti2Pin_val==8)
+					%assign ti2_alternate_function = "GPIO_AF10_TIM8"
+				%endif
+				%break
+			%default
+				%<LibReportFatalError("Timer Peripheral not supported for Encoder Mode")>
+				%break
+		%endswitch
+	
+	%else
+		%<LibReportFatalError("Encoder Input Block not supported for this target")>
+	%endif	
   
   %if !SLibCodeGenForSim()
     /* %<Type> block: %<Name> */
@@ -72,46 +229,32 @@
     TIM_MasterConfigTypeDef %<name>_sMasterConfig;
     GPIO_InitTypeDef %<name>_GPIO_InitStruct;
 
-	__TIM%<p1_val>_CLK_ENABLE();
-	%switch(p1_val)
-		%case 1
-			__GPIOE_CLK_ENABLE();
-			
-			%<name>_GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_11;			
-			%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-			%<name>_GPIO_InitStruct.Pull = %<pulltype>;
-			%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-			%<name>_GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
-			HAL_GPIO_Init(GPIOE, &%<name>_GPIO_InitStruct);
-			%break
-		%case 2
-			__GPIOA_CLK_ENABLE();
-			
-			%<name>_GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_15;
-			%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-			%<name>_GPIO_InitStruct.Pull = %<pulltype>;
-			%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-			%<name>_GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
-			HAL_GPIO_Init(GPIOA, &%<name>_GPIO_InitStruct);
-			%break
-		%case 3
-			__GPIOB_CLK_ENABLE();
-			
-			%<name>_GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5;
-			%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-			%<name>_GPIO_InitStruct.Pull = %<pulltype>;
-			%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-			%<name>_GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
-			HAL_GPIO_Init(GPIOB, &%<name>_GPIO_InitStruct);
-			%break
-		%default
-			%break
-	%endswitch
+	__%<timer_name>_CLK_ENABLE();
 	
-	%<name>.Instance = TIM%<p1_val>;
+	%if ISEQUAL(ti1gpio_name, ti2gpio_name)		
+		__%<ti1gpio_name>_CLK_ENABLE();			
+	%else
+		__%<ti1gpio_name>_CLK_ENABLE();
+		__%<ti2gpio_name>_CLK_ENABLE();
+	%endif
+	
+	%<name>_GPIO_InitStruct.Pin = GPIO_PIN_%<Ti1Pin_val>;			
+	%<name>_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	%<name>_GPIO_InitStruct.Pull = %<pulltype>;
+	%<name>_GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+	%<name>_GPIO_InitStruct.Alternate = %<ti1_alternate_function>;
+	HAL_GPIO_Init(%<ti1gpio_name>, &%<name>_GPIO_InitStruct);
+		
+	%<name>_GPIO_InitStruct.Pin = GPIO_PIN_%<Ti2Pin_val>;
+	%<name>_GPIO_InitStruct.Alternate = %<ti2_alternate_function>;
+	HAL_GPIO_Init(%<ti2gpio_name>, &%<name>_GPIO_InitStruct);
+	
+	%<name>.Instance = %<timer_name>;
+	
+	%<name>.Instance = %<timer_name>;
 	%<name>.Init.Prescaler = 0;
 	%<name>.Init.CounterMode = TIM_COUNTERMODE_UP;
-	%<name>.Init.Period = %<p4_val>;
+	%<name>.Init.Period = %<Resolution_val>;
 	%<name>.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	%<name>.Init.RepetitionCounter = 0;
 	%<name>_sConfig.EncoderMode = %<encodermode>;
@@ -154,12 +297,11 @@
     %assign u1_val = LibBlockInputSignal(0, "", "", 0)
 	%assign y1_val = LibBlockOutputSignal(0, "", "", 0)
 	%assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+	
+    %assign Resolution_val = CAST("Real",LibBlockParameterValue(p8, 0))
 
-    %assign p2_val = CAST("Number",LibBlockParameterValue(p2, 0))	
-    %assign p4_val = CAST("Real",LibBlockParameterValue(p4, 0))
-
-    %assign anglePerTick = 360/p4_val   
-    %%assign anglePerTick = 6.2831853/p4_val %%in rad
+    %assign anglePerTick = 360/Resolution_val   
+    %%assign anglePerTick = 6.2831853/Resolution_val %%in rad
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")

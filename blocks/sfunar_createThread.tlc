@@ -13,18 +13,18 @@
 
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
-    
+
 %endfunction
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-  
+
   %assign p1_val = LibBlockParameterValue(p1, 0)
   %assign p2_val = LibBlockParameterValue(p2, 0)
   %assign p3_val = LibBlockParameterValue(p3, 0)
   %assign p4_val = CAST("Number",LibBlockParameterValue(p4, 0))
   %assign p5_val = CAST("Number",LibBlockParameterValue(p5, 0))
-   
+
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
 
@@ -96,7 +96,6 @@
 
   %endif
 
-  
   %if !SLibCodeGenForSim()
     %openfile declbuf
     /* %<Type> block: %<Name> */
@@ -118,22 +117,5 @@
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
   %endif
-  
-%endfunction
 
-
-%% Function: Outputs ======================================================
-%%
-%function Outputs(block, system) Output
-
-    %%assign u1_val = LibBlockInputSignal(0, "", "", 0)
-	%%assign y1_val = LibBlockOutputSignal(0, "", "", 0)
-
-    %%assign p2_val = CAST("Number",LibBlockParameterValue(p2, 0))	
-    %%assign p4_val = CAST("Real",LibBlockParameterValue(p4, 0))
-
-    %%
-    %if !SLibCodeGenForSim()
-        
-    %endif
 %endfunction

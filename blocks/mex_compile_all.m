@@ -17,7 +17,6 @@ mex sfunar_digitalOutput.c
 mex sfunar_digitalOutput_max11300.c
 mex sfunar_digitalOutput_pcf8574.c
 mex sfunar_encoderInput.c
-mex sfunar_encoderInput_F303RE.c
 mex sfunar_i2cConfig.c
 mex sfunar_i2cFramConfig.c
 mex sfunar_i2cFram_read.c
@@ -28,6 +27,9 @@ mex sfunar_mcp3204Config.c
 mex sfunar_mcp4822Config.c
 mex sfunar_pcf8574Config.c
 mex sfunar_serialConfig.c
+mex sfunar_serialDmaConfig.c
+mex sfunar_serialDmaRead.c
+mex sfunar_serialDmaWrite.c
 mex sfunar_serialRead.c
 mex sfunar_serialWrite.c
 mex sfunar_servoOutput.c

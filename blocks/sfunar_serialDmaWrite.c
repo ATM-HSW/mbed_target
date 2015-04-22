@@ -1,21 +1,18 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_serialWrite.c Simple C-MEX S-function for function call.
+ *   sfunar_digitalOutput.c Simple C-MEX S-function for function call.
  *
  *   ABSTRACT:
  *     The purpose of this SFunction is to call a simple legacy
  *     function during simulation:
  *
- *        serialWrite(uint8 u1[],int16 size(u1,1))
- *
- *   Simulink version           : 7.3 (R2009a) 15-Jan-2009
- *   C source code generated on : 06-Jul-2009 17:01:33
+ *        sfunar_digitalOutput(uint8 u1, uint8 p1)
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_serialWrite
+#define S_FUNCTION_NAME                sfunar_serialDmaWrite
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -48,13 +45,13 @@ static void mdlCheckParameters(SimStruct *S)
    * Check the parameter 1 (sample time)
    */
   if EDIT_OK(S, 0) {
-    const double *sampleTime = NULL;
+    const double * sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
 
     /* Sample time must be a real scalar value or 2 element array. */
     if (IsRealMatrix(SAMPLE_TIME) &&
         (stArraySize == 1 || stArraySize == 2) ) {
-      sampleTime = (real_T *) mxGetPr(SAMPLE_TIME);
+      sampleTime = mxGetPr(SAMPLE_TIME);
     } else {
       ssSetErrorStatus(S,
                        "Invalid sample time. Sample time must be a real scalar value or an array of two real values.");
@@ -87,9 +84,9 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-
+  
   /*
-   * Check the parameter 2
+   * Check the parameter 2 (SerialPort)
    */
   if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
@@ -98,6 +95,7 @@ static void mdlCheckParameters(SimStruct *S)
     ssCheckSFcnParamValueAttribs(S, 1, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 }
+
 
 #endif
 
@@ -149,12 +147,12 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Configure the input port 1
    */
-  ssSetInputPortDataType(S, 0, SS_INT32);
+  ssSetInputPortDataType(S, 0, SS_UINT8);
   ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
   ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetInputPortDirectFeedThrough(S, 0, 1);
-  ssSetInputPortAcceptExprInRTW(S, 0, 0);
-  ssSetInputPortOverWritable(S, 0, 0);
+  ssSetInputPortAcceptExprInRTW(S, 0, 1);
+  ssSetInputPortOverWritable(S, 0, 1);
   ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetInputPortRequiredContiguous(S, 0, 1);
 
@@ -162,8 +160,8 @@ static void mdlInitializeSizes(SimStruct *S)
    * Set the number of output ports.
    */
   if (!ssSetNumOutputPorts(S, 0))
-    return;
-
+    return;  
+  
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -197,8 +195,8 @@ static void mdlInitializeSizes(SimStruct *S)
  */
 static void mdlInitializeSampleTimes(SimStruct *S)
 {
-  const double * const sampleTime = mxGetPr(SAMPLE_TIME);
-  const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
+  double * const sampleTime = mxGetPr(SAMPLE_TIME);
+  const  size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {
     ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME?
@@ -237,82 +235,25 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "p1", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "p1", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
-#define MDL_SET_INPUT_PORT_DIMENSION_INFO
-#if defined(MDL_SET_INPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
 
-/* Function: mdlSetInputPortDimensionInfo =================================
+#define MDL_START
+#if defined(MDL_START)
+
+/* Function: mdlStart =====================================================
  * Abstract:
- *    This method is called with the candidate dimensions for an input port
- *    with unknown dimensions. If the proposed dimensions are acceptable, the
- *    method should go ahead and set the actual port dimensions.
- *    If they are unacceptable an error should be generated via
- *    ssSetErrorStatus.
- *    Note that any other input or output ports whose dimensions are
- *    implicitly defined by virtue of knowing the dimensions of the given
- *    port can also have their dimensions set.
- *
+ *    This function is called once at start of model execution. If you
+ *    have states that should be initialized once, this is the place
+ *    to do it.
  */
-static void mdlSetInputPortDimensionInfo(SimStruct *S, int_T portIndex, const
-  DimsInfo_T *dimsInfo)
+static void mdlStart(SimStruct *S)
 {
-/* Set input port dimension */
-if(!ssSetInputPortDimensionInfo(S, portIndex, dimsInfo)) return;
-
-
+    UNUSED_PARAMETER(S);
 }
-#endif
 
-#define MDL_SET_OUTPUT_PORT_DIMENSION_INFO
-#if defined(MDL_SET_OUTPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
-/* Function: mdlSetOutputPortDimensionInfo ================================
- * Abstract:
- *    This method is called with the candidate dimensions for an output port
- *    with unknown dimensions. If the proposed dimensions are acceptable, the
- *    method should go ahead and set the actual port dimensions.
- *    If they are unacceptable an error should be generated via
- *    ssSetErrorStatus.
- *    Note that any other input or output ports whose dimensions are
- *    implicitly defined by virtue of knowing the dimensions of the given
- *    port can also have their dimensions set.
- *
- */
-static void mdlSetOutputPortDimensionInfo(SimStruct *S, int_T portIndex, const DimsInfo_T *dimsInfo)
-{
-    /* Set output port dimension */
-    if(!ssSetOutputPortDimensionInfo(S, portIndex, dimsInfo)) return;
-    
-}
-#endif
-
-#define MDL_SET_DEFAULT_PORT_DIMENSION_INFO
-#if defined(MDL_SET_DEFAULT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
-/* Function: mdlSetDefaultPortDimensionInfo ===============================
- * Abstract:
- *    This method is called when there is not enough information in your
- *    model to uniquely determine the port dimensionality of signals
- *    entering or leaving your block. When this occurs, Simulink's
- *    dimension propagation engine calls this method to ask you to set
- *    your S-functions default dimensions for any input and output ports
- *    that are dynamically sized.
- *
- *    If you do not provide this method and you have dynamically sized ports
- *    where Simulink does not have enough information to propagate the
- *    dimensionality to your S-function, then Simulink will set these unknown
- *    ports to the 'block width' which is determined by examining any known
- *    ports. If there are no known ports, the width will be set to 1.
- *
- */
-static void mdlSetDefaultPortDimensionInfo(SimStruct *S)
-{
-    /* Set input port 1 default dimension */
-    if (ssGetInputPortWidth(S, 0) == DYNAMICALLY_SIZED) {
-        ssSetInputPortWidth(S, 0, 1);
-    }
-}
 #endif
 
 /* Function: mdlOutputs ===================================================
@@ -339,6 +280,7 @@ static void mdlTerminate(SimStruct *S)
 
 #define MDL_RTW
 #if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
+
 /* Function: mdlRTW =======================================================
  * Abstract:
  *    This function is called when the Real-Time Workshop is generating
@@ -348,6 +290,7 @@ static void mdlRTW(SimStruct *S)
 {
     UNUSED_PARAMETER(S);
 }
+
 #endif
 
 /* Function: IsRealMatrix =================================================
@@ -356,35 +299,32 @@ static void mdlRTW(SimStruct *S)
  */
 static bool IsRealMatrix(const mxArray * const m)
 {
-    if (mxIsNumeric(m)  &&  
-        mxIsDouble(m)   && 
-        !mxIsLogical(m) &&
-        !mxIsComplex(m) &&  
-        !mxIsSparse(m)  && 
-        !mxIsEmpty(m)   &&
-        mxGetNumberOfDimensions(m) == 2) {
-
-        const double * const data = mxGetPr(m);
-        const size_t numEl = mxGetNumberOfElements(m);
-        size_t i;
-
-        for (i = 0; i < numEl; i++) {
-            if (!mxIsFinite(data[i])) {
-                return(false);
-            }
-        }
-
-        return(true);
-    } else {
+  if (mxIsNumeric(m) &&
+      mxIsDouble(m) &&
+      !mxIsLogical(m) &&
+      !mxIsComplex(m) &&
+      !mxIsSparse(m) &&
+      !mxIsEmpty(m) &&
+      mxGetNumberOfDimensions(m) == 2) {
+    const double * const data = mxGetPr(m);
+    const size_t numEl = mxGetNumberOfElements(m);
+    size_t i;
+    for (i = 0; i < numEl; i++) {
+      if (!mxIsFinite(data[i])) {
         return(false);
+      }
     }
-}
 
+    return(true);
+  } else {
+    return(false);
+  }
+}
 
 /*
  * Required S-function trailer
  */
-#ifdef    MATLAB_MEX_FILE
+#ifdef MATLAB_MEX_FILE
 # include "simulink.c"
 #else
 # include "cg_sfun.h"
