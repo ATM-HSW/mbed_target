@@ -104,7 +104,7 @@
 	%endswitch
 
 
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI")
 	
 		%switch(TimerNumber_val)
 			%case 1
