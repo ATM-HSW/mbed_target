@@ -61,12 +61,12 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'Download Application';
+  rtwoptions(oIdx).prompt         = 'Download Application (mbed)';
   rtwoptions(oIdx).type           = 'Checkbox';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedDownload();
   rtwoptions(oIdx).tlcvariable    = 'DownloadApplication';
   rtwoptions(oIdx).makevariable   = 'DOWNLOADAPPLICATION';
-  rtwoptions(oIdx).tooltip        = ['Flash application'];
+  rtwoptions(oIdx).tooltip        = ['Flash application: copy to Virtual Drive'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadApplication'')';
 
 
@@ -80,6 +80,14 @@
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedDrive'')';
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'Download Application (STLink)';
+  rtwoptions(oIdx).type           = 'Checkbox';
+  rtwoptions(oIdx).default        = 'off';
+  rtwoptions(oIdx).tlcvariable    = 'DownloadApplicationSTLink';
+  rtwoptions(oIdx).tooltip        = ['Flash application: STLink'];
 
   oIdx = oIdx + 1;
 

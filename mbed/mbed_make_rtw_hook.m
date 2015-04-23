@@ -66,10 +66,15 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     else
         downloadToMbedHardware = 0;
     end
+    if ( strcmp(get_param(gcs,'DownloadApplicationSTLink'),'on') )
+        downloadToHardwareSTLink = 1;
+    else
+        downloadToHardwareSTLink = 0;
+    end
 
-    if ~i_isPilSim && ~i_isModelReferenceBuild(modelName) && downloadToMbedHardware
+    if ~i_isPilSim && ~i_isModelReferenceBuild(modelName) && (downloadToMbedHardware || downloadToHardwareSTLink)
         %disp('i_download');
-        i_download(modelName)
+        i_download(modelName, downloadToMbedHardware, downloadToHardwareSTLink)
     end
 
    case 'exit'
@@ -167,19 +172,22 @@ function i_write_mbed_files()
 
 end
 
-function i_download(modelName)
-	destname = get_param(modelName,'MbedDrive');
+function i_download(modelName, bMbedCopy, bSTLink)
     lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
-    [~,modelName,~] = fileparts( which (bdroot));
-    try
-        srcname = fullfile(lCodeGenFolder, [modelName '_slprj'], [modelName '.bin']);
-	    disp(['copy ' srcname ' to ' destname]);
-        [status,message,messageid] = copyfile(srcname,destname,'f');
-        if status==0
-            disp(message);
+    srcname = fullfile(lCodeGenFolder, [modelName '_slprj'], [modelName '.bin']);
+    if bMbedCopy
+        destname = get_param(modelName,'MbedDrive');
+        try
+            disp(['copy ' srcname ' to ' destname]);
+            [status,message,~] = copyfile(srcname,destname,'f');
+            if status==0
+                disp(message);
+            end
+        catch err
+            disp(err);
         end
-    catch err
-        disp(err);
+    elseif bSTLink
+        system([fullfile(getMbedTargetPath(), 'mbed', 'stlinkflash.bat') ' ' '"' srcname '"'],'-echo')
     end
 end
 
