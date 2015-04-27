@@ -21,6 +21,8 @@ mex sfunar_i2cConfig.c
 mex sfunar_i2cFramConfig.c
 mex sfunar_i2cFram_read.c
 mex sfunar_i2cFram_write.c
+mex sfunar_i2cRead.c
+mex sfunar_i2cWrite.c
 mex sfunar_lcdOutput.c
 mex sfunar_max11300Config.c
 mex sfunar_mcp3204Config.c
@@ -35,6 +37,9 @@ mex sfunar_serialWrite.c
 mex sfunar_servoOutput.c
 mex sfunar_servoOutput.org.c
 mex sfunar_spiConfig.c
+mex sfunar_spiDmaConfig.c
+mex sfunar_spiDmaRead.c
+mex sfunar_spiDmaWrite.c
 mex sfunar_spiFramConfig.c
 mex sfunar_spiFram_read.c
 mex sfunar_spiFram_write.c
