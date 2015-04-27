@@ -133,8 +133,23 @@
 		%endswitch
 	
 		%assign UartDiv = fck/(BaudRate_val*16)
-		%assign Mantissa = CAST("Number", UartDiv)
-		%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*16 + 0.5)
+		%if UartDiv > 1
+			%assign Over8 = 0
+			%assign Mantissa = CAST("Number", UartDiv)
+			%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*16 + 0.5)
+		%else
+			%assign Over8 = 1
+			%assign UartDiv = fck/(BaudRate_val*8)
+			%if UartDiv < 1
+				%<LibReportError("UART%<SerialPort_val> BaudRate is too high!")>
+			%endif
+			%assign Mantissa = CAST("Number", UartDiv)
+			%assign Fraction = CAST("Number",(UartDiv-CAST("Real", Mantissa))*8 + 0.5)
+			%if Fraction >= 8
+				%assign Fraction = 0
+				%assign Mantissa = Mantissa+1
+			%endif
+		%endif
 
 		%if !SLibCodeGenForSim()
 			%openfile buffer
@@ -170,7 +185,7 @@
 				__%<uart_name>_CLK_ENABLE();
 
 				%<uart_name>->BRR = %<(Mantissa<<4) + Fraction>;
-				%<uart_name>->CR1 = (USART_CR1_TE | USART_CR1_RE);
+				%<uart_name>->CR1 = ((%<Over8> << 15) | USART_CR1_TE | USART_CR1_RE);
 				%<uart_name>->CR2 = 0;
 				%<uart_name>->CR3 = (USART_CR3_DMAT | USART_CR3_DMAR);
 				%<uart_name>->GTPR = 0;
@@ -241,7 +256,17 @@
 			%break
 		%endswitch
 		
-		%assign UartDiv = CAST("Number", fck/(BaudRate_val) + 0.5)
+		%assign UartDiv = CAST("Number", fck/(BaudRate_val))
+		%if UartDiv < 16
+			%assign Over8 = 1
+			%assign UartDiv = CAST("Number", (2*fck)/(BaudRate_val))
+			%if UartDiv < 16
+				%<LibReportError("UART%<SerialPort_val> BaudRate is too high!")>
+			%endif
+			%assign UartDiv = (UartDiv & 65520) + ((UartDiv & 15) >> 1)
+		%else
+			%assign Over8 = 0
+		%endif
 		
 		%if !SLibCodeGenForSim()
 			%openfile buffer
@@ -278,7 +303,7 @@
 				__%<uart_name>_CLK_ENABLE();
 
 				%<uart_name>->BRR = %<UartDiv>;
-				%<uart_name>->CR1 = (USART_CR1_TE | USART_CR1_RE);
+				%<uart_name>->CR1 = ((%<Over8> << 15) | USART_CR1_TE | USART_CR1_RE);
 				%<uart_name>->CR2 = 0;
 				%<uart_name>->CR3 = (USART_CR3_DMAT | USART_CR3_DMAR);
 				%<uart_name>->GTPR = 0;
