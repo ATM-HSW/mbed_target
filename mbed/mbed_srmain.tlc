@@ -24,7 +24,11 @@
   %openfile tmpBuf
   #include "%<LibGetMdlPubHdrBaseName()>.h"
   #include "mbed.h"
+
+  %if UseMbedRTOS
   #include "rtos.h"
+  %endif
+
   %closefile tmpBuf
 
   %<LibSetSourceFileSection(cFile, "Includes", tmpBuf)>
