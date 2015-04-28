@@ -27,15 +27,25 @@
   %assign scl_name = "P" + FEVAL("char",p4_val+64) + "_" + FEVAL("int2str",p5_val-1)
 
   %assign freq = LibBlockParameterValue(p6,0)
+  
+  %assign I2cPort_val = LibBlockParameterValue(p7,0)
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
-    %%
-    #if defined(I2C_INTERFACE_DEFINED)
-        #error "Two or more I2C-Interfaces defined!"
-    #endif
-    I2C i2c(%<sda_name>, %<scl_name>);
-    #define I2C_INTERFACE_DEFINED
+	%switch I2cPort
+		%case 1
+			I2C i2c(%<sda_name>, %<scl_name>);
+			%break
+		%case 2
+			I2C i2c2(%<sda_name>, %<scl_name>);
+			%break
+		%case 3
+			I2C i2c3(%<sda_name>, %<scl_name>);
+			%break
+		%default
+			%break
+	%endswitch
+	
     %%
     %closefile declbuf
     %assign srcFile = LibGetModelDotCFile()

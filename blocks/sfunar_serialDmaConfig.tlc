@@ -73,7 +73,7 @@
 			%break
 	%endswitch
 	
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE")
 				
 		%switch SerialPort_val
 		%case 1
@@ -335,8 +335,5 @@
 	%else
 		%<LibReportFatalError("Serial DMA Config Block not supported by this target")>
 	%endif
-	
-	
-	
   
 %endfunction

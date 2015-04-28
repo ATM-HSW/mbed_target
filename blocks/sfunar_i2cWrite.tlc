@@ -25,10 +25,26 @@
 	%assign SlaveAddress_val = CAST("Number", LibBlockParameterValue(p2, 0))
 	%assign ByteCountFlag_val = CAST("Number", LibBlockParameterValue(p3, 0))
 	
+	%assign I2cPort_val = CAST("Number", LibBlockParameterValue(p5, 0))
 	
 	%assign NumBytes_val = LibBlockInputSignalWidth(0)
 	%assign u1_val = LibBlockInputSignalAddr(0, "", "", 0)
 
+	
+	%switch I2cPort_val
+		%case 1
+			%assign i2c_instance = "i2c"
+			%break
+		%case 2
+			%assign i2c_instance = "i2c2"
+			%break
+		%case 3
+			%assign i2c_instance = "i2c3"
+			%break
+		%default
+			%break
+	%endswitch
+	
 	%if AddressFlag_val == 1
 		%assign SlaveAddress_val = LibBlockInputSignal(2, "", "", 0)
 	%endif
@@ -40,6 +56,6 @@
 	%endif
 	
     %if !SLibCodeGenForSim()
-		i2c.write(%<SlaveAddress_val>,(char_T*)%<u1_val>,%<NumBytes_val>,%<CAST("Number", LibBlockParameterValue(p4, 0))>);
+		%<i2c_instance>.write(%<SlaveAddress_val>,(char_T*)%<u1_val>,%<NumBytes_val>,%<CAST("Number", LibBlockParameterValue(p4, 0))>);
     %endif
 %endfunction
