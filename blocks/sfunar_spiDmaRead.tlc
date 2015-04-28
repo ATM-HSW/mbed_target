@@ -23,7 +23,7 @@
 	%assign RxBuffer_val = CAST("Number", LibBlockParameterValue(p2,0))
 
 	
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
 		%switch SpiPort_val
 			%case 1
 				%assign rx_dma_stream = "DMA2_Stream2"
@@ -131,7 +131,7 @@
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
     
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
 		%switch SpiPort_val
 			%case 1
 				%assign rx_dma_stream = "DMA2_Stream2"

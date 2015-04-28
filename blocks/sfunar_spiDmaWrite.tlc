@@ -40,7 +40,7 @@
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
 	
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
 		%switch SpiPort_val
 			%case 1
 				%assign spi_name = "SPI1"

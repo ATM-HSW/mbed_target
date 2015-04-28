@@ -104,31 +104,36 @@
     %endswitch
 
 
-    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI")
+    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
   
         %switch(TimerNumber_val)
             %case 1
-                %assign timer_name = "TIM1"              
+                %assign timer_name = "TIM1" 
+                %% TI1 and TI2 alternate function             
                 %assign ti1_alternate_function = "GPIO_AF1_TIM1"
                 %assign ti2_alternate_function = "GPIO_AF1_TIM1"
                 %break
             %case 2
                 %assign timer_name = "TIM2"
+                %% TI1 and TI2 alternate function
                 %assign ti1_alternate_function = "GPIO_AF1_TIM2"
                 %assign ti2_alternate_function = "GPIO_AF1_TIM2"
                 %break
             %case 3
                 %assign timer_name = "TIM3"
+                %% TI1 and TI2 alternate function
                 %assign ti1_alternate_function = "GPIO_AF2_TIM3"
                 %assign ti2_alternate_function = "GPIO_AF2_TIM3"
                 %break
             %case 4
                 %assign timer_name = "TIM4"
+                %% TI1 and TI2 alternate function
                 %assign ti1_alternate_function = "GPIO_AF2_TIM4"
                 %assign ti2_alternate_function = "GPIO_AF2_TIM4"
                 %break
             %case 6
                 %assign timer_name = "TIM8"
+                %% TI1 and TI2 alternate function
                 %assign ti1_alternate_function = "GPIO_AF3_TIM8"
                 %assign ti2_alternate_function = "GPIO_AF3_TIM8"
                 %break
@@ -142,6 +147,7 @@
         %switch(TimerNumber_val)
             %case 1
                 %assign timer_name = "TIM1"
+                %% TI1 alternate function
                 %if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==8)
                     %assign ti1_alternate_function = "GPIO_AF6_TIM1"
                 %elseif ISEQUAL(ti1gpio_name,"GPIOC") && (Ti1Pin_val==0)
@@ -149,6 +155,7 @@
                 %elseif ISEQUAL(ti1gpio_name,"GPIOE") && (Ti1Pin_val==9)
                     %assign ti1_alternate_function = "GPIO_AF2_TIM1"
                 %endif
+                %% TI2 alternate function
                 %if ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==9)
                     %assign ti2_alternate_function = "GPIO_AF6_TIM1"
                 %elseif ISEQUAL(ti2gpio_name,"GPIOC") && (Ti2Pin_val==1)
@@ -159,6 +166,7 @@
                 %break
             %case 3
                 %assign timer_name = "TIM3"
+                %% TI1 alternate function
                 %if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==6)
                     %assign ti1_alternate_function = "GPIO_AF2_TIM3"
                 %elseif ISEQUAL(ti1gpio_name,"GPIOB") && (Ti1Pin_val==4)
@@ -168,6 +176,7 @@
                 %elseif ISEQUAL(ti1gpio_name,"GPIOE") && (Ti1Pin_val==2)
                     %assign ti1_alternate_function = "GPIO_AF2_TIM3"
                 %endif
+                %% TI2 alternate function
                 %if ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==4)
                     %assign ti2_alternate_function = "GPIO_AF2_TIM3"
                 %elseif ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==7)
@@ -182,6 +191,7 @@
                 %break
             %case 4
                 %assign timer_name = "TIM4"
+                %% TI1 alternate function
                 %if ISEQUAL(ti1gpio_name,"GPIOB") && (Ti1Pin_val==6)
                     %assign ti1_alternate_function = "GPIO_AF2_TIM4"
                 %elseif ISEQUAL(ti1gpio_name,"GPIOD") && (Ti1Pin_val==12)
@@ -189,6 +199,7 @@
                 %elseif ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==11)
                     %assign ti1_alternate_function = "GPIO_AF10_TIM4"
                 %endif
+                %% TI2 alternate function
                 %if ISEQUAL(ti2gpio_name,"GPIOB") && (Ti2Pin_val==7)
                     %assign ti2_alternate_function = "GPIO_AF2_TIM4"
                 %elseif ISEQUAL(ti2gpio_name,"GPIOD") && (Ti2Pin_val==13)
@@ -199,6 +210,7 @@
                 %break
             %case 6
                 %assign timer_name = "TIM8"
+                %% TI1 alternate function
                 %if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==15)
                     %assign ti1_alternate_function = "GPIO_AF2_TIM8"
                 %elseif ISEQUAL(ti1gpio_name,"GPIOC") && (Ti1Pin_val==6)
@@ -206,6 +218,7 @@
                 %elseif ISEQUAL(ti1gpio_name,"GPIOB") && (Ti1Pin_val==6)
                     %assign ti1_alternate_function = "GPIO_AF5_TIM8"
                 %endif
+                %% TI2 alternate function
                 %if ISEQUAL(ti2gpio_name,"GPIOC") && (Ti2Pin_val==7)
                     %assign ti2_alternate_function = "GPIO_AF4_TIM8"
                 %elseif ISEQUAL(ti2gpio_name,"GPIOA") && (Ti2Pin_val==14)

@@ -142,7 +142,7 @@
 			%break
 	%endswitch
 
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
 	
 		%switch SpiPort_val
 		%case 1
@@ -312,7 +312,7 @@
 			__%<spi_name>_CLK_ENABLE();
 			__%<dma_name>_CLK_ENABLE();
 			
-			%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI")
+			%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
 			
 				%% configure SPI Peripheral	
 				%if SlaveFlag_val == 1
