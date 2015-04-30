@@ -34,8 +34,6 @@ mex sfunar_serialDmaRead.c
 mex sfunar_serialDmaWrite.c
 mex sfunar_serialRead.c
 mex sfunar_serialWrite.c
-mex sfunar_servoOutput.c
-mex sfunar_servoOutput.org.c
 mex sfunar_spiConfig.c
 mex sfunar_spiDmaConfig.c
 mex sfunar_spiDmaRead.c
