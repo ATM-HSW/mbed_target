@@ -136,7 +136,7 @@ static void mdlCheckParameters(SimStruct *S)
   }
   
   /*
-   * Check the parameter 5 (Repeated)
+   * Check the parameter 6 (I2cPort)
    */
   if EDIT_OK(S, 6) {
     int_T dimsArray[2] = { 1, 1 };

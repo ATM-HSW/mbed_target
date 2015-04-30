@@ -211,7 +211,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 6))
+  if (!ssSetNumRunTimeParams(S, 7))
     return;
 
   /*

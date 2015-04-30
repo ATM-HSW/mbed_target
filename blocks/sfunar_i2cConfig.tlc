@@ -32,7 +32,7 @@
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
-	%switch I2cPort
+	%switch I2cPort_val
 		%case 1
 			I2C i2c(%<sda_name>, %<scl_name>);
 			%break
