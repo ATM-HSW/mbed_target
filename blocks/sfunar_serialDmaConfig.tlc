@@ -74,7 +74,13 @@
 	%endswitch
 	
 	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE")
-				
+		
+		%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI")
+			%assign fck = 84000000
+		%elseif ISEQUAL(MbedTarget,"NUCLEO_F446RE")
+			%assign fck = 90000000
+		%endif
+		
 		%switch SerialPort_val
 		%case 1
 			%assign uart_name = "USART1"
@@ -83,7 +89,6 @@
 			%assign tx_dma_stream = "DMA2_Stream7"
 			%assign rx_dma_stream = "DMA2_Stream5"
 			%assign alternate_function = "GPIO_AF7_USART1"
-			%assign fck = 84000000
 			%break
 		%case 2
 			%assign uart_name = "USART2"
@@ -92,7 +97,7 @@
 			%assign tx_dma_stream = "DMA1_Stream6"
 			%assign rx_dma_stream = "DMA1_Stream5"
 			%assign alternate_function = "GPIO_AF7_USART2"
-			%assign fck = 42000000
+			%assign fck = fck/2
 			%break		
 		%case 3
 			%assign uart_name = "USART3"
@@ -101,7 +106,7 @@
 			%assign tx_dma_stream = "DMA1_Stream3"
 			%assign rx_dma_stream = "DMA1_Stream1"
 			%assign alternate_function = "GPIO_AF7_USART3"
-			%assign fck = 42000000
+			%assign fck = fck/2
 			%break
 		%case 4
 			%assign uart_name = "UART4"
@@ -110,7 +115,7 @@
 			%assign tx_dma_stream = "DMA1_Stream4"
 			%assign rx_dma_stream = "DMA1_Stream2"
 			%assign alternate_function = "GPIO_AF8_UART4"
-			%assign fck = 42000000
+			%assign fck = fck/2
 			%break
 		%case 5
 			%assign uart_name = "UART5"
@@ -119,7 +124,7 @@
 			%assign tx_dma_stream = "DMA1_Stream7"
 			%assign rx_dma_stream = "DMA1_Stream0"
 			%assign alternate_function = "GPIO_AF8_UART5"
-			%assign fck = 42000000
+			%assign fck = fck/2
 			%break
 		%case 6
 			%assign uart_name = "USART6"
@@ -128,7 +133,6 @@
 			%assign tx_dma_stream = "DMA2_Stream6"
 			%assign rx_dma_stream = "DMA2_Stream2"
 			%assign alternate_function = "GPIO_AF8_USART6"
-			%assign fck = 84000000
 			%break
 		%endswitch
 	
