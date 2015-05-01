@@ -62,19 +62,15 @@ function mbed_make_rtw_hook(hookMethod, modelName, rtwroot,templateMakefile,buil
     % this stage.
     %disp('after_make');
     if ( strcmp(get_param(gcs,'DownloadApplication'),'on') )
-        downloadToMbedHardware = 1;
+        downloadApplication = 1;
     else
-        downloadToMbedHardware = 0;
+        downloadApplication = 0;
     end
-    if ( strcmp(get_param(gcs,'DownloadApplicationSTLink'),'on') )
-        downloadToHardwareSTLink = 1;
-    else
-        downloadToHardwareSTLink = 0;
-    end
+    downloadMethod = get_param(gcs,'DownloadMethod');
 
-    if ~i_isPilSim && ~i_isModelReferenceBuild(modelName) && (downloadToMbedHardware || downloadToHardwareSTLink)
+    if ~i_isPilSim && ~i_isModelReferenceBuild(modelName) && downloadApplication
         %disp('i_download');
-        i_download(modelName, downloadToMbedHardware, downloadToHardwareSTLink)
+        i_download(modelName, downloadApplication, downloadMethod)
     end
 
    case 'exit'
@@ -167,15 +163,15 @@ function i_write_mbed_files()
     target = get_param(bdroot,'MbedTarget');
 
     % Copy the mbed target into the build area
-    srcFile = fullfile(getMbedTargetPath(), 'targets', [target '.zip']);
+    srcFile = fullfile(mbed_getTargetRootPath(), 'targets', [target '.zip']);
     unzip(srcFile, buildAreaDstFolder);
 
 end
 
-function i_download(modelName, bMbedCopy, bSTLink)
+function i_download(modelName, bFlash, flashMethod)
     lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
     srcname = fullfile(lCodeGenFolder, [modelName '_slprj'], [modelName '.bin']);
-    if bMbedCopy
+    if bFlash && strcmp(flashMethod,'mbed')
         destname = get_param(modelName,'MbedDrive');
         try
             disp(['copy ' srcname ' to ' destname]);
@@ -186,8 +182,13 @@ function i_download(modelName, bMbedCopy, bSTLink)
         catch err
             disp(err);
         end
-    elseif bSTLink
-        system([fullfile(getMbedTargetPath(), 'mbed', 'stlinkflash.bat') ' ' '"' srcname '"'],'-echo')
+    elseif bFlash
+        cmd = [fullfile(mbed_getTargetRootPath(), 'targets_flash', [flashMethod '.bat'])];
+        cmd = [cmd ' ' '"' srcname '"'];
+        cmd = [cmd ' ' '"' mbed_getTargetRootPath() '"'];
+        cmd = [cmd ' ' '"' get_param(modelName,'MbedDrive') '"'];
+        cmd = [cmd ' ' '"' get_param(modelName,'ComPort') '"'];
+        system(cmd,'-echo')
     end
 end
 

@@ -1,4 +1,4 @@
-function ret = getMbedTargetPath()
+function ret = mbed_getTargetRootPath()
   ret = '';
   a=strsplit(path,';');
   b=regexp(a,'\\mbed_\w*\\mbed');

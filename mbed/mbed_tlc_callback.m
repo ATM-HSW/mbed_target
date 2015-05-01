@@ -20,3 +20,8 @@ end
 if isequal(paramName, 'ComPort')
     mbed.Prefs.getComPort(slConfigUIGetVal(hDlg, hSrc, paramName));
 end
+
+if isequal(paramName, 'MbedDownloadApp')
+    % mbed.Prefs.setMbedRTOS(slConfigUIGetVal(hDlg, hSrc, paramName));
+end
+

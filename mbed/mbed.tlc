@@ -56,18 +56,30 @@
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
-   rtwoptions(oIdx).callback      = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
 
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'Download Application (mbed)';
+  rtwoptions(oIdx).prompt         = 'Flash Application';
   rtwoptions(oIdx).type           = 'Checkbox';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedDownload();
   rtwoptions(oIdx).tlcvariable    = 'DownloadApplication';
   rtwoptions(oIdx).makevariable   = 'DOWNLOADAPPLICATION';
   rtwoptions(oIdx).tooltip        = ['Flash application: copy to Virtual Drive'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadApplication'')';
+
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'Flash method: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getDownloadMethod();
+  rtwoptions(oIdx).tlcvariable    = 'DownloadMethod';
+  rtwoptions(oIdx).makevariable   = 'DownloadMethod';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['Downloadfunktion: mbed - copy to mbed Virtual Drive, STLink - batch file calling STLink CLI']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadMethod'')';
 
 
   oIdx = oIdx + 1;
@@ -81,13 +93,6 @@
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedDrive'')';
 
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'Download Application (STLink)';
-  rtwoptions(oIdx).type           = 'Checkbox';
-  rtwoptions(oIdx).default        = 'off';
-  rtwoptions(oIdx).tlcvariable    = 'DownloadApplicationSTLink';
-  rtwoptions(oIdx).tooltip        = ['Flash application: STLink'];
 
   oIdx = oIdx + 1;
 
