@@ -1,0 +1,83 @@
+%% File : sfunar_Interrupt.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_Interrupt "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign srcFile = LibGetModelDotCFile()
+
+    %assign p1_val = LibBlockParameterValue(p1, 0)
+    %assign p2_val = LibBlockParameterValue(p2, 0)
+    %assign p3_val = LibBlockParameterValue(p3, 0)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val-1)
+    %openfile declbuf
+
+    InterruptIn %<name>(%<pname>);
+
+    %closefile declbuf
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %% PullDefault, PullUp, PullDown, PullNone
+    %switch(p3_val)
+      %case 1
+        %<name>.rise(NULL);
+        %<name>.fall(NULL);
+        %break
+      %case 2
+        %<name>.rise(%<name>_interrupt);
+        %break
+      %case 3
+        %<name>.fall(%<name>_interrupt);
+        %break
+      %case 4
+        %<name>.rise(%<name>_interrupt);
+        %<name>.fall(%<name>_interrupt);
+        %break
+    %endswitch
+
+    %openfile declbuf
+    /* %<Type> block: %<Name> */
+    void %<name>_interrupt();
+    %closefile declbuf
+    %<LibSetSourceFileSection(srcFile,"Declarations", declbuf)>
+
+    %openfile declbuf
+    /* %<Type> block: %<Name> */
+    void %<name>_interrupt() {
+      %<LibBlockExecuteFcnCall(block,0)>
+    }
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+  %endif
+
+%endfunction
