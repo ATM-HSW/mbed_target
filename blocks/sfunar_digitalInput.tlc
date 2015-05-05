@@ -34,6 +34,7 @@
 
       %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
+      %assign name = FEVAL("strrep",name,"-","_")
       %assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val-1)
       %openfile declbuf
 
@@ -78,6 +79,7 @@
 
       %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
+      %assign name = FEVAL("strrep",name,"-","_")
       %%
       %<y1_val> = %<name>;
       %%
