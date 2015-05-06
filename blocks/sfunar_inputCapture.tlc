@@ -1,0 +1,583 @@
+%% File : sfunar_encoderInput.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_inputCapture "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %assign TimerNumber_val = CAST("Number",LibBlockParameterValue(TimerNumber, 0))
+  %assign Frequency_val = CAST("Number",LibBlockParameterValue(Frequency, 0))
+  %assign Ti1Active_val = CAST("Number",LibBlockParameterValue(Ti1Active, 0))-1
+  %assign Ti1Port_val = CAST("Number",LibBlockParameterValue(Ti1Port, 0))
+  %assign Ti1Pin_val = CAST("Number",LibBlockParameterValue(Ti1Pin, 0))-1  
+  %assign Ti1Pupd_val = CAST("Number",LibBlockParameterValue(Ti1Pupd, 0))-1
+  %assign Ti2Active_val = CAST("Number",LibBlockParameterValue(Ti2Active, 0))-1
+  %assign Ti2Port_val = CAST("Number",LibBlockParameterValue(Ti2Port, 0))
+  %assign Ti2Pin_val = CAST("Number",LibBlockParameterValue(Ti2Pin, 0))-1  
+  %assign Ti2Pupd_val = CAST("Number",LibBlockParameterValue(Ti2Pupd, 0))-1
+  %assign Ti3Active_val = CAST("Number",LibBlockParameterValue(Ti3Active, 0))-1
+  %assign Ti3Port_val = CAST("Number",LibBlockParameterValue(Ti3Port, 0))
+  %assign Ti3Pin_val = CAST("Number",LibBlockParameterValue(Ti3Pin, 0))-1  
+  %assign Ti3Pupd_val = CAST("Number",LibBlockParameterValue(Ti3Pupd, 0))-1
+  %assign Ti4Active_val = CAST("Number",LibBlockParameterValue(Ti4Active, 0))-1
+  %assign Ti4Port_val = CAST("Number",LibBlockParameterValue(Ti4Port, 0))
+  %assign Ti4Pin_val = CAST("Number",LibBlockParameterValue(Ti4Pin, 0))-1  
+  %assign Ti4Pupd_val = CAST("Number",LibBlockParameterValue(Ti4Pupd, 0))-1
+
+  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign name = FEVAL("strrep",name," ","_")
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Get Number of Capture Pins and edge polarity
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %assign numPorts = 0
+  %assign dier_val = 0
+  %assign ccmr1_val = 0
+  %assign ccmr2_val = 0
+  %assign ccer_val = 0
+
+  %if Ti1Active_val > 0
+    %assign numPorts = numPorts + 1
+    %assign dier_val = dier_val + (1 << 1)
+    %assign ccmr1_val = ccmr1_val + (1 << 0)
+    %assign ccer_val = ccer_val + (1 << 0)
+    %switch Ti1Active_val
+      %case 2
+        %assign ccer_val = ccer_val + (1 << 1)
+        %break
+      %case 3        
+        %assign ccer_val = ccer_val + (1 << 3) + (1 << 1)
+        %break
+    %endswitch
+  %endif
+  %if Ti2Active_val > 0
+    %assign numPorts = numPorts + 1
+    %assign dier_val = dier_val + (1 << 2)
+    %assign ccmr1_val = ccmr1_val + (1 << 8)
+    %assign ccer_val = ccer_val + (1 << 4)
+    %switch Ti2Active_val
+      %case 2
+        %assign ccer_val = ccer_val + (1 << 5)
+        %break
+      %case 3        
+        %assign ccer_val = ccer_val + (1 << 5) + (1 << 7)
+        %break
+    %endswitch
+  %endif
+  %if Ti3Active_val > 0
+    %assign numPorts = numPorts + 1
+    %assign dier_val = dier_val + (1 << 3)
+    %assign ccmr2_val = ccmr2_val + (1 << 0)
+    %assign ccer_val = ccer_val + (1 << 8)
+    %switch Ti3Active_val
+      %case 2
+        %assign ccer_val = ccer_val + (1 << 9)
+        %break
+      %case 3        
+        %assign ccer_val = ccer_val + (1 << 9) + (1 << 11)
+        %break
+    %endswitch
+  %endif
+  %if Ti4Active_val > 0
+    %assign numPorts = numPorts + 1
+    %assign dier_val = dier_val + (1 << 4)
+    %assign ccmr2_val = ccmr2_val + (1 << 8)
+    %assign ccer_val = ccer_val + (1 << 12)
+    %switch Ti4Active_val
+      %case 2
+        %assign ccer_val = ccer_val + (1 << 13)
+        %break
+      %case 3        
+        %assign ccer_val = ccer_val + (1 << 13)
+        %break
+    %endswitch
+  %endif
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% GPIO Port Name evaluation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+  %assign Ti1Port_name = "GPIO" + FEVAL("char",Ti1Port_val+64)
+  %assign Ti2Port_name = "GPIO" + FEVAL("char",Ti2Port_val+64)
+  %assign Ti3Port_name = "GPIO" + FEVAL("char",Ti3Port_val+64)
+  %assign Ti4Port_name = "GPIO" + FEVAL("char",Ti4Port_val+64)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Target specific options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
+  
+  %if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI")
+    %assign fck = 168000000
+  %elseif ISEQUAL(MbedTarget, "NUCLEO_F446RE")
+    %assign fck = 180000000
+  %endif
+
+  %switch TimerNumber_val
+    %case 1
+        %assign timerName = "TIM1"
+        %assign Ti1AlternateFunction = "1"
+        %assign Ti2AlternateFunction = "1"
+        %assign Ti3AlternateFunction = "1"
+        %assign Ti4AlternateFunction = "1"
+        %assign InterruptName = "TIM1_CC"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 2
+        %assign timerName = "TIM2"
+        %assign Ti1AlternateFunction = "1"
+        %assign Ti2AlternateFunction = "1"
+        %assign Ti3AlternateFunction = "1"
+        %assign Ti4AlternateFunction = "1"
+        %assign InterruptName = "TIM2"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 3
+        %assign timerName = "TIM3"
+        %assign Ti1AlternateFunction = "2"
+        %assign Ti2AlternateFunction = "2"
+        %assign Ti3AlternateFunction = "2"
+        %assign Ti4AlternateFunction = "2"
+        %assign InterruptName = "TIM3"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 4
+        %assign timerName = "TIM4"
+        %assign Ti1AlternateFunction = "2"
+        %assign Ti2AlternateFunction = "2"
+        %assign Ti3AlternateFunction = "2"
+        %assign Ti4AlternateFunction = "2"
+        %assign InterruptName = "TIM4"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 6
+        %assign timerName = "TIM8"
+        %assign Ti1AlternateFunction = "3"
+        %assign Ti2AlternateFunction = "3"
+        %assign Ti3AlternateFunction = "3"
+        %assign Ti4AlternateFunction = "3"
+        %assign InterruptName = "TIM8_CC"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 7
+        %assign timerName = "TIM9"
+        %assign Ti1AlternateFunction = "3"
+        %assign Ti2AlternateFunction = "3"
+        %if (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 3 and 4")>
+        %endif
+        %assign InterruptName = "TIM1_BRK_TIM9"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 8
+        %assign timerName = "TIM10"
+        %assign Ti1AlternateFunction = "3"
+        %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
+        %endif
+        %assign InterruptName = "TIM1_UP_TIM10"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 9
+        %assign timerName = "TIM11"
+        %assign Ti1AlternateFunction = "3"
+        %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
+        %endif
+        %assign InterruptName = "TIM1_TRG_COM_TIM11"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 10
+        %assign timerName = "TIM12"
+        %assign Ti1AlternateFunction = "9"
+        %assign Ti2AlternateFunction = "9"
+        %if (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 3 and 4")>
+        %endif
+        %assign InterruptName = "TIM8_BRK_TIM12"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 11
+        %assign timerName = "TIM13"
+        %assign Ti1AlternateFunction = "9"
+        %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
+        %endif
+        %assign InterruptName = "TIM8_UP_TIM13"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 12
+        %assign timerName = "TIM14"
+        %assign Ti1AlternateFunction = "9"
+        %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
+        %endif
+        %assign InterruptName = "TIM8_TRG_COM_TIM14"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %default
+      %<LibReportError("Timer peripheral is not supported!")>
+      %break
+  %endswitch
+
+%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+
+  %assign fck = 72000000
+
+  %switch TimerNumber_val
+    %case 1
+        %assign timerName = "TIM1"
+        
+        %if (Ti1Port_val == 3) || (Ti1Port_val == 5)
+          %assign Ti1AlternateFunction = "2"
+        %elseif (Ti1Port_val == 1)
+          %assign Ti1AlternateFunction = "6"
+        %endif
+        %if (Ti2Port_val == 3) || (Ti2Port_val == 5)
+          %assign Ti2AlternateFunction = "2"
+        %elseif (Ti2Port_val == 1)            
+          %assign Ti2AlternateFunction = "6"
+        %endif
+        %if (Ti3Port_val == 3) || (Ti3Port_val == 5)
+          %assign Ti3AlternateFunction = "2"
+        %elseif (Ti3Port_val == 1)            
+          %assign Ti3AlternateFunction = "6"
+        %endif
+        %if (Ti4Port_val == 3) || (Ti4Port_val == 5)
+          %assign Ti4AlternateFunction = "2"
+        %elseif (Ti4Port_val == 1)            
+          %assign Ti4AlternateFunction = "11"
+        %endif
+
+        %assign InterruptName = "TIM1_CC"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 3
+        %assign timerName = "TIM3"
+        %assign Ti1AlternateFunction = "2"
+        %assign Ti2AlternateFunction = "2"
+        %assign Ti3AlternateFunction = "2"
+        %assign Ti4AlternateFunction = "2"
+        %assign InterruptName = "TIM3"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 4
+        %assign timerName = "TIM4"
+
+        %if (Ti1Port_val == 2) || (Ti1Port_val == 4)
+          %assign Ti1AlternateFunction = "2"
+        %elseif (Ti1Port_val == 1)
+          %assign Ti1AlternateFunction = "10"
+        %endif
+        %if (Ti2Port_val == 2) || (Ti2Port_val == 4)
+          %assign Ti2AlternateFunction = "2"
+        %elseif (Ti2Port_val == 1)            
+          %assign Ti2AlternateFunction = "10"
+        %endif
+        %if (Ti3Port_val == 2) || (Ti3Port_val == 4)
+          %assign Ti3AlternateFunction = "2"
+        %elseif (Ti3Port_val == 1)            
+          %assign Ti3AlternateFunction = "10"
+        %endif
+        %assign Ti4AlternateFunction = "2"
+
+        %assign InterruptName = "TIM4"
+        %assign prescaler_val = fck/(2*Frequency_val)
+      %break
+    %case 6
+        %assign timerName = "TIM8"
+        
+        %if (Ti1Port_val == 1)
+          %assign Ti1AlternateFunction = "2"
+        %elseif (Ti1Port_val == 3)
+          %assign Ti1AlternateFunction = "4"
+        %elseif (Ti1Port_val == 2)          
+          %assign Ti1AlternateFunction = "5"
+        %endif
+        %if (Ti2Port_val == 3)
+          %assign Ti2AlternateFunction = "4"
+        %elseif (Ti2Port_val == 1)            
+          %assign Ti2AlternateFunction = "5"
+        %elseif (Ti2Port_val == 2)            
+          %assign Ti2AlternateFunction = "10"
+        %endif
+        %if (Ti3Port_val == 3)
+          %assign Ti3AlternateFunction = "4"
+        %elseif (Ti3Port_val == 1)            
+          %assign Ti3AlternateFunction = "6"
+        %elseif (Ti3Port_val == 2)            
+          %assign Ti3AlternateFunction = "10"
+        %endif
+        %assign Ti4AlternateFunction = "4"
+
+        %assign InterruptName = "TIM8_CC"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 13
+        %assign timerName = "TIM15"
+        
+        %if (Ti1Port_val == 2)
+          %assign Ti1AlternateFunction = "1"
+        %elseif (Ti1Port_val == 6)
+          %assign Ti1AlternateFunction = "3"
+        %elseif (Ti1Port_val == 1)
+          %assign Ti1AlternateFunction = "9"
+        %endif
+        %if (Ti2Port_val == 2)
+          %assign Ti2AlternateFunction = "1"
+        %elseif (Ti2Port_val == 6)            
+          %assign Ti2AlternateFunction = "3"
+        %elseif (Ti2Port_val == 1)            
+          %assign Ti2AlternateFunction = "9"
+        %endif
+        %if (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 3 and 4")>
+        %endif
+
+        %assign InterruptName = "TIM1_BRK_TIM15"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 14
+        %assign timerName = "TIM16"
+
+        %if (Ti1Port_val == 1) || (Ti1Port_val == 2)
+          %assign Ti1AlternateFunction = "1"
+        %elseif (Ti1Port_val == 5)
+          %assign Ti1AlternateFunction = "4"
+        %endif  
+        %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
+        %endif
+
+        %assign InterruptName = "TIM1_UP_TIM16"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %case 15
+        %assign timerName = "TIM17"
+
+        %if (Ti1Port_val == 1) || ((Ti1Port_val == 2) && (Ti1Pin_val == 9))
+          %assign Ti1AlternateFunction = "1"
+        %elseif (Ti1Port_val == 5)
+          %assign Ti1AlternateFunction = "4"
+        %elseif (Ti1Port_val == 2) && (Ti1Pin_val == 5)           
+          %assign Ti1AlternateFunction = "10"
+        %endif  
+        %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
+          %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
+        %endif
+
+        %assign InterruptName = "TIM1_TRG_COM_TIM17"
+        %assign prescaler_val = fck/Frequency_val
+      %break
+    %default
+      %<LibReportError("Timer peripheral is not supported!")>
+      %break
+  %endswitch
+
+%endif 
+
+  %if !SLibCodeGenForSim()
+    %if Ti1Active_val > 0
+        __%<Ti1Port_name>_CLK_ENABLE();
+        %<Ti1Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti1Pin_val>*2));   // Alternate Function Mode
+        %<Ti1Port_name>->PUPDR |= (%<Ti1Pupd_val> << (%<Ti1Pin_val>*2));   // Pull type
+        %if Ti1Pin_val > 7
+            %<Ti1Port_name>->AFR[1] |= (%<Ti1AlternateFunction> << (%<Ti1Pin_val-8>*4));
+        %else          
+            %<Ti1Port_name>->AFR[0] |= (%<Ti1AlternateFunction> << (%<Ti1Pin_val>*4));
+        %endif
+    %endif
+
+    %if Ti2Active_val > 0
+        __%<Ti2Port_name>_CLK_ENABLE();
+        %<Ti2Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti2Pin_val>*2));   // Alternate Function Mode
+        %<Ti2Port_name>->PUPDR |= (%<Ti2Pupd_val> << (%<Ti2Pin_val>*2));   // Pull type
+        %if Ti1Pin_val > 7
+            %<Ti2Port_name>->AFR[1] |= (%<Ti2AlternateFunction> << (%<Ti2Pin_val-8>*4));
+        %else          
+            %<Ti2Port_name>->AFR[0] |= (%<Ti2AlternateFunction> << (%<Ti2Pin_val>*4));
+        %endif
+    %endif
+
+    %if Ti3Active_val > 0
+        __%<Ti3Port_name>_CLK_ENABLE();
+        %<Ti3Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti3Pin_val>*2));   // Alternate Function Mode
+        %<Ti3Port_name>->PUPDR |= (%<Ti3Pupd_val> << (%<Ti3Pin_val>*2));   // Pull type
+        %if Ti1Pin_val > 7
+            %<Ti3Port_name>->AFR[1] |= (%<Ti3AlternateFunction> << (%<Ti3Pin_val-8>*4));
+        %else          
+            %<Ti3Port_name>->AFR[0] |= (%<Ti3AlternateFunction> << (%<Ti3Pin_val>*4));
+        %endif
+    %endif
+
+    %if Ti4Active_val > 0
+        __%<Ti4Port_name>_CLK_ENABLE();
+        %<Ti4Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti4Pin_val>*2));   // Alternate Function Mode
+        %<Ti4Port_name>->PUPDR |= (%<Ti4Pupd_val> << (%<Ti4Pin_val>*2));   // Pull type
+        %if Ti1Pin_val > 7
+            %<Ti4Port_name>->AFR[1] |= (%<Ti4AlternateFunction> << (%<Ti4Pin_val-8>*4));
+        %else          
+            %<Ti4Port_name>->AFR[0] |= (%<Ti4AlternateFunction> << (%<Ti4Pin_val>*4));
+        %endif
+    %endif
+    
+    __%<timerName>_CLK_ENABLE();
+    %<timerName>->DIER |= %<SPRINTF("0x%08X",dier_val)>;
+    %if Ti1Active_val > 0 || Ti2Active_val > 0
+        %<timerName>->CCMR1 |= %<SPRINTF("0x%08X",ccmr1_val)>;
+    %endif
+    %if Ti3Active_val > 0 || Ti4Active_val > 0        
+        %<timerName>->CCMR2 |= %<SPRINTF("0x%08X",ccmr2_val)>;
+    %endif    
+    %<timerName>->CCER |= %<SPRINTF("0x%08X",ccer_val)>;
+    %<timerName>->PSC = %<prescaler_val>;
+    NVIC_SetVector(%<InterruptName>_IRQn, (uint32_T)&%<InterruptName>_IRQHandler);
+    NVIC_EnableIRQ(%<InterruptName>_IRQn);
+    %%<timerName>->CR1 |= TIM_CR1_EN;
+    %<timerName>->CR1 |= 0x1;
+  %endif
+
+  %if !SLibCodeGenForSim()
+      %openfile declbuf
+        %if numPorts > 1
+          volatile uint32_T inputCapture%<TimerNumber_val>[%<numPorts>];
+        %else
+          volatile uint32_T inputCapture%<TimerNumber_val>;
+        %endif
+
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Timer CC Interrupt Handler  
+  %assign cnt = 0
+  %if !SLibCodeGenForSim()
+      %openfile buffer
+        void %<InterruptName>_IRQHandler(void)
+        {
+            uint32_T tmp;
+            tmp = %<timerName>->SR & %<SPRINTF("0x%08X",dier_val)>;
+            %<timerName>->SR = ~%<SPRINTF("0x%08X",(dier_val << 8) + dier_val)>;
+            %if numPorts > 1
+              %if Ti1Active_val > 0
+                if(tmp & 0x02)
+                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR1;
+                %assign cnt = cnt + 1
+              %endif
+              %if Ti2Active_val > 0
+                if(tmp & 0x04)
+                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR2;
+                %assign cnt = cnt + 1
+              %endif
+              %if Ti3Active_val > 0
+                if(tmp & 0x08)
+                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR3;
+                %assign cnt = cnt + 1
+              %endif
+              %if Ti4Active_val > 0
+                if(tmp & 0x10)
+                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR4;
+              %endif
+            %else              
+              %if Ti1Active_val > 0
+                if(tmp & 0x02)
+                  inputCapture%<TimerNumber_val> = %<timerName>->CCR1;
+                %assign cnt = cnt + 1
+              %endif
+              %if Ti2Active_val > 0
+                if(tmp & 0x04)
+                  inputCapture%<TimerNumber_val> = %<timerName>->CCR2;
+                %assign cnt = cnt + 1
+              %endif
+              %if Ti3Active_val > 0
+                if(tmp & 0x08)
+                  inputCapture%<TimerNumber_val> = %<timerName>->CCR3;
+                %assign cnt = cnt + 1
+              %endif
+              %if Ti4Active_val > 0
+                if(tmp & 0x10)
+                  inputCapture%<TimerNumber_val> = %<timerName>->CCR4;
+              %endif
+            %endif
+        }
+      %closefile buffer
+      %<LibSetSourceFileSection(srcFile, "Functions", buffer)>
+  %endif
+%endfunction
+
+%% Function: Outputs ======================================================
+%%
+%function Outputs(block, system) Output
+
+  %assign TimerNumber_val = CAST("Number",LibBlockParameterValue(TimerNumber, 0))
+  %assign Ti1Active_val = CAST("Number",LibBlockParameterValue(Ti1Active, 0))-1
+  %assign Ti2Active_val = CAST("Number",LibBlockParameterValue(Ti2Active, 0))-1
+  %assign Ti3Active_val = CAST("Number",LibBlockParameterValue(Ti3Active, 0))-1
+  %assign Ti4Active_val = CAST("Number",LibBlockParameterValue(Ti4Active, 0))-1
+
+  %assign numPorts = 0
+
+    %if Ti1Active_val > 0  
+      %assign numPorts = numPorts + 1
+    %endif
+    %if Ti2Active_val > 0
+      %assign numPorts = numPorts + 1
+    %endif
+    %if Ti3Active_val > 0
+      %assign numPorts = numPorts + 1
+    %endif
+    %if Ti4Active_val > 0
+      %assign numPorts = numPorts + 1
+    %endif
+
+  %assign cnt = 0
+  %if !SLibCodeGenForSim()
+    %if numPorts > 1
+      %if Ti1Active_val > 0
+        %<LibBlockOutputSignal(cnt, "", "", 0)> = inputCapture%<TimerNumber_val>[%<cnt>];
+        %assign cnt = cnt + 1
+      %endif
+      %if Ti2Active_val > 0
+        %<LibBlockOutputSignal(cnt, "", "", 0)> = inputCapture%<TimerNumber_val>[%<cnt>];
+        %assign cnt = cnt + 1
+      %endif
+      %if Ti3Active_val > 0
+        %<LibBlockOutputSignal(cnt, "", "", 0)> = inputCapture%<TimerNumber_val>[%<cnt>];
+        %assign cnt = cnt + 1
+      %endif
+      %if Ti4Active_val > 0
+        %<LibBlockOutputSignal(cnt, "", "", 0)> = inputCapture%<TimerNumber_val>[%<cnt>];
+        %assign cnt = cnt + 1
+      %endif
+    %else
+      %if Ti1Active_val > 0        
+        %<LibBlockOutputSignal(0, "", "", 0)> = inputCapture%<TimerNumber_val>;
+      %endif
+      %if Ti2Active_val > 0
+        %<LibBlockOutputSignal(0, "", "", 0)> = inputCapture%<TimerNumber_val>;
+      %endif
+      %if Ti3Active_val > 0
+        %<LibBlockOutputSignal(0, "", "", 0)> = inputCapture%<TimerNumber_val>;
+      %endif
+      %if Ti4Active_val > 0
+        %<LibBlockOutputSignal(0, "", "", 0)> = inputCapture%<TimerNumber_val>;
+      %endif
+    %endif
+  %endif
+%endfunction

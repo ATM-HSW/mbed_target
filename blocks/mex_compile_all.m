@@ -23,6 +23,7 @@ mex sfunar_i2cFram_read.c
 mex sfunar_i2cFram_write.c
 mex sfunar_i2cRead.c
 mex sfunar_i2cWrite.c
+mex sfunar_inputCapture.c
 mex sfunar_lcdOutput.c
 mex sfunar_max11300Config.c
 mex sfunar_mcp3204Config.c
