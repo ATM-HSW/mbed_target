@@ -438,13 +438,15 @@
     __%<timerName>_CLK_ENABLE();
     %<timerName>->DIER |= %<SPRINTF("0x%08X",dier_val)>;
     %if Ti1Active_val > 0 || Ti2Active_val > 0
-        %<timerName>->CCMR1 |= %<SPRINTF("0x%08X",ccmr1_val)>;
+      %<timerName>->CCMR1 |= %<SPRINTF("0x%08X",ccmr1_val)>;
     %endif
     %if Ti3Active_val > 0 || Ti4Active_val > 0        
-        %<timerName>->CCMR2 |= %<SPRINTF("0x%08X",ccmr2_val)>;
+      %<timerName>->CCMR2 |= %<SPRINTF("0x%08X",ccmr2_val)>;
     %endif    
     %<timerName>->CCER |= %<SPRINTF("0x%08X",ccer_val)>;
-    %<timerName>->PSC = %<prescaler_val>;
+    %if Frequency_val > 0
+      %<timerName>->PSC = %<prescaler_val>;
+    %endif
     NVIC_SetVector(%<InterruptName>_IRQn, (uint32_T)&%<InterruptName>_IRQHandler);
     NVIC_EnableIRQ(%<InterruptName>_IRQn);
     %%<timerName>->CR1 |= TIM_CR1_EN;
