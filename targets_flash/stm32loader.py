@@ -46,6 +46,7 @@ chip_ids = {
     0x416: "STM32 Medium-density ultralow power line",
     0x411: "STM32F2xx",
     0x413: "STM32F4xx",
+    0x421: "STM32F446",
 }
 
 def mdebug(level, message):
