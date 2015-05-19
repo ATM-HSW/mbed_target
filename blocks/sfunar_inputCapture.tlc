@@ -135,7 +135,7 @@
         %assign Ti3AlternateFunction = "1"
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM1_CC"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 2
         %assign timerName = "TIM2"
@@ -144,7 +144,7 @@
         %assign Ti3AlternateFunction = "1"
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM2"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 3
         %assign timerName = "TIM3"
@@ -153,7 +153,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM3"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 4
         %assign timerName = "TIM4"
@@ -162,7 +162,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM4"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 6
         %assign timerName = "TIM8"
@@ -171,7 +171,7 @@
         %assign Ti3AlternateFunction = "3"
         %assign Ti4AlternateFunction = "3"
         %assign InterruptName = "TIM8_CC"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 7
         %assign timerName = "TIM9"
@@ -181,7 +181,7 @@
           %<LibReportError("Timer peripheral has no channel 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_BRK_TIM9"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 8
         %assign timerName = "TIM10"
@@ -190,7 +190,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_UP_TIM10"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 9
         %assign timerName = "TIM11"
@@ -199,7 +199,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_TRG_COM_TIM11"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 10
         %assign timerName = "TIM12"
@@ -209,7 +209,7 @@
           %<LibReportError("Timer peripheral has no channel 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_BRK_TIM12"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 11
         %assign timerName = "TIM13"
@@ -218,7 +218,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_UP_TIM13"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 12
         %assign timerName = "TIM14"
@@ -227,7 +227,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_TRG_COM_TIM14"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %default
       %<LibReportError("Timer peripheral is not supported!")>
@@ -264,7 +264,7 @@
         %endif
 
         %assign InterruptName = "TIM1_CC"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 3
         %assign timerName = "TIM3"
@@ -273,7 +273,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM3"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 4
         %assign timerName = "TIM4"
@@ -296,7 +296,7 @@
         %assign Ti4AlternateFunction = "2"
 
         %assign InterruptName = "TIM4"
-        %assign prescaler_val = fck/(2*Frequency_val)
+        %assign prescaler_val = fck/(2*Frequency_val)-1
       %break
     %case 6
         %assign timerName = "TIM8"
@@ -325,7 +325,7 @@
         %assign Ti4AlternateFunction = "4"
 
         %assign InterruptName = "TIM8_CC"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 13
         %assign timerName = "TIM15"
@@ -349,7 +349,7 @@
         %endif
 
         %assign InterruptName = "TIM1_BRK_TIM15"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 14
         %assign timerName = "TIM16"
@@ -364,7 +364,7 @@
         %endif
 
         %assign InterruptName = "TIM1_UP_TIM16"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %case 15
         %assign timerName = "TIM17"
@@ -381,7 +381,7 @@
         %endif
 
         %assign InterruptName = "TIM1_TRG_COM_TIM17"
-        %assign prescaler_val = fck/Frequency_val
+        %assign prescaler_val = fck/Frequency_val-1
       %break
     %default
       %<LibReportError("Timer peripheral is not supported!")>
@@ -406,7 +406,7 @@
         __%<Ti2Port_name>_CLK_ENABLE();
         %<Ti2Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti2Pin_val>*2));   // Alternate Function Mode
         %<Ti2Port_name>->PUPDR |= (%<Ti2Pupd_val> << (%<Ti2Pin_val>*2));   // Pull type
-        %if Ti1Pin_val > 7
+        %if Ti2Pin_val > 7
             %<Ti2Port_name>->AFR[1] |= (%<Ti2AlternateFunction> << (%<Ti2Pin_val-8>*4));
         %else          
             %<Ti2Port_name>->AFR[0] |= (%<Ti2AlternateFunction> << (%<Ti2Pin_val>*4));
@@ -417,7 +417,7 @@
         __%<Ti3Port_name>_CLK_ENABLE();
         %<Ti3Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti3Pin_val>*2));   // Alternate Function Mode
         %<Ti3Port_name>->PUPDR |= (%<Ti3Pupd_val> << (%<Ti3Pin_val>*2));   // Pull type
-        %if Ti1Pin_val > 7
+        %if Ti3Pin_val > 7
             %<Ti3Port_name>->AFR[1] |= (%<Ti3AlternateFunction> << (%<Ti3Pin_val-8>*4));
         %else          
             %<Ti3Port_name>->AFR[0] |= (%<Ti3AlternateFunction> << (%<Ti3Pin_val>*4));
@@ -428,7 +428,7 @@
         __%<Ti4Port_name>_CLK_ENABLE();
         %<Ti4Port_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<Ti4Pin_val>*2));   // Alternate Function Mode
         %<Ti4Port_name>->PUPDR |= (%<Ti4Pupd_val> << (%<Ti4Pin_val>*2));   // Pull type
-        %if Ti1Pin_val > 7
+        %if Ti4Pin_val > 7
             %<Ti4Port_name>->AFR[1] |= (%<Ti4AlternateFunction> << (%<Ti4Pin_val-8>*4));
         %else          
             %<Ti4Port_name>->AFR[0] |= (%<Ti4AlternateFunction> << (%<Ti4Pin_val>*4));
