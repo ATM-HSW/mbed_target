@@ -103,7 +103,6 @@
   rtwoptions(oIdx).makevariable   = 'COMPORT';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual COM Port (COMx)']);
-  rtwoptions(oIdx).callback      = '';
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''ComPort'')';
 
   oIdx = oIdx + 1;
