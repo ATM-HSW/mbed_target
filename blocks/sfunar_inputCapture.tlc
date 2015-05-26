@@ -37,6 +37,7 @@
   %assign Ti4Port_val = CAST("Number",LibBlockParameterValue(Ti4Port, 0))
   %assign Ti4Pin_val = CAST("Number",LibBlockParameterValue(Ti4Pin, 0))-1  
   %assign Ti4Pupd_val = CAST("Number",LibBlockParameterValue(Ti4Pupd, 0))-1
+  %assign OutputMode_val = CAST("Number",LibBlockParameterValue(OutputMode, 0))
 
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
@@ -135,7 +136,7 @@
         %assign Ti3AlternateFunction = "1"
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM1_CC"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 2
         %assign timerName = "TIM2"
@@ -144,7 +145,7 @@
         %assign Ti3AlternateFunction = "1"
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM2"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 3
         %assign timerName = "TIM3"
@@ -153,7 +154,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM3"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 4
         %assign timerName = "TIM4"
@@ -162,7 +163,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM4"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 6
         %assign timerName = "TIM8"
@@ -171,7 +172,7 @@
         %assign Ti3AlternateFunction = "3"
         %assign Ti4AlternateFunction = "3"
         %assign InterruptName = "TIM8_CC"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 7
         %assign timerName = "TIM9"
@@ -181,7 +182,7 @@
           %<LibReportError("Timer peripheral has no channel 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_BRK_TIM9"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 8
         %assign timerName = "TIM10"
@@ -190,7 +191,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_UP_TIM10"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 9
         %assign timerName = "TIM11"
@@ -199,7 +200,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_TRG_COM_TIM11"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 10
         %assign timerName = "TIM12"
@@ -209,7 +210,7 @@
           %<LibReportError("Timer peripheral has no channel 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_BRK_TIM12"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 11
         %assign timerName = "TIM13"
@@ -218,7 +219,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_UP_TIM13"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 12
         %assign timerName = "TIM14"
@@ -227,7 +228,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_TRG_COM_TIM14"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %default
       %<LibReportError("Timer peripheral is not supported!")>
@@ -264,7 +265,7 @@
         %endif
 
         %assign InterruptName = "TIM1_CC"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 3
         %assign timerName = "TIM3"
@@ -273,7 +274,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM3"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 4
         %assign timerName = "TIM4"
@@ -296,7 +297,7 @@
         %assign Ti4AlternateFunction = "2"
 
         %assign InterruptName = "TIM4"
-        %assign prescaler_val = fck/(2*Frequency_val)-1
+        %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
     %case 6
         %assign timerName = "TIM8"
@@ -325,7 +326,7 @@
         %assign Ti4AlternateFunction = "4"
 
         %assign InterruptName = "TIM8_CC"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 13
         %assign timerName = "TIM15"
@@ -349,7 +350,7 @@
         %endif
 
         %assign InterruptName = "TIM1_BRK_TIM15"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 14
         %assign timerName = "TIM16"
@@ -364,7 +365,7 @@
         %endif
 
         %assign InterruptName = "TIM1_UP_TIM16"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %case 15
         %assign timerName = "TIM17"
@@ -381,7 +382,7 @@
         %endif
 
         %assign InterruptName = "TIM1_TRG_COM_TIM17"
-        %assign prescaler_val = fck/Frequency_val-1
+        %assign prescaler_val = (fck/Frequency_val)-1
       %break
     %default
       %<LibReportError("Timer peripheral is not supported!")>
@@ -456,9 +457,9 @@
   %if !SLibCodeGenForSim()
       %openfile declbuf
         %if numPorts > 1
-          volatile uint32_T inputCapture%<TimerNumber_val>[%<numPorts>];
+          volatile real32_T inputCapture%<TimerNumber_val>[%<numPorts>];
         %else
-          volatile uint32_T inputCapture%<TimerNumber_val>;
+          volatile real32_T inputCapture%<TimerNumber_val>;
         %endif
 
       %closefile declbuf
@@ -468,53 +469,177 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Timer CC Interrupt Handler  
+  
   %assign cnt = 0
   %if !SLibCodeGenForSim()
       %openfile buffer
         void %<InterruptName>_IRQHandler(void)
         {
+            %if numPorts > 1
+              static uint16_T oldCapture[%<numPorts>];
+            %else
+              static uint16_T oldCapture;
+            %endif
+            uint16_T tmpCapture = 0;
             uint32_T tmp;
             tmp = %<timerName>->SR & %<SPRINTF("0x%08X",dier_val)>;
             %<timerName>->SR = ~%<SPRINTF("0x%08X",(dier_val << 8) + dier_val)>;
             %if numPorts > 1
               %if Ti1Active_val > 0
                 if(tmp & 0x02)
-                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR1;
+                {
+                  tmpCapture = %<timerName>->CCR1;                  
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                  %endswitch
+                }
                 %assign cnt = cnt + 1
               %endif
               %if Ti2Active_val > 0
                 if(tmp & 0x04)
-                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR2;
+                {
+                  tmpCapture = %<timerName>->CCR2;               
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                  %endswitch
+                }
                 %assign cnt = cnt + 1
               %endif
               %if Ti3Active_val > 0
                 if(tmp & 0x08)
-                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR3;
+                {
+                  tmpCapture = %<timerName>->CCR3;               
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                  %endswitch
+                }
                 %assign cnt = cnt + 1
               %endif
               %if Ti4Active_val > 0
                 if(tmp & 0x10)
-                  inputCapture%<TimerNumber_val>[%<cnt>] = %<timerName>->CCR4;
+                {
+                  tmpCapture = %<timerName>->CCR4;               
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                  %endswitch
+                }
               %endif
             %else              
               %if Ti1Active_val > 0
                 if(tmp & 0x02)
-                  inputCapture%<TimerNumber_val> = %<timerName>->CCR1;
-                %assign cnt = cnt + 1
+                {
+                  tmpCapture = %<timerName>->CCR1;
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      oldCapture = tmpCapture;
+                      %break
+                  %endswitch
+                }  
               %endif
               %if Ti2Active_val > 0
                 if(tmp & 0x04)
-                  inputCapture%<TimerNumber_val> = %<timerName>->CCR2;
-                %assign cnt = cnt + 1
+                {
+                  tmpCapture = %<timerName>->CCR2;
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      oldCapture = tmpCapture;
+                      %break
+                  %endswitch
+                }
               %endif
               %if Ti3Active_val > 0
                 if(tmp & 0x08)
-                  inputCapture%<TimerNumber_val> = %<timerName>->CCR3;
-                %assign cnt = cnt + 1
+                {
+                  tmpCapture = %<timerName>->CCR3;
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      oldCapture = tmpCapture;
+                      %break
+                  %endswitch
+                }
               %endif
               %if Ti4Active_val > 0
                 if(tmp & 0x10)
-                  inputCapture%<TimerNumber_val> = %<timerName>->CCR4;
+                {
+                  tmpCapture = %<timerName>->CCR4;
+                  %switch OutputMode_val
+                    %case 1
+                      inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
+                      %break
+                    %case 2
+                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 3
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      oldCapture = tmpCapture;
+                      %break
+                  %endswitch
+                }
               %endif
             %endif
         }

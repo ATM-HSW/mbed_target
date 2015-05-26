@@ -264,6 +264,16 @@ static void mdlCheckParameters(SimStruct *S)
       /* Check the parameter attributes */
       ssCheckSFcnParamValueAttribs(S, 18, "P18", DYNAMICALLY_TYPED, 2, dimsArray, 0);
     }	
+  
+    /*
+     * Check the parameter 20  (OutputMode)
+     */
+    if EDIT_OK(S, 19) {
+      int_T dimsArray[2] = { 1, 1 };
+
+      /* Check the parameter attributes */
+      ssCheckSFcnParamValueAttribs(S, 19, "P19", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    }	
 }
 
 #endif
@@ -278,7 +288,7 @@ static void mdlInitializeSizes(SimStruct *S)
 	int numOutput = 0;
 	int i;
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 19);
+  ssSetNumSFcnParams(S, 20);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -320,6 +330,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 16, 0);
   ssSetSFcnParamTunable(S, 17, 0);  
   ssSetSFcnParamTunable(S, 18, 0);
+  ssSetSFcnParamTunable(S, 19, 0);  // OutputMode
 
   ssSetNumPWork(S, 0);
 
@@ -356,7 +367,7 @@ static void mdlInitializeSizes(SimStruct *S)
 	  /*
 	   * Configure the output port i
 	   */
-	  ssSetOutputPortDataType(S, i, SS_UINT32);
+	  ssSetOutputPortDataType(S, i, SS_SINGLE);
 	  ssSetOutputPortWidth(S, i, 1);
 	  ssSetOutputPortComplexSignal(S, i, COMPLEX_NO);
 	  ssSetOutputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
@@ -431,7 +442,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 18))
+  if (!ssSetNumRunTimeParams(S, 19))
     return;
 
   /*
@@ -506,6 +517,10 @@ static void mdlSetWorkWidths(SimStruct *S)
    * Register the run-time parameter 8
    */
   ssRegDlgParamAsRunTimeParam(S, 18, 17, "Ti4Pupd", ssGetDataTypeId(S, "uint8"));
+  /*
+   * Register the run-time parameter 8
+   */
+  ssRegDlgParamAsRunTimeParam(S, 19, 18, "OutputMode", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
