@@ -120,12 +120,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Target specific options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI") || ISEQUAL(MbedTarget, "NUCLEO_F446RE")
+%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI") || ISEQUAL(MbedTarget, "NUCLEO_F446RE") || ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE")
   
   %if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI")
-    %assign fck = 168000000
+    %assign fck_apb1 = 168000000
+	%assign fck_apb2 =  84000000
   %elseif ISEQUAL(MbedTarget, "NUCLEO_F446RE")
-    %assign fck = 180000000
+    %assign fck_apb1 = 180000000
+	%assign fck_apb2 =  90000000
+  %elseif  ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE")
+    %assign fck_apb1 = 84000000
+	%assign fck_apb2 = 84000000
   %endif
 
   %switch TimerNumber_val
@@ -136,7 +141,7 @@
         %assign Ti3AlternateFunction = "1"
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM1_CC"
-        %assign prescaler_val = (fck/Frequency_val)-1
+        %assign prescaler_val = (fck_apb1/Frequency_val)-1
       %break
     %case 2
         %assign timerName = "TIM2"
@@ -145,7 +150,7 @@
         %assign Ti3AlternateFunction = "1"
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM2"
-        %assign prescaler_val = (fck/(2*Frequency_val))-1
+        %assign prescaler_val = (fck_apb2/Frequency_val)-1
       %break
     %case 3
         %assign timerName = "TIM3"
@@ -154,7 +159,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM3"
-        %assign prescaler_val = (fck/(2*Frequency_val))-1
+        %assign prescaler_val = (fck_apb2/Frequency_val)-1
       %break
     %case 4
         %assign timerName = "TIM4"
@@ -163,7 +168,7 @@
         %assign Ti3AlternateFunction = "2"
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM4"
-        %assign prescaler_val = (fck/(2*Frequency_val))-1
+        %assign prescaler_val = (fck_apb2/Frequency_val)-1
       %break
     %case 6
         %assign timerName = "TIM8"
@@ -172,7 +177,7 @@
         %assign Ti3AlternateFunction = "3"
         %assign Ti4AlternateFunction = "3"
         %assign InterruptName = "TIM8_CC"
-        %assign prescaler_val = (fck/Frequency_val)-1
+        %assign prescaler_val = (fck_apb1/Frequency_val)-1
       %break
     %case 7
         %assign timerName = "TIM9"
@@ -182,7 +187,7 @@
           %<LibReportError("Timer peripheral has no channel 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_BRK_TIM9"
-        %assign prescaler_val = (fck/Frequency_val)-1
+        %assign prescaler_val = (fck_apb1/Frequency_val)-1
       %break
     %case 8
         %assign timerName = "TIM10"
@@ -191,7 +196,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_UP_TIM10"
-        %assign prescaler_val = (fck/Frequency_val)-1
+        %assign prescaler_val = (fck_apb1/Frequency_val)-1
       %break
     %case 9
         %assign timerName = "TIM11"
@@ -200,7 +205,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM1_TRG_COM_TIM11"
-        %assign prescaler_val = (fck/Frequency_val)-1
+        %assign prescaler_val = (fck_apb1/Frequency_val)-1
       %break
     %case 10
         %assign timerName = "TIM12"
@@ -210,7 +215,7 @@
           %<LibReportError("Timer peripheral has no channel 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_BRK_TIM12"
-        %assign prescaler_val = (fck/(2*Frequency_val))-1
+        %assign prescaler_val = (fck_apb2/Frequency_val)-1
       %break
     %case 11
         %assign timerName = "TIM13"
@@ -219,7 +224,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_UP_TIM13"
-        %assign prescaler_val = (fck/(2*Frequency_val))-1
+        %assign prescaler_val = (fck_apb2/Frequency_val)-1
       %break
     %case 12
         %assign timerName = "TIM14"
@@ -228,7 +233,7 @@
           %<LibReportError("Timer peripheral has no channel 2, 3 and 4")>
         %endif
         %assign InterruptName = "TIM8_TRG_COM_TIM14"
-        %assign prescaler_val = (fck/(2*Frequency_val))-1
+        %assign prescaler_val = (fck_apb2/Frequency_val)-1
       %break
     %default
       %<LibReportError("Timer peripheral is not supported!")>
