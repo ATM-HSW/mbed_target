@@ -58,14 +58,23 @@
 
   %if UseMbedRTOS
   
-    %openfile tmpBuf
+    %openfile declbuf	
     void step(void const *param) {
       %<LibCallModelStep(0)>
-    }
-    
+    } 
+	%closefile declbuf
+    %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_fcn_decl")>
+    %<LibSetSourceFileCustomSection(cFile,"Ert_main_fcn_decl",declbuf)>
+	
+    %openfile tmpBuf
+	
     %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_glob_decl")>
     %<LibGetSourceFileCustomSection(cFile,"Ert_main_glob_decl")>
+	   
   
+    %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_fcn_decl")>
+    %<LibGetSourceFileCustomSection(cFile,"Ert_main_fcn_decl")>
+	
     /* with RTOS */
     int main(void) {
       
