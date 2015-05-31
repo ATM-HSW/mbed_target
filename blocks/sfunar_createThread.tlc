@@ -65,46 +65,61 @@
     %openfile declbuf
     /* %<Type> block: %<Name> */
     extern void %<name>_thread(void const *);
-	extern osThreadId %<name>_id;
+	%if timing_val > 0
+		extern osThreadId %<name>_id;
+	%endif
     %closefile declbuf
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_glob_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_glob_decl",declbuf)>
 	
+	%if timing_val > 0
+		%openfile declbuf
+		/* %<Type> block: %<Name> */
+		void %<name>_callback(void const *param)
+		{
+		  osSignalSet(%<name>_id, 0x1);
+		  // Get model outputs here
+		}
+		%closefile declbuf
+		%<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_fcn_decl")>
+		%<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_fcn_decl",declbuf)>
+    %endif
+	
     %openfile declbuf
     /* %<Type> block: %<Name> */
-	void %<name>_callback(void const *param)
-	{
-	  osSignalSet(%<name>_id, 0x1);
-	  // Get model outputs here
-	}
-    %closefile declbuf
-    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_fcn_decl")>
-    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_fcn_decl",declbuf)>
-
-    %openfile declbuf
-    /* %<Type> block: %<Name> */
-        Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);
+    Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);
+		
+	%if timing_val > 0	
         RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
+	%endif
+	
     %closefile declbuf
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
 
-    %openfile buff
-        /* %<Type> block: %<Name> */    
-        %<name>_timer.start(%<timing_val>);
-    %closefile buff
-    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
-    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
-
+	%if timing_val > 0
+		%openfile buff
+			/* %<Type> block: %<Name> */    
+			%<name>_timer.start(%<timing_val>);
+		%closefile buff
+		%<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
+		%<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
+    %endif
   %endif
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     /* %<Type> block: %<Name> */
 	void %<name>_thread(void const *argument) {
+	
+	%if timing_val > 0
 	%<name>_id = Thread::gettid();
+	%endif
+	
 	while(1) {
-      Thread::signal_wait(0x1,osWaitForever);
+	  %if timing_val > 0
+		Thread::signal_wait(0x1,osWaitForever);
+	  %endif
 	  %<LibBlockExecuteFcnCall(block,0)>
 	}
 	}
@@ -112,10 +127,12 @@
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
 	
-	%openfile declbuf	
-		osThreadId %<name>_id;
-	%closefile declbuf	
-    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+	%if timing_val > 0
+		%openfile declbuf	
+			osThreadId %<name>_id;
+		%closefile declbuf	
+		%<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+	%endif
   %endif
 
 %endfunction
