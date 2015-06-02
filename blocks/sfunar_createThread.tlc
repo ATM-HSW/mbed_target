@@ -78,7 +78,6 @@
 		void %<name>_callback(void const *param)
 		{
 		  osSignalSet(%<name>_id, 0x1);
-		  // Get model outputs here
 		}
 		%closefile declbuf
 		%<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_fcn_decl")>

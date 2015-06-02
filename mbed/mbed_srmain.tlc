@@ -52,6 +52,7 @@
   #define STEP_SIZE_US %<SampleRate_us>UL /* Sample Time in microseconds */
   #define STEP_SIZE_MS %<SampleRate_ms>UL /* and in milliseconds */
 
+  osThreadId step_id;
   %closefile tmpBuf
 
   %<LibSetSourceFileSection(cFile, "Declarations", tmpBuf)>
@@ -59,9 +60,17 @@
   %if UseMbedRTOS
   
     %openfile declbuf	
-    void step(void const *param) {
-      %<LibCallModelStep(0)>
+    void step_thread(void const *param) {
+	  step_id = Thread::gettid();
+	  while(1){
+	    Thread::signal_wait(0x1,osWaitForever);
+        %<LibCallModelStep(0)>
+	  }
     } 
+	
+	void step_callback(void const *param){
+	  osSignalSet(step_id, 0x1);
+	}
 	%closefile declbuf
     %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_fcn_decl")>
     %<LibSetSourceFileCustomSection(cFile,"Ert_main_fcn_decl",declbuf)>
@@ -78,7 +87,8 @@
     /* with RTOS */
     int main(void) {
       
-      RtosTimer step_1_timer(step, osTimerPeriodic, (void *)0);
+      Thread step_1_thread(step_thread, NULL, osPriorityNormal, DEFAULT_STACK_SIZE);
+      RtosTimer step_1_timer(step_callback, osTimerPeriodic, (void *)0);
       %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_loc_decl")>
       %<LibGetSourceFileCustomSection(cFile,"Ert_main_loc_decl")>
   
