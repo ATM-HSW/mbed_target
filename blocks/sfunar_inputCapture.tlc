@@ -128,7 +128,10 @@
   %elseif ISEQUAL(MbedTarget, "NUCLEO_F446RE")
     %assign fck_apb1 = 180000000
 	%assign fck_apb2 =  90000000
-  %elseif  ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE")
+  %elseif  ISEQUAL(MbedTarget, "NUCLEO_F411RE")
+    %assign fck_apb1 = 96000000
+	%assign fck_apb2 = 96000000
+  %elseif  ISEQUAL(MbedTarget, "NUCLEO_F401RE")
     %assign fck_apb1 = 84000000
 	%assign fck_apb2 = 84000000
   %endif
