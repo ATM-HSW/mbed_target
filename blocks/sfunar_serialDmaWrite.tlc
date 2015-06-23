@@ -36,11 +36,12 @@
 
     %assign u1_val = LibBlockInputSignalAddr(0, "", "", 0)
 	%assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
+	%assign numData_val = CAST("Number",LibBlockParameterValue(p2, 0))
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
 	
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
 		%switch SerialPort_val
 			%case 1
 				%assign uart_name = "USART1"
@@ -118,7 +119,7 @@
 		%assign clear_uart_tc = "%<uart_name>->ICR &= ~(USART_ICR_TCCF)"
 		
 	%else
-		%<LibReportFatalError("Serial DMA Write Block not supported by this target")>
+		%<LibReportError("Serial DMA Write Block not supported by this target")>
 	%endif	
 	
 	%if !SLibCodeGenForSim()	
@@ -126,11 +127,22 @@
 		{
 			if(%<check_dma_enable>){
 				%<clear_dma_enable>;
-			}				
+			}	
+
+            %if numData_val == 0			
 			memcpy(serial%<SerialPort_val>_TxBuffer, %<u1_val>,  %<LibBlockInputSignalWidth(0)>);
+            %else
+			memcpy(serial%<SerialPort_val>_TxBuffer, %<u1_val>,  %<LibBlockInputSignal(1, "", "", 0)>);
+            %endif
+
 			%<clear_dma_flags>;
 			%<dma_mar_access> = (uint32_t)serial%<SerialPort_val>_TxBuffer;
+
+            %if numData_val == 0
 			%<dma_ndtr_access> = %<LibBlockInputSignalWidth(0)>;
+            %else
+            %<dma_ndtr_access> = %<LibBlockInputSignal(1, "", "", 0)>;
+            %endif
 			
 			%<clear_uart_tc>;
 			%<set_dma_enable>; 
