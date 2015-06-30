@@ -75,11 +75,11 @@
 	
 	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
 		
-		%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F401RE")
+		%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") %%%|| ISEQUAL(MbedTarget,"DISCO_F429ZI") 
 			%assign fck = 84000000
 		%elseif ISEQUAL(MbedTarget,"NUCLEO_F411RE")
 		    %assign fck = 96000000
-		%elseif ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") 
+		%elseif ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"DISCO_F429ZI") 
 			%assign fck = 90000000
 		%endif
 		

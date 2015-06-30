@@ -26,6 +26,8 @@ mex sfunar_i2cWrite.c
 mex sfunar_inputCapture.c
 mex sfunar_Interrupt.c
 mex sfunar_lcdOutput.c
+mex sfunar_mailReceive.c
+mex sfunar_mailSend.c
 mex sfunar_max11300Config.c
 mex sfunar_mcp3204Config.c
 mex sfunar_mcp4822Config.c

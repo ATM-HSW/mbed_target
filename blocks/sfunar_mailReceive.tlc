@@ -1,0 +1,80 @@
+%% File : sfunar_encoderInput.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_mailReceive "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Outputs ========================================================
+%function Outputs(block, system) Output
+  
+  %assign MailNumber_val = CAST("Number",LibBlockParameterValue(MailNumber, 0))
+  %assign DataType_val = LibBlockParameterValue(DataType, 0)
+  %assign NumElements_val = CAST("Number",LibBlockParameterValue(NumElements, 0))
+
+  %switch DataType_val
+    %case 1
+      %assign type = "real_T"
+      %assign len = 8*NumElements_val
+      %break
+    %case 2
+      %assign type = "real32_T"
+      %assign len = 4*NumElements_val
+      %break
+    %case 3
+      %assign type = "int8_T"
+      %assign len = 1*NumElements_val
+      %break
+    %case 4
+      %assign type = "uint8_T"
+      %assign len = 1*NumElements_val
+      %break
+    %case 5
+      %assign type = "int16_T"
+      %assign len = 2*NumElements_val
+      %break
+    %case 6
+      %assign type = "uint16_T"
+      %assign len = 2*NumElements_val
+      %break
+    %case 7
+      %assign type = "int32_T"
+      %assign len = 4*NumElements_val
+      %break
+    %case 8
+      %assign type = "uint32_T"
+      %assign len = 4*NumElements_val
+      %break
+  %endswitch
+
+  %assign y1_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
+  %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+
+  %if !SLibCodeGenForSim()
+    osEvent evt = mail_box%<MailNumber_val>.get();
+    if(evt.status == osEventMail)
+    {
+      mail%<MailNumber_val>_T *mail = (mail%<MailNumber_val>_T*)evt.value.p;
+      memcpy(%<y1_ptr>, mail, %<len>);
+      mail_box%<MailNumber_val>.free(mail);
+      %<y2_val> = 1;
+    }
+    else
+    {
+      %<y2_val> = 0;
+    }
+  %endif
+
+%endfunction
