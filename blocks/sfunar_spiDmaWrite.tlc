@@ -107,7 +107,7 @@
 		%assign dma_ndtr_access = "%<tx_dma_stream>->NDTR"
 		%assign set_dma_enable = "%<tx_dma_stream>->CR |= DMA_SxCR_EN"
 		%assign clear_dma_enable = "%<tx_dma_stream>->CR &= ~DMA_SxCR_EN"
-		%assign check_uart_transmit_empty = "%<spi_name>->SR & SPI_SR_TXE"
+		%assign check_spi_transmit_empty = "%<spi_name>->SR & SPI_SR_TXE"
 	
 	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 		%switch SpiPort_val
