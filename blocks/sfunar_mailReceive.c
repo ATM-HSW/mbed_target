@@ -23,6 +23,7 @@
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
 
+#include <stdio.h>
 /*
  * Utility function prototypes.
  */
@@ -51,13 +52,13 @@ static void mdlCheckParameters(SimStruct *S)
   }
   
   /*
-   * Check the parameter 1	(DDataType)
+   * Check the parameter 1	(DataType)
    */
   if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 1, "P2", SS_UINT32, 2, dimsArray, 0);
   }
   
   /*
@@ -82,6 +83,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
 	int_T numElements = 0;
+	DTypeId DataType = 0;
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 3);
 
@@ -129,7 +131,11 @@ static void mdlInitializeSizes(SimStruct *S)
 		  
   numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 2)));
 
-  ssSetOutputPortDataType(S, 0, (*(DTypeId*)(mxGetData(ssGetSFcnParam(S, 1))))-1);
+  //printf("numElements: %d\n",numElements);
+  DataType = (*(DTypeId*)(mxGetData(ssGetSFcnParam(S, 1))))-1;
+  //printf("DataType: %d\n",DataType);
+
+  ssSetOutputPortDataType(S, 0, DataType);
   ssSetOutputPortWidth(S, 0, numElements);
 //   ssSetOutputPortDataType(S, 0, SS_UINT8);
 //   ssSetOutputPortWidth(S, 0, 1);

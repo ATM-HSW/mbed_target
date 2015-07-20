@@ -63,12 +63,12 @@
   %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
 
   %if !SLibCodeGenForSim()
-    osEvent evt = mail_box%<MailNumber_val>.get();
-    if(evt.status == osEventMail)
+    osEvent evt%<MailNumber_val> = mail_box%<MailNumber_val>.get(0);
+    if(evt%<MailNumber_val>.status == osEventMail)
     {
-      mail%<MailNumber_val>_T *mail = (mail%<MailNumber_val>_T*)evt.value.p;
-      memcpy(%<y1_ptr>, mail, %<len>);
-      mail_box%<MailNumber_val>.free(mail);
+      mail%<MailNumber_val>_T *mail%<MailNumber_val>_ptr = (mail%<MailNumber_val>_T*)evt%<MailNumber_val>.value.p;
+      memcpy(%<y1_ptr>, mail%<MailNumber_val>_ptr, %<len>);
+      mail_box%<MailNumber_val>.free(mail%<MailNumber_val>_ptr);
       %<y2_val> = 1;
     }
     else
