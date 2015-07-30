@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% MCP3428 Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_adcMcp3428Config "C"
 
@@ -19,13 +20,11 @@
 %function Start(block, system) Output
 
   %assign p1_val = LibBlockParameterValue(p1,0)
+  %assign i2cport_val = CAST("Number" ,LibBlockParameterValue(I2cPort,0))
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if !defined(I2C_INTERFACE_DEFINED)
-        #error "No I2C Interface defined! Add a \"I2C-Config\" Block!"
-    #endif
 
 #if defined(MCP3428_ADDR_DEVICE)
     #error "Multiple ADC MCP3428 Config blocks!"
@@ -46,7 +45,7 @@
 #define MCP3428_nRDY_BIT (1<<7)
 
 bool mcp3428_write(uint8_t conf){
-    return i2c.write(MCP3428_ADDR, (char*) &conf, 1, 0) == 0;
+    return i2c%<i2cport_val>.write(MCP3428_ADDR, (char*) &conf, 1, 0) == 0;
 }
 
 bool mcp3428_writeConfig(uint8_t channel, uint8_t sampleRate, uint8_t pgaGain, bool continuousMode=true){
@@ -58,7 +57,7 @@ bool mcp3428_writeConfig(uint8_t channel, uint8_t sampleRate, uint8_t pgaGain, b
 
 bool mcp3428_read(uint16_t* data, uint8_t* conf){
     char buf[3];
-    int ret = i2c.read(MCP3428_ADDR, buf, 3, 0);
+    int ret = i2c%<i2cport_val>.read(MCP3428_ADDR, buf, 3, 0);
     
     if(ret != 0)
         return false;

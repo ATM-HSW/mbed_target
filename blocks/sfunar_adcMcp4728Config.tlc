@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% MCP4728 Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_adcMcp4728Config "C"
 
@@ -19,13 +20,11 @@
 %function Start(block, system) Output
 
   %assign p1_val = LibBlockParameterValue(p1,0)
+  %assign i2cport_val = CAST("Number", LibBlockParameterValue(I2cPort,0))
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if !defined(I2C_INTERFACE_DEFINED)
-        #error "No I2C Interface defined! Add a \"I2C-Config\" Block!"
-    #endif
 
 #if defined(MCP4728_ADDR_DEVICE)
     #error "Multiple DAC MCP4728 Config blocks!"
@@ -43,7 +42,7 @@ bool mcp4728_setChannel(uint8_t channel, bool UseInternalVRef, uint8_t powerDown
     
     buf[2] = value & 0xff;
     
-    return i2c.write(MCP4728_ADDR, buf, 3, 0) == 0;
+    return i2c%<i2cport_val>.write(MCP4728_ADDR, buf, 3, 0) == 0;
 }
 
 uint16_t mcp4728_valueFromVoltage(double volt, bool UseInternalVRef, bool use2xGain){

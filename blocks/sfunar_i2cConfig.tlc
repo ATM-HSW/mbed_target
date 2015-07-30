@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% I2C Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_i2cConfig "C"
 
@@ -28,23 +29,11 @@
 
   %assign freq = LibBlockParameterValue(p6,0)
   
-  %assign I2cPort_val = LibBlockParameterValue(p7,0)
+  %assign I2cPort_val = CAST("Number", LibBlockParameterValue(p7,0))
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
-	%switch I2cPort_val
-		%case 1
-			I2C i2c(%<sda_name>, %<scl_name>);
-			%break
-		%case 2
-			I2C i2c2(%<sda_name>, %<scl_name>);
-			%break
-		%case 3
-			I2C i2c3(%<sda_name>, %<scl_name>);
-			%break
-		%default
-			%break
-	%endswitch
+	I2C i2c%<I2cPort_val>(%<sda_name>, %<scl_name>);
 	
     %%
     %closefile declbuf
@@ -52,7 +41,7 @@
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
     
     %%
-    i2c.frequency(%<freq>);
+	i2c%<I2cPort_val>.frequency(%<freq>);
     %%
   %endif
 %endfunction

@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% FRAM Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_i2cFramConfig "C"
 
@@ -18,13 +19,11 @@
 %% Function: Start ========================================================
 %function Start(block, system) Output
 
+%assign i2cport_val = CAST("Number", LibBlockParameterValue(I2cPort,0))
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if !defined(I2C_INTERFACE_DEFINED)
-        #error "No I2C Interface defined! Add a \"I2C-Config\" Block!"
-    #endif
 
 #if defined(I2C_FRAM_BASEADDR)
     #error "Multiple I2C FRAM Config blocks!"
@@ -36,7 +35,7 @@ uint8_t fram_calcAddr(uint8_t pageAdr, bool receiveBit) {
 }
 
 bool fram_sendAddr(uint8_t pageAdr, uint8_t wordAdr, bool receiveBit) {
-	return !i2c.write(fram_calcAddr(pageAdr, receiveBit),
+	return !i2c%<i2cport_val>.write(fram_calcAddr(pageAdr, receiveBit),
 			(const char*) &wordAdr, 1, 1);
 }
 
@@ -46,18 +45,18 @@ bool fram_write(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
 
 	ret = fram_sendAddr(pageAdr, wordAdr, false);
 	if (ret != 1) {
-		i2c.stop();
+		i2c%<i2cport_val>.stop();
 		return false;
 	}
 
 	for (int i = 0; i < dataLength; ++i) {
-		ret = i2c.write(buf[i]);
+		ret = i2c%<i2cport_val>.write(buf[i]);
 		if (ret != 1) {
-			i2c.stop();
+			i2c%<i2cport_val>.stop();
 			return false;
 		}
 	}
-	i2c.stop();
+	i2c%<i2cport_val>.stop();
 	return true;
 }
 
@@ -67,11 +66,11 @@ bool fram_read(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
 
 	ret = fram_sendAddr(pageAdr, wordAdr, false);
 	if (ret != 1) {
-		i2c.stop();
+		i2c%<i2cport_val>.stop();
 		return false;
 	}
 
-	ret = i2c.read(fram_calcAddr(pageAdr, true), (char*) buf, dataLength, 0);
+	ret = i2c%<i2cport_val>.read(fram_calcAddr(pageAdr, true), (char*) buf, dataLength, 0);
 	if (ret != 0) {
 		return false;
 	}

@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% MCP822 Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_mcp4822Config "C"
 
@@ -21,14 +22,12 @@
   %assign p2_val = LibBlockParameterValue(p1,0)
   %assign p3_val = LibBlockParameterValue(p2,0)
   %assign cs_name = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p3_val-1)
-
+    
+  %assign spiport_val = CAST("Number", LibBlockParameterValue(SpiPort,0))
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if !defined(SPI_INTERFACE_DEFINED)
-        #error "No SPI Interface defined! Add a \"SPI-Config\" Block!"
-    #endif
 
 #if defined(MCP4822_DEVICE)
     #error "Multiple MCP4822 Config blocks not supported"
@@ -54,8 +53,8 @@ void mcp4822_write(uint8_t channel, uint8_t gain, uint8_t shutdown, uint16_t val
     uint8_t out2 = value & 0xFF;
     
     cs_mcp4822 = 0;
-    spi.write(out1);
-    spi.write(out2);
+    spi%<spiport_val>.write(out1);
+    spi%<spiport_val>.write(out2);
     cs_mcp4822 = 1;
 }
 

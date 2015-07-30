@@ -1,6 +1,7 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /* Copyright 2014 Dr.O.Hagendorf, HS Wismar  */
 /* PCF8574 Modifications by Axel Utech 2014, HS Wismar */
+/* Copyright 2015 M.Marquardt, HS Wismar  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
@@ -37,6 +38,15 @@ static void mdlCheckParameters(SimStruct *S)
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
+  /*
+   * Check the parameter 2 (I2cPort)
+   */
+  if EDIT_OK(S, 1) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
 }
 
 #endif
@@ -49,7 +59,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 1);
+  ssSetNumSFcnParams(S, 2);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -72,7 +82,8 @@ static void mdlInitializeSizes(SimStruct *S)
 #endif
 
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 1);
+  ssSetSFcnParamTunable(S, 0, 0);
+  ssSetSFcnParamTunable(S, 1, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -151,13 +162,14 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 1))
+  if (!ssSetNumRunTimeParams(S, 2))
     return;
 
   /*
    * Register the run-time parameter 1
    */
   ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "I2cPort", SS_UINT8);
 }
 
 #endif

@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% FRAM Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_spiFramConfig "C"
 
@@ -22,13 +23,11 @@
   %assign p3_val = LibBlockParameterValue(p2,0)
   %assign cs_name = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p3_val-1)
 
+  %assign spiport_val = CAST("Number", LibBlockParameterValue(SpiPort,0))
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if !defined(SPI_INTERFACE_DEFINED)
-        #error "No SPI Interface defined! Add a \"SPI-Config\" Block!"
-    #endif
 
 #if defined(SPI_FRAM_DEVICE)
     #error "Multiple SPI FRAM Config blocks not supported"
@@ -48,15 +47,15 @@ uint8_t fm25_readStatus(void) {
 	uint8_t data;
 
 	cs_fram = 0;
-	spi.write(FM25L16B_OPCODE_RDSR);
-	data = spi.write(0);
+	spi%<spiport_val>.write(FM25L16B_OPCODE_RDSR);
+	data = spi%<spiport_val>.write(0);
 	cs_fram = 1;
 	return data;
 }
 
 void fm25_sendWriteEnable(void) {
 	cs_fram = 0;
-	spi.write(FM25L16B_OPCODE_WREN);
+	spi%<spiport_val>.write(FM25L16B_OPCODE_WREN);
 	cs_fram = 1;
 }
 
@@ -64,11 +63,11 @@ bool fram_write(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
 		uint16_t dataLength) {
 	fm25_sendWriteEnable();
 	cs_fram = 0;
-	spi.write(FM25L16B_OPCODE_WRITE);
-	spi.write(pageAdr);
-	spi.write(wordAdr);
+	spi%<spiport_val>.write(FM25L16B_OPCODE_WRITE);
+	spi%<spiport_val>.write(pageAdr);
+	spi%<spiport_val>.write(wordAdr);
 	for (int i = 0; i < dataLength; ++i) {
-		spi.write(buf[i]);
+		spi%<spiport_val>.write(buf[i]);
 	}
 	cs_fram = 1;
 	return true;
@@ -77,11 +76,11 @@ bool fram_write(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
 bool fram_read(uint8_t pageAdr, uint8_t wordAdr, uint8_t* buf,
 		uint16_t dataLength) {
 	cs_fram = 0;
-	spi.write(FM25L16B_OPCODE_READ);
-	spi.write(pageAdr);
-	spi.write(wordAdr);
+	spi%<spiport_val>.write(FM25L16B_OPCODE_READ);
+	spi%<spiport_val>.write(pageAdr);
+	spi%<spiport_val>.write(wordAdr);
 	for (int i = 0; i < dataLength; ++i) {
-		buf[i] = spi.write(0);
+		buf[i] = spi%<spiport_val>.write(0);
 	}
 	cs_fram = 1;
 	return true;

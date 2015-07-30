@@ -1,6 +1,7 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /* Copyright 2014 Dr.O.Hagendorf, HS Wismar  */
 /* I2C Modifications by Axel Utech 2014, HS Wismar */
+/* Copyright 2015 M. Marquardt, HS Wismar */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
@@ -100,6 +101,15 @@ static void mdlCheckParameters(SimStruct *S)
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 7, "P8", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
+  /*
+   * Check the parameter 9 (SpiPort)
+   */
+  if EDIT_OK(S, 8) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 8, "P9", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
 }
 
 #endif
@@ -112,7 +122,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 8);
+  ssSetNumSFcnParams(S, 9);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -135,14 +145,15 @@ static void mdlInitializeSizes(SimStruct *S)
 #endif
 
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 1);
-  ssSetSFcnParamTunable(S, 1, 1);
-  ssSetSFcnParamTunable(S, 2, 1);
-  ssSetSFcnParamTunable(S, 3, 1);
-  ssSetSFcnParamTunable(S, 4, 1);
-  ssSetSFcnParamTunable(S, 5, 1);
-  ssSetSFcnParamTunable(S, 6, 1);
-  ssSetSFcnParamTunable(S, 7, 1);
+  ssSetSFcnParamTunable(S, 0, 0);
+  ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
+  ssSetSFcnParamTunable(S, 6, 0);
+  ssSetSFcnParamTunable(S, 7, 0);
+  ssSetSFcnParamTunable(S, 8, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -221,7 +232,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 8))
+  if (!ssSetNumRunTimeParams(S, 9))
     return;
 
   /*
@@ -238,6 +249,7 @@ static void mdlSetWorkWidths(SimStruct *S)
   ssRegDlgParamAsRunTimeParam(S, 5, 5, "p6", ssGetDataTypeId(S, "int32"));
   ssRegDlgParamAsRunTimeParam(S, 6, 6, "p7", ssGetDataTypeId(S, "int8"));
   ssRegDlgParamAsRunTimeParam(S, 7, 7, "p8", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 8, 8, "SpiPort", SS_UINT8);
 }
 
 #endif

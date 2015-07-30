@@ -29,24 +29,22 @@
   %assign p7_val = LibBlockParameterValue(p7,0)
   %assign p8_val = LibBlockParameterValue(p8,0)
   %assign sck_name = "P" + FEVAL("char",p7_val+64) + "_" + FEVAL("int2str",p8_val-1)
+  
+  %assign spiport_val = CAST("Number",LibBlockParameterValue(SpiPort,0))
 
   %assign freq = LibBlockParameterValue(p6,0)
 
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if defined(SPI_INTERFACE_DEFINED)
-        #error "Two or more SPI-Interfaces defined!"
-    #endif
-    SPI spi(%<mosi_name>, %<miso_name>, %<sck_name>);
-    #define SPI_INTERFACE_DEFINED
+	SPI spi%<spiport_val>(%<mosi_name>, %<miso_name>, %<sck_name>);
     %%
     %closefile declbuf
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
     
     %%
-    spi.frequency(%<freq>);
+    spi%<spiport_val>.frequency(%<freq>);
     %%
   %endif
 %endfunction

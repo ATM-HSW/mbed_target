@@ -1,6 +1,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% MAX11300 Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_max11300Config "C"
 
@@ -25,12 +26,11 @@
   %assign adcconv = LibBlockParameterValue(p3,0)
   %assign dacref = LibBlockParameterValue(p4,0)
 
+  %assign spiport_val = CAST("Number", LibBlockParameterValue(SpiPort,0))
+
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
-    #if !defined(SPI_INTERFACE_DEFINED)
-        #error "No SPI Interface defined! Add a \"SPI-Config\" Block!"
-    #endif
 
 #if defined(MAX11300_DEVICE)
     #error "Multiple MAX11300 Config blocks not supported"
@@ -59,10 +59,10 @@ void max11300_writeReg(uint8_t addr, uint16_t data){
      cs_max11300 = 0;
      
      uint8_t chip_addr = (addr << 1) | 0;
-     spi.write(chip_addr);
+     spi%<spiport_val>.write(chip_addr);
      
-     spi.write(data >> 8);
-     spi.write(data & 0xff);
+     spi%<spiport_val>.write(data >> 8);
+     spi%<spiport_val>.write(data & 0xff);
      
      cs_max11300 = 1;
 }
@@ -71,12 +71,12 @@ uint16_t max11300_readReg(uint8_t addr) {
      uint8_t in;
      cs_max11300 = 0;
      uint8_t chip_addr = (addr << 1) | 1;
-     spi.write(chip_addr);
+     spi%<spiport_val>.write(chip_addr);
      
-     in = spi.write(0);
+     in = spi%<spiport_val>.write(0);
      data = (uint16_t)in << 8;
      
-     in = spi.write(0);
+     in = spi%<spiport_val>.write(0);
      data |= in;
      
      cs_max11300 = 1;
