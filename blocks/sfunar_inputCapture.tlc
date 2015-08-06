@@ -42,6 +42,7 @@
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
 
+  %assign bitsize = "uint16_T"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Get Number of Capture Pins and edge polarity
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,8 +61,10 @@
       %case 2
         %assign ccer_val = ccer_val + (1 << 1)
         %break
-      %case 3        
-        %assign ccer_val = ccer_val + (1 << 3) + (1 << 1)
+      %case 3   
+        %if OutputMode_val < 4      
+            %assign ccer_val = ccer_val + (1 << 3) + (1 << 1)
+        %endif
         %break
     %endswitch
   %endif
@@ -74,8 +77,10 @@
       %case 2
         %assign ccer_val = ccer_val + (1 << 5)
         %break
-      %case 3        
-        %assign ccer_val = ccer_val + (1 << 5) + (1 << 7)
+      %case 3  
+        %if OutputMode_val < 4      
+            %assign ccer_val = ccer_val + (1 << 5) + (1 << 7)
+        %endif
         %break
     %endswitch
   %endif
@@ -88,8 +93,10 @@
       %case 2
         %assign ccer_val = ccer_val + (1 << 9)
         %break
-      %case 3        
-        %assign ccer_val = ccer_val + (1 << 9) + (1 << 11)
+      %case 3  
+        %if OutputMode_val < 4
+            %assign ccer_val = ccer_val + (1 << 9) + (1 << 11)
+        %endif
         %break
     %endswitch
   %endif
@@ -102,7 +109,7 @@
       %case 2
         %assign ccer_val = ccer_val + (1 << 13)
         %break
-      %case 3        
+      %case 3      
         %assign ccer_val = ccer_val + (1 << 13)
         %break
     %endswitch
@@ -145,6 +152,7 @@
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM1_CC"
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
+        %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
     %case 2
         %assign timerName = "TIM2"
@@ -154,6 +162,8 @@
         %assign Ti4AlternateFunction = "1"
         %assign InterruptName = "TIM2"
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
+        %assign Frequency_val = fck_apb2/(prescaler_val+1)
+        %assign bitsize = "uint32_T"
       %break
     %case 3
         %assign timerName = "TIM3"
@@ -163,6 +173,7 @@
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM3"
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
+        %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
     %case 4
         %assign timerName = "TIM4"
@@ -172,6 +183,7 @@
         %assign Ti4AlternateFunction = "2"
         %assign InterruptName = "TIM4"
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
+        %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
     %case 6
         %assign timerName = "TIM8"
@@ -181,6 +193,7 @@
         %assign Ti4AlternateFunction = "3"
         %assign InterruptName = "TIM8_CC"
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
+        %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
     %case 7
         %assign timerName = "TIM9"
@@ -191,6 +204,7 @@
         %endif
         %assign InterruptName = "TIM1_BRK_TIM9"
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
+        %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
     %case 8
         %assign timerName = "TIM10"
@@ -200,6 +214,7 @@
         %endif
         %assign InterruptName = "TIM1_UP_TIM10"
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
+        %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
     %case 9
         %assign timerName = "TIM11"
@@ -209,6 +224,7 @@
         %endif
         %assign InterruptName = "TIM1_TRG_COM_TIM11"
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
+        %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
     %case 10
         %assign timerName = "TIM12"
@@ -219,6 +235,7 @@
         %endif
         %assign InterruptName = "TIM8_BRK_TIM12"
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
+        %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
     %case 11
         %assign timerName = "TIM13"
@@ -228,6 +245,7 @@
         %endif
         %assign InterruptName = "TIM8_UP_TIM13"
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
+        %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
     %case 12
         %assign timerName = "TIM14"
@@ -237,11 +255,13 @@
         %endif
         %assign InterruptName = "TIM8_TRG_COM_TIM14"
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
+        %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
     %default
       %<LibReportError("Timer peripheral is not supported!")>
       %break
   %endswitch
+
 
 %elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 
@@ -397,7 +417,9 @@
       %break
   %endswitch
 
+  %assign Frequency_val = fck/(prescaler_val+1)
 %endif 
+
 
   %if !SLibCodeGenForSim()
     %if Ti1Active_val > 0
@@ -484,14 +506,33 @@
         void %<InterruptName>_IRQHandler(void)
         {
             %if numPorts > 1
-              static uint16_T oldCapture[%<numPorts>];
+              static %<bitsize> oldCapture[%<numPorts>];
             %else
-              static uint16_T oldCapture;
+              static %<bitsize> oldCapture;
             %endif
-            uint16_T tmpCapture = 0;
+            
+            %if OutputMode_val >= 4
+              static uint8_T pulse = 0;
+            %endif
+
+            %<bitsize> tmpCapture = 0;
             uint32_T tmp;
             tmp = %<timerName>->SR & %<SPRINTF("0x%08X",dier_val)>;
             %<timerName>->SR = ~%<SPRINTF("0x%08X",(dier_val << 8) + dier_val)>;
+
+            %if OutputMode_val >= 4
+              if(pulse == 0)
+              {
+                %<timerName>->CCER &= ~(%<SPRINTF("0x%08X",(ccer_val&4369)<<1)>);
+                pulse = 1;
+              }
+              else
+              {
+                %<timerName>->CCER |= %<SPRINTF("0x%08X",(ccer_val&4369)<<1)>;
+                pulse = 0;
+              }
+            %endif
+
             %if numPorts > 1
               %if Ti1Active_val > 0
                 if(tmp & 0x02)
@@ -502,11 +543,21 @@
                       inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture[%<cnt>]));
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                   %endswitch
@@ -522,11 +573,21 @@
                       inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture[%<cnt>]));
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                   %endswitch
@@ -542,11 +603,21 @@
                       inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture[%<cnt>]));
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                   %endswitch
@@ -562,11 +633,21 @@
                       inputCapture%<TimerNumber_val>[%<cnt>] = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>])/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture[%<cnt>]);
+                      inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture[%<cnt>]));
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
+                      oldCapture[%<cnt>] = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val>[%<cnt>] = ((real32_T)(tmpCapture-oldCapture[%<cnt>]))/((real32_T)%<Frequency_val>);
                       oldCapture[%<cnt>] = tmpCapture;
                       %break
                   %endswitch
@@ -582,11 +663,21 @@
                       inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture));
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                   %endswitch
@@ -601,11 +692,21 @@
                       inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture));
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                   %endswitch
@@ -620,11 +721,21 @@
                       inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture));
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                   %endswitch
@@ -639,11 +750,21 @@
                       inputCapture%<TimerNumber_val> = (real32_T)tmpCapture;
                       %break
                     %case 2
-                      inputCapture%<TimerNumber_val> = ((real32_T)tmpCapture-(real32_T)oldCapture)/((real32_T)%<Frequency_val>);
+                      inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                     %case 3
-                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)tmpCapture-(real32_T)oldCapture);
+                      inputCapture%<TimerNumber_val> = ((real32_T)%<Frequency_val>)/((real32_T)(tmpCapture-oldCapture));
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 4
+                      if(pulse == 1)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
+                      oldCapture = tmpCapture;
+                      %break
+                    %case 5  
+                      if(pulse == 0)
+                        inputCapture%<TimerNumber_val> = ((real32_T)(tmpCapture-oldCapture))/((real32_T)%<Frequency_val>);
                       oldCapture = tmpCapture;
                       %break
                   %endswitch
