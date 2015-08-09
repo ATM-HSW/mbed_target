@@ -35,24 +35,23 @@
 
   %openfile tmpBuf
 
-  %if !UseMbedRTOS
-    /* Overrun counter */
-    static uint8_t uOverrunCounter;
-  %endif
-
   %% Get fundamental step time
   %assign SAMPLETIME = CompiledModel.FundamentalStepSize
   %if SAMPLETIME < 0.00005
       %% Even 50 microseconds is too quick for Arduino
       %<LibReportError("The minimum supported sample time is 50 microseconds. Change the Sample time parameter in blocks that use incorrect sample times.")>
   %endif
-  %assign SampleRate_us  = CAST("Number", %<SAMPLETIME> * 1000000)
-  %assign SampleRate_ms  = CAST("Number", %<SAMPLETIME> * 1000)
+  %assign SampleRate_us  = %<SAMPLETIME> * 1000000
+  %assign SampleRate_ms  = %<SAMPLETIME> * 1000
   
-  #define STEP_SIZE_US %<SampleRate_us>UL /* Sample Time in microseconds */
-  #define STEP_SIZE_MS %<SampleRate_ms>UL /* and in milliseconds */
+  #define STEP_SIZE_US %<SampleRate_us>F /* Sample Time in microseconds */
+  #define STEP_SIZE_MS %<SampleRate_ms>F /* and in milliseconds */
 
-  osThreadId step_id;
+  %if UseMbedRTOS
+    osThreadId step_id;
+  %else
+    Ticker timer;
+  %endif
   %closefile tmpBuf
 
   %<LibSetSourceFileSection(cFile, "Declarations", tmpBuf)>
@@ -118,18 +117,11 @@
 
   %else
 
-    %openfile tmpBuf    
-    uint8_t GetOverrunCounter(void)
-    {
-    	return uOverrunCounter;
-    }
+    %openfile tmpBuf   
   
     // without RTOS
     int main(void)
-    {
-      unsigned long oldTime;
-      unsigned long actualTime;
-      
+    {      
       /* initialize model */
       %<LibCallModelInitialize()>\
   
@@ -137,28 +129,8 @@
           %<SLibGenERTExtModeInit()>
       %endif
   
-      oldTime = us_ticker_read();
-      while (true) {
-          /* call main step function */
-  	    %<LibCallModelStep(0)>\
-  
-          actualTime = us_ticker_read();
-          /* Overrun check */
-          if ((actualTime - oldTime) >= STEP_SIZE_US) {
-              /* We missed our time slot for actual step, report it! */
-              if(uOverrunCounter < 255U){
-                  uOverrunCounter++;
-              }
-              oldTime = actualTime;               /* Update time stamp of last step */
-              continue;                           /* We are late, continue with next step */
-          }\
-  
-          /* Waiting with pooling method */
-          while((actualTime - oldTime) < STEP_SIZE_US){
-              actualTime = us_ticker_read();                  /* Get actual time */
-          }
-          oldTime = actualTime;                       /* Update time stamp of last step */
-      }
+      timer.attach_us(&%<LibGetModelName()>_step, STEP_SIZE_US);
+      while (true);
   
       /* deinitialize model */
       %<LibCallModelTerminate()>\
