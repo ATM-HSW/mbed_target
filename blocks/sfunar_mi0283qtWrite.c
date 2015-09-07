@@ -1,5 +1,6 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /* Copyright 2015 L. Schlüter, HS Wismar  */
+/* Copyright 2015 O.Hagendorf, HS Wismar  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
@@ -63,7 +64,51 @@ static void mdlCheckParameters(SimStruct *S)
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 3, "range", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
-}
+  /*
+   * Check the parameter 5
+   */
+  if EDIT_OK(S, 4) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 4, "spi_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 6
+   */
+  if EDIT_OK(S, 5) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 5, "cs_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 7
+   */
+  if EDIT_OK(S, 6) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 6, "cs_pin", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 8
+   */
+  if EDIT_OK(S, 7) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 7, "rst_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 9
+   */
+  if EDIT_OK(S, 8) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 8, "rst_pin", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }}
 
 #endif
 
@@ -75,7 +120,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 9);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -102,6 +147,11 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 1, 1);
   ssSetSFcnParamTunable(S, 2, 1);
   ssSetSFcnParamTunable(S, 3, 1);
+  ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
+  ssSetSFcnParamTunable(S, 6, 0);
+  ssSetSFcnParamTunable(S, 7, 0);
+  ssSetSFcnParamTunable(S, 8, 0);
 
   ssSetNumPWork(S, 0);
 
