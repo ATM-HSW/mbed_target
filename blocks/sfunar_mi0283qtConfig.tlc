@@ -1,0 +1,71 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 L. Schlüter, HS Wismar
+
+%implements sfunar_mi0283qtConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %<LibAddToCommonIncludes("lcd_mi0283qt/cmd.h")>
+  %<LibAddToCommonIncludes("lcd_mi0283qt/lcd_scope.h")>
+  %<LibAddToCommonIncludes("lcd_mi0283qt/mi0283qt.h")>
+  
+  %<LibAddToModelSources("mi0283qt")>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %assign mosi_port_val = LibBlockParameterValue(mosi_port,0)
+  %assign mosi_pin_val = LibBlockParameterValue(mosi_pin,0)
+  %assign mosi_name = "P" + FEVAL("char",mosi_port_val+64) + "_" + FEVAL("int2str",mosi_pin_val-1)
+
+  %assign miso_port_val = LibBlockParameterValue(miso_port,0)
+  %assign miso_pin_val = LibBlockParameterValue(miso_pin,0)
+  %assign miso_name = "P" + FEVAL("char",miso_port_val+64) + "_" + FEVAL("int2str",miso_pin_val-1)
+
+  %assign sck_port_val = LibBlockParameterValue(sck_port,0)
+  %assign sck_pin_val = LibBlockParameterValue(sck_pin,0)
+  %assign sck_name = "P" + FEVAL("char",sck_port_val+64) + "_" + FEVAL("int2str",sck_pin_val-1)
+
+  %assign cs_port_val = LibBlockParameterValue(cs_port,0)
+  %assign cs_pin_val = LibBlockParameterValue(cs_pin,0)
+  %assign cs_name = "P" + FEVAL("char",cs_port_val+64) + "_" + FEVAL("int2str",cs_pin_val-1)
+
+  %assign rst_port_val = LibBlockParameterValue(rst_port,0)
+  %assign rst_pin_val = LibBlockParameterValue(rst_pin,0)
+  %assign rst_name = "P" + FEVAL("char",rst_port_val+64) + "_" + FEVAL("int2str",rst_pin_val-1)
+
+  %assign freq = LibBlockParameterValue(spi_freq,0)
+
+  %if !SLibCodeGenForSim()
+    %openfile declbuf
+    %%
+    #if defined(SPI_INTERFACE_DEFINED)
+        #error "Two or more SPI-Interfaces defined!"
+    #endif
+    SPI spi_mi0283qt(%<mosi_name>, %<miso_name>, %<sck_name>);
+    #define SPI_MODE      3
+    #define SPI_INTERFACE_DEFINED
+    DigitalOut cs_mi0283qt(%<cs_name>);
+    DigitalOut rst_mi0283qt(%<rst_name>);
+    %%
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    
+    %%
+    spi_mi0283qt.format(MI0283QT_FRAME_SIZE, SPI_MODE);
+    spi_mi0283qt.frequency(%<freq>);
+    %%
+    
+    %% Display Initialisierung
+    lcd_init(spi_mi0283qt, cs_mi0283qt, rst_mi0283qt);
+  %endif
+%endfunction

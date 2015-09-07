@@ -1,0 +1,44 @@
+%% File : sfunar_datalogger.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_datalogger "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign asciiformat = CAST("String",SFcnParamSettings.Formatstring)
+    %assign blockid = CAST("String",SFcnParamSettings.blockid)
+    %assign IdxOffset = 0
+
+      /* string format */
+      sprintf((char *)&%<blockid>_buffer[%<blockid>_buffer_index], \
+      "%<asciiformat>"\
+      %assign dataIdx = 0
+      %foreach idx = LibBlockNumInputPorts(block)
+        %if idx >= IdxOffset
+          ,%<LibBlockInputSignal(dataIdx+IdxOffset, "", "", 0)>\
+          %assign dataIdx = dataIdx + 1
+        %endif
+      %endforeach
+      );
+  %endif
+%endfunction

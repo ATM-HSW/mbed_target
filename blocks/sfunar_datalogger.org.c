@@ -43,7 +43,7 @@ static void mdlCheckParameters(SimStruct *S)
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    //ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 
   /*
@@ -111,9 +111,8 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int i, numberInputs, errorOutputEnable, ret;
+  int i, numberInputs, errorOutputEnable;
   char *formatstr, *tmp;
-  mxChar *mxch;
     
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 3);
@@ -139,9 +138,9 @@ static void mdlInitializeSizes(SimStruct *S)
 #endif
 
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 0);
+  ssSetSFcnParamTunable(S, 0, 1);
   ssSetSFcnParamTunable(S, 1, 0);
-  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 2, 1);
 
   ssSetNumPWork(S, 0);
 
@@ -151,16 +150,15 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  ret = mxGetN((ssGetSFcnParam(S, 0)))*sizeof(mxChar)+1; 
-  printf("len %d\n", ret);
-  mxch = mxGetChars(ssGetSFcnParam(S, 0));
-  printf("string %s\n", mxch);
-  tmp = (char*)mxch;
-  numberInputs = 0;
-  while((tmp = strpbrk(tmp, "%d"))!=NULL) {
-    tmp++;tmp++;
-    numberInputs++;
-  }
+  //numberInputs = mxGetScalar(ssGetSFcnParam(S,0));
+  formatstr = mxGetChars(ssGetSFcnParam(S,0));
+  printf("format %s\n", formatstr);
+  //tmp = formatstr;
+  //numberInputs = 0;
+  //while((tmp = strpbrk(tmp, "%d"))!=NULL) {
+  //  tmp++;tmp++;
+  //  numberInputs++;
+  //}
 
   if (!ssSetNumInputPorts(S, numberInputs))
     return;
@@ -263,14 +261,14 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 0))
+  if (!ssSetNumRunTimeParams(S, 2))
     return;
 
   /*
    * Register the run-time parameter 1
    */
-  //ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "uint8"));
-  //ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "boolean"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "boolean"));
 
 }
 

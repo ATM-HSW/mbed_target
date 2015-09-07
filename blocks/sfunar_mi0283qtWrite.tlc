@@ -1,0 +1,72 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 L. Schlüter, HS Wismar
+
+%implements sfunar_mi0283qtWrite "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %<LibAddToCommonIncludes("lcd_mi0283qt/lcd_scope.h")>
+  %<LibAddToCommonIncludes("lcd_mi0283qt/mi0283qt.h")>
+  
+  %<LibAddToModelSources("mi0283qt")>
+  %<LibAddToModelSources("lcd_scope")>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    uint16_t signalNumber_mi0283qt;
+    
+    %assign timeRange = LibBlockParameterValue(range,0)
+    %assign minValue = LibBlockParameterValue(min,0)
+    %assign maxValue = LibBlockParameterValue(max,0)
+    
+    if(%<LibBlockInputSignalWidth(0)> > MAX_SCOPE_VALUE_NUMBER)
+    {
+      signalNumber_mi0283qt = MAX_SCOPE_VALUE_NUMBER;
+    }
+    else
+    {
+      signalNumber_mi0283qt = %<LibBlockInputSignalWidth(0)>;
+    }
+    
+    lcd_drawScope(spi_mi0283qt, cs_mi0283qt, %<timeRange>, %<minValue>, %<maxValue>);
+    lcd_drawScopeLegend(spi_mi0283qt, cs_mi0283qt, signalNumber_mi0283qt);
+  %endif
+%endfunction
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    uint16_t time;
+    uint16_t signalNumber_mi0283qt;
+    
+    %assign value = LibBlockInputSignalAddr(0, "", "", 0)
+    %assign minValue = LibBlockParameterValue(min,0)
+    %assign maxValue = LibBlockParameterValue(max,0)
+    %assign stepSize = LibBlockParameterValue(step,0)
+    %assign timeRange = LibBlockParameterValue(range,0)
+    
+    if(%<LibBlockInputSignalWidth(0)> > MAX_SCOPE_VALUE_NUMBER)
+    {
+      signalNumber_mi0283qt = MAX_SCOPE_VALUE_NUMBER;
+    }
+    else
+    {
+      signalNumber_mi0283qt = %<LibBlockInputSignalWidth(0)>;
+    }
+    
+    time = calc_Time(%<stepSize>);
+    lcd_drawScopeValue(spi_mi0283qt, cs_mi0283qt, time, %<value>, %<timeRange>, %<minValue>, %<maxValue>, signalNumber_mi0283qt);
+    %%lcd_testScreen(spi_mi0283qt, cs_mi0283qt);
+    
+  %endif
+%endfunction
