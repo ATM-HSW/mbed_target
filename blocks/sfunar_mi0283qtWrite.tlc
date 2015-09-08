@@ -11,9 +11,9 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
-  %<LibAddToCommonIncludes("lcd_mi0283qt/cmd.h")>
-  %<LibAddToCommonIncludes("lcd_mi0283qt/lcd_scope.h")>
-  %<LibAddToCommonIncludes("lcd_mi0283qt/mi0283qt.h")>
+  %<LibAddToCommonIncludes("cmd.h")>
+  %<LibAddToCommonIncludes("lcd_scope.h")>
+  %<LibAddToCommonIncludes("mi0283qt.h")>
   
   %<LibAddToModelSources("mi0283qt")>
   %<LibAddToModelSources("lcd_scope")>
@@ -32,8 +32,6 @@
   %assign rst_pin_val = LibBlockParameterValue(rst_pin,0)
   %assign rst_name = "P" + FEVAL("char",rst_port_val+64) + "_" + FEVAL("int2str",rst_pin_val-1)
 
-  %assign freq = LibBlockParameterValue(spi_freq,0)
-
   %if !SLibCodeGenForSim()
     %openfile declbuf
     %%
@@ -47,11 +45,11 @@
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
     %%
-    spi_%<spi_port_val>.format(MI0283QT_FRAME_SIZE, SPI_MODE);
+    spi%<spi_port_val>.format(MI0283QT_FRAME_SIZE, SPI_MODE);
     %%
 
     %% Display Initialisierung
-    lcd_init(spi_%<spi_port_val>, cs_mi0283qt, rst_mi0283qt);
+    lcd_init(spi%<spi_port_val>, cs_mi0283qt, rst_mi0283qt);
   %endif
 
   %if !SLibCodeGenForSim()
@@ -70,8 +68,8 @@
       signalNumber_mi0283qt = %<LibBlockInputSignalWidth(0)>;
     }
 
-    lcd_drawScope(spi_%<spi_port_val>, cs_mi0283qt, %<timeRange>, %<minValue>, %<maxValue>);
-    lcd_drawScopeLegend(spi_%<spi_port_val>, cs_mi0283qt, signalNumber_mi0283qt);
+    lcd_drawScope(spi%<spi_port_val>, cs_mi0283qt, %<timeRange>, %<minValue>, %<maxValue>);
+    lcd_drawScopeLegend(spi%<spi_port_val>, cs_mi0283qt, signalNumber_mi0283qt);
   %endif
 %endfunction
 
@@ -100,8 +98,8 @@
     }
 
     time = calc_Time(%<stepSize>);
-    lcd_drawScopeValue(spi_%<spi_port_val>, cs_mi0283qt, time, %<value>, %<timeRange>, %<minValue>, %<maxValue>, signalNumber_mi0283qt);
-    %%lcd_testScreen(spi_%<spi_port_val>, cs_mi0283qt);
+    lcd_drawScopeValue(spi%<spi_port_val>, cs_mi0283qt, time, %<value>, %<timeRange>, %<minValue>, %<maxValue>, signalNumber_mi0283qt);
+    %%lcd_testScreen(spi%<spi_port_val>, cs_mi0283qt);
 
   %endif
 %endfunction

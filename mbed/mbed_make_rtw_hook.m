@@ -166,6 +166,8 @@ function i_write_mbed_files()
     srcFile = fullfile(mbed_getTargetRootPath(), 'targets', [target '.zip']);
     unzip(srcFile, buildAreaDstFolder);
 
+    srcFile = fullfile(mbed_getTargetRootPath(), 'blocks', 'libraries', '*');
+    copyfile(srcFile, buildAreaDstFolder);
 end
 
 function i_download(modelName, bFlash, flashMethod)

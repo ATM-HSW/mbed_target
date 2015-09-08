@@ -242,16 +242,21 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 4))
+  if (!ssSetNumRunTimeParams(S, 9))
   return;
 
   /*
   * Register the run-time parameter
   */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "min", ssGetDataTypeId(S, "int16"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "max", ssGetDataTypeId(S, "int16"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "step", ssGetDataTypeId(S, "uint16"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 3, "range", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "min",      ssGetDataTypeId(S, "int16"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "max",      ssGetDataTypeId(S, "int16"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "step",     ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "range",    ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "spi_port", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "cs_port",  ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 6, 6, "cs_pin",   ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 7, 7, "rst_port", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 8, 8, "rst_pin",  ssGetDataTypeId(S, "uint8"));
 }
 
 #endif

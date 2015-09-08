@@ -86,5 +86,4 @@ mex sfunar_tmp123Config.c
 
 %% Display MI0283
 mex sfunar_mi0283qtWrite.c
-mex sfunar_mi0283qtConfig.c
 %%
