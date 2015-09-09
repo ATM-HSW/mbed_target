@@ -24,5 +24,13 @@ mbed.Prefs.setMbedDownload('on');
 mbed.Prefs.setMbedRTOS('off');
 mbed.Prefs.setMbedProgrammer('mbed');
 
-mbed.Prefs.setGccPath('C:\Program Files (x86)\GNU Tools ARM Embedded\4.9 2014q4\bin')
-mbed.Prefs.setPythonPath('C:\Python27')
+
+%% set user specific variables:
+% setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\GNU Tools ARM Embedded\4.9 2015q1\bin']);
+% setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\GNU Tools ARM Embedded\make-3.81\bin']);
+% setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\STMicroelectronics\STM32 ST-LINK Utility\ST-LINK Utility']);
+% setenv('PATH', [getenv('PATH') ';C:\Python27']);
+if exist('setup_userprefs.m','file')>0
+    setup_userprefs;
+end
+

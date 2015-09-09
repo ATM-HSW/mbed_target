@@ -21,3 +21,4 @@
 *~
 *.autosave
 .gitignore
+setup_userprefs.m
