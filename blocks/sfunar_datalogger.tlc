@@ -29,72 +29,72 @@
     %assign nInputs  = LibBlockNumInputPorts(block)-1
     %assign rolling = [0: %<nInputs>]
     %assign blockid = 1 %% CAST("String",SFcnParamSettings.blockid)
-    %assign value = LibBlockInputSignalAddr(0, "", "", 0)
   
     %roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
       %assign inputportwidth = LibBlockInputSignalWidth(sigIdx)
+      %assign value = LibBlockInputSignalAddr(sigIdx, "", "", 0)
   
       %switch LibBlockInputSignalDataTypeId(sigIdx)
         %% SS_DOUBLE
         %case 0
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%d,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%d,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_SINGLE
         %case 1
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%s,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%s,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_INT8
         %case 2
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%i8,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%i8,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_UINT8
         %case 3
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%ui8,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%ui8,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_INT16
         %case 4
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%i16,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%i16,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_UINT16
         %case 5
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%ui16,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%ui16,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_INT32
         %case 6
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%i32,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%i32,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_UINT32
         %case 7
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%ui32,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%ui32,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
         %% SS_BOOLEAN
         %case 8
           %foreach idx = inputportwidth
-            sprintf((char *)&%<blockid>_buffer, "%b,", value[%<idx>]);
+            sprintf((char *)&%<blockid>_buffer, "%b,", (%<value>)[%<idx>]);
           %endforeach
           %break
   
