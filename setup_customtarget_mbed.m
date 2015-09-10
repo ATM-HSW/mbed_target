@@ -11,7 +11,6 @@ if result==1
     error(msg);
 else
     disp(' Saved updated MATLAB path');
-    disp(' ');
 end
 
 %% Register PIL/ExtMode communication interface
@@ -31,6 +30,7 @@ mbed.Prefs.setMbedProgrammer('mbed');
 % setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\STMicroelectronics\STM32 ST-LINK Utility\ST-LINK Utility']);
 % setenv('PATH', [getenv('PATH') ';C:\Python27']);
 if exist('setup_userprefs.m','file')>0
+    disp ' Setting user prefs';
     setup_userprefs;
 end
 

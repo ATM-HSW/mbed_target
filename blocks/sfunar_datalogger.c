@@ -27,104 +27,6 @@
  */
 static void mdlCheckParameters(SimStruct *S)
 {
-  /*
-   * Check the parameter 1
-   */
-  if EDIT_OK(S, 0) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 0, "mosi_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 2
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "mosi_pin", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 3
-   */
-  if EDIT_OK(S, 2) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "miso_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 4
-   */
-  if EDIT_OK(S, 3) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 3, "miso_pin", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 5
-   */
-  if EDIT_OK(S, 4) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 4, "cs_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 6
-   */
-  if EDIT_OK(S, 5) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 5, "cs_pin", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }  /*
-   * Check the parameter 7
-   */
-  if EDIT_OK(S, 6) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 6, "sclk_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 8
-   */
-  if EDIT_OK(S, 7) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 7, "sclk_pin", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 9
-   */
-  if EDIT_OK(S, 8) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 8, "number_of_inputs", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 10
-   */
-  if EDIT_OK(S, 9) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 9, "sampletime", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 11
-   */
-  if EDIT_OK(S, 10) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 10, "error_out", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 #endif
@@ -136,7 +38,9 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-	int i, errorOutputEnable, numberOfInputs;
+  int i, errorOutputEnable;
+  int_T numberOfInputs;
+  
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 11);
 
@@ -181,15 +85,37 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  numberOfInputs = mxGetScalar(ssGetSFcnParam(S, 8));
+  //numberOfInputs = mxGetScalar(ssGetSFcnParam(S, 8));
+  // Now we need two now how many Inputports we must set
+  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S,8));
   if (!ssSetNumInputPorts(S, numberOfInputs))
     return;
 
   /*
    * Configure the input ports
    */
-  for(i=0; i<numberOfInputs; i++) {
-    ssSetInputPortDataType(S, i, SS_INT16);
+  for (i = 0; i < numberOfInputs; i++) {
+    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "uint8"))
+      ssSetInputPortDataType(S, i, SS_UINT8);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "uint16"))
+      ssSetInputPortDataType(S, i, SS_UINT16);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "uint32"))
+      ssSetInputPortDataType(S, i, SS_UINT32);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "int8"))
+      ssSetInputPortDataType(S, i, SS_INT8);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "int16"))
+      ssSetInputPortDataType(S, i, SS_INT16);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "int32"))
+      ssSetInputPortDataType(S, i, SS_INT32);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "single"))
+      ssSetInputPortDataType(S, i, SS_SINGLE);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "double"))
+      ssSetInputPortDataType(S, i, SS_DOUBLE);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "bool"))
+      ssSetInputPortDataType(S, i, SS_BOOLEAN);
+    else
+      mexWarnMsgTxt("One or more Ports Datatypes not set");
+
     ssSetInputPortWidth(S, i, DYNAMICALLY_SIZED);
     ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
     ssSetInputPortDirectFeedThrough(S, i, 1);
@@ -198,7 +124,7 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
     ssSetInputPortRequiredContiguous(S, i, 1);
   }
-  
+
   /*
    * Set the number of output ports.
    */
@@ -287,11 +213,12 @@ static void mdlSetWorkWidths(SimStruct *S)
   ssRegDlgParamAsRunTimeParam(S, 1, 1, "mosi_pin",  ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "miso_port", ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 3, 3, "miso_pin",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 4, 4, "spi_port", ssGetDataTypeId(S, "int8"));
-  ssRegDlgParamAsRunTimeParam(S, 5, 5, "cs_port",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 6, 6, "cs_pin",   ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 7, 7, "rst_port", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 8, 8, "rst_pin",  ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "sclk_port", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "sclk_pin",  ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 6, 6, "cs_port",  ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 7, 7, "cs_pin",   ssGetDataTypeId(S, "uint8"));
+  //ssRegDlgParamAsRunTimeParam(S, 9, 9, "SampleTime", ssGetDataTypeId(S, "uint8"));
+  //ssRegDlgParamAsRunTimeParam(S, 10, 10, "errEn",  ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
