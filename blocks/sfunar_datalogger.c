@@ -38,9 +38,10 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int i, errorOutputEnable;
+  int i, errorOutputEnable, numberOfVectorElements;
   int_T numberOfInputs;
-  
+  DECL_AND_INIT_DIMSINFO(di);
+
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 11);
 
@@ -87,7 +88,7 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   //numberOfInputs = mxGetScalar(ssGetSFcnParam(S, 8));
   // Now we need two now how many Inputports we must set
-  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S,8));
+  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S,8))/2;
   if (!ssSetNumInputPorts(S, numberOfInputs))
     return;
 
@@ -95,28 +96,35 @@ static void mdlInitializeSizes(SimStruct *S)
    * Configure the input ports
    */
   for (i = 0; i < numberOfInputs; i++) {
-    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "uint8"))
+    numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, 8), 2*i+1));
+    printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), numberOfVectorElements);
+    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "uint8"))
       ssSetInputPortDataType(S, i, SS_UINT8);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "uint16"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "uint16"))
       ssSetInputPortDataType(S, i, SS_UINT16);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "uint32"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "uint32"))
       ssSetInputPortDataType(S, i, SS_UINT32);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "int8"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "int8"))
       ssSetInputPortDataType(S, i, SS_INT8);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "int16"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "int16"))
       ssSetInputPortDataType(S, i, SS_INT16);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "int32"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "int32"))
       ssSetInputPortDataType(S, i, SS_INT32);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "single"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "single"))
       ssSetInputPortDataType(S, i, SS_SINGLE);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "double"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "double"))
       ssSetInputPortDataType(S, i, SS_DOUBLE);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), i)), "bool"))
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "bool"))
       ssSetInputPortDataType(S, i, SS_BOOLEAN);
     else
       mexWarnMsgTxt("One or more Ports Datatypes not set");
 
-    ssSetInputPortWidth(S, i, DYNAMICALLY_SIZED);
+    di.numDims = DYNAMICALLY_SIZED;
+    di.dims = DYNAMICALLY_SIZED;
+    di.width = DYNAMICALLY_SIZED;
+    //ssSetInputPortDimensionInfo(S, i, numberOfVectorElements);
+    //ssSetInputPortVectorDimension(S, i, 2);
+    ssSetInputPortWidth(S, i, numberOfVectorElements);
     ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
     ssSetInputPortDirectFeedThrough(S, i, 1);
     ssSetInputPortAcceptExprInRTW(S, i, 1);
