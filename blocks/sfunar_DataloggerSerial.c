@@ -83,7 +83,7 @@ static void mdlInitializeSizes(SimStruct *S)
   int_T numberOfInputs;
 
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 5);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -110,6 +110,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
   ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -128,7 +129,7 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   for (i = 0; i < numberOfInputs; i++) {
     numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, 1), 2*i+1));
-    printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), numberOfVectorElements);
+    //printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), numberOfVectorElements);
     if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint8"))
       ssSetInputPortDataType(S, i, SS_UINT8);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint16"))
@@ -244,7 +245,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 4))
+  if (!ssSetNumRunTimeParams(S, 5))
     return;
 
   /*
@@ -254,6 +255,7 @@ static void mdlSetWorkWidths(SimStruct *S)
   //ssRegDlgParamAsRunTimeParam(S, 1, 1, "type_input_ports",  ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "SampleTime", ssGetDataTypeId(S, "int32"));
   //ssRegDlgParamAsRunTimeParam(S, 3, 3, "errEn",  ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "block_size",  ssGetDataTypeId(S, "uint16"));
 }
 
 #endif
@@ -325,6 +327,7 @@ static bool IsRealMatrix(const mxArray * const m)
         return(false);
     }
 }
+
 /*
  * Required S-function trailer
  */

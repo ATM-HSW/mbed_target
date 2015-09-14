@@ -90,5 +90,5 @@ mex sfunar_mi0283qtWrite.c
 %%
 
 %% Arch Max
-mex sfunar_datalogger.c
+mex sfunar_DataloggerSDCard.c
 %%

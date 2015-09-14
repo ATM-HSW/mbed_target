@@ -17,14 +17,17 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-  %openfile declbuf
-  #define BUF_LEN 100
-  char buffer[BUF_LEN];
-  int buf_idx=0;
-  %closefile declbuf 
+  %if !SLibCodeGenForSim()
+    %assign BufferSize = LibBlockParameterValue(block_size,0)
+    %openfile declbuf
+    #define BUF_LEN %<BufferSize>
+    char buffer[BUF_LEN];
+    int buf_idx=0;
+    %closefile declbuf 
 
-  %assign srcFile = LibGetModelDotCFile()
-  %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
 %endfunction
 
 
