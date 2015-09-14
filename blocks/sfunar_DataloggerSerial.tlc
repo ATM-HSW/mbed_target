@@ -3,7 +3,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2015 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_datalogger "C"
+%implements sfunar_DataloggerSerial "C"
 
 %include "block_common_includes.tlc"
 
@@ -21,7 +21,6 @@
   #define BUF_LEN 100
   char buffer[BUF_LEN];
   int buf_idx=0;
-  Serial pc(PC_6, PC_7);
   %closefile declbuf 
 
   %assign srcFile = LibGetModelDotCFile()
@@ -34,8 +33,9 @@
 
   %if !SLibCodeGenForSim()
     %assign nInputs  = LibBlockNumInputPorts(block)
-    %assign rolling = [0: %<nInputs>]
     %assign blockid = 1
+    %assign sp_val = LibBlockParameterValue(serial_port,0)
+    %assign name = "serial" + FEVAL("int2str",sp_val)
 
     %assign y = LibBlockOutputSignal(0, "", "", 0)
     %<y> = 0;
@@ -88,7 +88,7 @@
 
         %endforeach
     %endforeach
-    pc.printf("%s\r\n", buffer);
+    %<name>.printf("%s\r\n", buffer);
   %endif
 %endfunction
 
