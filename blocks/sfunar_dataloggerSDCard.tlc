@@ -3,7 +3,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2015 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_datalogger "C"
+%implements sfunar_DataloggerSDCard "C"
 
 %include "block_common_includes.tlc"
 
@@ -13,6 +13,16 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
+  %<LibAddToCommonIncludes("SDFileSystem.h")>
+  
+  %<LibAddToModelSources("ccsbcs")>
+  %<LibAddToModelSources("diskio")>
+  %<LibAddToModelSources("FATDirHandle")>
+  %<LibAddToModelSources("FATFileHandle")>
+  %<LibAddToModelSources("FATFileSystem")>
+  %<LibAddToModelSources("ff")>
+  %<LibAddToModelSources("SDFileSystem")>
+
 %endfunction
 
 %% Function: Start ========================================================
@@ -21,9 +31,9 @@
   #define BUF_LEN 100
   char buffer[BUF_LEN];
   int buf_idx=0;
-  SDFileSystem sd(D11, D12, D13, D10, "sd"); // MOSI, MISO, SCK, CS
+  SDFileSystem sd(PC_3, PC_2, PB_10, PE_2, "sd"); // MOSI, MISO, SCK, CS
   FILE *fp;
-  Serial pc(PC_6,PC_7);
+  // Serial pc(PC_6,PC_7);
   %closefile declbuf 
 
   %assign srcFile = LibGetModelDotCFile()
@@ -32,13 +42,13 @@
   fp = fopen("/sd/hello.txt", "r");
   if (fp != NULL) {
       fclose(fp);
-      remove("/sd/hello.txt");
-      pc.printf("Remove an existing file with the same name\r\n");
+      remove("/sd/daten.csv");
+      printf("Remove an existing file with the same name\r\n");
   }
 
-  fp = fopen("/sd/hello.txt", "w");
+  fp = fopen("/sd/daten.csv", "w");
   if (fp == NULL) {
-      pc.printf("Unable to write the file\r\n");
+      printf("Unable to write the file\r\n");
   }
 %endfunction
 
@@ -102,8 +112,15 @@
 
         %endforeach
     %endforeach
-    pc.printf("%s\r\n", buffer);
-    fprintf(fp, "%s\r\n", buffer);
+    //pc.printf("%s\r\n", buffer);
+    fp = fopen("/sd/daten.csv", "w");
+    if (fp != NULL) {
+      fprintf(fp, "%s\r\n", buffer);
+      //sd.disk_sync();
+      fclose(fp);
+    } else
+      printf("Unable to write the file\r\n");
+    
   %endif
 %endfunction
 

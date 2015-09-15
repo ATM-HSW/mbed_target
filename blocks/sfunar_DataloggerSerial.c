@@ -34,7 +34,7 @@ static bool IsRealMatrix(const mxArray * const m);
 static void mdlCheckParameters(SimStruct *S)
 {
   /*
-   * Check the parameter 1 (sample time)
+   * Check the parameter: sample time
    */
   if EDIT_OK(S, 2) {
     const double *sampleTime = NULL;
@@ -127,9 +127,10 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Configure the input ports
    */
+  printf("sfunar_DataloggerSerial\r\n");
   for (i = 0; i < numberOfInputs; i++) {
     numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, 1), 2*i+1));
-    //printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), numberOfVectorElements);
+    printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), numberOfVectorElements);
     if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint8"))
       ssSetInputPortDataType(S, i, SS_UINT8);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint16"))
@@ -215,8 +216,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
   const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {
-    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME?
-      FIXED_IN_MINOR_STEP_OFFSET: 0.0));
+    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME ? FIXED_IN_MINOR_STEP_OFFSET : 0.0));
   } else {
     ssSetOffsetTime(S, 0, sampleTime[1]);
   }
@@ -254,7 +254,7 @@ static void mdlSetWorkWidths(SimStruct *S)
   ssRegDlgParamAsRunTimeParam(S, 0, 0, "serial_port", ssGetDataTypeId(S, "uint8"));
   //ssRegDlgParamAsRunTimeParam(S, 1, 1, "type_input_ports",  ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "SampleTime", ssGetDataTypeId(S, "int32"));
-  //ssRegDlgParamAsRunTimeParam(S, 3, 3, "errEn",  ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "errEn",  ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 4, 4, "block_size",  ssGetDataTypeId(S, "uint16"));
 }
 

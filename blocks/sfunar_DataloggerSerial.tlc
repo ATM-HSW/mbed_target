@@ -40,9 +40,6 @@
     %assign sp_val = LibBlockParameterValue(serial_port,0)
     %assign name = "serial" + FEVAL("int2str",sp_val)
 
-    %assign y = LibBlockOutputSignal(0, "", "", 0)
-    %<y> = 0;
-
     %assign rollVars = ["U"]
     buf_idx = 0;
     %assign start = 0
@@ -93,99 +90,4 @@
     %endforeach
     %<name>.printf("%s\r\n", buffer);
   %endif
-%endfunction
-
-%% Function: Outputs ======================================================
-%function Outputs__(block, system) Output
-
-  %if !SLibCodeGenForSim()
-    %assign rollVars = ["U", "Y"]
-    %assign nInputs  = LibBlockNumInputPorts(block)-1
-    %assign rolling = [0: %<nInputs>]
-    %assign blockid = 1 %% CAST("String",SFcnParamSettings.blockid)
-  
-    %roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
-      %assign inputportwidth = LibBlockInputSignalWidth(sigIdx)
-  
-      %switch LibBlockInputSignalDataTypeId(sigIdx)
-        %% SS_DOUBLE
-        %case 0
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%d,", (%<value>)[%<idx>]);
-            %assign value = LibBlockInputSignal(idx, "", lcv, 1)
-            sprintf((char *)&%<blockid>_buffer, "%d,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_SINGLE
-        %case 1
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%s,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_INT8
-        %case 2
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%i8,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_UINT8
-        %case 3
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%ui8,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_INT16
-        %case 4
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%i16,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_UINT16
-        %case 5
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%ui16,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_INT32
-        %case 6
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%i32,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_UINT32
-        %case 7
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%ui32,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %% SS_BOOLEAN
-        %case 8
-          %foreach idx = inputportwidth
-            %assign value = LibBlockInputSignal(idx, "", lcv, 0)
-            sprintf((char *)&%<blockid>_buffer, "%b,", (%<value>)[%<idx>]);
-          %endforeach
-          %break
-  
-        %default
-          %break
-      %endswitch
-    %endroll
-  %endif
-
 %endfunction

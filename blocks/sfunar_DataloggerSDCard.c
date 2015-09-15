@@ -13,8 +13,7 @@
  */
 #include "simstruc.h"
 
-#define EDIT_OK(S, P_IDX) \
- (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
+#define EDIT_OK(S, P_IDX) (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
 #define MDL_CHECK_PARAMETERS
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
 #define SAMPLE_TIME                    (ssGetSFcnParam(S, 9))
@@ -36,8 +35,6 @@ static void mdlCheckParameters(SimStruct *S)
   /*
    * Check the parameter: sample time
    */
-
-  printf("mdlCheckParameters \r\n");
   if EDIT_OK(S, 9) {
     const double *sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
@@ -85,7 +82,6 @@ static void mdlInitializeSizes(SimStruct *S)
   int_T numberOfInputs;
 
   /* Number of expected parameters */
-  printf("ssSetNumSFcnParams %d\r\n", 12);
   ssSetNumSFcnParams(S, 12);
 
 #if defined(MATLAB_MEX_FILE)
@@ -124,25 +120,23 @@ static void mdlInitializeSizes(SimStruct *S)
 
   ssSetNumPWork(S, 0);
 
-
-  printf("ssSetNumDWork \r\n");
   if (!ssSetNumDWork(S, 0))
     return;
 
   /*
    * Set the number of input ports.
    */
-  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S,8))/2;
-  printf("numberOfInputs %d\r\n", numberOfInputs);
+  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 8))/2;
   if (!ssSetNumInputPorts(S, numberOfInputs))
     return;
 
   /*
    * Configure the input ports
    */
+  //printf("sfunar_DataloggerSDCard\r\n");
   for (i = 0; i < numberOfInputs; i++) {
     numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, 8), 2*i+1));
-    printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), numberOfVectorElements);
+    //printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), numberOfVectorElements);
     if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "uint8"))
       ssSetInputPortDataType(S, i, SS_UINT8);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 8), 2*i)), "uint16"))
@@ -226,11 +220,9 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 {
   const double * const sampleTime = mxGetPr(SAMPLE_TIME);
   const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
-
-  printf("mdlInitializeSampleTimes\r\n");
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {
-    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME?FIXED_IN_MINOR_STEP_OFFSET: 0.0));
+    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME ? FIXED_IN_MINOR_STEP_OFFSET : 0.0));
   } else {
     ssSetOffsetTime(S, 0, sampleTime[1]);
   }
@@ -258,8 +250,6 @@ static void mdlInitializeSampleTimes(SimStruct *S)
  */
 static void mdlSetWorkWidths(SimStruct *S)
 {
-
-  printf("mdlSetWorkWidths\r\n");
   /* Set number of run-time parameters */
   if (!ssSetNumRunTimeParams(S, 12))
     return;
@@ -267,19 +257,19 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
   * Register the run-time parameter
   */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "mosi_port", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "mosi_pin",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "miso_port", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 3, "miso_pin",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 4, 4, "sclk_port", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 5, 5, "sclk_pin",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 6, 6, "cs_port",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 7, 7, "cs_pin",   ssGetDataTypeId(S, "uint8"));
-  //ssRegDlgParamAsRunTimeParam(S, 8, 8, "type_input_ports",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 9, 9, "SampleTime", ssGetDataTypeId(S, "int32"));
-  //ssRegDlgParamAsRunTimeParam(S, 10, 10, "errEn",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 11, 11, "block_size",  ssGetDataTypeId(S, "uint16"));
-}
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "mosi_port",    ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "mosi_pin",     ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "miso_port",    ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "miso_pin",     ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "sclk_port",    ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "sclk_pin",     ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 6, 6, "cs_port",      ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 7, 7, "cs_pin",       ssGetDataTypeId(S, "uint8"));
+//ssRegDlgParamAsRunTimeParam(S, 8, 8, "typeinpports", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 9, 9, "SampleTime",   ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 10, 10, "errEn",      ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 11, 11, "block_size", ssGetDataTypeId(S, "uint16"));
+  }
 
 #endif
 
@@ -294,7 +284,6 @@ static void mdlSetWorkWidths(SimStruct *S)
  */
 static void mdlStart(SimStruct *S)
 {
-  printf("mdlStart\r\n");
   UNUSED_PARAMETER(S);
 }
 
@@ -308,7 +297,6 @@ static void mdlStart(SimStruct *S)
  */
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
-  printf("mdlOutputs\r\n");
   UNUSED_PARAMETER(S);
   UNUSED_PARAMETER(tid);
 }
@@ -320,7 +308,6 @@ static void mdlOutputs(SimStruct *S, int_T tid)
  */
 static void mdlTerminate(SimStruct *S)
 {
-  printf("mdlTerminate\r\n");
   UNUSED_PARAMETER(S);
 }
 
