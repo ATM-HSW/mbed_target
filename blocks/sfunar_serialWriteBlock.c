@@ -1,10 +1,21 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2015 Dr.O.Hagendorf, HS Wismar  */
+/*
+ *   sfunar_serialWrite.c Simple C-MEX S-function for function call.
+ *
+ *   ABSTRACT:
+ *     The purpose of this SFunction is to call a simple legacy
+ *     function during simulation:
+ *
+ *        serialWrite(uint8 u1[],int16 size(u1,1))
+ *
+ *   Simulink version           : 7.3 (R2009a) 15-Jan-2009
+ *   C source code generated on : 06-Jul-2009 17:01:33
+ */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_DataloggerSerial
+#define S_FUNCTION_NAME                sfunar_serialWriteBlock
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -12,17 +23,17 @@
  * its associated macro definitions.
  */
 #include "simstruc.h"
-
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-#define MDL_CHECK_PARAMETERS
-#if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
-#define SAMPLE_TIME                    (ssGetSFcnParam(S, 2))
+#define SAMPLE_TIME                    (ssGetSFcnParam(S, 0))
 
 /*
  * Utility function prototypes.
  */
 static bool IsRealMatrix(const mxArray * const m);
+
+#define MDL_CHECK_PARAMETERS
+#if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
 
 /* Function: mdlCheckParameters ===========================================
  * Abstract:
@@ -34,39 +45,57 @@ static bool IsRealMatrix(const mxArray * const m);
 static void mdlCheckParameters(SimStruct *S)
 {
   /*
-   * Check the parameter: sample time
+   * Check the parameter 1 (sample time)
    */
-  if EDIT_OK(S, 2) {
+  if EDIT_OK(S, 0) {
     const double *sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
 
     /* Sample time must be a real scalar value or 2 element array. */
-    if (IsRealMatrix(SAMPLE_TIME) && (stArraySize == 1 || stArraySize == 2) ) {
+    if (IsRealMatrix(SAMPLE_TIME) &&
+        (stArraySize == 1 || stArraySize == 2) ) {
       sampleTime = (real_T *) mxGetPr(SAMPLE_TIME);
     } else {
-      ssSetErrorStatus(S, "Invalid sample time. Sample time must be a real scalar value or an array of two real values.");
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Sample time must be a real scalar value or an array of two real values.");
       return;
     }
 
     if (sampleTime[0] < 0.0 && sampleTime[0] != -1.0) {
-      ssSetErrorStatus(S, "Invalid sample time. Period must be non-negative or -1 (for inherited).");
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Period must be non-negative or -1 (for inherited).");
       return;
     }
 
-    if (stArraySize == 2 && sampleTime[0] > 0.0 && sampleTime[1] >= sampleTime[0]) {
-      ssSetErrorStatus(S, "Invalid sample time. Offset must be smaller than period.");
+    if (stArraySize == 2 && sampleTime[0] > 0.0 &&
+        sampleTime[1] >= sampleTime[0]) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Offset must be smaller than period.");
       return;
     }
 
     if (stArraySize == 2 && sampleTime[0] == -1.0 && sampleTime[1] != 0.0) {
-      ssSetErrorStatus(S, "Invalid sample time. When period is -1, offset must be 0.");
+      ssSetErrorStatus(S,
+                       "Invalid sample time. When period is -1, offset must be 0.");
       return;
     }
 
-    if (stArraySize == 2 && sampleTime[0] == 0.0 && !(sampleTime[1] == 1.0)) {
-      ssSetErrorStatus(S, "Invalid sample time. When period is 0, offset must be 1.");
+    if (stArraySize == 2 && sampleTime[0] == 0.0 &&
+        !(sampleTime[1] == 1.0)) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. When period is 0, offset must be 1.");
       return;
     }
+  }
+
+  /*
+   * Check the parameter 2
+   */
+  if EDIT_OK(S, 1) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 1, "serial_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 }
 
@@ -79,11 +108,9 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int i, errorOutputEnable, numberOfVectorElements;
-  int_T numberOfInputs;
-
+	int numInput;
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 5);
+  ssSetNumSFcnParams(S, 3);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -109,9 +136,6 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
-  ssSetSFcnParamTunable(S, 3, 0);
-  ssSetSFcnParamTunable(S, 4, 0);
-
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
@@ -120,64 +144,38 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 1))/2;
-  if (!ssSetNumInputPorts(S, numberOfInputs))
+  numInput = mxGetScalar(ssGetSFcnParam(S, 2));
+  if (!ssSetNumInputPorts(S, numInput?2:1))
     return;
 
   /*
    * Configure the input ports
    */
-  printf("sfunar_DataloggerSerial\r\n");
-  for (i = 0; i < numberOfInputs; i++) {
-    numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, 1), 2*i+1));
-    printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), numberOfVectorElements);
-    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint8"))
-      ssSetInputPortDataType(S, i, SS_UINT8);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint16"))
-      ssSetInputPortDataType(S, i, SS_UINT16);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "uint32"))
-      ssSetInputPortDataType(S, i, SS_UINT32);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "int8"))
-      ssSetInputPortDataType(S, i, SS_INT8);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "int16"))
-      ssSetInputPortDataType(S, i, SS_INT16);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "int32"))
-      ssSetInputPortDataType(S, i, SS_INT32);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "single"))
-      ssSetInputPortDataType(S, i, SS_SINGLE);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "double"))
-      ssSetInputPortDataType(S, i, SS_DOUBLE);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 1), 2*i)), "bool"))
-      ssSetInputPortDataType(S, i, SS_BOOLEAN);
-    else
-      mexWarnMsgTxt("One or more Ports Datatypes not set");
+  ssSetInputPortDataType(S, 0, SS_UINT8);
+  ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
+  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetInputPortDirectFeedThrough(S, 0, 1);
+  ssSetInputPortAcceptExprInRTW(S, 0, 0);
+  ssSetInputPortOverWritable(S, 0, 0);
+  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetInputPortRequiredContiguous(S, 0, 1);
 
-    ssSetInputPortWidth(S, i, numberOfVectorElements);
-    ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
-    ssSetInputPortDirectFeedThrough(S, i, 1);
-    ssSetInputPortAcceptExprInRTW(S, i, 1);
-    ssSetInputPortOverWritable(S, i, 1);
-    ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
-    ssSetInputPortRequiredContiguous(S, i, 1);
+  if(numInput) {
+    ssSetInputPortDataType(S, 1, SS_UINT16);
+    ssSetInputPortWidth(S, 1, 1);
+    ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 1, 1);
+    ssSetInputPortAcceptExprInRTW(S, 1, 0);
+    ssSetInputPortOverWritable(S, 1, 0);
+    ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 1, 1);
   }
 
   /*
    * Set the number of output ports.
    */
-  errorOutputEnable = mxGetScalar(ssGetSFcnParam(S, 3));
-  if (!ssSetNumOutputPorts(S, errorOutputEnable?1:0))
+  if (!ssSetNumOutputPorts(S, 0))
     return;
-
-  if(errorOutputEnable){
-      /*
-       * Configure the output port 1: error output
-       */
-      ssSetOutputPortDataType(S, 0, SS_BOOLEAN);
-      ssSetOutputPortWidth(S, 0, 1);
-      ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-      ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-      ssSetOutputPortOutputExprInRTW(S, 0, 1);
-  }
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -216,7 +214,8 @@ static void mdlInitializeSampleTimes(SimStruct *S)
   const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {
-    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME ? FIXED_IN_MINOR_STEP_OFFSET : 0.0));
+    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME?
+      FIXED_IN_MINOR_STEP_OFFSET: 0.0));
   } else {
     ssSetOffsetTime(S, 0, sampleTime[1]);
   }
@@ -245,36 +244,65 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 5))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   /*
-  * Register the run-time parameter
-  */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "serial_port", ssGetDataTypeId(S, "uint8"));
-  //ssRegDlgParamAsRunTimeParam(S, 1, 1, "type_input_ports",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "SampleTime", ssGetDataTypeId(S, "int32"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 3, "errEn",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 4, 4, "block_size",  ssGetDataTypeId(S, "uint16"));
+   * Register the run-time parameter 1
+   */
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SampleTime",  ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "serial_port", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "enable_number_of_bytes",    ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
+#define MDL_SET_INPUT_PORT_DIMENSION_INFO
+#if defined(MDL_SET_INPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
 
-#define MDL_START
-#if defined(MDL_START)
-
-/* Function: mdlStart =====================================================
+/* Function: mdlSetInputPortDimensionInfo =================================
  * Abstract:
- *    This function is called once at start of model execution. If you
- *    have states that should be initialized once, this is the place
- *    to do it.
+ *    This method is called with the candidate dimensions for an input port
+ *    with unknown dimensions. If the proposed dimensions are acceptable, the
+ *    method should go ahead and set the actual port dimensions.
+ *    If they are unacceptable an error should be generated via
+ *    ssSetErrorStatus.
+ *    Note that any other input or output ports whose dimensions are
+ *    implicitly defined by virtue of knowing the dimensions of the given
+ *    port can also have their dimensions set.
+ *
  */
-static void mdlStart(SimStruct *S)
+static void mdlSetInputPortDimensionInfo(SimStruct *S, int_T portIndex, const
+  DimsInfo_T *dimsInfo)
 {
-  UNUSED_PARAMETER(S);
-}
+/* Set input port dimension */
+if(!ssSetInputPortDimensionInfo(S, portIndex, dimsInfo)) return;
 
+
+}
 #endif
+
+#define MDL_SET_OUTPUT_PORT_DIMENSION_INFO
+#if defined(MDL_SET_OUTPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
+/* Function: mdlSetOutputPortDimensionInfo ================================
+ * Abstract:
+ *    This method is called with the candidate dimensions for an output port
+ *    with unknown dimensions. If the proposed dimensions are acceptable, the
+ *    method should go ahead and set the actual port dimensions.
+ *    If they are unacceptable an error should be generated via
+ *    ssSetErrorStatus.
+ *    Note that any other input or output ports whose dimensions are
+ *    implicitly defined by virtue of knowing the dimensions of the given
+ *    port can also have their dimensions set.
+ *
+ */
+static void mdlSetOutputPortDimensionInfo(SimStruct *S, int_T portIndex, const DimsInfo_T *dimsInfo)
+{
+    /* Set output port dimension */
+    if(!ssSetOutputPortDimensionInfo(S, portIndex, dimsInfo)) return;
+    
+}
+#endif
+
 
 /* Function: mdlOutputs ===================================================
  * Abstract:
@@ -284,8 +312,8 @@ static void mdlStart(SimStruct *S)
  */
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
-  UNUSED_PARAMETER(S);
-  UNUSED_PARAMETER(tid);
+    UNUSED_PARAMETER(S);
+    UNUSED_PARAMETER(tid);
 }
 
 /* Function: mdlTerminate =================================================
@@ -295,8 +323,21 @@ static void mdlOutputs(SimStruct *S, int_T tid)
  */
 static void mdlTerminate(SimStruct *S)
 {
-  UNUSED_PARAMETER(S);
+    UNUSED_PARAMETER(S);
 }
+
+#define MDL_RTW
+#if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
+/* Function: mdlRTW =======================================================
+ * Abstract:
+ *    This function is called when the Real-Time Workshop is generating
+ *    the model.rtw file.
+ */
+static void mdlRTW(SimStruct *S)
+{
+    UNUSED_PARAMETER(S);
+}
+#endif
 
 /* Function: IsRealMatrix =================================================
  * Abstract:
@@ -328,12 +369,12 @@ static bool IsRealMatrix(const mxArray * const m)
     }
 }
 
+
 /*
  * Required S-function trailer
  */
-#ifdef MATLAB_MEX_FILE
+#ifdef    MATLAB_MEX_FILE
 # include "simulink.c"
 #else
 # include "cg_sfun.h"
 #endif
-

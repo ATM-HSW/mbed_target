@@ -29,7 +29,8 @@ mex sfunar_spiSlaveRead.c
 mex sfunar_spiSlaveWrite.c
 mex sfunar_spi_csConfig.c
 mex sfunar_spi_write.c
-mex sfunar_DataloggerSerial.c
+mex sfunar_DataloggerPlain.c
+mex sfunar_serialWriteBlock.c
 %%
 
 %% MCP3428
