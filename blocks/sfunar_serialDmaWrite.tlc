@@ -11,22 +11,22 @@
 %% Function: BlockTypeSetup ===============================================
 %function BlockTypeSetup(block, system) void
 
-  %% Ensure required header files are included
-  %<MbedCommonBlockTypeSetup(block, system)>
-    
+    %% Ensure required header files are included
+    %<MbedCommonBlockTypeSetup(block, system)>
+
 %endfunction
 
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
 
-	%assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
-	
-	%openfile declbuf
-		uint8_T serial%<SerialPort_val>_TxBuffer[%<LibBlockInputSignalWidth(0)>];
-	%closefile declbuf
-	%assign srcFile = LibGetModelDotCFile()
-	%<LibSetSourceFileSection(srcFile, "Declarations", declbuf)> 
+    %assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
+    
+    %openfile declbuf
+    uint8_T serial%<SerialPort_val>_TxBuffer[%<LibBlockInputSignalWidth(0)>];
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)> 
 
 %endfunction
 
@@ -35,117 +35,116 @@
 %function Outputs(block, system) Output
 
     %assign u1_val = LibBlockInputSignalAddr(0, "", "", 0)
-	%assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
-	%assign numData_val = CAST("Number",LibBlockParameterValue(p2, 0))
+    %assign SerialPort_val = CAST("Number",LibBlockParameterValue(p1, 0))
+    %assign numData_val = CAST("Number",LibBlockParameterValue(p2, 0))
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
-	
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
-		%switch SerialPort_val
-			%case 1
-				%assign uart_name = "USART1"
-				%assign tx_dma_stream = "DMA2_Stream7"
-				%assign clear_dma_flags = "DMA2->HIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
-				%break
-			%case 2
-				%assign uart_name = "USART2"
-				%assign tx_dma_stream = "DMA1_Stream6"
-				%assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF2_6 | DMA_FLAG_HTIF2_6 | DMA_FLAG_FEIF2_6"
-				%break		
-			%case 3
-				%assign uart_name = "USART3"
-				%assign tx_dma_stream = "DMA1_Stream3"
-				%assign clear_dma_flags = "DMA1->LIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
-				%break
-			%case 4
-				%assign uart_name = "UART4"
-				%assign tx_dma_stream = "DMA1_Stream4"
-				%assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF0_4 | DMA_FLAG_HTIF0_4 | DMA_FLAG_FEIF0_4"
-				%break
-			%case 5
-				%assign uart_name = "UART5"
-				%assign tx_dma_stream = "DMA1_Stream7"
-				%assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
-				%break
-			%case 6
-				%assign uart_name = "USART6"
-				%assign tx_dma_stream = "DMA2_Stream6"
-				%assign clear_dma_flags = "DMA2->HIFCR = DMA_FLAG_TCIF2_6 | DMA_FLAG_HTIF2_6 | DMA_FLAG_FEIF2_6"
-				%break
-		%endswitch		
-			
-		%assign check_dma_enable = "!(%<tx_dma_stream>->CR & DMA_SxCR_EN)"
-		%assign dma_mar_access = "%<tx_dma_stream>->M0AR"
-		%assign dma_ndtr_access = "%<tx_dma_stream>->NDTR"
-		%assign set_dma_enable = "%<tx_dma_stream>->CR |= DMA_SxCR_EN"
-		%assign clear_dma_enable = "%<tx_dma_stream>->CR &= ~DMA_SxCR_EN"
-		%assign check_uart_transmit_empty = "%<uart_name>->SR & USART_SR_TXE"
-		%assign clear_uart_tc = "%<uart_name>->SR &= ~(USART_SR_TC)"
-		
-	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
-		%switch SerialPort_val
-			%case 1
-				%assign uart_name = "USART1"
-				%assign tx_dma_channel = "DMA1_Channel4"
-				%assign clear_dma_flags = "DMA1->IFCR = DMA_FLAG_GL4"
-				%%assign check_dma_enable = "(DMA1->ISR & DMA_FLAG_TC4)"
-				%break
-			%case 2
-				%assign uart_name = "USART2"
-				%assign tx_dma_channel = "DMA1_Channel7"
-				%assign clear_dma_flags = "DMA1->IFCR = DMA_FLAG_GL7"
-				%%assign check_dma_enable = "(DMA1->ISR & DMA_FLAG_TC7)"
-				%break		
-			%case 3
-				%assign uart_name = "USART3"
-				%assign tx_dma_channel = "DMA1_Channel2"
-				%assign clear_dma_flags = "DMA1->IFCR = DMA_FLAG_GL2"
-				%%assign check_dma_enable = "(DMA1->ISR & DMA_FLAG_TC2)"
-				%break
-			%case 4
-				%assign uart_name = "UART4"
-				%assign tx_dma_channel = "DMA2_Channel5"
-				%assign clear_dma_flags = "DMA2->IFCR = DMA_FLAG_GL5"
-				%%assign check_dma_enable = "(DMA2->ISR & DMA_FLAG_TC5)"
-				%break
-		%endswitch
-		%assign check_dma_enable = "%<tx_dma_channel>->CCR & DMA_CCR_EN"
-		%assign dma_mar_access = "%<tx_dma_channel>->CMAR"
-		%assign dma_ndtr_access = "%<tx_dma_channel>->CNDTR"
-		%assign set_dma_enable = "%<tx_dma_channel>->CCR |= DMA_CCR_EN"
-		%assign clear_dma_enable = "%<tx_dma_channel>->CCR &= ~DMA_CCR_EN"
-		%assign check_uart_transmit_empty = "%<uart_name>->ISR & USART_ISR_TXE"
-		%assign clear_uart_tc = "%<uart_name>->ICR &= ~(USART_ICR_TCCF)"
-		
-	%else
-		%<LibReportError("Serial DMA Write Block not supported by this target")>
-	%endif	
-	
-	%if !SLibCodeGenForSim()	
-		if((%<check_uart_transmit_empty>))
-		{
-			if(%<check_dma_enable>){
-				%<clear_dma_enable>;
-			}	
 
-            %if numData_val == 0			
-			memcpy(serial%<SerialPort_val>_TxBuffer, %<u1_val>,  %<LibBlockInputSignalWidth(0)>);
-            %else
-			memcpy(serial%<SerialPort_val>_TxBuffer, %<u1_val>,  %<LibBlockInputSignal(1, "", "", 0)>);
-            %endif
+    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
+        %switch SerialPort_val
+            %case 1
+                %assign uart_name = "USART1"
+                %assign tx_dma_stream = "DMA2_Stream7"
+                %assign clear_dma_flags = "DMA2->HIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
+                %break
+            %case 2
+                %assign uart_name = "USART2"
+                %assign tx_dma_stream = "DMA1_Stream6"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF2_6 | DMA_FLAG_HTIF2_6 | DMA_FLAG_FEIF2_6"
+                %break	    
+            %case 3
+                %assign uart_name = "USART3"
+                %assign tx_dma_stream = "DMA1_Stream3"
+                %assign clear_dma_flags = "DMA1->LIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
+                %break
+            %case 4
+                %assign uart_name = "UART4"
+                %assign tx_dma_stream = "DMA1_Stream4"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF0_4 | DMA_FLAG_HTIF0_4 | DMA_FLAG_FEIF0_4"
+                %break
+            %case 5
+                %assign uart_name = "UART5"
+                %assign tx_dma_stream = "DMA1_Stream7"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
+                %break
+            %case 6
+                %assign uart_name = "USART6"
+                %assign tx_dma_stream = "DMA2_Stream6"
+                %assign clear_dma_flags = "DMA2->HIFCR = DMA_FLAG_TCIF2_6 | DMA_FLAG_HTIF2_6 | DMA_FLAG_FEIF2_6"
+                %break
+        %endswitch
 
-			%<clear_dma_flags>;
-			%<dma_mar_access> = (uint32_t)serial%<SerialPort_val>_TxBuffer;
+        %assign check_dma_enable = "!(%<tx_dma_stream>->CR & DMA_SxCR_EN)"
+        %assign dma_mar_access = "%<tx_dma_stream>->M0AR"
+        %assign dma_ndtr_access = "%<tx_dma_stream>->NDTR"
+        %assign set_dma_enable = "%<tx_dma_stream>->CR |= DMA_SxCR_EN"
+        %assign clear_dma_enable = "%<tx_dma_stream>->CR &= ~DMA_SxCR_EN"
+        %assign check_uart_transmit_empty = "%<uart_name>->SR & USART_SR_TXE"
+        %assign clear_uart_tc = "%<uart_name>->SR &= ~(USART_SR_TC)"
+
+    %elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+        %switch SerialPort_val
+            %case 1
+                %assign uart_name = "USART1"
+                %assign tx_dma_channel = "DMA1_Channel4"
+                %assign clear_dma_flags = "DMA1->IFCR = DMA_FLAG_GL4"
+                %%assign check_dma_enable = "(DMA1->ISR & DMA_FLAG_TC4)"
+                %break
+            %case 2
+                %assign uart_name = "USART2"
+                %assign tx_dma_channel = "DMA1_Channel7"
+                %assign clear_dma_flags = "DMA1->IFCR = DMA_FLAG_GL7"
+                %%assign check_dma_enable = "(DMA1->ISR & DMA_FLAG_TC7)"
+                %break	    
+            %case 3
+                %assign uart_name = "USART3"
+                %assign tx_dma_channel = "DMA1_Channel2"
+                %assign clear_dma_flags = "DMA1->IFCR = DMA_FLAG_GL2"
+                %%assign check_dma_enable = "(DMA1->ISR & DMA_FLAG_TC2)"
+                %break
+            %case 4
+                %assign uart_name = "UART4"
+                %assign tx_dma_channel = "DMA2_Channel5"
+                %assign clear_dma_flags = "DMA2->IFCR = DMA_FLAG_GL5"
+                %%assign check_dma_enable = "(DMA2->ISR & DMA_FLAG_TC5)"
+                %break
+        %endswitch
+        %assign check_dma_enable = "%<tx_dma_channel>->CCR & DMA_CCR_EN"
+        %assign dma_mar_access = "%<tx_dma_channel>->CMAR"
+        %assign dma_ndtr_access = "%<tx_dma_channel>->CNDTR"
+        %assign set_dma_enable = "%<tx_dma_channel>->CCR |= DMA_CCR_EN"
+        %assign clear_dma_enable = "%<tx_dma_channel>->CCR &= ~DMA_CCR_EN"
+        %assign check_uart_transmit_empty = "%<uart_name>->ISR & USART_ISR_TXE"
+        %assign clear_uart_tc = "%<uart_name>->ICR &= ~(USART_ICR_TCCF)"
+
+    %else
+        %<LibReportError("Serial DMA Write Block not supported by this target")>
+    %endif
+
+    %if !SLibCodeGenForSim()
+        if((%<check_uart_transmit_empty>)) {
+            if(%<check_dma_enable>) {
+                %<clear_dma_enable>;
+            }
 
             %if numData_val == 0
-			%<dma_ndtr_access> = %<LibBlockInputSignalWidth(0)>;
+                memcpy(serial%<SerialPort_val>_TxBuffer, %<u1_val>,  %<LibBlockInputSignalWidth(0)>);
             %else
-            %<dma_ndtr_access> = %<LibBlockInputSignal(1, "", "", 0)>;
+                memcpy(serial%<SerialPort_val>_TxBuffer, %<u1_val>,  %<LibBlockInputSignal(1, "", "", 0)>);
             %endif
-			
-			%<clear_uart_tc>;
-			%<set_dma_enable>; 
-		}
-	%endif	
+
+            %<clear_dma_flags>;
+            %<dma_mar_access> = (uint32_t)serial%<SerialPort_val>_TxBuffer;
+
+            %if numData_val == 0
+                %<dma_ndtr_access> = %<LibBlockInputSignalWidth(0)>;
+            %else
+                %<dma_ndtr_access> = %<LibBlockInputSignal(1, "", "", 0)>;
+            %endif
+
+            %<clear_uart_tc>;
+            %<set_dma_enable>; 
+        }
+    %endif
 %endfunction

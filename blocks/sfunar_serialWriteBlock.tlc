@@ -1,0 +1,50 @@
+%% File : sfunar_serialWrite.tlc
+%%
+%% Copyright 2010-2011 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_serialWriteBlock "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+    %% Ensure required header files are included
+    %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign serial_port_val = LibBlockParameterValue(serial_port,0)
+    %assign name = "serial" + FEVAL("int2str",serial_port_val)
+    %assign enable_number_of_bytes_val = LibBlockParameterValue(enable_number_of_bytes,0)
+    %if enable_number_of_bytes_val
+        %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+    %else
+        %assign number_of_bytes = %<LibBlockInputSignalWidth(0)>
+    %endif
+
+    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+
+    %%
+    #if DEVICE_SERIAL_ASYNCH
+    const uint8_t* ptr = (const char*)%<u1_ptr>;
+    int len = %<number_of_bytes>;
+    %<name>.write(ptr, len, 0, 0);
+
+    #else
+    const char* ptr = (const char*)%<u1_ptr>;
+    const char* end = ptr + %<number_of_bytes>;
+    while (ptr != end) {
+        if (%<name>.putc(*ptr++) == EOF) {
+            break;
+        }
+    }
+    #endif
+    %%
+  %endif
+%endfunction

@@ -32,7 +32,8 @@ mex sfunar_spi_write.c
 mex sfunar_usbSerialConfig.c
 mex sfunar_usbSerialRead.c
 mex sfunar_usbSerialWrite.c
-mex sfunar_DataloggerSerial.c
+mex sfunar_DataloggerPlain.c
+mex sfunar_serialWriteBlock.c
 %%
 
 %% MCP3428
