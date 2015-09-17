@@ -29,6 +29,9 @@ mex sfunar_spiSlaveRead.c
 mex sfunar_spiSlaveWrite.c
 mex sfunar_spi_csConfig.c
 mex sfunar_spi_write.c
+mex sfunar_usbSerialConfig.c
+mex sfunar_usbSerialRead.c
+mex sfunar_usbSerialWrite.c
 mex sfunar_DataloggerSerial.c
 %%
 

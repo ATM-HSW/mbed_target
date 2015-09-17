@@ -1,0 +1,28 @@
+%% File : sfunar_serialConfig.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_usbSerialConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %<LibAddToCommonIncludes("USBSerial.h")>
+  
+  %assign srcFile = LibGetModelDotCFile()
+  
+  %openfile declbuf
+	USBSerial usbSerial;
+  %closefile declbuf
+  %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+%endfunction
+
+

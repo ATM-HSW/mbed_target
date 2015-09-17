@@ -1,0 +1,37 @@
+%% File : sfunar_serialWrite.tlc
+%%
+%% Copyright 2010-2011 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_usbSerialWrite "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+    %% Ensure required header files are included
+    %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign numData_val = CAST("Number",LibBlockParameterValue(numData,0))
+
+    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+    %assign u1_dim1_val = LibBlockInputSignalWidth(0)
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+
+    %%
+	%if numData_val == 0
+      usbSerial.writeBlock((uint8_T*)%<u1_ptr>, %<u1_dim1_val>);
+	%else
+      usbSerial.writeBlock((uint8_T*)%<u1_ptr>, %<LibBlockInputSignal(1, "", "", 0)>);	  
+	%endif
+    %%
+  %endif
+%endfunction
