@@ -268,7 +268,7 @@ static void mdlSetWorkWidths(SimStruct *S)
 //ssRegDlgParamAsRunTimeParam(S, 8, 8, "typeinpports", ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 9, 9, "SampleTime",   ssGetDataTypeId(S, "int32"));
   ssRegDlgParamAsRunTimeParam(S, 10, 10, "errEn",      ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 11, 11, "block_size", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 11, 11, "buffer_size", ssGetDataTypeId(S, "uint16"));
   }
 
 #endif

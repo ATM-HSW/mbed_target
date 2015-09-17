@@ -27,29 +27,43 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
+  %assign port_val  = LibBlockParameterValue(mosi_port, 0)
+  %assign pin_val   = LibBlockParameterValue(mosi_pin, 0)
+  %assign mosi_name = "P" + FEVAL("char",port_val+64) + "_" + FEVAL("int2str",pin_val-1)
+  %assign port_val  = LibBlockParameterValue(miso_port, 0)
+  %assign pin_val   = LibBlockParameterValue(miso_pin, 0)
+  %assign miso_name = "P" + FEVAL("char",port_val+64) + "_" + FEVAL("int2str",pin_val-1)
+  %assign port_val  = LibBlockParameterValue(sclk_port, 0)
+  %assign pin_val   = LibBlockParameterValue(sclk_pin, 0)
+  %assign sclk_name = "P" + FEVAL("char",port_val+64) + "_" + FEVAL("int2str",pin_val-1)
+  %assign port_val  = LibBlockParameterValue(cs_port, 0)
+  %assign pin_val   = LibBlockParameterValue(cs_pin, 0)
+  %assign cs_name   = "P" + FEVAL("char",port_val+64) + "_" + FEVAL("int2str",pin_val-1)
+  %assign buffersize_val = CAST("Number",LibBlockParameterValue(buffer_size, 0))
+
   %openfile declbuf
-  #define BUF_LEN 100
+  #define BUF_LEN %<buffersize_val>
   char buffer[BUF_LEN];
   int buf_idx=0;
-  SDFileSystem sd(PC_3, PC_2, PB_10, PE_2, "sd"); // MOSI, MISO, SCK, CS
+  //SDFileSystem sd(PC_3, PC_2, PB_10, PE_2, "sd"); // MOSI, MISO, SCK, CS
+  SDFileSystem sd(%<mosi_name>, %<miso_name>, %<sclk_name>, %<cs_name>, "sd"); // MOSI, MISO, SCK, CS
   FILE *fp;
-  Serial pc(PC_6,PC_7);
   %closefile declbuf 
 
   %assign srcFile = LibGetModelDotCFile()
   %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
-  pc.printf("starting\r\n");
-  fp = fopen("/sd/hello.txt", "r");
+  //printf("starting\r\n");
+  fp = fopen("/sd/daten.csv", "r");
   if (fp != NULL) {
       fclose(fp);
       remove("/sd/daten.csv");
-      pc.printf("Remove an existing file with the same name\r\n");
+      //printf("Remove an existing file with the same name\r\n");
   }
 
   fp = fopen("/sd/daten.csv", "w");
   if (fp == NULL) {
-      pc.printf("Unable to write the file\r\n");
+      //printf("Unable to write the file\r\n");
   }
 %endfunction
 
@@ -61,9 +75,6 @@
     %assign nInputs  = LibBlockNumInputPorts(block)
     %assign rolling = [0: %<nInputs>]
     %assign blockid = 1
-
-    %assign y = LibBlockOutputSignal(0, "", "", 0)
-    %<y> = 0;
 
     %assign rollVars = ["U"]
     buf_idx = 0;
@@ -113,15 +124,24 @@
 
         %endforeach
     %endforeach
-    pc.printf("%s\r\n", buffer);
+    //printf("%s\r\n", buffer);
     fp = fopen("/sd/daten.csv", "a");
     if (fp != NULL) {
       fprintf(fp, "%s\r\n", buffer);
       //sd.disk_sync();
       fclose(fp);
-    } else
-      pc.printf("Unable to write the file\r\n");
-    
+    } //else
+      //printf("Unable to write the file\r\n");
+
+    %assign errEn_val = CAST("Number",LibBlockParameterValue(errEn, 0))
+    %if errEn_val
+      %assign y = LibBlockOutputSignal(0, "", "", 0)
+      if (BUF_LEN<buf_idx)
+        %<y> = 0;
+      else
+        %<y> = 1;
+    %endif
+
   %endif
 %endfunction
 
