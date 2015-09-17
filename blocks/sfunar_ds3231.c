@@ -41,7 +41,7 @@ static void mdlCheckParameters(SimStruct *S)
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 0, "I2cPort", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 0, "i2cbus", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 
   /*
@@ -227,8 +227,8 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "i2cPort", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SampleTime", ssGetDataTypeId(S, "uint32"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "i2cbus", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SampleTime", ssGetDataTypeId(S, "int32"));
 
 }
 

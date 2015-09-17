@@ -96,3 +96,8 @@ mex sfunar_mi0283qtWrite.c
 %% Arch Max
 mex sfunar_DataloggerSDCard.c
 %%
+
+%% DS3231 RTC
+mex sfunar_ds3231.c
+%%
+
