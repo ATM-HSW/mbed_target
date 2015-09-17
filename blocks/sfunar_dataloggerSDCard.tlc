@@ -15,13 +15,13 @@
 
   %<LibAddToCommonIncludes("SDFileSystem.h")>
   
-  %<LibAddToModelSources("ccsbcs")>
-  %<LibAddToModelSources("diskio")>
-  %<LibAddToModelSources("FATDirHandle")>
-  %<LibAddToModelSources("FATFileHandle")>
-  %<LibAddToModelSources("FATFileSystem")>
-  %<LibAddToModelSources("ff")>
-  %<LibAddToModelSources("SDFileSystem")>
+%%  %<LibAddToModelSources("ccsbcs")>
+%%  %<LibAddToModelSources("diskio")>
+%%  %<LibAddToModelSources("FATDirHandle")>
+%%  %<LibAddToModelSources("FATFileHandle")>
+%%  %<LibAddToModelSources("FATFileSystem")>
+%%  %<LibAddToModelSources("ff")>
+%%  %<LibAddToModelSources("SDFileSystem")>
 
 %endfunction
 
@@ -33,22 +33,23 @@
   int buf_idx=0;
   SDFileSystem sd(PC_3, PC_2, PB_10, PE_2, "sd"); // MOSI, MISO, SCK, CS
   FILE *fp;
-  // Serial pc(PC_6,PC_7);
+  Serial pc(PC_6,PC_7);
   %closefile declbuf 
 
   %assign srcFile = LibGetModelDotCFile()
   %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
+  pc.printf("starting\r\n");
   fp = fopen("/sd/hello.txt", "r");
   if (fp != NULL) {
       fclose(fp);
       remove("/sd/daten.csv");
-      printf("Remove an existing file with the same name\r\n");
+      pc.printf("Remove an existing file with the same name\r\n");
   }
 
   fp = fopen("/sd/daten.csv", "w");
   if (fp == NULL) {
-      printf("Unable to write the file\r\n");
+      pc.printf("Unable to write the file\r\n");
   }
 %endfunction
 
@@ -112,14 +113,14 @@
 
         %endforeach
     %endforeach
-    //pc.printf("%s\r\n", buffer);
-    fp = fopen("/sd/daten.csv", "w");
+    pc.printf("%s\r\n", buffer);
+    fp = fopen("/sd/daten.csv", "a");
     if (fp != NULL) {
       fprintf(fp, "%s\r\n", buffer);
       //sd.disk_sync();
       fclose(fp);
     } else
-      printf("Unable to write the file\r\n");
+      pc.printf("Unable to write the file\r\n");
     
   %endif
 %endfunction
