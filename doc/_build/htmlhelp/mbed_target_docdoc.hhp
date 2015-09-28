@@ -22,6 +22,10 @@ getting_started.html
 Index.html
 chapters\block_template.html
 chapters\Encoder_Input_en.html
+chapters\Serial_Dma_Config_en.html
+chapters\Serial_Dma_Read_en.html
+chapters\Serial_Dma_Write_en.html
+chapters\Spi_Dma_Config_en.html
 _static\ajax-loader.gif
 _static\alabaster.css
 _static\alert_info_32.png

@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    
+    <title>SPI DMA Config</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="top" title="mbed_target_doc 1.0 documentation" href="../Index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spi-dma-config">
+<h1>SPI DMA Config</h1>
+<p>Configuration of hardware SPI peripheral for non-blocking data transfer.</p>
+<div class="section" id="library">
+<h2>Library</h2>
+<p>Targets/STM/DISCO_F407VG</p>
+</div>
+<div class="section" id="description">
+<h2>Description</h2>
+<a class="reference internal image-reference" href="../_images/Spi_Dma_Config_block.png"><img alt="../_images/Spi_Dma_Config_block.png" src="../_images/Spi_Dma_Config_block.png" style="width: 239.6px; height: 132.8px;" /></a>
+<p>This block configures a hardware SPI peripheral of an STM32 MCU including DMA transfer to enable non-blocking data transmission.</p>
+</div>
+<div class="section" id="data-type-support">
+<h2>Data Type Support</h2>
+<p>This block has no input and output ports.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>Parameters and Dialog Box</h2>
+<img alt="../_images/Spi_Dma_Config_mask.png" src="../_images/Spi_Dma_Config_mask.png" />
+<div class="section" id="spi-port">
+<h3>SPI Port</h3>
+<p>Selects the hardware SPI peripheral of the used STM32 MCU. The port number is related to the actual SPI number referred to the data sheet of the MCU.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">Not all MCUs provide all of the selectable SPI ports.</p>
+</div>
+</div>
+<div class="section" id="mosi-port">
+<h3>MOSI Port</h3>
+<p>GPIO port letter of the Master Out Slave In pin of the SPI peripheral.</p>
+</div>
+<div class="section" id="mosi-pin">
+<h3>MOSI Pin</h3>
+<p>Pin number of the MOSI pin.</p>
+</div>
+<div class="section" id="miso-port">
+<h3>MISO Port</h3>
+<p>GPIO port letter of the Master In Slave Out pin of the SPI peripheral.</p>
+</div>
+<div class="section" id="miso-pin">
+<h3>MISO Pin</h3>
+<p>Pin number of the MISO pin.</p>
+</div>
+<div class="section" id="sclk-port">
+<h3>SCLK Port</h3>
+<p>GPIO port letter of the Serial Clock pin of the SPI peripheral.</p>
+</div>
+<div class="section" id="sclk-pin">
+<h3>SCLK Pin</h3>
+<p>Pin number of the Clock pin.</p>
+</div>
+<div class="section" id="nss-port">
+<h3>NSS Port</h3>
+<p>GPIO port letter of the Slave Select pin of the SPI peripheral.</p>
+</div>
+<div class="section" id="nss-pin">
+<h3>NSS Pin</h3>
+<p>Pin number of the Slave Select pin.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">All port and pin numbers have to match the selected SPI peripheral as referred in the data sheet of the used MCU.</p>
+</div>
+</div>
+<div class="section" id="spi-slave">
+<h3>SPI Slave</h3>
+<p>Configures the selected SPI peripheral as slave if checked.</p>
+</div>
+<div class="section" id="baud-rate-prescaler">
+<h3>Baud rate prescaler</h3>
+<p>In master mode the clock frequency of the SCLK pin is the peripheral clock devided by this prescaler value.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Mathias Marquardt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

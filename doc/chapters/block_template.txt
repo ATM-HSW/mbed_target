@@ -1,13 +1,13 @@
 Block Name
 ==========
 
-Short Description
+###Short Description
 
 
 Library
 -------
 
-Block Library in which this block resides
+###Block Library in which this block resides
 
 Description
 -----------
@@ -15,12 +15,12 @@ Description
 .. image:: ../images/Encoder_input_block.png
    :scale: 50 %
 
-Description of the Block
+###Description of the Block
 
 Data Type Support
 -----------------
 
-valid data types of input and output signals
+###valid data types of input and output signals
 
 Parameters and Dialog Box
 -------------------------

@@ -159,7 +159,7 @@ static void mdlInitializeSizes(SimStruct *S)
       /*
        * Configure the input port 2
        */
-      ssSetInputPortDataType(S, 1, SS_INT32);
+      ssSetInputPortDataType(S, 1, SS_UINT32);
       ssSetInputPortWidth(S, 1, 1);
       ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
       ssSetInputPortDirectFeedThrough(S, 1, 1);

@@ -13,6 +13,9 @@ Contents:
 
    getting_started
    chapters/Encoder_Input_en
+   chapters/Serial_Dma_Config_en
+   chapters/Serial_Dma_Read_en
+   chapters/Serial_Dma_Write_en
 
 
 Indices and tables
