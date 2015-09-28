@@ -10,7 +10,7 @@
 </OBJECT>
 <UL>
 <LI> <OBJECT type="text/sitemap">
-    <param name="Name" value="mbed_target_doc 1.0 Dokumentation">
+    <param name="Name" value="mbed_target_doc 1.0 documentation">
     <param name="Local" value="index.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
@@ -48,6 +48,26 @@
 <LI> <OBJECT type="text/sitemap">
     <param name="Name" value="Timer number">
     <param name="Local" value="chapters/Encoder_Input_en.html#timer-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Encoder Mode">
+    <param name="Local" value="chapters/Encoder_Input_en.html#encoder-mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TIx Port">
+    <param name="Local" value="chapters/Encoder_Input_en.html#tix-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TIx Pin">
+    <param name="Local" value="chapters/Encoder_Input_en.html#tix-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input Mode (GPIO)">
+    <param name="Local" value="chapters/Encoder_Input_en.html#input-mode-gpio">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Resolution (Pulses/Rev)">
+    <param name="Local" value="chapters/Encoder_Input_en.html#resolution-pulses-rev">
 </OBJECT>
 </UL>
 </UL>

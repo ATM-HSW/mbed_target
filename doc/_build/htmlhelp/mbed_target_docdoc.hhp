@@ -9,11 +9,11 @@ Display compile progress=No
 Full text search stop list file=mbed_target_docdoc.stp
 Full-text search=Yes
 Index file=mbed_target_docdoc.hhk
-Language=0x407
-Title=mbed_target_doc 1.0 Dokumentation
+Language=0x409
+Title=mbed_target_doc 1.0 documentation
 
 [WINDOWS]
-mbed_target_docdoc="mbed_target_doc 1.0 Dokumentation","mbed_target_docdoc.hhc","mbed_target_docdoc.hhk","index.html","index.html",,,,,0x63520,220,0x10384e,[0,0,1024,768],,,,,,,0
+mbed_target_docdoc="mbed_target_doc 1.0 documentation","mbed_target_docdoc.hhc","mbed_target_docdoc.hhk","index.html","index.html",,,,,0x63520,220,0x10384e,[0,0,1024,768],,,,,,,0
 
 [FILES]
 block_template.html

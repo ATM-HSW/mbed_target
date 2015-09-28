@@ -10,7 +10,7 @@
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="top" title="mbed_target_doc 1.0 Dokumentation" href="../Index.html" />
+    <link rel="top" title="mbed_target_doc 1.0 documentation" href="../Index.html" />
     <link rel="prev" title="Getting Started" href="../getting_started.html" /> 
   </head>
   <body role="document">
@@ -18,12 +18,12 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Stichwortverzeichnis"
-             accesskey="I">Index</a></li>
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
         <li class="right" >
           <a href="../getting_started.html" title="Getting Started"
-             accesskey="P">zurück</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 Dokumentation</a> &raquo;</li> 
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -41,8 +41,9 @@
 <div class="section" id="description">
 <h2>Description</h2>
 <a class="reference internal image-reference" href="../_images/Encoder_input_block.png"><img alt="../_images/Encoder_input_block.png" src="../_images/Encoder_input_block.png" style="width: 268.4px; height: 110.8px;" /></a>
-<p>This block uses the hardware timers of an STM32 MCU for decoding angular information from quadrature encoders. In order to get a proper functioning configuration one has to study the data sheet and/or reference manual of the appropriate MCU
-to get the right combination of hardware timer and pin numbers.</p>
+<p>This block uses the hardware timers of an STM32 MCU for decoding position information from quadrature encoders. In order to get a proper functioning configuration one has to study the data sheet and/or reference manual of the appropriate MCU
+to get the right combination of timer peripheral and pin numbers. This Block can be configured in different modes for counting the pulses of the connected encoder. So there is a true quadrature encoder mode that uses rising and falling edges of both encoder channels
+and the second mode which uses both edges of only one channel.</p>
 </div>
 <div class="section" id="data-type-support">
 <h2>Data Type Support</h2>
@@ -54,6 +55,42 @@ to get the right combination of hardware timer and pin numbers.</p>
 <img alt="../_images/Encoder_input_mask.png" src="../_images/Encoder_input_mask.png" />
 <div class="section" id="timer-number">
 <h3>Timer number</h3>
+<p>Number of the actual hardware timer peripheral in the MCU, e.g. choosing TIM1 uses Timer 1 of an STM32 MCU and configures it for decoding quadrature input signals on the timer&#8217;s channels CH1 and CH2.</p>
+</div>
+<div class="section" id="encoder-mode">
+<h3>Encoder Mode</h3>
+<p>There are three different encoder modes which can be configured:
+* TI1:  uses only the signal edges on timer input channel CH1 for counting
+* TI2:  uses only the signal edges on timer input channel CH2 for counting
+* TI1 and TI2: uses signal edges on both channels for counting</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In each mode rising <strong>and</strong> falling edges of the selected channel are used for counting.</p>
+</div>
+</div>
+<div class="section" id="tix-port">
+<h3>TIx Port</h3>
+<p>Selection of the GPIO port where the timer input channels are mapped to.</p>
+</div>
+<div class="section" id="tix-pin">
+<h3>TIx Pin</h3>
+<p>Selection of the GPIO pin number where the timer input channels are mapped to.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">The TIx Port and Pin numbers have to match the selected Timer number as referenced in the MCU&#8217;s data sheet. If the configuration is not correct the model will be generated and compiled without errors but the encoder does not work.</p>
+</div>
+</div>
+<div class="section" id="input-mode-gpio">
+<h3>Input Mode (GPIO)</h3>
+<p>Select the input mode for both of the selected timer input channels, possible values are:
+* PullNone:             no pull up or pull down resistors are configured for the input pins
+* PullUp:               internal pull up resistors are configured for both input pins
+* PullDown:             internal pull down resistors are configured for both input pins</p>
+</div>
+<div class="section" id="resolution-pulses-rev">
+<h3>Resolution (Pulses/Rev)</h3>
+<p>Configuration of the counter value for one revolution of the encoder shaft. The resolution value is the actual maximum value of the counter register, so it depends on the selected <em>Encoder Mode</em>, e.g. if the used encoder has a resolution of 1000 pulses/rev and for <em>Encoder Mode</em> TIx is selected the <em>Resolution</em> value is 2000 pulses/rev since both edges are used. If mode <em>TI1 and TI2</em> is selected the Resolution value is 4000 pulses/rev.
+Valid values for the resolution are 0 - 65535 since 16 bit timer peripheral are implemented in the MCU.</p>
 </div>
 </div>
 </div>
@@ -67,17 +104,17 @@ to get the right combination of hardware timer and pin numbers.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Stichwortverzeichnis"
-             >Index</a></li>
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
         <li class="right" >
           <a href="../getting_started.html" title="Getting Started"
-             >zurück</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 Dokumentation</a> &raquo;</li> 
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Mathias Marquardt.
-      Mit <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 erstellt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
