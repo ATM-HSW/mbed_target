@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<ncx version="2005-1" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+  <head>
+    <meta name="dtb:uid" content="unknown"/>
+    <meta name="dtb:depth" content="2"/>
+    <meta name="dtb:totalPageCount" content="0"/>
+    <meta name="dtb:maxPageNumber" content="0"/>
+  </head>
+  <docTitle>
+    <text>mbed_target_doc</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="navPoint1" playOrder="1">
+      <navLabel>
+        <text>Welcome to mbed_target_doc&#39;s documentation!</text>
+      </navLabel>
+      <content src="Index.html" />
+    </navPoint>
+    <navPoint id="navPoint2" playOrder="2">
+      <navLabel>
+        <text>Getting Started</text>
+      </navLabel>
+      <content src="getting_started.html" />
+      <navPoint id="navPoint3" playOrder="2">
+        <navLabel>
+          <text>Getting Started</text>
+        </navLabel>
+        <content src="getting_started.html" />
+      </navPoint>
+      <navPoint id="navPoint4" playOrder="3">
+        <navLabel>
+          <text>First steps</text>
+        </navLabel>
+        <content src="getting_started.html#first-steps" />
+      </navPoint>
+    </navPoint>
+  </navMap>
+</ncx>

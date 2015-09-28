@@ -1,0 +1,44 @@
+[OPTIONS]
+Binary TOC=No
+Binary Index=No
+Compiled file=mbed_target_docdoc.chm
+Contents file=mbed_target_docdoc.hhc
+Default Window=mbed_target_docdoc
+Default topic=index.html
+Display compile progress=No
+Full text search stop list file=mbed_target_docdoc.stp
+Full-text search=Yes
+Index file=mbed_target_docdoc.hhk
+Language=0x407
+Title=mbed_target_doc 1.0 Dokumentation
+
+[WINDOWS]
+mbed_target_docdoc="mbed_target_doc 1.0 Dokumentation","mbed_target_docdoc.hhc","mbed_target_docdoc.hhk","index.html","index.html",,,,,0x63520,220,0x10384e,[0,0,1024,768],,,,,,,0
+
+[FILES]
+block_template.html
+genindex.html
+getting_started.html
+Index.html
+chapters\block_template.html
+chapters\Encoder_Input_en.html
+_static\ajax-loader.gif
+_static\alabaster.css
+_static\alert_info_32.png
+_static\alert_warning_32.png
+_static\basic.css
+_static\bg-page.png
+_static\bullet_orange.png
+_static\classic.css
+_static\comment-bright.png
+_static\comment-close.png
+_static\comment.png
+_static\down-pressed.png
+_static\down.png
+_static\file.png
+_static\haiku.css
+_static\minus.png
+_static\plus.png
+_static\pygments.css
+_static\up-pressed.png
+_static\up.png

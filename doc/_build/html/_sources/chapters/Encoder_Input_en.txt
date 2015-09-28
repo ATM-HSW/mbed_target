@@ -1,0 +1,35 @@
+Block Name
+==========
+
+Block enables the use of STM32's hardware encoder circuitry.
+
+
+Library
+-------
+
+Targets/STM/DISCO_F407VG
+
+Description
+-----------
+
+.. image:: ../images/Encoder_input_block.png
+   :scale: 40 %
+
+This block uses the hardware timers of an STM32 MCU for decoding angular information from quadrature encoders. In order to get a proper functioning configuration one has to study the data sheet and/or reference manual of the appropriate MCU 
+to get the right combination of hardware timer and pin numbers.
+
+Data Type Support
+-----------------
+
+The block's reset input port expects a *uint8* integer value which is either zero in normal operation or none zero for resetting the internal counter value of the timer register.
+
+The first output port provides the actual angle as a *single* value in degrees and the second output port provides the actual counter value as an *int32* integer value.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Encoder_input_mask.png
+
+Timer number
+............
+

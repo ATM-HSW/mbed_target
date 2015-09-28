@@ -158,7 +158,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetOutputPortDataType(S, 0, SS_UINT8);
   ssSetOutputPortWidth(S, 0, portwidth[0]);
   ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_GLOBAL);
+  ssSetOutputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 1);
   
   /*
