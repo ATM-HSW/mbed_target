@@ -31,90 +31,12 @@
   %assign SlaveFlag_val = CAST("Number",LibBlockParameterValue(p10, 0))
   %assign Frequency_val = CAST("Number",LibBlockParameterValue(p11, 0))
 
-  %switch MosiPort_val
-		%case 1
-			%assign mosigpio_name = "GPIOA"
-			%break
-		%case 2
-			%assign mosigpio_name = "GPIOB"
-			%break
-		%case 3
-			%assign mosigpio_name = "GPIOC"
-			%break
-		%case 4
-			%assign mosigpio_name = "GPIOD"
-			%break
-		%case 5
-			%assign mosigpio_name = "GPIOE"
-			%break
-		%case 6
-			%assign mosigpio_name = "GPIOF"
-			%break
-	%endswitch
-	
-	%switch MisoPort_val
-		%case 1
-			%assign misogpio_name = "GPIOA"
-			%break
-		%case 2
-			%assign misogpio_name = "GPIOB"
-			%break
-		%case 3
-			%assign misogpio_name = "GPIOC"
-			%break
-		%case 4
-			%assign misogpio_name = "GPIOD"
-			%break
-		%case 5
-			%assign misogpio_name = "GPIOE"
-			%break
-		%case 6
-			%assign misogpio_name = "GPIOF"
-			%break
-	%endswitch
-	
-	%switch SclkPort_val
-		%case 1
-			%assign sclkgpio_name = "GPIOA"
-			%break
-		%case 2
-			%assign sclkgpio_name = "GPIOB"
-			%break
-		%case 3
-			%assign sclkgpio_name = "GPIOC"
-			%break
-		%case 4
-			%assign sclkgpio_name = "GPIOD"
-			%break
-		%case 5
-			%assign sclkgpio_name = "GPIOE"
-			%break
-		%case 6
-			%assign sclkgpio_name = "GPIOF"
-			%break
-	%endswitch
-	
-	%switch NssPort_val
-		%case 1
-			%assign nssgpio_name = "GPIOA"
-			%break
-		%case 2
-			%assign nssgpio_name = "GPIOB"
-			%break
-		%case 3
-			%assign nssgpio_name = "GPIOC"
-			%break
-		%case 4
-			%assign nssgpio_name = "GPIOD"
-			%break
-		%case 5
-			%assign nssgpio_name = "GPIOE"
-			%break
-		%case 6
-			%assign nssgpio_name = "GPIOF"
-			%break
-	%endswitch
-	
+  
+  %assign mosigpio_name = "GPIO" + FEVAL("char",MosiPort_val+64)
+  %assign misogpio_name = "GPIO" + FEVAL("char",MisoPort_val+64)
+  %assign sclkgpio_name = "GPIO" + FEVAL("char",SclkPort_val+64)
+  %assign nssgpio_name = "GPIO" + FEVAL("char",NssPort_val+64)
+			
 	%switch Frequency_val
 		%case 1
 			%assign baudrate_presc = "SPI_BAUDRATEPRESCALER_2"
@@ -174,7 +96,7 @@
 			%break
 		%endswitch 
 	
-	%elseif ISEQUAL(MbedTarget, "DISCO_F429ZI")
+	%elseif ISEQUAL(MbedTarget, "DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget, "DISCO_F429ZI_180MHz")
 		
 		%switch SpiPort_val
 		%case 1
@@ -222,6 +144,62 @@
 			%break
 		%endswitch 
 		
+	%elseif ISEQUAL(MbedTarget, "DISCO_F746NG")
+	
+		%switch SpiPort_val
+		%case 1
+			%assign spi_name = "SPI1"
+			%assign dma_name = "DMA2"
+			%assign dma_channel = "DMA_CHANNEL_3"
+			%assign tx_dma_stream = "DMA2_Stream3"
+			%assign rx_dma_stream = "DMA2_Stream2"
+			%assign alternate_function = "GPIO_AF5_SPI1"
+			%break
+		%case 2
+			%assign spi_name = "SPI2"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_0"
+			%assign tx_dma_stream = "DMA1_Stream4"
+			%assign rx_dma_stream = "DMA1_Stream3"
+			%assign alternate_function = "GPIO_AF5_SPI2"
+			%break
+		%case 3
+			%assign spi_name = "SPI3"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_0"
+			%assign tx_dma_stream = "DMA1_Stream7"
+			%assign rx_dma_stream = "DMA1_Stream0"
+			%assign alternate_function = "GPIO_AF6_SPI3"
+			%break
+		%case 4
+			%assign spi_name = "SPI4"
+			%assign dma_name = "DMA2"
+			%assign dma_channel = "DMA_CHANNEL_5"
+			%assign tx_dma_stream = "DMA2_Stream4"
+			%assign rx_dma_stream = "DMA2_Stream3"
+			%assign alternate_function = "GPIO_AF5_SPI4"
+			%break
+		%case 5
+			%assign spi_name = "SPI5"
+			%assign dma_name = "DMA2"
+			%assign dma_channel = "DMA_CHANNEL_7"
+			%assign tx_dma_stream = "DMA2_Stream6"
+			%assign rx_dma_stream = "DMA2_Stream5"
+			%assign alternate_function = "GPIO_AF5_SPI5"
+			%break
+		%case 6
+			%assign spi_name = "SPI6"
+			%assign dma_name = "DMA2"
+			%assign dma_channel = "DMA_CHANNEL_1"
+			%assign tx_dma_stream = "DMA2_Stream5"
+			%assign rx_dma_stream = "DMA2_Stream6"
+			%assign alternate_function = "GPIO_AF5_SPI6"
+			%break
+		%default
+			%<LibReportError("This SPI%<SpiPort_val> Peripheral is not supported by this target!")>
+			%break
+		%endswitch 
+	
 	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 
 		%switch SpiPort_val
@@ -312,7 +290,7 @@
 			__%<spi_name>_CLK_ENABLE();
 			__%<dma_name>_CLK_ENABLE();
 			
-			%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI") || ISEQUAL(MbedTarget, "NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE")
+			%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget, "DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget, "NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE")
 			
 				%% configure SPI Peripheral	
 				%if SlaveFlag_val == 1
@@ -377,6 +355,41 @@
 				}
 				%<rx_dma_channel>->CCR = DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
 				%<rx_dma_channel>->CPAR = (uint32_t)&%<spi_name>->DR;	
+				
+			%elseif ISEQUAL(MbedTarget, "DISCO_F746NG")
+			
+				%% configure SPI Peripheral	
+				%if SlaveFlag_val == 1
+					%<spi_name>->CR1 |= SPI_CR1_SSI | %<baudrate_presc>;
+					%<spi_name>->CR1 &= ~(SPI_CR1_MSTR | SPI_CR1_BIDIMODE | SPI_CR1_CPOL | SPI_CR1_CPHA | SPI_FIRSTBIT_LSB | SPI_CR1_CRCEN);
+					%<spi_name>->CR2 |= SPI_CR2_TXDMAEN | SPI_DATASIZE_8BIT | SPI_CR2_RXDMAEN;
+					%<spi_name>->CR2 &= ~(SPI_CR2_SSOE | SPI_CR2_FRF);
+				%else
+					%<spi_name>->CR1 |= SPI_CR1_MSTR | SPI_CR1_SSI | %<baudrate_presc>;
+					%<spi_name>->CR1 &= ~(SPI_CR1_BIDIMODE | SPI_CR1_CPOL | SPI_CR1_CPHA | SPI_FIRSTBIT_LSB | SPI_CR1_CRCEN);
+					%<spi_name>->CR2 |= SPI_CR2_SSOE | SPI_DATASIZE_8BIT | SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
+					%<spi_name>->CR2 &= ~(SPI_CR2_FRF);
+				%endif
+				
+				%<spi_name>->CR1 |= SPI_CR1_SPE;
+				%% config DMA TX
+				if(%<tx_dma_stream>->CR & DMA_SxCR_EN)
+				{
+					%<tx_dma_stream>->CR &= ~(DMA_SxCR_EN);
+					while(%<tx_dma_stream>->CR & DMA_SxCR_EN);
+				}
+				%<tx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_MEMORY_TO_PERIPH;
+				%<tx_dma_stream>->PAR = (uint32_t)&%<spi_name>->DR;
+				
+				%% config DMA RX			
+				if(%<rx_dma_stream>->CR & DMA_SxCR_EN)
+				{
+					%<rx_dma_stream>->CR &= ~(DMA_SxCR_EN);
+					while(%<rx_dma_stream>->CR & DMA_SxCR_EN);
+				}
+				%<rx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
+				%<rx_dma_stream>->PAR = (uint32_t)&%<spi_name>->DR;	
+			
 			%endif
 		%closefile buffer		
 		%<LibMdlRegCustomCode(buffer, "execution")>

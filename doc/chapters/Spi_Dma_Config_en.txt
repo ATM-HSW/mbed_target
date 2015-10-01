@@ -30,7 +30,7 @@ Parameters and Dialog Box
 SPI Port
 ........
 
-Selects the hardware SPI peripheral of the used STM32 MCU. The port number is related to the actual SPI number referred to the data sheet of the MCU.
+Selects the hardware SPI peripheral of the used STM32 MCU. The port number is related to the actual SPI number referred to the datasheet of the MCU.
 
 .. attention::
 	Not all MCUs provide all of the selectable SPI ports.

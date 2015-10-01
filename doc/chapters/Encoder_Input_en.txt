@@ -15,7 +15,7 @@ Description
 .. image:: ../images/Encoder_input_block.png
    :scale: 40 %
 
-This block uses the hardware timers of an STM32 MCU for decoding position information from quadrature encoders. In order to get a proper functioning configuration one has to study the data sheet and/or reference manual of the appropriate MCU 
+This block uses the hardware timers of an STM32 MCU for decoding position information from quadrature encoders. In order to get a proper functioning configuration one has to study the datasheet and/or reference manual of the appropriate MCU 
 to get the right combination of timer peripheral and pin numbers. This Block can be configured in different modes for counting the pulses of the connected encoder. So there is a true quadrature encoder mode that uses rising and falling edges of both encoder channels
 and the second mode which uses both edges of only one channel.
 

@@ -43,13 +43,13 @@
 	%endswitch
 	
 	%if AddressFlag_val == 1
-		%assign SlaveAddress_val = LibBlockInputSignal(1, "", "", 0)
+		%assign SlaveAddress_val = LibBlockInputSignal(0, "", "", 0)
 	%endif
 	
 	%if ByteCountFlag_val == 1 && AddressFlag_val == 0
-		NumBytes_val = LibBlockInputSignal(1, "", "", 0)
+		%assign NumBytes_val = LibBlockInputSignal(0, "", "", 0)
 	%elseif ByteCountFlag_val == 1 && AddressFlag_val == 1	
-		NumBytes_val = LibBlockInputSignal(2, "", "", 0)
+		%assign NumBytes_val = LibBlockInputSignal(1, "", "", 0)
 	%endif
 	
 	%assign y1_val = LibBlockOutputSignalAddr(0, "", "", 0)

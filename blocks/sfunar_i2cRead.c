@@ -148,7 +148,7 @@ static void mdlCheckParameters(SimStruct *S)
   /*
    * Check the parameter 7 (AckOut)
    */
-  if EDIT_OK(S, 6) {
+  if EDIT_OK(S, 7) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
@@ -213,7 +213,8 @@ static void mdlInitializeSizes(SimStruct *S)
 	
   if(*mxGetPr(ssGetSFcnParam(S, 3)) > 0)
     ports++;
-	
+
+	//printf("num ports = %d\n",ports);
   /*
    * Set the number of input ports.
    */
@@ -222,6 +223,7 @@ static void mdlInitializeSizes(SimStruct *S)
 	
   for(i=0; i<ports; i++)
   {
+	//printf("num = %d\n",i);
 	ssSetInputPortDataType(S, i, SS_UINT8);
 	ssSetInputPortWidth(S, i, 1);
 	ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
@@ -229,7 +231,7 @@ static void mdlInitializeSizes(SimStruct *S)
 	ssSetInputPortAcceptExprInRTW(S, i, 1);
 	ssSetInputPortOverWritable(S, i, 1);
 	ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
-	ssSetInputPortRequiredContiguous(S, 0, 1);
+	ssSetInputPortRequiredContiguous(S, i, 1);
   }
 
   

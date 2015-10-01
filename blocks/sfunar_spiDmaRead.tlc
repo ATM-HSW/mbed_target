@@ -48,7 +48,7 @@
 			%<LibMdlRegCustomCode(buffer, "trailer")>		
 		%endif
 		
-	%elseif ISEQUAL(MbedTarget,"DISCO_F429ZI")
+	%elseif ISEQUAL(MbedTarget, "DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget, "DISCO_F429ZI_180MHz")
 		%switch SpiPort_val
 			%case 1
 				%assign rx_dma_stream = "DMA2_Stream2"
@@ -78,7 +78,41 @@
 			%closefile buffer
 			%<LibMdlRegCustomCode(buffer, "trailer")>		
 		%endif
-	
+		
+	%elseif ISEQUAL(MbedTarget, "DISCO_F746NG")
+		%switch SpiPort_val
+			%case 1
+				%assign rx_dma_stream = "DMA2_Stream2"
+				%break
+			%case 2
+				%assign rx_dma_stream = "DMA1_Stream3"
+				%break		
+			%case 3
+				%assign rx_dma_stream = "DMA1_Stream0"
+				%break
+			%case 4
+				%assign rx_dma_stream = "DMA2_Stream3"
+				%break
+			%case 5
+				%assign rx_dma_stream = "DMA2_Stream5"
+				%break
+			%case 6
+				%assign rx_dma_stream = "DMA2_Stream6"
+				%break
+			%default
+				%<LibReportError("SPI%<SpiPort_val> Peripheral not supported!")>
+				%break
+		%endswitch
+				
+		%if !SLibCodeGenForSim()
+			%openfile buffer
+				%<rx_dma_stream>->M0AR = (uint32_T)spi%<SpiPort_val>_RxBuffer;
+				%<rx_dma_stream>->NDTR = %<RxBuffer_val>;
+				%<rx_dma_stream>->CR |= DMA_SxCR_EN;
+			%closefile buffer
+			%<LibMdlRegCustomCode(buffer, "trailer")>		
+		%endif
+		
 	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 
 		%switch SpiPort_val
@@ -150,7 +184,7 @@
 		%assign dma_mar_access = "%<rx_dma_stream>->M0AR"
 		%assign dma_ndtr_access = "%<rx_dma_stream>->NDTR"
 		
-	%elseif ISEQUAL(MbedTarget,"DISCO_F429ZI")
+	%elseif ISEQUAL(MbedTarget, "DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget, "DISCO_F429ZI_180MHz")
 		%switch SpiPort_val
 			%case 1
 				%assign rx_dma_stream = "DMA2_Stream2"
@@ -175,6 +209,34 @@
 		%assign dma_mar_access = "%<rx_dma_stream>->M0AR"
 		%assign dma_ndtr_access = "%<rx_dma_stream>->NDTR"
 		
+	%elseif ISEQUAL(MbedTarget, "DISCO_F746NG")
+		%switch SpiPort_val
+			%case 1
+				%assign rx_dma_stream = "DMA2_Stream2"
+				%break
+			%case 2
+				%assign rx_dma_stream = "DMA1_Stream3"
+				%break		
+			%case 3
+				%assign rx_dma_stream = "DMA1_Stream0"
+				%break
+			%case 4
+				%assign rx_dma_stream = "DMA2_Stream3"
+				%break
+			%case 5
+				%assign rx_dma_stream = "DMA2_Stream5"
+				%break
+			%case 6
+				%assign rx_dma_stream = "DMA2_Stream6"
+				%break
+			%default
+				%<LibReportError("SPI%<SpiPort_val> Peripheral not supported!")>
+				%break
+		%endswitch
+		
+		%assign dma_mar_access = "%<rx_dma_stream>->M0AR"
+		%assign dma_ndtr_access = "%<rx_dma_stream>->NDTR"
+	
 	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
 		%switch SpiPort_val
 			%case 1

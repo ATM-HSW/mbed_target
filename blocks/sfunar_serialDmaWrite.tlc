@@ -41,7 +41,7 @@
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
 
-    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
+    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget,"DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
         %switch SerialPort_val
             %case 1
                 %assign uart_name = "USART1"
@@ -118,6 +118,58 @@
         %assign check_uart_transmit_empty = "%<uart_name>->ISR & USART_ISR_TXE"
         %assign clear_uart_tc = "%<uart_name>->ICR &= ~(USART_ICR_TCCF)"
 
+	%elseif ISEQUAL(MbedTarget, "DISCO_F746NG")	
+	    %switch SerialPort_val
+            %case 1
+                %assign uart_name = "USART1"
+                %assign tx_dma_stream = "DMA2_Stream7"
+                %assign clear_dma_flags = "DMA2->HIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
+                %break
+            %case 2
+                %assign uart_name = "USART2"
+                %assign tx_dma_stream = "DMA1_Stream6"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF2_6 | DMA_FLAG_HTIF2_6 | DMA_FLAG_FEIF2_6"
+                %break	    
+            %case 3
+                %assign uart_name = "USART3"
+                %assign tx_dma_stream = "DMA1_Stream3"
+                %assign clear_dma_flags = "DMA1->LIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
+                %break
+            %case 4
+                %assign uart_name = "UART4"
+                %assign tx_dma_stream = "DMA1_Stream4"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF0_4 | DMA_FLAG_HTIF0_4 | DMA_FLAG_FEIF0_4"
+                %break
+            %case 5
+                %assign uart_name = "UART5"
+                %assign tx_dma_stream = "DMA1_Stream7"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF3_7 | DMA_FLAG_HTIF3_7 | DMA_FLAG_FEIF3_7"
+                %break
+            %case 6
+                %assign uart_name = "USART6"
+                %assign tx_dma_stream = "DMA2_Stream6"
+                %assign clear_dma_flags = "DMA2->HIFCR = DMA_FLAG_TCIF2_6 | DMA_FLAG_HTIF2_6 | DMA_FLAG_FEIF2_6"
+                %break
+            %case 7
+                %assign uart_name = "UART7"
+                %assign tx_dma_stream = "DMA1_Stream1"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF1_5 | DMA_FLAG_HTIF1_5 | DMA_FLAG_FEIF1_5"
+                %break
+            %case 6
+                %assign uart_name = "UART8"
+                %assign tx_dma_stream = "DMA1_Stream0"
+                %assign clear_dma_flags = "DMA1->HIFCR = DMA_FLAG_TCIF0_4 | DMA_FLAG_HTIF0_4 | DMA_FLAG_FEIF0_4"
+                %break
+        %endswitch
+
+        %assign check_dma_enable = "!(%<tx_dma_stream>->CR & DMA_SxCR_EN)"
+        %assign dma_mar_access = "%<tx_dma_stream>->M0AR"
+        %assign dma_ndtr_access = "%<tx_dma_stream>->NDTR"
+        %assign set_dma_enable = "%<tx_dma_stream>->CR |= DMA_SxCR_EN"
+        %assign clear_dma_enable = "%<tx_dma_stream>->CR &= ~DMA_SxCR_EN"
+        %assign check_uart_transmit_empty = "%<uart_name>->ISR & USART_ISR_TXE"
+        %assign clear_uart_tc = "%<uart_name>->ICR &= ~(USART_ICR_TCCF)"
+	
     %else
         %<LibReportError("Serial DMA Write Block not supported by this target")>
     %endif

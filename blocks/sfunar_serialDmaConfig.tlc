@@ -73,13 +73,13 @@
 			%break
 	%endswitch
 	
-	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
+	%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget,"DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE")
 		
-		%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") %%%|| ISEQUAL(MbedTarget,"DISCO_F429ZI") 
+		%if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"DISCO_F429ZI_168MHz") 
 			%assign fck = 84000000
 		%elseif ISEQUAL(MbedTarget,"NUCLEO_F411RE")
 		    %assign fck = 96000000
-		%elseif ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"DISCO_F429ZI") 
+		%elseif ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"DISCO_F429ZI_180MHz") 
 			%assign fck = 90000000
 		%endif
 		
@@ -135,6 +135,9 @@
 			%assign tx_dma_stream = "DMA2_Stream6"
 			%assign rx_dma_stream = "DMA2_Stream2"
 			%assign alternate_function = "GPIO_AF8_USART6"
+			%break
+		%default
+			%<LibReportError("Uart%<SerialPort_val> Peripheral not supported!")>
 			%break
 		%endswitch
 	
@@ -214,9 +217,7 @@
 					while(%<rx_dma_stream>->CR & DMA_SxCR_EN);
 				}
 				%<rx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
-				%<rx_dma_stream>->PAR = (uint32_t)&%<uart_name>->DR;			
-				%% Dma für empfang enablen wird im Serial Read Block gemacht
-				%%<rx_dma_stream>->CR |= DMA_SxCR_EN;			
+				%<rx_dma_stream>->PAR = (uint32_t)&%<uart_name>->DR;	
 			%closefile buffer		
 			%<LibMdlRegCustomCode(buffer, "execution")>
 		%endif
@@ -231,7 +232,7 @@
 			%assign tx_dma_channel = "DMA1_Channel4"
 			%assign rx_dma_channel = "DMA1_Channel5"
 			%assign alternate_function = "GPIO_AF7_USART1"			
-			%assign set_dma_clock = "RCC->CFGR3 |= (1<<0)"		
+			%assign set_uart_clock_src = "RCC->CFGR3 |= (1<<0)"		
 			%break
 		%case 2
 			%assign uart_name = "USART2"
@@ -239,7 +240,7 @@
 			%assign tx_dma_channel = "DMA1_Channel7"
 			%assign rx_dma_channel = "DMA1_Channel6"
 			%assign alternate_function = "GPIO_AF7_USART2"
-			%assign set_dma_clock = "RCC->CFGR3 |= (1<<16)"
+			%assign set_uart_clock_src = "RCC->CFGR3 |= (1<<16)"
 			%break		
 		%case 3
 			%assign uart_name = "USART3"
@@ -247,7 +248,7 @@
 			%assign tx_dma_channel = "DMA1_Channel2"
 			%assign rx_dma_channel = "DMA1_Channel3"
 			%assign alternate_function = "GPIO_AF7_USART3"
-			%assign set_dma_clock = "RCC->CFGR3 |= (1<<18)"
+			%assign set_uart_clock_src = "RCC->CFGR3 |= (1<<18)"
 			%break
 		%case 4
 			%assign uart_name = "UART4"
@@ -255,7 +256,7 @@
 			%assign tx_dma_channel = "DMA2_Channel5"
 			%assign rx_dma_channel = "DMA2_Channel3"
 			%assign alternate_function = "GPIO_AF5_UART4"
-			%assign set_dma_clock = "RCC->CFGR3 |= (1<<20)"
+			%assign set_uart_clock_src = "RCC->CFGR3 |= (1<<20)"
 			%break
 		%default
 			%<LibReportError("Uart%<SerialPort_val> Peripheral not supported!")>
@@ -276,7 +277,7 @@
 		
 		%if !SLibCodeGenForSim()
 			%openfile buffer
-				%<set_dma_clock>;
+				%<set_uart_clock_src>;
 				%if ISEQUAL(txgpio_name,rxgpio_name)
 					__%<txgpio_name>_CLK_ENABLE();				
 				%else
@@ -338,6 +339,163 @@
 			%closefile buffer		
 			%<LibMdlRegCustomCode(buffer, "execution")>
 		%endif
+		
+	%elseif ISEQUAL(MbedTarget, "DISCO_F746NG")	
+		%assign fck = 216000000		
+		
+		%switch SerialPort_val
+		%case 1
+			%assign uart_name = "USART1"
+			%assign dma_name = "DMA2"
+			%assign dma_channel = "DMA_CHANNEL_4"
+			%assign tx_dma_stream = "DMA2_Stream7"
+			%assign rx_dma_stream = "DMA2_Stream5"
+			%assign alternate_function = "GPIO_AF7_USART1"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<0)"		
+			%break
+		%case 2
+			%assign uart_name = "USART2"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_4"
+			%assign tx_dma_stream = "DMA1_Stream6"
+			%assign rx_dma_stream = "DMA1_Stream5"
+			%assign alternate_function = "GPIO_AF7_USART2"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<2)"		
+			%break
+		%case 3
+			%assign uart_name = "USART3"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_4"
+			%assign tx_dma_stream = "DMA1_Stream3"
+			%assign rx_dma_stream = "DMA1_Stream1"
+			%assign alternate_function = "GPIO_AF7_USART3"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<4)"		
+			%break
+		%case 4
+			%assign uart_name = "UART4"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_4"
+			%assign tx_dma_stream = "DMA1_Stream4"
+			%assign rx_dma_stream = "DMA1_Stream2"
+			%assign alternate_function = "GPIO_AF8_UART4"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<6)"		
+			%break
+		%case 5
+			%assign uart_name = "UART5"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_4"
+			%assign tx_dma_stream = "DMA1_Stream7"
+			%assign rx_dma_stream = "DMA1_Stream0"
+			%assign alternate_function = "GPIO_AF8_UART5"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<8)"		
+			%break
+		%case 6
+			%assign uart_name = "USART6"
+			%assign dma_name = "DMA2"
+			%assign dma_channel = "DMA_CHANNEL_5"
+			%assign tx_dma_stream = "DMA2_Stream6"
+			%assign rx_dma_stream = "DMA2_Stream1"
+			%assign alternate_function = "GPIO_AF8_USART6"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<10)"		
+			%break
+		%case 7
+			%assign uart_name = "UART7"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_5"
+			%assign tx_dma_stream = "DMA1_Stream1"
+			%assign rx_dma_stream = "DMA1_Stream3"
+			%assign alternate_function = "GPIO_AF8_UART7"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<12)"		
+			%break
+		%case 8
+			%assign uart_name = "UART8"
+			%assign dma_name = "DMA1"
+			%assign dma_channel = "DMA_CHANNEL_5"
+			%assign tx_dma_stream = "DMA1_Stream0"
+			%assign rx_dma_stream = "DMA1_Stream6"
+			%assign alternate_function = "GPIO_AF8_UART8"			
+			%assign set_uart_clock_src = "RCC->DCKCFGR2 |= (1<<14)"		
+			%break			
+		%default
+			%<LibReportError("Uart%<SerialPort_val> Peripheral not supported!")>
+			%break
+		%endswitch
+						
+		%assign UartDiv = CAST("Number", fck/(BaudRate_val))
+		%if UartDiv < 16
+			%assign Over8 = 1
+			%assign UartDiv = CAST("Number", (2*fck)/(BaudRate_val))
+			%if UartDiv < 16
+				%<LibReportError("UART%<SerialPort_val> BaudRate is too high!")>
+			%endif
+			%assign UartDiv = (UartDiv & 65520) + ((UartDiv & 15) >> 1)
+		%else
+			%assign Over8 = 0
+		%endif
+		
+		%if !SLibCodeGenForSim()
+			%openfile buffer
+				%<set_uart_clock_src>;
+				%if ISEQUAL(txgpio_name,rxgpio_name)
+					__%<txgpio_name>_CLK_ENABLE();				
+				%else
+					__%<txgpio_name>_CLK_ENABLE();
+					__%<rxgpio_name>_CLK_ENABLE();
+				%endif			
+				
+				%<txgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<TxPin_val*2>));
+				%<txgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<TxPin_val>);
+				%<txgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<TxPin_val*2>));
+				%<txgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<TxPin_val*2>));
+				%if TxPin_val > 7
+					%assign TxPin_val = TxPin_val - 8
+					%<txgpio_name>->AFR[1] |= (%<alternate_function> << (%<TxPin_val*4>));
+				%else
+					%<txgpio_name>->AFR[0] |= (%<alternate_function> << (%<TxPin_val*4>));
+				%endif
+						
+				%<rxgpio_name>->MODER |= (GPIO_MODER_MODER0_1 << (%<RxPin_val*2>));
+				%<rxgpio_name>->OTYPER &= ~(GPIO_OTYPER_OT_%<RxPin_val>);
+				%<rxgpio_name>->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0_0 << (%<RxPin_val*2>));
+				%<rxgpio_name>->PUPDR |= (GPIO_PUPDR_PUPDR0_0 << (%<RxPin_val*2>));
+				%if RxPin_val > 7
+					%assign RxPin_val = RxPin_val - 8
+					%<rxgpio_name>->AFR[1] |= (%<alternate_function> << (%<RxPin_val*4>));
+				%else
+					%<rxgpio_name>->AFR[0] |= (%<alternate_function> << (%<RxPin_val*4>));
+				%endif
+					
+				__%<uart_name>_CLK_ENABLE();
+
+				%<uart_name>->BRR = %<UartDiv>;
+				%<uart_name>->CR1 = ((%<Over8> << 15) | USART_CR1_TE | USART_CR1_RE);
+				%<uart_name>->CR2 = 0;
+				%<uart_name>->CR3 = (USART_CR3_DMAT | USART_CR3_DMAR);
+				%<uart_name>->GTPR = 0;
+
+				%<uart_name>->CR1 |= USART_CR1_UE;
+				
+				__%<dma_name>_CLK_ENABLE();
+				
+				if(%<tx_dma_stream>->CR & DMA_SxCR_EN)
+				{
+					%<tx_dma_stream>->CR &= ~(DMA_SxCR_EN);
+					while(%<tx_dma_stream>->CR & DMA_SxCR_EN);
+				}
+				%<tx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_MEMORY_TO_PERIPH;
+				%<tx_dma_stream>->PAR = (uint32_t)&%<uart_name>->TDR;
+				
+				if(%<rx_dma_stream>->CR & DMA_SxCR_EN)
+				{
+					%<rx_dma_stream>->CR &= ~(DMA_SxCR_EN);
+					while(%<rx_dma_stream>->CR & DMA_SxCR_EN);
+				}
+				%<rx_dma_stream>->CR = %<dma_channel> | DMA_MDATAALIGN_BYTE | DMA_PDATAALIGN_BYTE | DMA_MINC_ENABLE | DMA_PINC_DISABLE | DMA_PERIPH_TO_MEMORY | DMA_CIRCULAR;
+				%<rx_dma_stream>->PAR = (uint32_t)&%<uart_name>->RDR;	
+			%closefile buffer		
+			%<LibMdlRegCustomCode(buffer, "execution")>
+		%endif
+				
 	%else
 		%<LibReportFatalError("Serial DMA Config Block not supported by this target")>
 	%endif
