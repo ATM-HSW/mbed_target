@@ -179,4 +179,94 @@
 </OBJECT>
 </UL>
 </UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Random Number Generator">
+    <param name="Local" value="chapters/Random_Number_Generator_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Random_Number_Generator_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Random_Number_Generator_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Random_Number_Generator_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Random_Number_Generator_en.html#parameters-and-dialog-box">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="GPIO Runtime">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Port Name">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html#port-name">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Pin Number">
+    <param name="Local" value="chapters/Gpio_Runtime_en.html#pin-number">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="DAC Runtime">
+    <param name="Local" value="chapters/Dac_Runtime_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Port Name">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#port-name">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Pin Number">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#pin-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="DAC Value">
+    <param name="Local" value="chapters/Dac_Runtime_en.html#dac-value">
+</OBJECT>
+</UL>
+</UL>
 </UL></BODY></HTML>

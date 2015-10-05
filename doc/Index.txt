@@ -16,6 +16,9 @@ Contents:
    chapters/Serial_Dma_Config_en
    chapters/Serial_Dma_Read_en
    chapters/Serial_Dma_Write_en
+   chapters/Random_Number_Generator_en
+   chapters/Gpio_Runtime_en
+   chapters/Dac_Runtime_en
 
 
 Indices and tables

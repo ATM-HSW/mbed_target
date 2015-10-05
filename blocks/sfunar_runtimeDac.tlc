@@ -1,0 +1,67 @@
+%% File : sfunar_runtimeDac.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_runtimeDac "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
+  %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
+
+  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign name = FEVAL("strrep",name," ","_")
+  %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
+
+  %if !SLibCodeGenForSim()
+    %%
+	%<name>.write(0.0f);
+    %%
+  %endif
+
+  %if !SLibCodeGenForSim()
+      %openfile declbuf
+
+      AnalogOut %<name>(%<pname>);
+
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%%
+%function Outputs(block, system) Output
+
+  %assign Dacvalue = LibBlockParameterValue(DacValue, 0)
+  
+  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign name = FEVAL("strrep",name," ","_")
+  
+  %if !SLibCodeGenForSim()
+
+  %% High setzen des Pins am Anfang eines Subsystems
+	%openfile buffer
+		real32_T %<name>_old = %<name>.read();
+		%<name>.write(%<Dacvalue>);		
+	%closefile buffer
+	%<LibSystemOutputCustomCode(system, buffer, "header")>
+	
+  %% LOW setzen des Pins am Anfang eines Subsystems
+	%openfile buffer
+		%<name>.write(%<name>_old);		
+	%closefile buffer
+	%<LibSystemOutputCustomCode(system, buffer, "trailer")>
+
+  %endif
+%endfunction

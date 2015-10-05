@@ -14,6 +14,9 @@ mex sfunar_Interrupt.c
 mex sfunar_lcdOutput.c
 mex sfunar_mailReceive.c
 mex sfunar_mailSend.c
+mex sfunar_randomNumber.c
+mex sfunar_runtimeGpio.c
+mex sfunar_runtimeDac.c
 mex sfunar_serialConfig.c
 mex sfunar_serialDmaConfig.c
 mex sfunar_serialDmaRead.c
