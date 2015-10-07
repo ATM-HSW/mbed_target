@@ -89,7 +89,7 @@ double mcp3428_calculateVoltage(uint16_t data, uint8_t conf){
 
 	uint8_t sampleRate = (conf >> 2) & 3;
 
-	const double lsbs_uV[4] = {1000, 250, 65.5, 0}; // lsb in uV depending on sampleRate
+	const double lsbs_uV[4] = {1000, 250, 62.5, 0}; // lsb in uV depending on sampleRate
 	double lsb_uV = lsbs_uV[sampleRate];
 	double result = data * lsb_uV / gain / 1000 / 1000;
 	return result;
