@@ -1,0 +1,53 @@
+OpenOCD Configuration
+=====================
+
+This section shows how to set up OpenOCD in order to program STM32 MCUs via the ST-Link debug adapter from a RaspberryPI. (should work the same with any other PC) 
+
+Dependencies
+------------
+
+Before you can start building OpenOCD some other tools must be installed. To do so type the following command into your terminal window.::
+
+	sudo apt-get install libtool pkg-config autoconf automake texinfo
+
+Get OpenOCD
+-----------
+
+Next step is to create a directory and clone the OpenOCD git repository into it.::
+	
+	mkdir ~/myopenocd_repo
+	
+	cd myopenocd_repo
+
+	git clone git://repo.or.cz/openocd.git openocd.git
+	
+	cd openocd.git
+	
+Setup and build OpenOCD
+-----------------------
+
+To setup and build OpenOCD execute the following commands.::
+
+	./bootstrap
+	
+	./configure --enable-stlink
+	
+	make
+	
+	sudo make install
+	
+Make sure that the option ``--enable-stlink`` is chosen otherwise OpenOCD is build without ST-Link support. After ``./configure`` has finished check the output if ST-Link is enabled if so you can continue with the ``make`` command
+	
+.. image:: ../images/openocd_configure.png
+	:scale: 80 %
+
+After all commands execute properly you can now use OpenOCD for debuging and flashing MCUs.
+
+Writing a program to internal flash memory
+------------------------------------------
+
+Executing the following command writes a binary into the internal flash memory of an STM32F4 MCU.::
+	
+	openocd -f interface/stlink-v2.cfg -f target/stm32f4x.cfg \	
+	-c init -c targets -c "halt" -c "flash write_image erase test.bin 0x08000000" \	
+	-c "verify_image test.bin" -c "reset run" -c shutdown

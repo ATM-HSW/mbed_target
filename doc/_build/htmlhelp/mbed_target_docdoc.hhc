@@ -24,6 +24,46 @@
 </OBJECT>
 </UL>
 <LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="OpenOCD Configuration">
+    <param name="Local" value="chapters/OpenOCD_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Dependencies">
+    <param name="Local" value="chapters/OpenOCD_en.html#dependencies">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Get OpenOCD">
+    <param name="Local" value="chapters/OpenOCD_en.html#get-openocd">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Setup and build OpenOCD">
+    <param name="Local" value="chapters/OpenOCD_en.html#setup-and-build-openocd">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Writing a program to internal flash memory">
+    <param name="Local" value="chapters/OpenOCD_en.html#writing-a-program-to-internal-flash-memory">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="VisualGDB">
+    <param name="Local" value="chapters/VisualGDB_de.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Vorbereitung">
+    <param name="Local" value="chapters/VisualGDB_de.html#vorbereitung">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Durchführung">
+    <param name="Local" value="chapters/VisualGDB_de.html#durchfuhrung">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Projekteinstellungen">
+    <param name="Local" value="chapters/VisualGDB_de.html#projekteinstellungen">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
     <param name="Name" value="Encoder Input">
     <param name="Local" value="chapters/Encoder_Input_en.html">
 </OBJECT>

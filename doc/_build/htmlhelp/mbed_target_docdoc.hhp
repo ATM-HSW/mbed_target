@@ -24,12 +24,14 @@ chapters\block_template.html
 chapters\Dac_Runtime_en.html
 chapters\Encoder_Input_en.html
 chapters\Gpio_Runtime_en.html
+chapters\OpenOCD_en.html
 chapters\Random_Number_Generator_en.html
 chapters\Serial_Dma_Config_en.html
 chapters\Serial_Dma_Read_en.html
 chapters\Serial_Dma_toc.html
 chapters\Serial_Dma_Write_en.html
 chapters\Spi_Dma_Config_en.html
+chapters\VisualGDB_de.html
 _static\ajax-loader.gif
 _static\alabaster.css
 _static\alert_info_32.png

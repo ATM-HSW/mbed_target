@@ -12,6 +12,8 @@ Contents:
    :maxdepth: 1
 
    getting_started
+   chapters/OpenOCD_en
+   chapters/VisualGDB_de
    chapters/Encoder_Input_en
    chapters/Serial_Dma_Config_en
    chapters/Serial_Dma_Read_en
