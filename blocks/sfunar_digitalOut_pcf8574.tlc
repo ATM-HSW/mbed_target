@@ -1,0 +1,81 @@
+%% File : sfunar_digitalOut_pcf8574.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_digitalOut_pcf8574 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("pcf8574.h")>
+  %<LibAddToModelSources("pcf8574")>
+  
+  %assign ::PCF8574_instances  = CAST("Number",0)
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+      %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+	  %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1
+	  
+      %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+
+	  %if !(::PCF8574_instances & (1<<subaddress_val))
+        %openfile declbuf
+
+        PCF8574 pcf8574_%<subaddress_val>(&%<i2c_name>, %<subaddress_val>);
+
+        %closefile declbuf
+        %assign srcFile = LibGetModelDotCFile()
+        %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+		
+		%assign ::PCF8574_instances = ::PCF8574_instances | (1<<subaddress_val)
+	  %endif
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign channel_val = CAST("Number",LibBlockParameterValue(Channel, 0)) - 1
+  %assign enableerror_val = CAST("Number",LibBlockParameterValue(EnableError, 0))
+  %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1  
+  %assign pinnumber_val = CAST("Number",LibBlockParameterValue(PinNumber, 0))-1
+  
+  %if !SLibCodeGenForSim()
+  
+    %if pinnumber_val < 8
+		%if enableerror_val == 1
+			%<LibBlockOutputSignal(0, "", "", 0)> = pcf8574_%<subaddress_val>.set_pin(%<pinnumber_val>, %<LibBlockOutputSignal(0, "", "", 0)>);
+		%else
+			pcf8574_%<subaddress_val>.set_pin(%<pinnumber_val>, %<LibBlockOutputSignal(0, "", "", 0)>);
+		%endif
+	%else		
+		%if enableerror_val == 1
+			%<LibBlockOutputSignal(0, "", "", 0)> = pcf8574_%<subaddress_val>.set_port(%<LibBlockOutputSignal(0, "", "", 0)>);
+		%else
+			pcf8574_%<subaddress_val>.set_port(%<LibBlockOutputSignal(0, "", "", 0)>);
+		%endif
+	%endif
+
+  %endif
+%endfunction
