@@ -21,6 +21,9 @@ Contents:
    chapters/Random_Number_Generator_en
    chapters/Gpio_Runtime_en
    chapters/Dac_Runtime_en
+   chapters/MPU9250_6_DoF_Motion_Sensor_en
+   chapters/AK8963_3_DoF_Motion_Sensor_en
+   chapters/Digital_Pressure_Sensor_en
 
 
 Indices and tables

@@ -309,4 +309,108 @@
 </OBJECT>
 </UL>
 </UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MPU9250 6 DoF Motion Sensor">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sample time">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#sample-time">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Bus">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#i2c-bus">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sub Address">
+    <param name="Local" value="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#sub-address">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="AK8963 3 DoF Motion Sensor">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sample time">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#sample-time">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Bus">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#i2c-bus">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sub Address">
+    <param name="Local" value="chapters/AK8963_3_DoF_Motion_Sensor_en.html#sub-address">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Digital Pressure Sensor">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sample time">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html#sample-time">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Bus">
+    <param name="Local" value="chapters/Digital_Pressure_Sensor_en.html#i2c-bus">
+</OBJECT>
+</UL>
+</UL>
 </UL></BODY></HTML>

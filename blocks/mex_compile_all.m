@@ -40,13 +40,11 @@ mex sfunar_serialWriteBlock.c
 %%
 
 %% MCP3428
-mex sfunar_adcMcp3428Config.c
-mex sfunar_analogInput_mcp3428.c
+mex sfunar_analogIn_mcp3428.c
 %%
 
 %% MCP4728
-mex sfunar_adcMcp4728Config.c
-mex sfunar_analogOutput_mcp4728.c
+mex sfunar_analogOut_mcp4728.c
 %%
 
 %% MAX11300
@@ -68,9 +66,8 @@ mex sfunar_mcp4822Config.c
 %%
 
 %% PCF8574
-mex sfunar_digitalInput_pcf8574.c
-mex sfunar_digitalOutput_pcf8574.c
-mex sfunar_pcf8574Config.c
+mex sfunar_digitalIn_pcf8574.c
+mex sfunar_digitalOut_pcf8574.c
 %%
 
 %% FRAM I2C
@@ -88,7 +85,6 @@ mex sfunar_spiFram_write.c
 %% Temperature Sensors
 mex sfunar_temperature_tmp102.c
 mex sfunar_temperature_tmp123.c
-mex sfunar_tmp102Config.c
 mex sfunar_tmp123Config.c
 %%
 
@@ -104,3 +100,14 @@ mex sfunar_DataloggerSDCard.c
 mex sfunar_ds3231.c
 %%
 
+%% MPU9250 Gyro and Accel
+mex sfunar_mpu9250.c
+%%
+
+%% AK8963 Magnetometer
+mex sfunar_ak8963.c
+%%
+
+%% BMP180
+mex sfunar_bmp180.c
+%%

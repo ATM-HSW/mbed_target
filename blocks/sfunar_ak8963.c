@@ -1,11 +1,7 @@
-
-/* Copyright 2014 Dr.O.Hagendorf, HS Wismar  */
-/* PCF8574 Modifications by Axel Utech 2014, HS Wismar */
-
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_digitalInput_pcf8574
+#define S_FUNCTION_NAME                sfunar_ak8963
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -41,7 +37,7 @@ static void mdlCheckParameters(SimStruct *S)
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 0, "i2cbus", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 
   /*
@@ -87,12 +83,14 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-  
+    /*
+   * Check the parameter 3
+   */
   if EDIT_OK(S, 2) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+    ssCheckSFcnParamValueAttribs(S, 2, "SubAddress", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 }
 
@@ -106,7 +104,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   int errorOutputEnable;
-    
+ 
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 3);
 
@@ -133,45 +131,47 @@ static void mdlInitializeSizes(SimStruct *S)
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 1);
   ssSetSFcnParamTunable(S, 1, 0);
-  ssSetSFcnParamTunable(S, 2, 1);
-
+  ssSetSFcnParamTunable(S, 2, 0);
+    
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
     return;
 
-  errorOutputEnable = mxGetScalar(ssGetSFcnParam(S,2));
   /*
    * Set the number of input ports.
    */
-  if (!ssSetNumInputPorts(S, 0))
+  if (!ssSetNumInputPorts(S, 0))            
     return;
 
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 1+errorOutputEnable))
+  if (!ssSetNumOutputPorts(S, 3))          
     return;
 
   /*
    * Configure the output port 1
    */
-  ssSetOutputPortDataType(S, 0, SS_BOOLEAN);
+  ssSetOutputPortDataType(S, 0, SS_DOUBLE);
   ssSetOutputPortWidth(S, 0, 1);
   ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 1);
+
+    ssSetOutputPortDataType(S, 1, SS_DOUBLE);               
+  ssSetOutputPortWidth(S, 1, 1);
+  ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 1, 1);
   
-  if(errorOutputEnable){
-      /*
-       * Configure the output port 2
-       */
-      ssSetOutputPortDataType(S, 1, SS_BOOLEAN);
-      ssSetOutputPortWidth(S, 1, 1);
-      ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
-      ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-      ssSetOutputPortOutputExprInRTW(S, 1, 1);
-  }
+    ssSetOutputPortDataType(S, 2, SS_DOUBLE);
+  ssSetOutputPortWidth(S, 2, 1);
+  ssSetOutputPortComplexSignal(S, 2, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 2, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 2, 1);
+
+
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -245,9 +245,9 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "boolean"));
-
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "i2cbus", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SampleTime", ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "SubAddress", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif

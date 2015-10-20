@@ -1,6 +1,9 @@
+%% File : sfunar_temperature_tmp102_.tlc
+%%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
-%% TMP102 Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
 
 %implements sfunar_temperature_tmp102 "C"
 
@@ -11,6 +14,9 @@
 
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %<LibAddToCommonIncludes("tmp102.h")>
+  %<LibAddToModelSources("tmp102")>
 
 %endfunction
 
@@ -27,9 +33,25 @@
 %function Start(block, system) Output
 
   %if !SLibCodeGenForSim()
-    #if !defined(TMP102_ADDR_DEVICE)
-        #error "No TMP102 defined! Add a \"TMP102-Config\" Block!"
-    #endif
+      %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+	  %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1
+	  %assign samplerate_val = CAST("Number",LibBlockParameterValue(SampleRate, 0))-1
+      %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+	  
+	  %openfile declbuf
+	  
+		TMP102 tmp102_%<subaddress_val>(&%<i2c_name>, %<subaddress_val>);
+		
+	  %closefile declbuf
+	  %assign srcFile = LibGetModelDotCFile()
+	  %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+	  
+	  %if samplerate_val == 4
+		tmp102_%<subaddress_val>.configure(TMP102_SHUTDOWN, TMP102_COMPARATOR, TMP102_13BIT, TMP102_RATE_4HZ);
+	  %else
+	    tmp102_%<subaddress_val>.configure(TMP102_CONTINUOUS, TMP102_COMPARATOR, TMP102_13BIT, %<samplerate_val>);
+      %endif
+	  
   %endif
 %endfunction
 
@@ -37,20 +59,17 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
-  %if !SLibCodeGenForSim()
-      %assign p1_val = LibBlockParameterValue(p1, 0)
-      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
-      %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
-    %assign errorOutputEnable = LibBlockParameterValue(p2, 0)
-    %if errorOutputEnable
-        %assign ret_assign = LibBlockOutputSignal(2, "", "", 0) + "= !"
-    %else
-        %assign ret_assign = "(void)"
-    %endif
-      %%
-        %<ret_assign> tmp102_getTemperature(&%<y1_val>);
-        %<y1_val> = tmp102_shiftResult(%<y1_val>);
-        %<y2_val> = tmp102_convertTemp(%<y1_val>);
-      %%
+  %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1
+  %assign y1_addr = LibBlockOutputSignalAddr(0, "", "", 0)
+  %assign enableerror_val = LibBlockParameterValue(EnableError, 0)
+  
+  
+  %if !SLibCodeGenForSim()    
+    
+	%if enableerror_val == 1
+	  %<LibBlockOutputSignal(1, "", "", 0)> = tmp102_%<subaddress_val>.get_temp(%<y1_addr>);
+	%else
+      tmp102_%<subaddress_val>.get_temp(%<y1_addr>);	
+	%endif
   %endif
 %endfunction

@@ -47,23 +47,23 @@ bool TMP102::get_temp(float *temp)
     if(read(TMP102_TEMP_REG, &data))
         return true;
 
-
-    if(data & 0x1000)
+    if(data & 0x80)
     {
         if(config[2] & 0x10)
-            data = 0xf000 | (data >> 3);
+            data = ((data >> 11) | (data << 5)) & 0x1fff;
         else
-            data = 0xf000 | (data >> 4);
+            data = (data >> 12) | (data << 4);
 
+        data |= 0xf000;
         data = (~data) + 1;
         *temp = (float)data * -0.0625f;
     }
     else
     {
         if(config[2] & 0x10)
-            data = data >> 3;
+            data = ((data >> 11) | (data << 5)) & 0x1fff;
         else
-            data = data >> 4;
+            data = (data >> 12) | (data << 4);
 
         *temp = (float)data * 0.0625f;
     }
@@ -85,7 +85,7 @@ bool TMP102::configure(uint8_t continuous, uint8_t thermostat, uint8_t extended,
 
     config[2] = ((rate & 0x3) << 6) | ((extended & 0x1) << 4);
 
-    if(extended)
+    if(continuous)
         oneshot = 1;
     else
         oneshot = 0;

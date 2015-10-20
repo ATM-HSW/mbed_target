@@ -41,8 +41,12 @@
 	  %if !(::PCF8574_instances & (1<<subaddress_val))
         %openfile declbuf
 
-        PCF8574 pcf8574_%<subaddress_val>(&%<i2c_name>,%<subaddress_val>);
-
+		%if subaddress_val > 7
+          PCF8574A pcf8574_%<subaddress_val>(&%<i2c_name>, (%<subaddress_val-8> << 1));
+		%else
+          PCF8574 pcf8574_%<subaddress_val>(&%<i2c_name>, (%<subaddress_val> << 1));
+		%endif
+		
         %closefile declbuf
         %assign srcFile = LibGetModelDotCFile()
         %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
@@ -56,7 +60,6 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
-  %assign channel_val = CAST("Number",LibBlockParameterValue(Channel, 0)) - 1
   %assign enableerror_val = CAST("Number",LibBlockParameterValue(EnableError, 0))
   %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1  
   %assign pinnumber_val = CAST("Number",LibBlockParameterValue(PinNumber, 0))-1
