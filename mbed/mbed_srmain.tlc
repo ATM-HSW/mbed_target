@@ -47,6 +47,14 @@
   #define STEP_SIZE_US %<SampleRate_us>F /* Sample Time in microseconds */
   #define STEP_SIZE_MS %<SampleRate_ms>F /* and in milliseconds */
 
+  #if (defined(TARGET_STM32L053R8) || defined(TARGET_STM32L053C8)) && defined(TOOLCHAIN_GCC)
+    #define STACK_SIZE DEFAULT_STACK_SIZE/2
+  #elif (defined(TARGET_STM32F030R8) || defined(TARGET_STM32F070RB) || defined(TARGET_STM32F042K6)) && defined(TOOLCHAIN_GCC)
+    #define STACK_SIZE DEFAULT_STACK_SIZE/2
+  #else
+    #define STACK_SIZE DEFAULT_STACK_SIZE
+  #endif
+  
   %if UseMbedRTOS
     osThreadId step_id;
   %else
@@ -86,7 +94,7 @@
     /* with RTOS */
     int main(void) {
       
-      Thread step_1_thread(step_thread, NULL, osPriorityNormal, DEFAULT_STACK_SIZE);
+      Thread step_1_thread(step_thread, NULL, osPriorityNormal, STACK_SIZE);
       RtosTimer step_1_timer(step_callback, osTimerPeriodic, (void *)0);
       %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_loc_decl")>
       %<LibGetSourceFileCustomSection(cFile,"Ert_main_loc_decl")>
