@@ -6,7 +6,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_analogInput_mcp3428
+#define S_FUNCTION_NAME                sfunar_analogIn_mcp3428
 #define S_FUNCTION_LEVEL               2
 
 /*

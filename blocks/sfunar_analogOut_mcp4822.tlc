@@ -1,10 +1,10 @@
-%% File : sfunar_temperature_tmp123.tlc
+%% File : sfunar_analogOut_mcp4822.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2015 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements sfunar_temperature_tmp123 "C"
+%implements sfunar_analogOut_mcp4822 "C"
 
 %include "block_common_includes.tlc"
 
@@ -14,15 +14,15 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
-  %<LibAddToCommonIncludes("tmp123.h")>
-  %<LibAddToModelSources("tmp123")>
+  %<LibAddToCommonIncludes("mcp4822.h")>
+  %<LibAddToModelSources("mcp4822")>
   
-  %% global variable containing the CS Port and Pin Values used by any TMP123 block
+  %% global variable containing the CS Port and Pin Values used by any MCP4822_CS block
   %% lower 16 Bit contain pin number 
   %% upper 16 Bit contain port number
   %% example: 0b 00000000 00000001 00000000 00000001 = PA_0
   %%          0b 00000000 00001000 01000000 00000000 = PD_14
-  %assign ::TMP123_CS = CAST("Number",0)
+  %assign ::MCP4822_CS = CAST("Number",0)
   
 %endfunction
 
@@ -45,16 +45,16 @@
 	  %assign pname = "P" + FEVAL("char",csport_val+64) + "_" + FEVAL("int2str",cspin_val)
 	  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
 	  
-	  %if !((::TMP123_CS & ((1<<(csport_val+15)) | (1<<cspin_val))) == ((1<<(csport_val+15)) | (1<<cspin_val)))
+	  %if !((::MCP4822_CS & ((1<<(csport_val+15)) | (1<<cspin_val))) == ((1<<(csport_val+15)) | (1<<cspin_val)))
         %openfile declbuf
 		
-        TMP123 tmp123_%<instance>(&spi%<spiport_val>,%<pname>);
+        MCP4822 mcp4822_%<instance>(&spi%<spiport_val>,%<pname>);
 
         %closefile declbuf
         %assign srcFile = LibGetModelDotCFile()
         %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 		
-		%assign ::TMP123_CS = ::TMP123_CS | ((1<<(csport_val+15)) | (1<<cspin_val))
+		%assign ::MCP4822_CS = ::MCP4822_CS | ((1<<(csport_val+15)) | (1<<cspin_val))
 	  %endif
   %endif
 %endfunction
@@ -63,15 +63,36 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
+  %assign channel_val = CAST("Number",LibBlockParameterValue(Channel, 0)) - 1
+  %assign mode_val = CAST("Number",LibBlockParameterValue(Mode, 0))   
+  %assign gain_val = CAST("Number",LibBlockParameterValue(Gain, 0))-1
   %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
   %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1 
   
   
   %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
   
+  %if gain_val == 0
+	%assign gain_val = 1
+  %else
+    %assign gain_val = 0
+  %endif
+  
+  
   %if !SLibCodeGenForSim()
-
-	%<LibBlockOutputSignal(0, "", "", 0)> = tmp123_%<instance>.get_temp();
+    %switch mode_val
+	  %case 1 %% RAW MODE
+		mcp4822_%<instance>.write_raw(%<channel_val>, %<gain_val>, MCP4822_POWER_ON, %<LibBlockInputSignal(0, "", "", 0)>);
+		%break
+		
+	  %case 2 %% VOLTAGE MODE
+		mcp4822_%<instance>.write_voltage(%<channel_val>, %<gain_val>, MCP4822_POWER_ON, %<LibBlockInputSignal(0, "", "", 0)>);
+		%break
+		
+	  %case 3 %% RELATIVE MODE
+		mcp4822_%<instance>.write_relative(%<channel_val>, %<gain_val>, MCP4822_POWER_ON, %<LibBlockInputSignal(0, "", "", 0)>);
+		%break
+	%endswitch
 
   %endif
 %endfunction

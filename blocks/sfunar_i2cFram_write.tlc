@@ -1,6 +1,8 @@
+%% File : sfunar_i2cFram_write.tlc
+%%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
-%% FRAM Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements sfunar_i2cFram_write "C"
 
@@ -12,42 +14,41 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
+  %<LibAddToCommonIncludes("fm24cl16b.h")>
+  %<LibAddToModelSources("fm24cl16b")>
+  
+  %assign ::FM24CL16B_instances  = CAST("Number",0)
+
 %endfunction
 
 
 %% Function: BlockInstanceSetup ===========================================
 %function BlockInstanceSetup(block, system) void
   %%
-%%  %<LibBlockSetIsExpressionCompliant(block)> 
+  %<LibBlockSetIsExpressionCompliant(block)>
   %%
 %endfunction
 
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
-      %assign readContinous = LibBlockParameterValue(p1, 0)
   %if !SLibCodeGenForSim()
-    #if !defined(I2C_FRAM_BASEADDR)
-        #error "No I2C FRAM defined! Add a \"FRAM-Config\" Block!"
-    #endif
-    %if !readContinous
-        %assign name = FEVAL("strrep",FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_"), " ", "_")    
+      %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+	  
+      %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+      %assign name = FEVAL("strrep",FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_"), " ", "_")
 
+	  %if !(::FM24CL16B_instances == 1)
         %openfile declbuf
-        %%
-         bool %<name>_staticSuccess;
+
+        FM24CL16B fm24cl16b(&%<i2c_name>);
+
         %closefile declbuf
         %assign srcFile = LibGetModelDotCFile()
-        %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
-    
-        %assign u1_val = LibBlockInputSignal(0, "", "", 0)
-        %assign u2_val = LibBlockInputSignal(1, "", "", 0)
-        %assign u3_val = LibBlockInputSignal(2, "", "", 0)
-        
-        %<name>_staticSuccess = fram_write(%<u1_val>, %<u2_val>, &%<u3_val>, 1);
-        
-    %endif
+        %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+		
+		%assign ::FM24CL16B_instances = 1
+	  %endif
   %endif
 %endfunction
 
@@ -55,29 +56,15 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
+ %assign enableerror_val = CAST("Number",LibBlockParameterValue(EnableError, 0))
+ 
   %if !SLibCodeGenForSim()
-      %assign readContinous = LibBlockParameterValue(p1, 0)
 
-    %assign errorOutputEnable = LibBlockParameterValue(p2, 0)
-    %if errorOutputEnable
-        %assign ret_assign = LibBlockOutputSignal(0, "", "", 0) + "= !"
-    %else
-        %assign ret_assign = "(void)"
-    %endif
-
-
-    %if !readContinous
-        %assign name = FEVAL("strrep",FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_"), " ", "_")    
-        %<ret_assign> %<name>_staticSuccess;
-        
-    %else
-        %assign u1_val = LibBlockInputSignal(0, "", "", 0)
-        %assign u2_val = LibBlockInputSignal(1, "", "", 0)
-        %assign u3_val = LibBlockInputSignal(2, "", "", 0)
-        %<ret_assign> fram_write(%<u1_val>, %<u2_val>, &%<u3_val>, 1);
-    %endif
-
-      %%
-      %%
+	%if enableerror_val == 1
+	  %<LibBlockOutputSignal(0, "", "", 0)> = fm24cl16b.write_byte(%<LibBlockInputSignal(0, "", "", 0)>, %<LibBlockInputSignal(1, "", "", 0)>);
+	%else
+	  fm24cl16b.write_byte(%<LibBlockInputSignal(0, "", "", 0)>, %<LibBlockInputSignal(1, "", "", 0)>);
+	%endif
+	
   %endif
 %endfunction

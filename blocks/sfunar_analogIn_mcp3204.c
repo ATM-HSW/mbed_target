@@ -1,12 +1,12 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /* Copyright 2014 Dr.O.Hagendorf, HS Wismar  */
-/* TMP123 Modifications by Axel Utech 2014, HS Wismar */
 /* Copyright 2015 M. Marquardt, HS Wismar  */
+
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_tmp123Config
+#define S_FUNCTION_NAME                sfunar_analogIn_mcp3204
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -30,7 +30,7 @@
 static void mdlCheckParameters(SimStruct *S)
 {
   /*
-   * Check the parameter 1
+   * Check the parameter 1 SpiPort
    */
   if EDIT_OK(S, 0) {
     int_T dimsArray[2] = { 1, 1 };
@@ -39,7 +39,7 @@ static void mdlCheckParameters(SimStruct *S)
     ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
   /*
-   * Check the parameter 2
+   * Check the parameter 2 CsPort
    */
   if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
@@ -48,13 +48,40 @@ static void mdlCheckParameters(SimStruct *S)
     ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
   /*
-   * Check the parameter 3 (SpiPort)
+   * Check the parameter 3 CsPin
    */
   if EDIT_OK(S, 2) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 4 Channel
+   */
+  if EDIT_OK(S, 3) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 3, "P4", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 5 Mode
+   */
+  if EDIT_OK(S, 4) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 4, "P5", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 6 InputType
+   */
+  if EDIT_OK(S, 5) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 5, "P6", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
 }
 
@@ -68,8 +95,9 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 6);
 
+  
 #if defined(MATLAB_MEX_FILE)
 
   if (ssGetNumSFcnParams(S) == ssGetSFcnParamsCount(S)) {
@@ -90,10 +118,14 @@ static void mdlInitializeSizes(SimStruct *S)
 
 #endif
 
+  
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 0);
-  ssSetSFcnParamTunable(S, 1, 0);
-  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 0, 0);	// SpiPort
+  ssSetSFcnParamTunable(S, 1, 0);	// CsPort
+  ssSetSFcnParamTunable(S, 2, 0);	// CsPin
+  ssSetSFcnParamTunable(S, 3, 0);	// Channel
+  ssSetSFcnParamTunable(S, 4, 0);	// Mode
+  ssSetSFcnParamTunable(S, 5, 0);	// InputType
 
   ssSetNumPWork(S, 0);
 
@@ -105,13 +137,24 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 0))
     return;
-
+    
+ 
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 0))
-    return;
+  if (!ssSetNumOutputPorts(S, 1))
+    return;   
 
+	if(mxGetScalar(ssGetSFcnParam(S,4)) > 1)		  
+		ssSetOutputPortDataType(S, 0, SS_SINGLE);
+	else
+		ssSetOutputPortDataType(S, 0, SS_INT16);
+	ssSetOutputPortWidth(S, 0, 1);
+	ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+	ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+	ssSetOutputPortOutputExprInRTW(S, 0, 1);
+  
+  
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -172,12 +215,19 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 3))
+  if (!ssSetNumRunTimeParams(S, 6))
     return;
 
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "int8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "p2", ssGetDataTypeId(S, "int8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "SpiPort", SS_UINT8);
+  /*
+   * Register the run-time parameter 1
+   */
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SpiPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "CsPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "CsPin", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "Channel", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "Mode", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "InputType", ssGetDataTypeId(S, "uint8"));
+
 }
 
 #endif
@@ -218,6 +268,49 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 static void mdlTerminate(SimStruct *S)
 {
     UNUSED_PARAMETER(S);
+}
+
+#define MDL_RTW
+#if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
+
+/* Function: mdlRTW =======================================================
+ * Abstract:
+ *    This function is called when the Real-Time Workshop is generating
+ *    the model.rtw file.
+ */
+static void mdlRTW(SimStruct *S)
+{
+    UNUSED_PARAMETER(S);
+}
+
+#endif
+
+/* Function: IsRealMatrix =================================================
+ * Abstract:
+ *      Verify that the mxArray is a real (double) finite matrix
+ */
+static bool IsRealMatrix(const mxArray * const m)
+{
+  if (mxIsNumeric(m) &&
+      mxIsDouble(m) &&
+      !mxIsLogical(m) &&
+      !mxIsComplex(m) &&
+      !mxIsSparse(m) &&
+      !mxIsEmpty(m) &&
+      mxGetNumberOfDimensions(m) == 2) {
+    const real_T * const data = mxGetPr(m);
+    const size_t numEl = mxGetNumberOfElements(m);
+    size_t i;
+    for (i = 0; i < numEl; i++) {
+      if (!mxIsFinite(data[i])) {
+        return(false);
+      }
+    }
+
+    return(true);
+  } else {
+    return(false);
+  }
 }
 
 /*

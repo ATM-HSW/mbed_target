@@ -44,6 +44,7 @@
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
     
     %%
+	spi%<spiport_val>.format(8,0);
     spi%<spiport_val>.frequency(%<freq>);
     %%
   %endif

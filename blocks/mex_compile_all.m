@@ -56,13 +56,11 @@ mex sfunar_max11300Config.c
 mex sfunar_temperature_max11300.c
 
 %% MCP3204
-mex sfunar_analogInput_mcp3204.c
-mex sfunar_mcp3204Config.c
+mex sfunar_analogIn_mcp3204.c
 %%
 
 %% MCP4822
-mex sfunar_analogOutput_mcp4822.c
-mex sfunar_mcp4822Config.c
+mex sfunar_analogOut_mcp4822.c
 %%
 
 %% PCF8574
@@ -71,13 +69,11 @@ mex sfunar_digitalOut_pcf8574.c
 %%
 
 %% FRAM I2C
-mex sfunar_i2cFramConfig.c
 mex sfunar_i2cFram_read.c
 mex sfunar_i2cFram_write.c
 %%
 
 %% FRAM SPI
-mex sfunar_spiFramConfig.c
 mex sfunar_spiFram_read.c
 mex sfunar_spiFram_write.c
 %%
@@ -85,7 +81,6 @@ mex sfunar_spiFram_write.c
 %% Temperature Sensors
 mex sfunar_temperature_tmp102.c
 mex sfunar_temperature_tmp123.c
-mex sfunar_tmp123Config.c
 %%
 
 %% Display MI0283
