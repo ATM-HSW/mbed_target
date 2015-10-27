@@ -41,12 +41,12 @@ classdef Signal < Simulink.Signal
   % - Launch the cscdesigner for this package.
   %     >> cscdesigner('packageName');
   %
-  % methods
-  %   function setupCoderInfo(h)
-  %     % Use custom storage classes from this package
-  %     useLocalCustomStorageClasses(h, 'packageName');
-  %   end
-  % end % methods
+  methods
+    function setupCoderInfo(h)
+      % Use custom storage classes from this package
+      useLocalCustomStorageClasses(h, 'mbed_csc');
+    end
+  end % methods
   
   methods (Access=protected)
     %---------------------------------------------------------------------------

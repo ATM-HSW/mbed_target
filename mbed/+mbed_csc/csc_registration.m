@@ -13,7 +13,7 @@ function defs = csc_registration(action)
 % - Hand modification of this file is not recommended as it may prevent the
 %   Simulink custom storage class designer from loading the associated classes.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% - Generated on:   29-Sep-2015 22:06:52
+% - Generated on:   27-Oct-2015 20:20:33
 % - MATLAB version: 8.5.0.197613 (R2015a)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -27,12 +27,12 @@ switch action
     set(h, 'Name', 'SDRAM');
     set(h, 'OwnerPackage', 'mbed_csc');
     set(h, 'CSCType', 'Unstructured');
-    set(h, 'MemorySection', 'Default');
+    set(h, 'MemorySection', 'SDRAM');
     set(h, 'IsMemorySectionInstanceSpecific', false);
     set(h, 'IsGrouped', false);
         set(h.DataUsage, 'IsParameter', true);
         set(h.DataUsage, 'IsSignal', true);
-    set(h, 'DataScope', 'Exported');
+    set(h, 'DataScope', 'Auto');
     set(h, 'IsDataScopeInstanceSpecific', false);
     set(h, 'IsAutosarPerInstanceMemory', false);
     set(h, 'DataInit', 'Auto');
@@ -138,12 +138,12 @@ switch action
     set(h, 'Name', 'Volatile');
     set(h, 'OwnerPackage', 'mbed_csc');
     set(h, 'CSCType', 'Unstructured');
-    set(h, 'MemorySection', 'MemVolatile');
+    set(h, 'MemorySection', 'SDRAM');
     set(h, 'IsMemorySectionInstanceSpecific', false);
     set(h, 'IsGrouped', false);
         set(h.DataUsage, 'IsParameter', true);
         set(h.DataUsage, 'IsSignal', true);
-    set(h, 'DataScope', 'Exported');
+    set(h, 'DataScope', 'Auto');
     set(h, 'IsDataScopeInstanceSpecific', false);
     set(h, 'IsAutosarPerInstanceMemory', false);
     set(h, 'DataInit', 'Auto');
@@ -151,7 +151,7 @@ switch action
     set(h, 'DataAccess', 'Direct');
     set(h, 'IsDataAccessInstanceSpecific', false);
     set(h, 'HeaderFile', '');
-    set(h, 'IsHeaderFileInstanceSpecific', true);
+    set(h, 'IsHeaderFileInstanceSpecific', false);
     set(h, 'Owner', '');
     set(h, 'IsOwnerInstanceSpecific', true);
     set(h, 'DefinitionFile', '');
@@ -473,6 +473,18 @@ switch action
     defs = [];
 
     h = Simulink.MemorySectionDefn;
+    set(h, 'Name', 'SDRAM');
+    set(h, 'OwnerPackage', 'mbed_csc');
+    set(h, 'Comment', '');
+    set(h, 'PragmaPerVar', true);
+    set(h, 'PrePragma', '');
+    set(h, 'PostPragma', '');
+    set(h, 'IsConst', false);
+    set(h, 'IsVolatile', false);
+    set(h, 'Qualifier', '__attribute__ ((section (".sdram")))');
+    defs = [defs; h];
+
+    h = Simulink.MemorySectionDefn;
     set(h, 'Name', 'MemConst');
     set(h, 'OwnerPackage', 'mbed_csc');
     set(h, 'Comment', '/* Const memory section */');
@@ -487,7 +499,7 @@ switch action
     h = Simulink.MemorySectionDefn;
     set(h, 'Name', 'MemVolatile');
     set(h, 'OwnerPackage', 'mbed_csc');
-    set(h, 'Comment', '/* Volatile memory section */');
+    set(h, 'Comment', '/* Volatile memory section 11*/');
     set(h, 'PragmaPerVar', false);
     set(h, 'PrePragma', '');
     set(h, 'PostPragma', '');
