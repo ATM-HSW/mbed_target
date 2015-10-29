@@ -1,0 +1,64 @@
+%% File : sfunar_max11300Config.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_max11300Config "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %<LibAddToCommonIncludes("max11300.h")>
+  %<LibAddToModelSources("max11300")>
+  
+  %% global variable containing the CS Port and Pin Values used by any MSP3204 block
+  %% lower 16 Bit contain pin number 
+  %% upper 16 Bit contain port number
+  %% example: 0b 00000000 00000001 00000000 00000001 = PA_0
+  %%          0b 00000000 00001000 01000000 00000000 = PD_14
+  %assign ::MAX11300_CS = CAST("Number",0)
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+      %assign spiport_val = CAST("Number",LibBlockParameterValue(SpiPort, 0))
+	  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  
+      %assign adcrate_val = CAST("Number",LibBlockParameterValue(AdcRate,0))-1
+      %assign dacref_val = CAST("Number",LibBlockParameterValue(DacRef,0))-1
+	  
+      %assign tempch0_val = CAST("Number",LibBlockParameterValue(TempCh0,0))	  
+      %assign tempch1_val = CAST("Number",LibBlockParameterValue(TempCh1,0))
+      %assign tempch2_val = CAST("Number",LibBlockParameterValue(TempCh2,0))
+	  
+	  %assign pname = "P" + FEVAL("char",csport_val+64) + "_" + FEVAL("int2str",cspin_val)
+	  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+      %if !((::MAX11300_CS & ((1<<(csport_val+15)) | (1<<cspin_val))) == ((1<<(csport_val+15)) | (1<<cspin_val)))
+        %openfile declbuf
+		
+        MAX11300 max11300_%<instance>(&spi%<spiport_val>,%<pname>);
+
+        %closefile declbuf
+        %assign srcFile = LibGetModelDotCFile()
+        %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+		
+		%assign ::MAX11300_CS = ::MAX11300_CS | ((1<<(csport_val+15)) | (1<<cspin_val))
+	  %endif
+
+	  %assign temp = (tempch0_val) | (tempch1_val << 1) | (tempch2_val << 2)
+	  
+	  max11300_%<instance>.config_device(%<adcrate_val>, %<dacref_val>, %<temp>);
+  %endif
+%endfunction

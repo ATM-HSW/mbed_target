@@ -23,15 +23,12 @@
 #define TMP102_CONTINUOUS   (0)
 #define TMP102_SHUTDOWN     (1)
 
-// thermostat (TM) Bit
 #define TMP102_COMPARATOR   (0)
 #define TMP102_INTERRUPT    (1)
 // extended mode Bit
 #define TMP102_12BIT        (0)
 #define TMP102_13BIT        (1)
 
-
-// change by user
 #define TMP102_FAULTQUEUE   (0) // Number of consecutive fault conditions valid 0 to 3 for 1, 2, 4, 6 consecutive fault events
 
 /****************************************

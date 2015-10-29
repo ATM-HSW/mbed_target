@@ -1,0 +1,54 @@
+%% File : sfunar_digitalOutput_max11300.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_digitalOutput_max11300 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  %%
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()  
+	  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  
+      %assign pin_val = CAST("Number",LibBlockParameterValue(Pin, 0))-1
+      %assign level_val = CAST("Number",LibBlockParameterValue(Level, 0))
+	  
+	  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+       max11300_%<instance>.write_dacRaw(%<pin_val>, %<level_val>);
+       max11300_%<instance>.config_pin(%<pin_val>, 3, 0, 0, 0, 0, 0);
+%endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+	  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+      %assign pin_val = CAST("Number",LibBlockParameterValue(Pin, 0))-1
+	  
+	  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+  %if !SLibCodeGenForSim()
+    %assign u_val = LibBlockInputSignal(0, "", "", 0)
+
+    max11300_%<instance>.setPin(%<pin_val>, %<u_val>);
+    %%
+  %endif
+%endfunction

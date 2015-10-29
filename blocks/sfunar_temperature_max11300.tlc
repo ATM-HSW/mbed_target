@@ -1,0 +1,44 @@
+%% File : sfunar_temperature_max11300.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_temperature_max11300 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+%%  %<LibBlockSetIsExpressionCompliant(block)> 
+  %%
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+	%assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	%assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  
+    %assign channel_val = CAST("Number",LibBlockParameterValue(Channel, 0))-1
+	
+	%assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	
+    %assign y_val = LibBlockOutputSignal(0, "", "", 0)				
+	
+	%<y_val> = max11300_%<instance>.read_temperature(%<channel_val>);
+
+  %endif
+%endfunction

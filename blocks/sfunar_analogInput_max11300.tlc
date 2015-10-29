@@ -1,0 +1,75 @@
+%% File : sfunar_analogInput_max11300.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_analogInput_max11300 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %%  %<LibBlockSetIsExpressionCompliant(block)> 
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+	%assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	%assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  
+    %assign inputtype_val = CAST("Number",LibBlockParameterValue(InputType, 0))-1	
+    %assign posPin = CAST("Number",LibBlockParameterValue(PosPin, 0))-1
+    %assign negPin = CAST("Number",LibBlockParameterValue(NegPin, 0))-1
+    %assign power = CAST("Number",LibBlockParameterValue(Power, 0))-1
+    %assign range = CAST("Number",LibBlockParameterValue(Range, 0))
+    %assign ref = CAST("Number",LibBlockParameterValue(Ref, 0))-1
+    %%
+	%assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+    max11300_%<instance>.config_pin(%<posPin>, %<inputtype_val+7>, %<negPin>, %<power>, %<range>, %<ref>, 0);
+
+    %if inputtype_val == 1
+      max11300_%<instance>.config_pin(%<negPin>, 9, 0, 0, %<range>, %<ref>, 0);
+    %endif
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+	%assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	%assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  
+    %assign mode_val = CAST("Number",LibBlockParameterValue(Mode, 0))-1
+    %assign inputtype_val = CAST("Number",LibBlockParameterValue(InputType, 0))-1	
+    %assign posPin = CAST("Number",LibBlockParameterValue(PosPin, 0))-1
+    %%
+	%assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+    %assign y_val = LibBlockOutputSignal(0, "", "", 0)
+		
+	%if mode_val > 0
+	  %<y_val> = max11300_%<instance>.read_adcRelative(%<posPin>, %<inputtype_val+7>);
+	%else
+	  %<y_val> = max11300_%<instance>.read_adcRaw(%<posPin>, %<inputtype_val+7>);
+	%endif
+    %%
+  %endif
+%endfunction

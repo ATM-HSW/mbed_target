@@ -70,14 +70,15 @@ bool MCP4728::write_voltage(uint8_t channel, uint8_t vref, uint8_t pdm, uint8_t 
 	return write_raw(channel, vref, pdm, gain, raw);
 }
 
-// takes value in range 0..1.0 and converts to analog voltage
+// takes data in range 0..1.0 and converts to analog voltage
 // ret: zero if OK
 //      none zero if Fail
 bool MCP4728::write_relative(uint8_t channel, uint8_t vref, uint8_t pdm, uint8_t gain, float data)
 {
-	uint16_t raw = 0;
+    if(data > 1.0f)
+        data = 1.0f;
 
-	raw = (uint16_t)((data * 4069) + 0.5f);
+	uint16_t raw = (uint16_t)((data * 4096) + 0.5f);
 
 	return write_raw(channel, vref, pdm, gain, raw);
 }

@@ -40,9 +40,10 @@ void MCP4822::write_voltage(uint8_t channel, uint8_t gain, uint8_t shutdown, flo
 
 void MCP4822::write_relative(uint8_t channel, uint8_t gain, uint8_t shutdown, float value)
 {
-    uint16_t raw = 0;
+    if(value > 1.0f)
+        value = 1.0f;
 
-	raw = (uint16_t)((value * 4096) + 0.5f);
+	uint16_t raw = (uint16_t)((value * 4096) + 0.5f);
     write_raw(channel, gain, shutdown, raw);
 }
 
