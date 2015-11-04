@@ -1,0 +1,53 @@
+PCF8574 Digital Input
+=====================
+
+Reads the digital value of the specified pin or the whole port of the PCF8574.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/Pcf8574_Digital_Input_block.png
+   :scale: 50 %
+
+This block interfaces the PCF8574 port expander. It is possible to read a single pin or the whole port of the PCF8574.
+
+Data Type Support
+-----------------
+
+The block's output data type is uint8.
+The error output port has data type boolean.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Encoder_input_mask.png
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+Device Address
+..............
+
+Bus address of the used PCF8574 device.
+
+Input
+.....
+
+Selects the input pin of the PCF8574 to be read or the whole 8 bit port.
+
+Enable error output port
+........................
+
+Enables an error output port with return values:
+
+*	"0" if no error occurred 
+*	"1" if there was an error during communication
+

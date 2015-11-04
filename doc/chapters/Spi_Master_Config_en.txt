@@ -1,0 +1,63 @@
+SPI Master Config
+=================
+
+This block sets up the SPI connection on the mbed board.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Spi_Master_Config_block.png
+   :scale: 50 %
+
+This block configures an SPI peripheral depending on the data and clock pins selected. In addition the clock frequency of the bus can be configured. 
+Internally the mbed SPI class is used to set up the SPI peripheral, so the user must get the matching pins off of the boards user manual. 
+
+If more than one SPI bus is needed each one needs it's own *SPI Master Config* block.
+
+.. attention::
+	If pins are configured which cannot be mapped to the same SPI peripheral **NO** error will show up at compile time, but the SPI bus won't work.
+
+Data Type Support
+-----------------
+
+This block has no input or output ports.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Spi_Master_Config_mask.png
+
+SPI Port
+........
+
+Selects an identifier for the bus that should correspond in the device's configuration which are connected to this particular bus.
+
+Bus frequency
+.............
+
+Sets the clock frequency of the SPI bus.
+
+MOSI Port and Pin
+.................
+
+Selects the Master In Slave Out pin of the SPI peripheral.
+
+MISO Port and Pin
+.................
+
+Selects the Master Out Slave In pin of the SPI peripheral.
+
+SCK Port and Pin
+................
+
+Selects the Serial Clock pin of the SPI peripheral.
+
+.. note::
+	All pins have to be of the same SPI peripheral otherwise the SPI bus won't work.
+	

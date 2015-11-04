@@ -1,0 +1,53 @@
+PCF8574 Digital Output
+======================
+
+Sets or clears the specified pin or sets the whole port of a PCF8574 port expander.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/Pcf8574_Digital_Output_block.png
+   :scale: 50 %
+
+This block interfaces the PCF8574 port expander chip. It enables setting a single pin of the PCF8574 or setting the whole port at once 
+to a 8 bit pattern.
+
+Data Type Support
+-----------------
+
+The input port data type is uint8.
+The error output port data type is boolean.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Encoder_input_mask.png
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+Device Address
+..............
+
+Bus address of the used PCF8574 device.
+
+Output
+......
+
+Selects the single output pin of the PCF8574 to be written or the whole 8 bit port.
+
+Enable error output port
+........................
+
+Enables an error output port with return values:
+
+*	"0" if no error occurred 
+*	"1" if there was an error during communication

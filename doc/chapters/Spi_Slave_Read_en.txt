@@ -1,0 +1,31 @@
+SPI Slave Read
+==============
+
+This block reads the last received byte from the SPI input buffer.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Spi_Slave_Read_block.png
+   :scale: 50 %
+
+This block gets the last received value from the input buffer of the SPI peripheral each time it is executed. If no new data are available the block's output stays the same.
+
+Data Type Support
+-----------------
+
+The block output port data type is uint8.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Spi_Slave_Read_mask.png
+
+
+This block has no mask paramters.

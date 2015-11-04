@@ -30,7 +30,6 @@ mex sfunar_spiDmaWrite.c
 mex sfunar_spiSlaveConfig.c
 mex sfunar_spiSlaveRead.c
 mex sfunar_spiSlaveWrite.c
-mex sfunar_spi_csConfig.c
 mex sfunar_spi_write.c
 mex sfunar_usbSerialConfig.c
 mex sfunar_usbSerialRead.c
@@ -105,4 +104,12 @@ mex sfunar_ak8963.c
 
 %% BMP180
 mex sfunar_bmp180.c
+%%
+
+%% LIS302DL Accelerometer
+mex sfunar_lis302dl_acc.c
+%%
+
+%% L3GD20 Gyroscope
+mex sfunar_l3gd20_gyro.c
 %%

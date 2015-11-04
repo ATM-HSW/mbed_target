@@ -1,0 +1,41 @@
+FM25L16B FRAM Write
+===================
+
+Stores one byte at the provided address in an FM25L16B FRAM device.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Fm25l16b_Fram_write_block.png
+   :scale: 50 %
+
+This block stores one byte every time it is executed to the address provided by the *addr* input port into an F25L16B FRAM device.
+
+Data Type Support
+-----------------
+
+The address input port expects a uint16 value.
+
+The data input port expects a uint8 value.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Fm25l16b_Fram_write_mask.png
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.

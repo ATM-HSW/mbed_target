@@ -1,0 +1,84 @@
+.. include:: <isoamsa.txt>
+
+MCP4728 Analog Output
+=====================
+
+Outputs a variable analog voltage on the specified channel of MCP4728 digital to analog converter.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/Mcp4728_Analog_Output_block.png
+   :scale: 50 %
+
+This block configures an MCP4728 digital to analog converter to output a variable analog voltage on a specified pin. The MCP4728 provides internal reference voltage
+of 2.048V which can be boosted to 4.096V by selecting internal gain to 2. In addition external reference voltage can be selected and so output range is 0 to Vdd.
+
+Data Type Support
+-----------------
+
+The block's input port data type depends on the selected mode parameter:
+
+* 	raw |srarr| uint16 
+*	voltage |srarr| single
+*	relative |srarr| single
+
+The error output port data type is boolean.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Mcp4728_Analog_Output_mask.png
+
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+Device Address
+..............
+
+Bus address of the used MCP4728 device.
+
+Enable error output port
+........................
+
+Enables an error output port with return values:
+
+*	"0" if no error occurred 
+*	"1" if there was an error during communication
+
+
+Channel Number
+..............
+
+Selects the output channel of the MCP4728.
+
+Mode
+....
+
+Selects the input data type and range
+
+*	raw |srarr| 0 ... 4095
+*	voltage |srarr| 0 ... Vref
+*	relative |srarr| 0 ... 1
+
+Reference Voltage
+.................
+
+Selects the reference voltage for the selected channel to internal or external.
+
+Gain
+....
+
+If internal reference voltage is selected the output voltage can be boosted to 4.096V with gain of 2.
+
+
+

@@ -413,4 +413,1130 @@
 </OBJECT>
 </UL>
 </UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MAX11300 Config">
+    <param name="Local" value="chapters/Max11300_Config_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Max11300_Config_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Max11300_Config_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Max11300_Config_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Max11300_Config_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Max11300_Config_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Max11300_Config_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="ADC Conversion Rate">
+    <param name="Local" value="chapters/Max11300_Config_en.html#adc-conversion-rate">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="DAC Reference">
+    <param name="Local" value="chapters/Max11300_Config_en.html#dac-reference">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable internal temperature channel">
+    <param name="Local" value="chapters/Max11300_Config_en.html#enable-internal-temperature-channel">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable temperature channel x">
+    <param name="Local" value="chapters/Max11300_Config_en.html#enable-temperature-channel-x">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MAX11300 Digital Input">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Pin Number">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#pin-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Threshold">
+    <param name="Local" value="chapters/Max11300_Digital_Input_en.html#threshold">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MAX11300 Digital Output">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Pin Number">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#pin-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Output level">
+    <param name="Local" value="chapters/Max11300_Digital_Output_en.html#output-level">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MAX11300 Analog Input">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input type">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#input-type">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Mode">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Positive input pin">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#positive-input-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Negative input pin">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#negative-input-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Average samples">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#average-samples">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input range">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#input-range">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Reference voltage">
+    <param name="Local" value="chapters/Max11300_Analog_Input_en.html#reference-voltage">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MAX11300 Analog Output">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Pin Number">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#pin-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Mode">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Range">
+    <param name="Local" value="chapters/Max11300_Analog_Output_en.html#range">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MAX11300 Temperature">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Channel">
+    <param name="Local" value="chapters/Max11300_Temperature_en.html#channel">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MCP3204 Analog Input">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Channel">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#channel">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Mode">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input type">
+    <param name="Local" value="chapters/Mcp3204_Analog_Input_en.html#input-type">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MCP4822 Analog Output">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Channel">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#channel">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Mode">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Gain">
+    <param name="Local" value="chapters/Mcp4822_Analog_Output_en.html#gain">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TMP123 Temperature">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Tmp123_Temperature_en.html#chip-select-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="FM25L16B FRAM Read">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Read_en.html#chip-select-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="FM25L16B FRAM Write">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Fm25l16b_Fram_Write_en.html#chip-select-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Master Read Write">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Spi_Master_Read_Write_en.html#chip-select-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="LIS302DL Accelerometer">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sample rate">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#sample-rate">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Full scale">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#full-scale">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="HP filter">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#hp-filter">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data ready Interrupt">
+    <param name="Local" value="chapters/Lis302dl_Accelerometer_en.html#data-ready-interrupt">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="L3GD20 Gyroscope">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#description">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Cut-off frequency [Hz] depending on bandwidth and sample rate selection">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#cut-off-frequency-hz-depending-on-bandwidth-and-sample-rate-selection">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="High pass filter cut-off frequency [Hz]">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#high-pass-filter-cut-off-frequency-hz">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sample rate">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#sample-rate">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Full scale">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#full-scale">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Bandwidth">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#bandwidth">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="HP filter">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#hp-filter">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable data ready interrupt in INT2 output">
+    <param name="Local" value="chapters/L3gd20_Gyroscope_en.html#enable-data-ready-interrupt-in-int2-output">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Master Config">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Bus frequency">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#bus-frequency">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MOSI Port and Pin">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#mosi-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MISO Port and Pin">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#miso-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SCK Port and Pin">
+    <param name="Local" value="chapters/Spi_Master_Config_en.html#sck-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Slave Config">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Bus frequency">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#bus-frequency">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MOSI Port and Pin">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#mosi-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MISO Port and Pin">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#miso-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SCK Port and Pin">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#sck-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SSEL Port and Pin">
+    <param name="Local" value="chapters/Spi_Slave_Config_en.html#ssel-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Slave Read">
+    <param name="Local" value="chapters/Spi_Slave_Read_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Spi_Slave_Read_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Spi_Slave_Read_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Spi_Slave_Read_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Spi_Slave_Read_en.html#parameters-and-dialog-box">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Slave Write">
+    <param name="Local" value="chapters/Spi_Slave_Write_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Spi_Slave_Write_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Spi_Slave_Write_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Spi_Slave_Write_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Spi_Slave_Write_en.html#parameters-and-dialog-box">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Configuration">
+    <param name="Local" value="chapters/I2c_Config_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/I2c_Config_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/I2c_Config_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/I2c_Config_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/I2c_Config_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/I2c_Config_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Bus frequency">
+    <param name="Local" value="chapters/I2c_Config_en.html#bus-frequency">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SDA Port and Pin">
+    <param name="Local" value="chapters/I2c_Config_en.html#sda-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SCL Port and Pin">
+    <param name="Local" value="chapters/I2c_Config_en.html#scl-port-and-pin">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Read">
+    <param name="Local" value="chapters/I2c_Read_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/I2c_Read_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/I2c_Read_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/I2c_Read_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/I2c_Read_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/I2c_Read_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="External address input">
+    <param name="Local" value="chapters/I2c_Read_en.html#external-address-input">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Slave address">
+    <param name="Local" value="chapters/I2c_Read_en.html#slave-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="External byte count">
+    <param name="Local" value="chapters/I2c_Read_en.html#external-byte-count">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Number of bytes to read">
+    <param name="Local" value="chapters/I2c_Read_en.html#number-of-bytes-to-read">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Repeated">
+    <param name="Local" value="chapters/I2c_Read_en.html#repeated">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable ACK Output">
+    <param name="Local" value="chapters/I2c_Read_en.html#enable-ack-output">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Write">
+    <param name="Local" value="chapters/I2c_Write_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/I2c_Write_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/I2c_Write_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/I2c_Write_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/I2c_Write_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/I2c_Write_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="External address input">
+    <param name="Local" value="chapters/I2c_Write_en.html#external-address-input">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Slave address">
+    <param name="Local" value="chapters/I2c_Write_en.html#slave-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="External byte count">
+    <param name="Local" value="chapters/I2c_Write_en.html#external-byte-count">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Repeated">
+    <param name="Local" value="chapters/I2c_Write_en.html#repeated">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable ACK Output">
+    <param name="Local" value="chapters/I2c_Write_en.html#enable-ack-output">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MCP3428 Analog Input">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Device Address">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#device-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable error output port">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#enable-error-output-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Channel Number">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#channel-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Mode">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Resolution">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#resolution">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="PGA Gain">
+    <param name="Local" value="chapters/Mcp3428_Analog_Input_en.html#pga-gain">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="MCP4728 Analog Output">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Device Address">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#device-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable error output port">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#enable-error-output-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Channel Number">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#channel-number">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Mode">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Reference Voltage">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#reference-voltage">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Gain">
+    <param name="Local" value="chapters/Mcp4728_Analog_Output_en.html#gain">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TMP102 Temperature">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Device Address">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#device-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Sample rate">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#sample-rate">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable error output port">
+    <param name="Local" value="chapters/Tmp102_Temperature_en.html#enable-error-output-port">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="PCF8574 Digital Input">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Device Address">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#device-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#input">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable error output port">
+    <param name="Local" value="chapters/Pcf8574_Digital_Input_en.html#enable-error-output-port">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="PCF8574 Digital Output">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#i2c-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Device Address">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#device-address">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Output">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#output">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable error output port">
+    <param name="Local" value="chapters/Pcf8574_Digital_Output_en.html#enable-error-output-port">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="FM24CL16B FRAM Read">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Read_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Read_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Read_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Read_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Read_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Read_en.html#i2c-port">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="FM24CL16B FRAM Write">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Write_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Write_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Write_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Write_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Write_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="I2C Port">
+    <param name="Local" value="chapters/Fm24cl16b_Fram_Write_en.html#i2c-port">
+</OBJECT>
+</UL>
+</UL>
 </UL></BODY></HTML>

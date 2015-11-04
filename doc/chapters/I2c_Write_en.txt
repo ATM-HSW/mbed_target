@@ -1,0 +1,71 @@
+I2C Write
+=========
+
+Performs a write operation to the device at the given bus address.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/I2c_Write_block.png
+   :scale: 50 %
+
+
+This block writes one or multiple bytes to a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB. 
+
+Data Type Support
+-----------------
+
+The block supports only uint8 values at each port.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/I2c_Write_mask.png
+
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+External address input
+......................
+
+Enables an input port that provides the device address to which the MCU should write data. 
+The address input port enables writing to different devices with the same write block by simply change the address input.
+
+Slave address
+.............
+
+Right aligned address of the bus device which the MCU should write to. The status of the R/W bit is ignored an set to "1" automatically.
+
+.. note::
+	If the external address input is active the value of this parameter field is ignored.
+	
+External byte count
+...................
+
+If the number of data to be written changes during program execution the external byte count port can be activated to provide the amount of data to be written to the slave device.
+
+.. note::
+	The maximum number of bytes to write is defined by the input port width in simulink.
+
+Repeated
+........
+
+If enabled no STOP condition is send after completing the write operation.
+
+
+Enable ACK Output
+.................
+
+Enables a block output port where the success of the operation can be read.
+
+*	"0" output: no error during communication
+*	"1" output:	error during communication

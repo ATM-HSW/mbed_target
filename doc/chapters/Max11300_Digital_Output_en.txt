@@ -1,0 +1,47 @@
+MAX11300 Digital Output
+=======================
+
+Outputs a digital high or low value to the specified MAX11300 pin.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Max11300_Digital_Output_block.png
+   :scale: 50 %
+
+This block configures the selected pin of the MAX11300 to act as a digital output. The voltage level of logical high can
+be configured between 0V and 10V by an output level parameter.
+
+Data Type Support
+-----------------
+
+The block's input parameter expects a uint8 value of either "0" (low level output) or "1" (high level output)
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Encoder_input_mask.png
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.
+
+.. note::
+	The chip select pin must be the same as in the corresponding *MAX11300 Config* block
+
+Pin Number
+..........
+
+Specifies the pin of the MAX11300 which should be used as digital output.
+
+Output level
+............
+
+12 bit value to configure the high level voltage output between 0V = 0 and 10V = 4095.

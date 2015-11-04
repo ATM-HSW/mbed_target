@@ -17,7 +17,7 @@
 **/slprj/*
 **/*_slprj/*
 **/Debug/*
-**/_build/*
+**/_build/**
 
 *~
 *.autosave

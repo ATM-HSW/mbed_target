@@ -1,0 +1,42 @@
+FM25L16B FRAM Read
+==================
+
+Reads one byte stored in a F25L16B FRAM device.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Fm25l16b_Fram_read_block.png
+   :scale: 50 %
+
+This block reads stored data from a F25L16B FRAM device. The data is read byte wise, so every time the block is executed one byte can be loaded of the FRAM. 
+The storage address from which the byte is read is provided via the block's input port.
+
+Data Type Support
+-----------------
+
+The block's output data type is uint8.
+
+The address input port expects a uint16 value.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Fm25l16b_Fram_read_mask.png
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.

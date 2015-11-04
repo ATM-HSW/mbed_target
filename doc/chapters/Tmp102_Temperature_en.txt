@@ -1,0 +1,59 @@
+TMP102 Temperature
+==================
+
+Reads the last temperature measurement result of the TMP102 sensor.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/Tmp102_Temperature_block.png
+   :scale: 50 %
+
+This block interfaces a TMP102 temperature sensor which measures the temperature at a 
+selected sample rate or in one shot mode. 
+
+.. attention::
+	When one shot mode is selected the temperature reading takes 30ms, for this period the program is blocked until end of conversion, but sample rate can be higher 
+	than the predefined rates.
+
+
+Data Type Support
+-----------------
+
+The block's data output data type is single for the temperature output and boolean for the error port.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Tmp102_Temperature_mask.png
+
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+Device Address
+..............
+
+Bus address of the used TMP102 device.
+
+Sample rate
+...........
+
+Selects the conversion rate of the TMP102 device. If one shot is selected 
+the sample rate can be higher but the reading is blocking for the duration of the conversion.
+
+Enable error output port
+........................
+
+Enables an error output port with return values:
+
+*	"0" if no error occurred 
+*	"1" if there was an error during communication

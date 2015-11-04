@@ -1,0 +1,29 @@
+SPI Slave Write
+===============
+
+This block puts one byte in the SPI output buffer.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Spi_Slave_Write_block.png
+   :scale: 50 %
+
+This block puts one byte into the output buffer of the SPI peripheral each time it is executed. Since the buffer is only one byte in depth the master is responsible to get the value right in time.
+If the master doesn't get the actual value the new value is not put inside the buffer.
+
+Data Type Support
+-----------------
+
+
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Spi_Slave_Write_mask.png

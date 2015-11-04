@@ -1,0 +1,86 @@
+.. include:: <isoamsa.txt>
+
+LIS302DL Accelerometer
+======================
+
+Reads the x, y and z force measured by an LIS302DL 3-axis accelerometer in mg
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Lis302dl_Accelerometer_block.png
+   :scale: 50 %
+
+This block provides acceleration measurement by an LIS302DL 3-axis accelerometer. Depending on the application two different measurement ranges can be configured, +/- 2g and +/- 8g. In addition a high pass
+filter inside the accelerometer can be activated an configured with different cut-off frequencies depending on the selected sample rate. The following table shows the cut-off frequencies to be selected.
+The measured force is provided in mg.
+
++--------------+-------------+-------------+ 
+|              |   cut-off frequency [Hz]  |
+| filter level | @rate 100Hz | @rate 400Hz |
++==============+=============+=============+
+|   level 1    |      2      |      8      |
++--------------+-------------+-------------+
+|   level 2    |      1      |      4      |
++--------------+-------------+-------------+
+|   level 3    |     0.5     |      2      |
++--------------+-------------+-------------+
+|   level 4    |     0.25    |      1      |
++--------------+-------------+-------------+
+
+
+Data Type Support
+-----------------
+
+The block's output data type is single.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Lis302dl_Accelerometer_mask.png
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.
+
+Sample rate
+...........
+
+Selects the sample rate of the internal ADC.
+
+*	100 Hz |srarr| new value every .01 seconds
+*   400 Hz |srarr| new value every .0025 seconds
+
+Full scale
+..........
+
+Selects the measurement range
+
+*	+/- 2g 
+*	+/- 8g
+
+HP filter
+.........
+
+Enables the internal high pass filter and selects the cut-off frequency (referred to the table above)
+
+Data ready Interrupt
+....................
+
+Enables the data ready interrupt of the LIS302DL device. The interrupt can be at INT1 or INT2 pin of the chip and configured to be open drain or push-pull output driver.
+
+.. note::
+	To use the data ready interrupt in the model a *Digital Input* or *Interrupt* block of the *GPIO* library must be configured to get the value of the INTx pin at the connected MCU pin.
+

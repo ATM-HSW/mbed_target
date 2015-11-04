@@ -1,0 +1,40 @@
+SPI Master Read Write
+=====================
+
+Performs a one byte write operation to the SPI bus and returns the received byte.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Spi_Master_Read_Write_block.png
+   :scale: 50 %
+
+The block writes the byte value provided at the input port each time it is executed. At the output port the received byte is provided.
+
+Data Type Support
+-----------------
+
+The block's data types are uint8 for input and output port.
+Port size can be a one-dimensional vector which must be the same for input and output.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Spi_Master_Read_Write_mask.png
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.

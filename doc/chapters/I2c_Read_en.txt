@@ -1,0 +1,74 @@
+I2C Read
+========
+
+Performs a read operation from the device at the given bus address.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/I2c_Read_block.png
+   :scale: 50 %
+
+This block reads one or multiple bytes from a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB. 
+
+Data Type Support
+-----------------
+
+The block supports only uint8 values at each port. 
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/I2c_Read_mask.png
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+External address input
+......................
+
+Enables an input port that provides the device address from which the MCU should read data. 
+The address input port enables reading from different devices with the same read block by simply change the address input.
+
+Slave address
+.............
+
+Right aligned address of the bus device which the MCU should read from. The status of the R/W bit is ignored an set to "1" automatically.
+
+.. note::
+	If the external address input is active the value of this parameter field is ignored.
+	
+External byte count
+...................
+
+If the number of data to be read changes during program execution the external byte count port can be activated to provide the amount of data to be read from the device.
+
+Number of bytes to read
+.......................
+
+This parameter serves two purposes.
+
+1.	If external byte count is disabled, the block reads the configured amount of bytes every time it is executed.
+2.  If external byte count is enabled, the parameter sets the maximum number of bytes (i.e. the data port width in simulink) which can be read.
+
+Repeated
+........
+
+If enabled no STOP condition is send after completing the read operation.
+
+Enable ACK Output
+.................
+
+Enables a block output port where the success of the operation can be read.
+
+*	"0" output: no error during communication
+*	"1" output:	error during communication
+

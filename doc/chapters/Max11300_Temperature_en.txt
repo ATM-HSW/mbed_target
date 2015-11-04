@@ -1,0 +1,46 @@
+MAX11300 Temperature
+====================
+
+Measures the temperature of the specified temperature channel of the MAX11300.
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Max11300_Temperature_block.png
+   :scale: 50 %
+
+This block returns the last temperature reading of the specified temperature channel. 
+
+.. note::
+	To use this block the specified temperature channel must be enabled in the corresponding *MAX11300 Config* block
+
+Data Type Support
+-----------------
+
+The block's output port returns the temperature reading in °C as data type single.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Max11300_Temperature_mask.png
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.
+
+.. note::
+	The chip select pin must be the same as in the corresponding *MAX11300 Config* block
+
+Channel
+.......
+
+Selects one of the three provided temperature channels of the MAX11300.
+
+.. note::
+	The selected channel must be enabled in the corresponding *MAX11300 Config* block

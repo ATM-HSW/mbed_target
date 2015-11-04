@@ -1,0 +1,87 @@
+.. include:: <isoamsa.txt>
+
+
+MCP3204 Analog Input
+====================
+
+Reads the analog voltage of one channel of the MCP3204 analog to digital converter.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Mcp3204_Analog_Input_block.png
+   :scale: 50 %
+   
+
+This block return the conversion result of one specified analog input channel of the MCP3204 analog to digital converter. The ADC can be configured in single ended or (pseudo)differential mode.
+The following table shows the channel configuration in differential mode.
+
++-----------+---------------+
+|  Channel  | resulting     |
+| Selection | configuration |
++===========+===============+
+| Channel 1 | CH1 = IN+     |
+|           | CH2 = IN-     |
++-----------+---------------+
+| Channel 2 | CH1 = IN-     |
+|           | CH2 = IN+     |
++-----------+---------------+
+| Channel 3 | CH3 = IN+     |
+|           | CH4 = IN-     |
++-----------+---------------+
+| Channel 4 | CH3 = IN-     |
+|           | CH4 = IN+     |
++-----------+---------------+
+
+.. attention::
+	In pseudo differential input mode the IN+ input can range from IN- to (Vref+IN-). The IN- input is limited to +/- 100mV from the Vss rail.
+	
+
+Data Type Support
+-----------------
+
+The block's output data type is either int16 or single depending on the *Mode* parameter.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Mcp3204_Analog_Input_mask.png
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.
+
+Channel
+.......
+
+Selects the analog input channel.
+
+Mode
+....
+
+Selects the block's output data type and range. 
+
+* 	raw |srarr| int16 data type output, range 0 to 4095
+* 	relative |srarr| single data type, range 0 to 1
+
+Input type
+..........
+
+Configures the analog input channel to single ended or pseudo differential mode.
+
+.. attention::
+	If a channel is configured as differential input the corresponding negative input channel must not be configured in another *MCP3204 Analog Input* block.
+	

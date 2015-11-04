@@ -1,0 +1,40 @@
+FM24CL16B FRAM Write
+====================
+
+Stores a single byte in the FM24CL16B FRAM device.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/Fm24cl16b_Fram_Write_block.png
+   :scale: 50 %
+
+
+This block stores one single byte in the FM24CL16B FRAM device to the given address each time it is executed. 
+The address range of the device is from 0 to 2047 which will be provided at the address input port. The address is partitioned internally into page and word address
+but the block address input expects one single address value inside the 2KB memory range. Since the page address is part of the I2C device address no device address must be 
+configured in the parameter mask.
+
+Data Type Support
+-----------------
+
+The address input data type is uint16.
+The data input type is uint8.
+The error output type is boolean.
+
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Fm24cl16b_Fram_Write_mask.png
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.

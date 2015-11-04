@@ -1,0 +1,42 @@
+TMP123 Temperature
+==================
+
+Temperature measurement with a TMP123 temperature sensor.
+
+
+Library
+-------
+
+/SPI
+
+Description
+-----------
+
+.. image:: ../images/Tmp123_Temperature_block.png
+   :scale: 50 %
+
+Reads the temperature measurement in °C of a TMP123 temperature sensor. Temperature accuracy of the sensor is within 2°C.
+
+.. note::
+	Conversion time of one measurement is 320ms max. For this period the CS pin must kept high as any conversion is interrupted by pulling CS low before conversion is ready.
+
+Data Type Support
+-----------------
+
+The block's output value is of data type single.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Tmp123_Temperature_mask.png
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.

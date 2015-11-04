@@ -1,0 +1,87 @@
+.. include:: <isoamsa.txt>
+
+MCP3428 Analog Input
+====================
+
+Reads the analog input voltage from the specified channel of an MCP3428 analog to digital converter.
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/Mcp3428_Analog_Input_block.png
+   :scale: 50 %
+
+This block reads the conversion result of the analog input voltage of one channel of the MCP3428 analog to digital converter. The voltage measured is the differential voltage between a channels positive 
+and negative input, so for single ended input mode one has to connect the negativ channel input to ground.
+The different resolutions that can be configured result in different conversion rates. 
+Since the internal reference voltage is 2.048V the input voltage of an channel must not exceed +/- 2.048V including the configured gain value. 
+
+Data Type Support
+-----------------
+
+The block's output data type depends on the configured mode parameter and can be:
+
+*	raw |srarr| int16
+*   voltage |srarr| single
+*   relative |srarr| single
+
+The error output data type is boolean.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Encoder_input_mask.png
+
+
+I2C Port
+........
+
+Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+
+Device Address
+..............
+
+Bus address of the used MCP3428 device.
+
+Enable error output port
+........................
+
+Enables an error output port with return values:
+
+*	"0" if no error occurred 
+*	"1" if there was an error during communication
+
+
+Channel Number
+..............
+
+Selects the input channel of the MCP3428 device which should be measured.
+
+Mode
+....
+
+Selects the output data type and range
+
+*	raw |srarr| -2^n ... 2^n-1 (with n = resolution - 1)
+*	voltage |srarr| -2.048V ... +2.048V
+*	relative |srarr| -1 ... 1
+
+Resolution
+..........
+
+Selects the digital resolution.
+
+PGA Gain
+........
+
+Selects the programmable gain amplifier to amplify the input signal.
+
+.. note::
+	The input voltage must not be greater than 2.048V/gain.
+	

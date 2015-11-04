@@ -1,0 +1,57 @@
+I2C Configuration
+=================
+
+This block sets up the I2C connection on the mbed board. 
+
+
+Library
+-------
+
+/I2C
+
+Description
+-----------
+
+.. image:: ../images/I2c_Config_block.png
+   :scale: 50 %
+
+This block configures a I2C bus peripheral as master on a mbed target MCU depending on the selected data and clock pin. In addition the bus clock frequency can be configured.
+Since this block internally uses the mbed I2C class to configure the peripheral, the user must select matching SDA and SCL pins as described in the boards user manual.
+If the MCU acts as master for multiple I2C busses, each one must have it's own *I2C Config* block.
+
+.. attention::	
+	If pins are configured which cannot be mapped to the same I2C peripheral **NO** error will show up at compile time, but the I2C bus won't work.
+	
+
+Data Type Support
+-----------------
+
+###valid data types of input and output signals
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Encoder_input_mask.png
+
+I2C Port
+........
+
+Selects an identifier for the bus that should correspond in the device's configuration which are connected to this particular bus.
+
+Bus frequency
+.............
+
+Configures the I2C bus clock frequency. 
+
+SDA Port and Pin
+................
+
+Selects the data pin of the I2C peripheral.
+
+SCL Port and Pin
+................
+
+Selects the clock pin of the I2C peripheral.
+
+.. note::
+	All pins have to be of the same I2C peripheral otherwise the I2C bus won't work.
