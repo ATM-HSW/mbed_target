@@ -68,14 +68,14 @@
 	  float %<mess_name>[3];
       %%
 	  %<name>.readAccelData(%<mess_name>);  
-	  %<x_accel_val> = (double)%<mess_name>[0];
-	  %<y_accel_val> = (double)%<mess_name>[1];
-	  %<z_accel_val> = (double)%<mess_name>[2];
+	  %<x_accel_val> = %<mess_name>[0];
+	  %<y_accel_val> = %<mess_name>[1];
+	  %<z_accel_val> = %<mess_name>[2];
 	  %<name>.readGyroData(%<mess_name>);  
-	  %<x_gyro_val> = (double)%<mess_name>[0];
-	  %<y_gyro_val> = (double)%<mess_name>[1];
-	  %<z_gyro_val> = (double)%<mess_name>[2];
-	  %<temp_val> = (double)(%<name>.readTempData());
+	  %<x_gyro_val> = %<mess_name>[0];
+	  %<y_gyro_val> = %<mess_name>[1];
+	  %<z_gyro_val> = %<mess_name>[2];
+	  %<temp_val> = (%<name>.readTempData());
       %%
     %endif 
   %endif
