@@ -113,3 +113,7 @@ mex sfunar_lis302dl_acc.c
 %% L3GD20 Gyroscope
 mex sfunar_l3gd20_gyro.c
 %%
+
+%% LSM303DLHC Accelerometer and Magnetometer
+mex sfunar_lsm303dlhc_acc_mag.c
+%%
