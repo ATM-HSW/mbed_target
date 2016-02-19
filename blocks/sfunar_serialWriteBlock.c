@@ -161,7 +161,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortRequiredContiguous(S, 0, 1);
 
   if(numInput) {
-    ssSetInputPortDataType(S, 1, SS_UINT16);
+    ssSetInputPortDataType(S, 1, SS_UINT32);
     ssSetInputPortWidth(S, 1, 1);
     ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
     ssSetInputPortDirectFeedThrough(S, 1, 1);
