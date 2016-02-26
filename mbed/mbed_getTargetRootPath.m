@@ -1,11 +1,13 @@
 function ret = mbed_getTargetRootPath()
   ret = '';
-  a=strsplit(path,';');
-  b=regexp(a,'\\mbed_\w*\\mbed');
-  %b=regexp(a,'\\mbed_\w*\\blocks');
+  a=strsplit(path,{';', '\n'},'CollapseDelimiters',false, 'DelimiterType','RegularExpression');
+  %b=regexp(a,'\\mbed_\w*\\mbed');
+  b=regexp(a,'\\mbed_\w*\\blocks');
   c = find(cellfun(@func, b));
   if size(c)==1
       ret = fileparts(char(a(c)));
+  else
+      error('can not extract mbed target path');
   end
 end
 
