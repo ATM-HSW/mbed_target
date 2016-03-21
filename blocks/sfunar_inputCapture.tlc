@@ -1,4 +1,4 @@
-%% File : sfunar_encoderInput.tlc
+%% File : sfunar_inputCapture.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2015 Dr.O.Hagendorf, HS Wismar
@@ -188,7 +188,7 @@
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
         %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
-    %case 6
+    %case 5
         %assign timerName = "TIM8"
         %assign Ti1AlternateFunction = "3"
         %assign Ti2AlternateFunction = "3"
@@ -198,7 +198,7 @@
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
         %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
-    %case 7
+    %case 6
         %assign timerName = "TIM9"
         %assign Ti1AlternateFunction = "3"
         %assign Ti2AlternateFunction = "3"
@@ -209,7 +209,7 @@
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
         %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
-    %case 8
+    %case 7
         %assign timerName = "TIM10"
         %assign Ti1AlternateFunction = "3"
         %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
@@ -219,7 +219,7 @@
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
         %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
-    %case 9
+    %case 8
         %assign timerName = "TIM11"
         %assign Ti1AlternateFunction = "3"
         %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
@@ -229,7 +229,7 @@
         %assign prescaler_val = (fck_apb2/Frequency_val)-1
         %assign Frequency_val = fck_apb2/(prescaler_val+1)
       %break
-    %case 10
+    %case 9
         %assign timerName = "TIM12"
         %assign Ti1AlternateFunction = "9"
         %assign Ti2AlternateFunction = "9"
@@ -240,7 +240,7 @@
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
         %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
-    %case 11
+    %case 10
         %assign timerName = "TIM13"
         %assign Ti1AlternateFunction = "9"
         %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
@@ -250,7 +250,7 @@
         %assign prescaler_val = (fck_apb1/Frequency_val)-1
         %assign Frequency_val = fck_apb1/(prescaler_val+1)
       %break
-    %case 12
+    %case 11
         %assign timerName = "TIM14"
         %assign Ti1AlternateFunction = "9"
         %if (Ti2Active_val > 0) || (Ti3Active_val > 0) || (Ti4Active_val > 0)          
@@ -330,7 +330,7 @@
         %assign InterruptName = "TIM4"
         %assign prescaler_val = (fck/(2*Frequency_val))-1
       %break
-    %case 6
+    %case 5
         %assign timerName = "TIM8"
         
         %if (Ti1Port_val == 1)
@@ -359,7 +359,7 @@
         %assign InterruptName = "TIM8_CC"
         %assign prescaler_val = (fck/Frequency_val)-1
       %break
-    %case 13
+    %case 12
         %assign timerName = "TIM15"
         
         %if (Ti1Port_val == 2)
@@ -383,7 +383,7 @@
         %assign InterruptName = "TIM1_BRK_TIM15"
         %assign prescaler_val = (fck/Frequency_val)-1
       %break
-    %case 14
+    %case 13
         %assign timerName = "TIM16"
 
         %if (Ti1Port_val == 1) || (Ti1Port_val == 2)
@@ -398,7 +398,7 @@
         %assign InterruptName = "TIM1_UP_TIM16"
         %assign prescaler_val = (fck/Frequency_val)-1
       %break
-    %case 15
+    %case 14
         %assign timerName = "TIM17"
 
         %if (Ti1Port_val == 1) || ((Ti1Port_val == 2) && (Ti1Pin_val == 9))

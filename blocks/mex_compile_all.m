@@ -3,6 +3,7 @@ mex sfunar_PWMOutput.c
 mex sfunar_analogInput.c
 mex sfunar_analogOutput.c
 mex sfunar_createThread.c
+mex sfunar_counter.c
 mex sfunar_digitalInput.c
 mex sfunar_digitalOutput.c
 mex sfunar_i2cConfig.c
