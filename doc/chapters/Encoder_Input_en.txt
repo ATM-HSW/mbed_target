@@ -22,7 +22,7 @@ and the second mode which uses both edges of only one channel.
 Data Type Support
 -----------------
 
-The block's reset input port expects a *uint8* integer value which is either zero in normal operation or none zero for resetting the internal counter value of the timer register.
+The block's *reset* input port expects a *uint8* integer value which is either zero in normal operation or none zero for resetting the internal counter value of the timer register.
 
 The first output port provides the actual angle as a *single* value in degrees and the second output port provides the actual counter value as an *int32* integer value.
 
@@ -64,6 +64,7 @@ Input Mode (GPIO)
 .................
 
 Select the input mode for both of the selected timer input channels, possible values are:
+
 * PullNone:		no pull up or pull down resistors are configured for the input pins
 * PullUp:		internal pull up resistors are configured for both input pins
 * PullDown:		internal pull down resistors are configured for both input pins

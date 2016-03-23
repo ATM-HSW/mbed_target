@@ -180,63 +180,153 @@
     </navPoint>
     <navPoint id="navPoint29" playOrder="24">
       <navLabel>
-        <text>Serial DMA Config</text>
+        <text>Counter</text>
       </navLabel>
-      <content src="chapters/Serial_Dma_Config_en.html" />
+      <content src="chapters/Counter_en.html" />
       <navPoint id="navPoint30" playOrder="24">
         <navLabel>
-          <text>Serial DMA Config</text>
+          <text>Counter</text>
         </navLabel>
-        <content src="chapters/Serial_Dma_Config_en.html" />
+        <content src="chapters/Counter_en.html" />
       </navPoint>
       <navPoint id="navPoint31" playOrder="25">
         <navLabel>
           <text>Library</text>
         </navLabel>
-        <content src="chapters/Serial_Dma_Config_en.html#library" />
+        <content src="chapters/Counter_en.html#library" />
       </navPoint>
       <navPoint id="navPoint32" playOrder="26">
         <navLabel>
           <text>Description</text>
         </navLabel>
-        <content src="chapters/Serial_Dma_Config_en.html#description" />
+        <content src="chapters/Counter_en.html#description" />
       </navPoint>
       <navPoint id="navPoint33" playOrder="27">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
-        <content src="chapters/Serial_Dma_Config_en.html#data-type-support" />
+        <content src="chapters/Counter_en.html#data-type-support" />
       </navPoint>
       <navPoint id="navPoint34" playOrder="28">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
-        <content src="chapters/Serial_Dma_Config_en.html#parameters-and-dialog-box" />
+        <content src="chapters/Counter_en.html#parameters-and-dialog-box" />
         <navPoint id="navPoint35" playOrder="28">
+          <navLabel>
+            <text>Parameters and Dialog Box</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#parameters-and-dialog-box" />
+        </navPoint>
+        <navPoint id="navPoint36" playOrder="29">
+          <navLabel>
+            <text>Timer</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#timer" />
+        </navPoint>
+        <navPoint id="navPoint37" playOrder="30">
+          <navLabel>
+            <text>Input channel</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#input-channel" />
+        </navPoint>
+        <navPoint id="navPoint38" playOrder="31">
+          <navLabel>
+            <text>Input Port</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#input-port" />
+        </navPoint>
+        <navPoint id="navPoint39" playOrder="32">
+          <navLabel>
+            <text>Input Pin</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#input-pin" />
+        </navPoint>
+        <navPoint id="navPoint40" playOrder="33">
+          <navLabel>
+            <text>Input Pull type</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#input-pull-type" />
+        </navPoint>
+        <navPoint id="navPoint41" playOrder="34">
+          <navLabel>
+            <text>Max counter value</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#max-counter-value" />
+        </navPoint>
+        <navPoint id="navPoint42" playOrder="35">
+          <navLabel>
+            <text>Interrupt setting</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#interrupt-setting" />
+        </navPoint>
+        <navPoint id="navPoint43" playOrder="36">
+          <navLabel>
+            <text>Enable reset input</text>
+          </navLabel>
+          <content src="chapters/Counter_en.html#enable-reset-input" />
+        </navPoint>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint44" playOrder="37">
+      <navLabel>
+        <text>Serial DMA Config</text>
+      </navLabel>
+      <content src="chapters/Serial_Dma_Config_en.html" />
+      <navPoint id="navPoint45" playOrder="37">
+        <navLabel>
+          <text>Serial DMA Config</text>
+        </navLabel>
+        <content src="chapters/Serial_Dma_Config_en.html" />
+      </navPoint>
+      <navPoint id="navPoint46" playOrder="38">
+        <navLabel>
+          <text>Library</text>
+        </navLabel>
+        <content src="chapters/Serial_Dma_Config_en.html#library" />
+      </navPoint>
+      <navPoint id="navPoint47" playOrder="39">
+        <navLabel>
+          <text>Description</text>
+        </navLabel>
+        <content src="chapters/Serial_Dma_Config_en.html#description" />
+      </navPoint>
+      <navPoint id="navPoint48" playOrder="40">
+        <navLabel>
+          <text>Data Type Support</text>
+        </navLabel>
+        <content src="chapters/Serial_Dma_Config_en.html#data-type-support" />
+      </navPoint>
+      <navPoint id="navPoint49" playOrder="41">
+        <navLabel>
+          <text>Parameters and Dialog Box</text>
+        </navLabel>
+        <content src="chapters/Serial_Dma_Config_en.html#parameters-and-dialog-box" />
+        <navPoint id="navPoint50" playOrder="41">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Config_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint36" playOrder="29">
+        <navPoint id="navPoint51" playOrder="42">
           <navLabel>
             <text>Serial Port</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Config_en.html#serial-port" />
         </navPoint>
-        <navPoint id="navPoint37" playOrder="30">
+        <navPoint id="navPoint52" playOrder="43">
           <navLabel>
             <text>Port Name</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Config_en.html#port-name" />
         </navPoint>
-        <navPoint id="navPoint38" playOrder="31">
+        <navPoint id="navPoint53" playOrder="44">
           <navLabel>
             <text>Pin Number</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Config_en.html#pin-number" />
         </navPoint>
-        <navPoint id="navPoint39" playOrder="32">
+        <navPoint id="navPoint54" playOrder="45">
           <navLabel>
             <text>Baud Rate</text>
           </navLabel>
@@ -244,59 +334,59 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint40" playOrder="33">
+    <navPoint id="navPoint55" playOrder="46">
       <navLabel>
         <text>Serial DMA Read</text>
       </navLabel>
       <content src="chapters/Serial_Dma_Read_en.html" />
-      <navPoint id="navPoint41" playOrder="33">
+      <navPoint id="navPoint56" playOrder="46">
         <navLabel>
           <text>Serial DMA Read</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Read_en.html" />
       </navPoint>
-      <navPoint id="navPoint42" playOrder="34">
+      <navPoint id="navPoint57" playOrder="47">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Read_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint43" playOrder="35">
+      <navPoint id="navPoint58" playOrder="48">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Read_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint44" playOrder="36">
+      <navPoint id="navPoint59" playOrder="49">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Read_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint45" playOrder="37">
+      <navPoint id="navPoint60" playOrder="50">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Read_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint46" playOrder="37">
+        <navPoint id="navPoint61" playOrder="50">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Read_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint47" playOrder="38">
+        <navPoint id="navPoint62" playOrder="51">
           <navLabel>
             <text>Serial Port</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Read_en.html#serial-port" />
         </navPoint>
-        <navPoint id="navPoint48" playOrder="39">
+        <navPoint id="navPoint63" playOrder="52">
           <navLabel>
             <text>DMA buffer size</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Read_en.html#dma-buffer-size" />
         </navPoint>
-        <navPoint id="navPoint49" playOrder="40">
+        <navPoint id="navPoint64" playOrder="53">
           <navLabel>
             <text>specify data port width</text>
           </navLabel>
@@ -304,53 +394,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint50" playOrder="41">
+    <navPoint id="navPoint65" playOrder="54">
       <navLabel>
         <text>Serial DMA Write</text>
       </navLabel>
       <content src="chapters/Serial_Dma_Write_en.html" />
-      <navPoint id="navPoint51" playOrder="41">
+      <navPoint id="navPoint66" playOrder="54">
         <navLabel>
           <text>Serial DMA Write</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Write_en.html" />
       </navPoint>
-      <navPoint id="navPoint52" playOrder="42">
+      <navPoint id="navPoint67" playOrder="55">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Write_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint53" playOrder="43">
+      <navPoint id="navPoint68" playOrder="56">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Write_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint54" playOrder="44">
+      <navPoint id="navPoint69" playOrder="57">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Write_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint55" playOrder="45">
+      <navPoint id="navPoint70" playOrder="58">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Serial_Dma_Write_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint56" playOrder="45">
+        <navPoint id="navPoint71" playOrder="58">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Write_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint57" playOrder="46">
+        <navPoint id="navPoint72" playOrder="59">
           <navLabel>
             <text>Serial Port</text>
           </navLabel>
           <content src="chapters/Serial_Dma_Write_en.html#serial-port" />
         </navPoint>
-        <navPoint id="navPoint58" playOrder="47">
+        <navPoint id="navPoint73" playOrder="60">
           <navLabel>
             <text>Enable datasize port</text>
           </navLabel>
@@ -358,89 +448,89 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint59" playOrder="48">
+    <navPoint id="navPoint74" playOrder="61">
       <navLabel>
         <text>Random Number Generator</text>
       </navLabel>
       <content src="chapters/Random_Number_Generator_en.html" />
-      <navPoint id="navPoint60" playOrder="48">
+      <navPoint id="navPoint75" playOrder="61">
         <navLabel>
           <text>Random Number Generator</text>
         </navLabel>
         <content src="chapters/Random_Number_Generator_en.html" />
       </navPoint>
-      <navPoint id="navPoint61" playOrder="49">
+      <navPoint id="navPoint76" playOrder="62">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Random_Number_Generator_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint62" playOrder="50">
+      <navPoint id="navPoint77" playOrder="63">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Random_Number_Generator_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint63" playOrder="51">
+      <navPoint id="navPoint78" playOrder="64">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Random_Number_Generator_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint64" playOrder="52">
+      <navPoint id="navPoint79" playOrder="65">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Random_Number_Generator_en.html#parameters-and-dialog-box" />
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint65" playOrder="53">
+    <navPoint id="navPoint80" playOrder="66">
       <navLabel>
         <text>GPIO Runtime</text>
       </navLabel>
       <content src="chapters/Gpio_Runtime_en.html" />
-      <navPoint id="navPoint66" playOrder="53">
+      <navPoint id="navPoint81" playOrder="66">
         <navLabel>
           <text>GPIO Runtime</text>
         </navLabel>
         <content src="chapters/Gpio_Runtime_en.html" />
       </navPoint>
-      <navPoint id="navPoint67" playOrder="54">
+      <navPoint id="navPoint82" playOrder="67">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Gpio_Runtime_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint68" playOrder="55">
+      <navPoint id="navPoint83" playOrder="68">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Gpio_Runtime_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint69" playOrder="56">
+      <navPoint id="navPoint84" playOrder="69">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Gpio_Runtime_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint70" playOrder="57">
+      <navPoint id="navPoint85" playOrder="70">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Gpio_Runtime_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint71" playOrder="57">
+        <navPoint id="navPoint86" playOrder="70">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Gpio_Runtime_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint72" playOrder="58">
+        <navPoint id="navPoint87" playOrder="71">
           <navLabel>
             <text>Port Name</text>
           </navLabel>
           <content src="chapters/Gpio_Runtime_en.html#port-name" />
         </navPoint>
-        <navPoint id="navPoint73" playOrder="59">
+        <navPoint id="navPoint88" playOrder="72">
           <navLabel>
             <text>Pin Number</text>
           </navLabel>
@@ -448,59 +538,59 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint74" playOrder="60">
+    <navPoint id="navPoint89" playOrder="73">
       <navLabel>
         <text>DAC Runtime</text>
       </navLabel>
       <content src="chapters/Dac_Runtime_en.html" />
-      <navPoint id="navPoint75" playOrder="60">
+      <navPoint id="navPoint90" playOrder="73">
         <navLabel>
           <text>DAC Runtime</text>
         </navLabel>
         <content src="chapters/Dac_Runtime_en.html" />
       </navPoint>
-      <navPoint id="navPoint76" playOrder="61">
+      <navPoint id="navPoint91" playOrder="74">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Dac_Runtime_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint77" playOrder="62">
+      <navPoint id="navPoint92" playOrder="75">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Dac_Runtime_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint78" playOrder="63">
+      <navPoint id="navPoint93" playOrder="76">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Dac_Runtime_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint79" playOrder="64">
+      <navPoint id="navPoint94" playOrder="77">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Dac_Runtime_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint80" playOrder="64">
+        <navPoint id="navPoint95" playOrder="77">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Dac_Runtime_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint81" playOrder="65">
+        <navPoint id="navPoint96" playOrder="78">
           <navLabel>
             <text>Port Name</text>
           </navLabel>
           <content src="chapters/Dac_Runtime_en.html#port-name" />
         </navPoint>
-        <navPoint id="navPoint82" playOrder="66">
+        <navPoint id="navPoint97" playOrder="79">
           <navLabel>
             <text>Pin Number</text>
           </navLabel>
           <content src="chapters/Dac_Runtime_en.html#pin-number" />
         </navPoint>
-        <navPoint id="navPoint83" playOrder="67">
+        <navPoint id="navPoint98" playOrder="80">
           <navLabel>
             <text>DAC Value</text>
           </navLabel>
@@ -508,59 +598,59 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint84" playOrder="68">
+    <navPoint id="navPoint99" playOrder="81">
       <navLabel>
         <text>MPU9250 6 DoF Motion Sensor</text>
       </navLabel>
       <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html" />
-      <navPoint id="navPoint85" playOrder="68">
+      <navPoint id="navPoint100" playOrder="81">
         <navLabel>
           <text>MPU9250 6 DoF Motion Sensor</text>
         </navLabel>
         <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html" />
       </navPoint>
-      <navPoint id="navPoint86" playOrder="69">
+      <navPoint id="navPoint101" playOrder="82">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint87" playOrder="70">
+      <navPoint id="navPoint102" playOrder="83">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint88" playOrder="71">
+      <navPoint id="navPoint103" playOrder="84">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint89" playOrder="72">
+      <navPoint id="navPoint104" playOrder="85">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint90" playOrder="72">
+        <navPoint id="navPoint105" playOrder="85">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint91" playOrder="73">
+        <navPoint id="navPoint106" playOrder="86">
           <navLabel>
             <text>Sample time</text>
           </navLabel>
           <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#sample-time" />
         </navPoint>
-        <navPoint id="navPoint92" playOrder="74">
+        <navPoint id="navPoint107" playOrder="87">
           <navLabel>
             <text>I2C Bus</text>
           </navLabel>
           <content src="chapters/MPU9250_6_DoF_Motion_Sensor_en.html#i2c-bus" />
         </navPoint>
-        <navPoint id="navPoint93" playOrder="75">
+        <navPoint id="navPoint108" playOrder="88">
           <navLabel>
             <text>Sub Address</text>
           </navLabel>
@@ -568,59 +658,59 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint94" playOrder="76">
+    <navPoint id="navPoint109" playOrder="89">
       <navLabel>
         <text>AK8963 3 DoF Motion Sensor</text>
       </navLabel>
       <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html" />
-      <navPoint id="navPoint95" playOrder="76">
+      <navPoint id="navPoint110" playOrder="89">
         <navLabel>
           <text>AK8963 3 DoF Motion Sensor</text>
         </navLabel>
         <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html" />
       </navPoint>
-      <navPoint id="navPoint96" playOrder="77">
+      <navPoint id="navPoint111" playOrder="90">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint97" playOrder="78">
+      <navPoint id="navPoint112" playOrder="91">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint98" playOrder="79">
+      <navPoint id="navPoint113" playOrder="92">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint99" playOrder="80">
+      <navPoint id="navPoint114" playOrder="93">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint100" playOrder="80">
+        <navPoint id="navPoint115" playOrder="93">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint101" playOrder="81">
+        <navPoint id="navPoint116" playOrder="94">
           <navLabel>
             <text>Sample time</text>
           </navLabel>
           <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#sample-time" />
         </navPoint>
-        <navPoint id="navPoint102" playOrder="82">
+        <navPoint id="navPoint117" playOrder="95">
           <navLabel>
             <text>I2C Bus</text>
           </navLabel>
           <content src="chapters/AK8963_3_DoF_Motion_Sensor_en.html#i2c-bus" />
         </navPoint>
-        <navPoint id="navPoint103" playOrder="83">
+        <navPoint id="navPoint118" playOrder="96">
           <navLabel>
             <text>Sub Address</text>
           </navLabel>
@@ -628,53 +718,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint104" playOrder="84">
+    <navPoint id="navPoint119" playOrder="97">
       <navLabel>
         <text>Digital Pressure Sensor</text>
       </navLabel>
       <content src="chapters/Digital_Pressure_Sensor_en.html" />
-      <navPoint id="navPoint105" playOrder="84">
+      <navPoint id="navPoint120" playOrder="97">
         <navLabel>
           <text>Digital Pressure Sensor</text>
         </navLabel>
         <content src="chapters/Digital_Pressure_Sensor_en.html" />
       </navPoint>
-      <navPoint id="navPoint106" playOrder="85">
+      <navPoint id="navPoint121" playOrder="98">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Digital_Pressure_Sensor_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint107" playOrder="86">
+      <navPoint id="navPoint122" playOrder="99">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Digital_Pressure_Sensor_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint108" playOrder="87">
+      <navPoint id="navPoint123" playOrder="100">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Digital_Pressure_Sensor_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint109" playOrder="88">
+      <navPoint id="navPoint124" playOrder="101">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Digital_Pressure_Sensor_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint110" playOrder="88">
+        <navPoint id="navPoint125" playOrder="101">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Digital_Pressure_Sensor_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint111" playOrder="89">
+        <navPoint id="navPoint126" playOrder="102">
           <navLabel>
             <text>Sample time</text>
           </navLabel>
           <content src="chapters/Digital_Pressure_Sensor_en.html#sample-time" />
         </navPoint>
-        <navPoint id="navPoint112" playOrder="90">
+        <navPoint id="navPoint127" playOrder="103">
           <navLabel>
             <text>I2C Bus</text>
           </navLabel>
@@ -682,77 +772,77 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint113" playOrder="91">
+    <navPoint id="navPoint128" playOrder="104">
       <navLabel>
         <text>MAX11300 Config</text>
       </navLabel>
       <content src="chapters/Max11300_Config_en.html" />
-      <navPoint id="navPoint114" playOrder="91">
+      <navPoint id="navPoint129" playOrder="104">
         <navLabel>
           <text>MAX11300 Config</text>
         </navLabel>
         <content src="chapters/Max11300_Config_en.html" />
       </navPoint>
-      <navPoint id="navPoint115" playOrder="92">
+      <navPoint id="navPoint130" playOrder="105">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Max11300_Config_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint116" playOrder="93">
+      <navPoint id="navPoint131" playOrder="106">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Max11300_Config_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint117" playOrder="94">
+      <navPoint id="navPoint132" playOrder="107">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Max11300_Config_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint118" playOrder="95">
+      <navPoint id="navPoint133" playOrder="108">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Max11300_Config_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint119" playOrder="95">
+        <navPoint id="navPoint134" playOrder="108">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Max11300_Config_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint120" playOrder="96">
+        <navPoint id="navPoint135" playOrder="109">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Max11300_Config_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint121" playOrder="97">
+        <navPoint id="navPoint136" playOrder="110">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Max11300_Config_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint122" playOrder="98">
+        <navPoint id="navPoint137" playOrder="111">
           <navLabel>
             <text>ADC Conversion Rate</text>
           </navLabel>
           <content src="chapters/Max11300_Config_en.html#adc-conversion-rate" />
         </navPoint>
-        <navPoint id="navPoint123" playOrder="99">
+        <navPoint id="navPoint138" playOrder="112">
           <navLabel>
             <text>DAC Reference</text>
           </navLabel>
           <content src="chapters/Max11300_Config_en.html#dac-reference" />
         </navPoint>
-        <navPoint id="navPoint124" playOrder="100">
+        <navPoint id="navPoint139" playOrder="113">
           <navLabel>
             <text>Enable internal temperature channel</text>
           </navLabel>
           <content src="chapters/Max11300_Config_en.html#enable-internal-temperature-channel" />
         </navPoint>
-        <navPoint id="navPoint125" playOrder="101">
+        <navPoint id="navPoint140" playOrder="114">
           <navLabel>
             <text>Enable temperature channel x</text>
           </navLabel>
@@ -760,59 +850,59 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint126" playOrder="102">
+    <navPoint id="navPoint141" playOrder="115">
       <navLabel>
         <text>MAX11300 Digital Input</text>
       </navLabel>
       <content src="chapters/Max11300_Digital_Input_en.html" />
-      <navPoint id="navPoint127" playOrder="102">
+      <navPoint id="navPoint142" playOrder="115">
         <navLabel>
           <text>MAX11300 Digital Input</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Input_en.html" />
       </navPoint>
-      <navPoint id="navPoint128" playOrder="103">
+      <navPoint id="navPoint143" playOrder="116">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Input_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint129" playOrder="104">
+      <navPoint id="navPoint144" playOrder="117">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Input_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint130" playOrder="105">
+      <navPoint id="navPoint145" playOrder="118">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Input_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint131" playOrder="106">
+      <navPoint id="navPoint146" playOrder="119">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Input_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint132" playOrder="106">
+        <navPoint id="navPoint147" playOrder="119">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Max11300_Digital_Input_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint133" playOrder="107">
+        <navPoint id="navPoint148" playOrder="120">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Max11300_Digital_Input_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint134" playOrder="108">
+        <navPoint id="navPoint149" playOrder="121">
           <navLabel>
             <text>Pin Number</text>
           </navLabel>
           <content src="chapters/Max11300_Digital_Input_en.html#pin-number" />
         </navPoint>
-        <navPoint id="navPoint135" playOrder="109">
+        <navPoint id="navPoint150" playOrder="122">
           <navLabel>
             <text>Threshold</text>
           </navLabel>
@@ -820,59 +910,59 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint136" playOrder="110">
+    <navPoint id="navPoint151" playOrder="123">
       <navLabel>
         <text>MAX11300 Digital Output</text>
       </navLabel>
       <content src="chapters/Max11300_Digital_Output_en.html" />
-      <navPoint id="navPoint137" playOrder="110">
+      <navPoint id="navPoint152" playOrder="123">
         <navLabel>
           <text>MAX11300 Digital Output</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Output_en.html" />
       </navPoint>
-      <navPoint id="navPoint138" playOrder="111">
+      <navPoint id="navPoint153" playOrder="124">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Output_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint139" playOrder="112">
+      <navPoint id="navPoint154" playOrder="125">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Output_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint140" playOrder="113">
+      <navPoint id="navPoint155" playOrder="126">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Output_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint141" playOrder="114">
+      <navPoint id="navPoint156" playOrder="127">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Max11300_Digital_Output_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint142" playOrder="114">
+        <navPoint id="navPoint157" playOrder="127">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Max11300_Digital_Output_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint143" playOrder="115">
+        <navPoint id="navPoint158" playOrder="128">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Max11300_Digital_Output_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint144" playOrder="116">
+        <navPoint id="navPoint159" playOrder="129">
           <navLabel>
             <text>Pin Number</text>
           </navLabel>
           <content src="chapters/Max11300_Digital_Output_en.html#pin-number" />
         </navPoint>
-        <navPoint id="navPoint145" playOrder="117">
+        <navPoint id="navPoint160" playOrder="130">
           <navLabel>
             <text>Output level</text>
           </navLabel>
@@ -880,89 +970,89 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint146" playOrder="118">
+    <navPoint id="navPoint161" playOrder="131">
       <navLabel>
         <text>MAX11300 Analog Input</text>
       </navLabel>
       <content src="chapters/Max11300_Analog_Input_en.html" />
-      <navPoint id="navPoint147" playOrder="118">
+      <navPoint id="navPoint162" playOrder="131">
         <navLabel>
           <text>MAX11300 Analog Input</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Input_en.html" />
       </navPoint>
-      <navPoint id="navPoint148" playOrder="119">
+      <navPoint id="navPoint163" playOrder="132">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Input_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint149" playOrder="120">
+      <navPoint id="navPoint164" playOrder="133">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Input_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint150" playOrder="121">
+      <navPoint id="navPoint165" playOrder="134">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Input_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint151" playOrder="122">
+      <navPoint id="navPoint166" playOrder="135">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Input_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint152" playOrder="122">
+        <navPoint id="navPoint167" playOrder="135">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint153" playOrder="123">
+        <navPoint id="navPoint168" playOrder="136">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint154" playOrder="124">
+        <navPoint id="navPoint169" playOrder="137">
           <navLabel>
             <text>Input type</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#input-type" />
         </navPoint>
-        <navPoint id="navPoint155" playOrder="125">
+        <navPoint id="navPoint170" playOrder="138">
           <navLabel>
             <text>Mode</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#mode" />
         </navPoint>
-        <navPoint id="navPoint156" playOrder="126">
+        <navPoint id="navPoint171" playOrder="139">
           <navLabel>
             <text>Positive input pin</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#positive-input-pin" />
         </navPoint>
-        <navPoint id="navPoint157" playOrder="127">
+        <navPoint id="navPoint172" playOrder="140">
           <navLabel>
             <text>Negative input pin</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#negative-input-pin" />
         </navPoint>
-        <navPoint id="navPoint158" playOrder="128">
+        <navPoint id="navPoint173" playOrder="141">
           <navLabel>
             <text>Average samples</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#average-samples" />
         </navPoint>
-        <navPoint id="navPoint159" playOrder="129">
+        <navPoint id="navPoint174" playOrder="142">
           <navLabel>
             <text>Input range</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Input_en.html#input-range" />
         </navPoint>
-        <navPoint id="navPoint160" playOrder="130">
+        <navPoint id="navPoint175" playOrder="143">
           <navLabel>
             <text>Reference voltage</text>
           </navLabel>
@@ -970,65 +1060,65 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint161" playOrder="131">
+    <navPoint id="navPoint176" playOrder="144">
       <navLabel>
         <text>MAX11300 Analog Output</text>
       </navLabel>
       <content src="chapters/Max11300_Analog_Output_en.html" />
-      <navPoint id="navPoint162" playOrder="131">
+      <navPoint id="navPoint177" playOrder="144">
         <navLabel>
           <text>MAX11300 Analog Output</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Output_en.html" />
       </navPoint>
-      <navPoint id="navPoint163" playOrder="132">
+      <navPoint id="navPoint178" playOrder="145">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Output_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint164" playOrder="133">
+      <navPoint id="navPoint179" playOrder="146">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Output_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint165" playOrder="134">
+      <navPoint id="navPoint180" playOrder="147">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Output_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint166" playOrder="135">
+      <navPoint id="navPoint181" playOrder="148">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Max11300_Analog_Output_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint167" playOrder="135">
+        <navPoint id="navPoint182" playOrder="148">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Output_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint168" playOrder="136">
+        <navPoint id="navPoint183" playOrder="149">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Output_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint169" playOrder="137">
+        <navPoint id="navPoint184" playOrder="150">
           <navLabel>
             <text>Pin Number</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Output_en.html#pin-number" />
         </navPoint>
-        <navPoint id="navPoint170" playOrder="138">
+        <navPoint id="navPoint185" playOrder="151">
           <navLabel>
             <text>Mode</text>
           </navLabel>
           <content src="chapters/Max11300_Analog_Output_en.html#mode" />
         </navPoint>
-        <navPoint id="navPoint171" playOrder="139">
+        <navPoint id="navPoint186" playOrder="152">
           <navLabel>
             <text>Range</text>
           </navLabel>
@@ -1036,53 +1126,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint172" playOrder="140">
+    <navPoint id="navPoint187" playOrder="153">
       <navLabel>
         <text>MAX11300 Temperature</text>
       </navLabel>
       <content src="chapters/Max11300_Temperature_en.html" />
-      <navPoint id="navPoint173" playOrder="140">
+      <navPoint id="navPoint188" playOrder="153">
         <navLabel>
           <text>MAX11300 Temperature</text>
         </navLabel>
         <content src="chapters/Max11300_Temperature_en.html" />
       </navPoint>
-      <navPoint id="navPoint174" playOrder="141">
+      <navPoint id="navPoint189" playOrder="154">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Max11300_Temperature_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint175" playOrder="142">
+      <navPoint id="navPoint190" playOrder="155">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Max11300_Temperature_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint176" playOrder="143">
+      <navPoint id="navPoint191" playOrder="156">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Max11300_Temperature_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint177" playOrder="144">
+      <navPoint id="navPoint192" playOrder="157">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Max11300_Temperature_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint178" playOrder="144">
+        <navPoint id="navPoint193" playOrder="157">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Max11300_Temperature_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint179" playOrder="145">
+        <navPoint id="navPoint194" playOrder="158">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Max11300_Temperature_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint180" playOrder="146">
+        <navPoint id="navPoint195" playOrder="159">
           <navLabel>
             <text>Channel</text>
           </navLabel>
@@ -1090,71 +1180,71 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint181" playOrder="147">
+    <navPoint id="navPoint196" playOrder="160">
       <navLabel>
         <text>MCP3204 Analog Input</text>
       </navLabel>
       <content src="chapters/Mcp3204_Analog_Input_en.html" />
-      <navPoint id="navPoint182" playOrder="147">
+      <navPoint id="navPoint197" playOrder="160">
         <navLabel>
           <text>MCP3204 Analog Input</text>
         </navLabel>
         <content src="chapters/Mcp3204_Analog_Input_en.html" />
       </navPoint>
-      <navPoint id="navPoint183" playOrder="148">
+      <navPoint id="navPoint198" playOrder="161">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Mcp3204_Analog_Input_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint184" playOrder="149">
+      <navPoint id="navPoint199" playOrder="162">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Mcp3204_Analog_Input_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint185" playOrder="150">
+      <navPoint id="navPoint200" playOrder="163">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Mcp3204_Analog_Input_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint186" playOrder="151">
+      <navPoint id="navPoint201" playOrder="164">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Mcp3204_Analog_Input_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint187" playOrder="151">
+        <navPoint id="navPoint202" playOrder="164">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Mcp3204_Analog_Input_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint188" playOrder="152">
+        <navPoint id="navPoint203" playOrder="165">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Mcp3204_Analog_Input_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint189" playOrder="153">
+        <navPoint id="navPoint204" playOrder="166">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Mcp3204_Analog_Input_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint190" playOrder="154">
+        <navPoint id="navPoint205" playOrder="167">
           <navLabel>
             <text>Channel</text>
           </navLabel>
           <content src="chapters/Mcp3204_Analog_Input_en.html#channel" />
         </navPoint>
-        <navPoint id="navPoint191" playOrder="155">
+        <navPoint id="navPoint206" playOrder="168">
           <navLabel>
             <text>Mode</text>
           </navLabel>
           <content src="chapters/Mcp3204_Analog_Input_en.html#mode" />
         </navPoint>
-        <navPoint id="navPoint192" playOrder="156">
+        <navPoint id="navPoint207" playOrder="169">
           <navLabel>
             <text>Input type</text>
           </navLabel>
@@ -1162,71 +1252,71 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint193" playOrder="157">
+    <navPoint id="navPoint208" playOrder="170">
       <navLabel>
         <text>MCP4822 Analog Output</text>
       </navLabel>
       <content src="chapters/Mcp4822_Analog_Output_en.html" />
-      <navPoint id="navPoint194" playOrder="157">
+      <navPoint id="navPoint209" playOrder="170">
         <navLabel>
           <text>MCP4822 Analog Output</text>
         </navLabel>
         <content src="chapters/Mcp4822_Analog_Output_en.html" />
       </navPoint>
-      <navPoint id="navPoint195" playOrder="158">
+      <navPoint id="navPoint210" playOrder="171">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Mcp4822_Analog_Output_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint196" playOrder="159">
+      <navPoint id="navPoint211" playOrder="172">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Mcp4822_Analog_Output_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint197" playOrder="160">
+      <navPoint id="navPoint212" playOrder="173">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Mcp4822_Analog_Output_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint198" playOrder="161">
+      <navPoint id="navPoint213" playOrder="174">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Mcp4822_Analog_Output_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint199" playOrder="161">
+        <navPoint id="navPoint214" playOrder="174">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Mcp4822_Analog_Output_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint200" playOrder="162">
+        <navPoint id="navPoint215" playOrder="175">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Mcp4822_Analog_Output_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint201" playOrder="163">
+        <navPoint id="navPoint216" playOrder="176">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Mcp4822_Analog_Output_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint202" playOrder="164">
+        <navPoint id="navPoint217" playOrder="177">
           <navLabel>
             <text>Channel</text>
           </navLabel>
           <content src="chapters/Mcp4822_Analog_Output_en.html#channel" />
         </navPoint>
-        <navPoint id="navPoint203" playOrder="165">
+        <navPoint id="navPoint218" playOrder="178">
           <navLabel>
             <text>Mode</text>
           </navLabel>
           <content src="chapters/Mcp4822_Analog_Output_en.html#mode" />
         </navPoint>
-        <navPoint id="navPoint204" playOrder="166">
+        <navPoint id="navPoint219" playOrder="179">
           <navLabel>
             <text>Gain</text>
           </navLabel>
@@ -1234,53 +1324,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint205" playOrder="167">
+    <navPoint id="navPoint220" playOrder="180">
       <navLabel>
         <text>TMP123 Temperature</text>
       </navLabel>
       <content src="chapters/Tmp123_Temperature_en.html" />
-      <navPoint id="navPoint206" playOrder="167">
+      <navPoint id="navPoint221" playOrder="180">
         <navLabel>
           <text>TMP123 Temperature</text>
         </navLabel>
         <content src="chapters/Tmp123_Temperature_en.html" />
       </navPoint>
-      <navPoint id="navPoint207" playOrder="168">
+      <navPoint id="navPoint222" playOrder="181">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Tmp123_Temperature_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint208" playOrder="169">
+      <navPoint id="navPoint223" playOrder="182">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Tmp123_Temperature_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint209" playOrder="170">
+      <navPoint id="navPoint224" playOrder="183">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Tmp123_Temperature_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint210" playOrder="171">
+      <navPoint id="navPoint225" playOrder="184">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Tmp123_Temperature_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint211" playOrder="171">
+        <navPoint id="navPoint226" playOrder="184">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Tmp123_Temperature_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint212" playOrder="172">
+        <navPoint id="navPoint227" playOrder="185">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Tmp123_Temperature_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint213" playOrder="173">
+        <navPoint id="navPoint228" playOrder="186">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
@@ -1288,53 +1378,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint214" playOrder="174">
+    <navPoint id="navPoint229" playOrder="187">
       <navLabel>
         <text>FM25L16B FRAM Read</text>
       </navLabel>
       <content src="chapters/Fm25l16b_Fram_Read_en.html" />
-      <navPoint id="navPoint215" playOrder="174">
+      <navPoint id="navPoint230" playOrder="187">
         <navLabel>
           <text>FM25L16B FRAM Read</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Read_en.html" />
       </navPoint>
-      <navPoint id="navPoint216" playOrder="175">
+      <navPoint id="navPoint231" playOrder="188">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Read_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint217" playOrder="176">
+      <navPoint id="navPoint232" playOrder="189">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Read_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint218" playOrder="177">
+      <navPoint id="navPoint233" playOrder="190">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Read_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint219" playOrder="178">
+      <navPoint id="navPoint234" playOrder="191">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Read_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint220" playOrder="178">
+        <navPoint id="navPoint235" playOrder="191">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Fm25l16b_Fram_Read_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint221" playOrder="179">
+        <navPoint id="navPoint236" playOrder="192">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Fm25l16b_Fram_Read_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint222" playOrder="180">
+        <navPoint id="navPoint237" playOrder="193">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
@@ -1342,53 +1432,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint223" playOrder="181">
+    <navPoint id="navPoint238" playOrder="194">
       <navLabel>
         <text>FM25L16B FRAM Write</text>
       </navLabel>
       <content src="chapters/Fm25l16b_Fram_Write_en.html" />
-      <navPoint id="navPoint224" playOrder="181">
+      <navPoint id="navPoint239" playOrder="194">
         <navLabel>
           <text>FM25L16B FRAM Write</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Write_en.html" />
       </navPoint>
-      <navPoint id="navPoint225" playOrder="182">
+      <navPoint id="navPoint240" playOrder="195">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Write_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint226" playOrder="183">
+      <navPoint id="navPoint241" playOrder="196">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Write_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint227" playOrder="184">
+      <navPoint id="navPoint242" playOrder="197">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Write_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint228" playOrder="185">
+      <navPoint id="navPoint243" playOrder="198">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Fm25l16b_Fram_Write_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint229" playOrder="185">
+        <navPoint id="navPoint244" playOrder="198">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Fm25l16b_Fram_Write_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint230" playOrder="186">
+        <navPoint id="navPoint245" playOrder="199">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Fm25l16b_Fram_Write_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint231" playOrder="187">
+        <navPoint id="navPoint246" playOrder="200">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
@@ -1396,53 +1486,53 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint232" playOrder="188">
+    <navPoint id="navPoint247" playOrder="201">
       <navLabel>
         <text>SPI Master Read Write</text>
       </navLabel>
       <content src="chapters/Spi_Master_Read_Write_en.html" />
-      <navPoint id="navPoint233" playOrder="188">
+      <navPoint id="navPoint248" playOrder="201">
         <navLabel>
           <text>SPI Master Read Write</text>
         </navLabel>
         <content src="chapters/Spi_Master_Read_Write_en.html" />
       </navPoint>
-      <navPoint id="navPoint234" playOrder="189">
+      <navPoint id="navPoint249" playOrder="202">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Spi_Master_Read_Write_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint235" playOrder="190">
+      <navPoint id="navPoint250" playOrder="203">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Spi_Master_Read_Write_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint236" playOrder="191">
+      <navPoint id="navPoint251" playOrder="204">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Spi_Master_Read_Write_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint237" playOrder="192">
+      <navPoint id="navPoint252" playOrder="205">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Spi_Master_Read_Write_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint238" playOrder="192">
+        <navPoint id="navPoint253" playOrder="205">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Spi_Master_Read_Write_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint239" playOrder="193">
+        <navPoint id="navPoint254" playOrder="206">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Spi_Master_Read_Write_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint240" playOrder="194">
+        <navPoint id="navPoint255" playOrder="207">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
@@ -1450,77 +1540,77 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint241" playOrder="195">
+    <navPoint id="navPoint256" playOrder="208">
       <navLabel>
         <text>LIS302DL Accelerometer</text>
       </navLabel>
       <content src="chapters/Lis302dl_Accelerometer_en.html" />
-      <navPoint id="navPoint242" playOrder="195">
+      <navPoint id="navPoint257" playOrder="208">
         <navLabel>
           <text>LIS302DL Accelerometer</text>
         </navLabel>
         <content src="chapters/Lis302dl_Accelerometer_en.html" />
       </navPoint>
-      <navPoint id="navPoint243" playOrder="196">
+      <navPoint id="navPoint258" playOrder="209">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Lis302dl_Accelerometer_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint244" playOrder="197">
+      <navPoint id="navPoint259" playOrder="210">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Lis302dl_Accelerometer_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint245" playOrder="198">
+      <navPoint id="navPoint260" playOrder="211">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Lis302dl_Accelerometer_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint246" playOrder="199">
+      <navPoint id="navPoint261" playOrder="212">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Lis302dl_Accelerometer_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint247" playOrder="199">
+        <navPoint id="navPoint262" playOrder="212">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Lis302dl_Accelerometer_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint248" playOrder="200">
+        <navPoint id="navPoint263" playOrder="213">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Lis302dl_Accelerometer_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint249" playOrder="201">
+        <navPoint id="navPoint264" playOrder="214">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/Lis302dl_Accelerometer_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint250" playOrder="202">
+        <navPoint id="navPoint265" playOrder="215">
           <navLabel>
             <text>Sample rate</text>
           </navLabel>
           <content src="chapters/Lis302dl_Accelerometer_en.html#sample-rate" />
         </navPoint>
-        <navPoint id="navPoint251" playOrder="203">
+        <navPoint id="navPoint266" playOrder="216">
           <navLabel>
             <text>Full scale</text>
           </navLabel>
           <content src="chapters/Lis302dl_Accelerometer_en.html#full-scale" />
         </navPoint>
-        <navPoint id="navPoint252" playOrder="204">
+        <navPoint id="navPoint267" playOrder="217">
           <navLabel>
             <text>HP filter</text>
           </navLabel>
           <content src="chapters/Lis302dl_Accelerometer_en.html#hp-filter" />
         </navPoint>
-        <navPoint id="navPoint253" playOrder="205">
+        <navPoint id="navPoint268" playOrder="218">
           <navLabel>
             <text>Data ready Interrupt</text>
           </navLabel>
@@ -1528,101 +1618,101 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint254" playOrder="206">
+    <navPoint id="navPoint269" playOrder="219">
       <navLabel>
         <text>L3GD20 Gyroscope</text>
       </navLabel>
       <content src="chapters/L3gd20_Gyroscope_en.html" />
-      <navPoint id="navPoint255" playOrder="206">
+      <navPoint id="navPoint270" playOrder="219">
         <navLabel>
           <text>L3GD20 Gyroscope</text>
         </navLabel>
         <content src="chapters/L3gd20_Gyroscope_en.html" />
       </navPoint>
-      <navPoint id="navPoint256" playOrder="207">
+      <navPoint id="navPoint271" playOrder="220">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/L3gd20_Gyroscope_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint257" playOrder="208">
+      <navPoint id="navPoint272" playOrder="221">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/L3gd20_Gyroscope_en.html#description" />
-        <navPoint id="navPoint258" playOrder="208">
+        <navPoint id="navPoint273" playOrder="221">
           <navLabel>
             <text>Description</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#description" />
         </navPoint>
-        <navPoint id="navPoint259" playOrder="209">
+        <navPoint id="navPoint274" playOrder="222">
           <navLabel>
             <text>Cut-off frequency [Hz] depending on bandwidth and sample rate selection</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#cut-off-frequency-hz-depending-on-bandwidth-and-sample-rate-selection" />
         </navPoint>
-        <navPoint id="navPoint260" playOrder="210">
+        <navPoint id="navPoint275" playOrder="223">
           <navLabel>
             <text>High pass filter cut-off frequency [Hz]</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#high-pass-filter-cut-off-frequency-hz" />
         </navPoint>
       </navPoint>
-      <navPoint id="navPoint261" playOrder="211">
+      <navPoint id="navPoint276" playOrder="224">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/L3gd20_Gyroscope_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint262" playOrder="212">
+      <navPoint id="navPoint277" playOrder="225">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/L3gd20_Gyroscope_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint263" playOrder="212">
+        <navPoint id="navPoint278" playOrder="225">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint264" playOrder="213">
+        <navPoint id="navPoint279" playOrder="226">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint265" playOrder="214">
+        <navPoint id="navPoint280" playOrder="227">
           <navLabel>
             <text>Chip Select Port and Pin</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#chip-select-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint266" playOrder="215">
+        <navPoint id="navPoint281" playOrder="228">
           <navLabel>
             <text>Sample rate</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#sample-rate" />
         </navPoint>
-        <navPoint id="navPoint267" playOrder="216">
+        <navPoint id="navPoint282" playOrder="229">
           <navLabel>
             <text>Full scale</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#full-scale" />
         </navPoint>
-        <navPoint id="navPoint268" playOrder="217">
+        <navPoint id="navPoint283" playOrder="230">
           <navLabel>
             <text>Bandwidth</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#bandwidth" />
         </navPoint>
-        <navPoint id="navPoint269" playOrder="218">
+        <navPoint id="navPoint284" playOrder="231">
           <navLabel>
             <text>HP filter</text>
           </navLabel>
           <content src="chapters/L3gd20_Gyroscope_en.html#hp-filter" />
         </navPoint>
-        <navPoint id="navPoint270" playOrder="219">
+        <navPoint id="navPoint285" playOrder="232">
           <navLabel>
             <text>Enable data ready interrupt in INT2 output</text>
           </navLabel>
@@ -1630,71 +1720,71 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint271" playOrder="220">
+    <navPoint id="navPoint286" playOrder="233">
       <navLabel>
         <text>SPI Master Config</text>
       </navLabel>
       <content src="chapters/Spi_Master_Config_en.html" />
-      <navPoint id="navPoint272" playOrder="220">
+      <navPoint id="navPoint287" playOrder="233">
         <navLabel>
           <text>SPI Master Config</text>
         </navLabel>
         <content src="chapters/Spi_Master_Config_en.html" />
       </navPoint>
-      <navPoint id="navPoint273" playOrder="221">
+      <navPoint id="navPoint288" playOrder="234">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Spi_Master_Config_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint274" playOrder="222">
+      <navPoint id="navPoint289" playOrder="235">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Spi_Master_Config_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint275" playOrder="223">
+      <navPoint id="navPoint290" playOrder="236">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Spi_Master_Config_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint276" playOrder="224">
+      <navPoint id="navPoint291" playOrder="237">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Spi_Master_Config_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint277" playOrder="224">
+        <navPoint id="navPoint292" playOrder="237">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Spi_Master_Config_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint278" playOrder="225">
+        <navPoint id="navPoint293" playOrder="238">
           <navLabel>
             <text>SPI Port</text>
           </navLabel>
           <content src="chapters/Spi_Master_Config_en.html#spi-port" />
         </navPoint>
-        <navPoint id="navPoint279" playOrder="226">
+        <navPoint id="navPoint294" playOrder="239">
           <navLabel>
             <text>Bus frequency</text>
           </navLabel>
           <content src="chapters/Spi_Master_Config_en.html#bus-frequency" />
         </navPoint>
-        <navPoint id="navPoint280" playOrder="227">
+        <navPoint id="navPoint295" playOrder="240">
           <navLabel>
             <text>MOSI Port and Pin</text>
           </navLabel>
           <content src="chapters/Spi_Master_Config_en.html#mosi-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint281" playOrder="228">
+        <navPoint id="navPoint296" playOrder="241">
           <navLabel>
             <text>MISO Port and Pin</text>
           </navLabel>
           <content src="chapters/Spi_Master_Config_en.html#miso-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint282" playOrder="229">
+        <navPoint id="navPoint297" playOrder="242">
           <navLabel>
             <text>SCK Port and Pin</text>
           </navLabel>
@@ -1702,71 +1792,71 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint283" playOrder="230">
+    <navPoint id="navPoint298" playOrder="243">
       <navLabel>
         <text>SPI Slave Config</text>
       </navLabel>
       <content src="chapters/Spi_Slave_Config_en.html" />
-      <navPoint id="navPoint284" playOrder="230">
+      <navPoint id="navPoint299" playOrder="243">
         <navLabel>
           <text>SPI Slave Config</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Config_en.html" />
       </navPoint>
-      <navPoint id="navPoint285" playOrder="231">
+      <navPoint id="navPoint300" playOrder="244">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Config_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint286" playOrder="232">
+      <navPoint id="navPoint301" playOrder="245">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Config_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint287" playOrder="233">
+      <navPoint id="navPoint302" playOrder="246">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Config_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint288" playOrder="234">
+      <navPoint id="navPoint303" playOrder="247">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Config_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint289" playOrder="234">
+        <navPoint id="navPoint304" playOrder="247">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Spi_Slave_Config_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint290" playOrder="235">
+        <navPoint id="navPoint305" playOrder="248">
           <navLabel>
             <text>Bus frequency</text>
           </navLabel>
           <content src="chapters/Spi_Slave_Config_en.html#bus-frequency" />
         </navPoint>
-        <navPoint id="navPoint291" playOrder="236">
+        <navPoint id="navPoint306" playOrder="249">
           <navLabel>
             <text>MOSI Port and Pin</text>
           </navLabel>
           <content src="chapters/Spi_Slave_Config_en.html#mosi-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint292" playOrder="237">
+        <navPoint id="navPoint307" playOrder="250">
           <navLabel>
             <text>MISO Port and Pin</text>
           </navLabel>
           <content src="chapters/Spi_Slave_Config_en.html#miso-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint293" playOrder="238">
+        <navPoint id="navPoint308" playOrder="251">
           <navLabel>
             <text>SCK Port and Pin</text>
           </navLabel>
           <content src="chapters/Spi_Slave_Config_en.html#sck-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint294" playOrder="239">
+        <navPoint id="navPoint309" playOrder="252">
           <navLabel>
             <text>SSEL Port and Pin</text>
           </navLabel>
@@ -1774,137 +1864,137 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint295" playOrder="240">
+    <navPoint id="navPoint310" playOrder="253">
       <navLabel>
         <text>SPI Slave Read</text>
       </navLabel>
       <content src="chapters/Spi_Slave_Read_en.html" />
-      <navPoint id="navPoint296" playOrder="240">
+      <navPoint id="navPoint311" playOrder="253">
         <navLabel>
           <text>SPI Slave Read</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Read_en.html" />
       </navPoint>
-      <navPoint id="navPoint297" playOrder="241">
+      <navPoint id="navPoint312" playOrder="254">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Read_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint298" playOrder="242">
+      <navPoint id="navPoint313" playOrder="255">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Read_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint299" playOrder="243">
+      <navPoint id="navPoint314" playOrder="256">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Read_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint300" playOrder="244">
+      <navPoint id="navPoint315" playOrder="257">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Read_en.html#parameters-and-dialog-box" />
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint301" playOrder="245">
+    <navPoint id="navPoint316" playOrder="258">
       <navLabel>
         <text>SPI Slave Write</text>
       </navLabel>
       <content src="chapters/Spi_Slave_Write_en.html" />
-      <navPoint id="navPoint302" playOrder="245">
+      <navPoint id="navPoint317" playOrder="258">
         <navLabel>
           <text>SPI Slave Write</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Write_en.html" />
       </navPoint>
-      <navPoint id="navPoint303" playOrder="246">
+      <navPoint id="navPoint318" playOrder="259">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Write_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint304" playOrder="247">
+      <navPoint id="navPoint319" playOrder="260">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Write_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint305" playOrder="248">
+      <navPoint id="navPoint320" playOrder="261">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Write_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint306" playOrder="249">
+      <navPoint id="navPoint321" playOrder="262">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Spi_Slave_Write_en.html#parameters-and-dialog-box" />
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint307" playOrder="250">
+    <navPoint id="navPoint322" playOrder="263">
       <navLabel>
         <text>I2C Configuration</text>
       </navLabel>
       <content src="chapters/I2c_Config_en.html" />
-      <navPoint id="navPoint308" playOrder="250">
+      <navPoint id="navPoint323" playOrder="263">
         <navLabel>
           <text>I2C Configuration</text>
         </navLabel>
         <content src="chapters/I2c_Config_en.html" />
       </navPoint>
-      <navPoint id="navPoint309" playOrder="251">
+      <navPoint id="navPoint324" playOrder="264">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/I2c_Config_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint310" playOrder="252">
+      <navPoint id="navPoint325" playOrder="265">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/I2c_Config_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint311" playOrder="253">
+      <navPoint id="navPoint326" playOrder="266">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/I2c_Config_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint312" playOrder="254">
+      <navPoint id="navPoint327" playOrder="267">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/I2c_Config_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint313" playOrder="254">
+        <navPoint id="navPoint328" playOrder="267">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/I2c_Config_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint314" playOrder="255">
+        <navPoint id="navPoint329" playOrder="268">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/I2c_Config_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint315" playOrder="256">
+        <navPoint id="navPoint330" playOrder="269">
           <navLabel>
             <text>Bus frequency</text>
           </navLabel>
           <content src="chapters/I2c_Config_en.html#bus-frequency" />
         </navPoint>
-        <navPoint id="navPoint316" playOrder="257">
+        <navPoint id="navPoint331" playOrder="270">
           <navLabel>
             <text>SDA Port and Pin</text>
           </navLabel>
           <content src="chapters/I2c_Config_en.html#sda-port-and-pin" />
         </navPoint>
-        <navPoint id="navPoint317" playOrder="258">
+        <navPoint id="navPoint332" playOrder="271">
           <navLabel>
             <text>SCL Port and Pin</text>
           </navLabel>
@@ -1912,83 +2002,83 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint318" playOrder="259">
+    <navPoint id="navPoint333" playOrder="272">
       <navLabel>
         <text>I2C Read</text>
       </navLabel>
       <content src="chapters/I2c_Read_en.html" />
-      <navPoint id="navPoint319" playOrder="259">
+      <navPoint id="navPoint334" playOrder="272">
         <navLabel>
           <text>I2C Read</text>
         </navLabel>
         <content src="chapters/I2c_Read_en.html" />
       </navPoint>
-      <navPoint id="navPoint320" playOrder="260">
+      <navPoint id="navPoint335" playOrder="273">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/I2c_Read_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint321" playOrder="261">
+      <navPoint id="navPoint336" playOrder="274">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/I2c_Read_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint322" playOrder="262">
+      <navPoint id="navPoint337" playOrder="275">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/I2c_Read_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint323" playOrder="263">
+      <navPoint id="navPoint338" playOrder="276">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/I2c_Read_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint324" playOrder="263">
+        <navPoint id="navPoint339" playOrder="276">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint325" playOrder="264">
+        <navPoint id="navPoint340" playOrder="277">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint326" playOrder="265">
+        <navPoint id="navPoint341" playOrder="278">
           <navLabel>
             <text>External address input</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#external-address-input" />
         </navPoint>
-        <navPoint id="navPoint327" playOrder="266">
+        <navPoint id="navPoint342" playOrder="279">
           <navLabel>
             <text>Slave address</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#slave-address" />
         </navPoint>
-        <navPoint id="navPoint328" playOrder="267">
+        <navPoint id="navPoint343" playOrder="280">
           <navLabel>
             <text>External byte count</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#external-byte-count" />
         </navPoint>
-        <navPoint id="navPoint329" playOrder="268">
+        <navPoint id="navPoint344" playOrder="281">
           <navLabel>
             <text>Number of bytes to read</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#number-of-bytes-to-read" />
         </navPoint>
-        <navPoint id="navPoint330" playOrder="269">
+        <navPoint id="navPoint345" playOrder="282">
           <navLabel>
             <text>Repeated</text>
           </navLabel>
           <content src="chapters/I2c_Read_en.html#repeated" />
         </navPoint>
-        <navPoint id="navPoint331" playOrder="270">
+        <navPoint id="navPoint346" playOrder="283">
           <navLabel>
             <text>Enable ACK Output</text>
           </navLabel>
@@ -1996,77 +2086,77 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint332" playOrder="271">
+    <navPoint id="navPoint347" playOrder="284">
       <navLabel>
         <text>I2C Write</text>
       </navLabel>
       <content src="chapters/I2c_Write_en.html" />
-      <navPoint id="navPoint333" playOrder="271">
+      <navPoint id="navPoint348" playOrder="284">
         <navLabel>
           <text>I2C Write</text>
         </navLabel>
         <content src="chapters/I2c_Write_en.html" />
       </navPoint>
-      <navPoint id="navPoint334" playOrder="272">
+      <navPoint id="navPoint349" playOrder="285">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/I2c_Write_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint335" playOrder="273">
+      <navPoint id="navPoint350" playOrder="286">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/I2c_Write_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint336" playOrder="274">
+      <navPoint id="navPoint351" playOrder="287">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/I2c_Write_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint337" playOrder="275">
+      <navPoint id="navPoint352" playOrder="288">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/I2c_Write_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint338" playOrder="275">
+        <navPoint id="navPoint353" playOrder="288">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/I2c_Write_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint339" playOrder="276">
+        <navPoint id="navPoint354" playOrder="289">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/I2c_Write_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint340" playOrder="277">
+        <navPoint id="navPoint355" playOrder="290">
           <navLabel>
             <text>External address input</text>
           </navLabel>
           <content src="chapters/I2c_Write_en.html#external-address-input" />
         </navPoint>
-        <navPoint id="navPoint341" playOrder="278">
+        <navPoint id="navPoint356" playOrder="291">
           <navLabel>
             <text>Slave address</text>
           </navLabel>
           <content src="chapters/I2c_Write_en.html#slave-address" />
         </navPoint>
-        <navPoint id="navPoint342" playOrder="279">
+        <navPoint id="navPoint357" playOrder="292">
           <navLabel>
             <text>External byte count</text>
           </navLabel>
           <content src="chapters/I2c_Write_en.html#external-byte-count" />
         </navPoint>
-        <navPoint id="navPoint343" playOrder="280">
+        <navPoint id="navPoint358" playOrder="293">
           <navLabel>
             <text>Repeated</text>
           </navLabel>
           <content src="chapters/I2c_Write_en.html#repeated" />
         </navPoint>
-        <navPoint id="navPoint344" playOrder="281">
+        <navPoint id="navPoint359" playOrder="294">
           <navLabel>
             <text>Enable ACK Output</text>
           </navLabel>
@@ -2074,83 +2164,83 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint345" playOrder="282">
+    <navPoint id="navPoint360" playOrder="295">
       <navLabel>
         <text>MCP3428 Analog Input</text>
       </navLabel>
       <content src="chapters/Mcp3428_Analog_Input_en.html" />
-      <navPoint id="navPoint346" playOrder="282">
+      <navPoint id="navPoint361" playOrder="295">
         <navLabel>
           <text>MCP3428 Analog Input</text>
         </navLabel>
         <content src="chapters/Mcp3428_Analog_Input_en.html" />
       </navPoint>
-      <navPoint id="navPoint347" playOrder="283">
+      <navPoint id="navPoint362" playOrder="296">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Mcp3428_Analog_Input_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint348" playOrder="284">
+      <navPoint id="navPoint363" playOrder="297">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Mcp3428_Analog_Input_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint349" playOrder="285">
+      <navPoint id="navPoint364" playOrder="298">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Mcp3428_Analog_Input_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint350" playOrder="286">
+      <navPoint id="navPoint365" playOrder="299">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Mcp3428_Analog_Input_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint351" playOrder="286">
+        <navPoint id="navPoint366" playOrder="299">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint352" playOrder="287">
+        <navPoint id="navPoint367" playOrder="300">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint353" playOrder="288">
+        <navPoint id="navPoint368" playOrder="301">
           <navLabel>
             <text>Device Address</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#device-address" />
         </navPoint>
-        <navPoint id="navPoint354" playOrder="289">
+        <navPoint id="navPoint369" playOrder="302">
           <navLabel>
             <text>Enable error output port</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#enable-error-output-port" />
         </navPoint>
-        <navPoint id="navPoint355" playOrder="290">
+        <navPoint id="navPoint370" playOrder="303">
           <navLabel>
             <text>Channel Number</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#channel-number" />
         </navPoint>
-        <navPoint id="navPoint356" playOrder="291">
+        <navPoint id="navPoint371" playOrder="304">
           <navLabel>
             <text>Mode</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#mode" />
         </navPoint>
-        <navPoint id="navPoint357" playOrder="292">
+        <navPoint id="navPoint372" playOrder="305">
           <navLabel>
             <text>Resolution</text>
           </navLabel>
           <content src="chapters/Mcp3428_Analog_Input_en.html#resolution" />
         </navPoint>
-        <navPoint id="navPoint358" playOrder="293">
+        <navPoint id="navPoint373" playOrder="306">
           <navLabel>
             <text>PGA Gain</text>
           </navLabel>
@@ -2158,83 +2248,83 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint359" playOrder="294">
+    <navPoint id="navPoint374" playOrder="307">
       <navLabel>
         <text>MCP4728 Analog Output</text>
       </navLabel>
       <content src="chapters/Mcp4728_Analog_Output_en.html" />
-      <navPoint id="navPoint360" playOrder="294">
+      <navPoint id="navPoint375" playOrder="307">
         <navLabel>
           <text>MCP4728 Analog Output</text>
         </navLabel>
         <content src="chapters/Mcp4728_Analog_Output_en.html" />
       </navPoint>
-      <navPoint id="navPoint361" playOrder="295">
+      <navPoint id="navPoint376" playOrder="308">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Mcp4728_Analog_Output_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint362" playOrder="296">
+      <navPoint id="navPoint377" playOrder="309">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Mcp4728_Analog_Output_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint363" playOrder="297">
+      <navPoint id="navPoint378" playOrder="310">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Mcp4728_Analog_Output_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint364" playOrder="298">
+      <navPoint id="navPoint379" playOrder="311">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Mcp4728_Analog_Output_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint365" playOrder="298">
+        <navPoint id="navPoint380" playOrder="311">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint366" playOrder="299">
+        <navPoint id="navPoint381" playOrder="312">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint367" playOrder="300">
+        <navPoint id="navPoint382" playOrder="313">
           <navLabel>
             <text>Device Address</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#device-address" />
         </navPoint>
-        <navPoint id="navPoint368" playOrder="301">
+        <navPoint id="navPoint383" playOrder="314">
           <navLabel>
             <text>Enable error output port</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#enable-error-output-port" />
         </navPoint>
-        <navPoint id="navPoint369" playOrder="302">
+        <navPoint id="navPoint384" playOrder="315">
           <navLabel>
             <text>Channel Number</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#channel-number" />
         </navPoint>
-        <navPoint id="navPoint370" playOrder="303">
+        <navPoint id="navPoint385" playOrder="316">
           <navLabel>
             <text>Mode</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#mode" />
         </navPoint>
-        <navPoint id="navPoint371" playOrder="304">
+        <navPoint id="navPoint386" playOrder="317">
           <navLabel>
             <text>Reference Voltage</text>
           </navLabel>
           <content src="chapters/Mcp4728_Analog_Output_en.html#reference-voltage" />
         </navPoint>
-        <navPoint id="navPoint372" playOrder="305">
+        <navPoint id="navPoint387" playOrder="318">
           <navLabel>
             <text>Gain</text>
           </navLabel>
@@ -2242,65 +2332,65 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint373" playOrder="306">
+    <navPoint id="navPoint388" playOrder="319">
       <navLabel>
         <text>TMP102 Temperature</text>
       </navLabel>
       <content src="chapters/Tmp102_Temperature_en.html" />
-      <navPoint id="navPoint374" playOrder="306">
+      <navPoint id="navPoint389" playOrder="319">
         <navLabel>
           <text>TMP102 Temperature</text>
         </navLabel>
         <content src="chapters/Tmp102_Temperature_en.html" />
       </navPoint>
-      <navPoint id="navPoint375" playOrder="307">
+      <navPoint id="navPoint390" playOrder="320">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Tmp102_Temperature_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint376" playOrder="308">
+      <navPoint id="navPoint391" playOrder="321">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Tmp102_Temperature_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint377" playOrder="309">
+      <navPoint id="navPoint392" playOrder="322">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Tmp102_Temperature_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint378" playOrder="310">
+      <navPoint id="navPoint393" playOrder="323">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Tmp102_Temperature_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint379" playOrder="310">
+        <navPoint id="navPoint394" playOrder="323">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Tmp102_Temperature_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint380" playOrder="311">
+        <navPoint id="navPoint395" playOrder="324">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/Tmp102_Temperature_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint381" playOrder="312">
+        <navPoint id="navPoint396" playOrder="325">
           <navLabel>
             <text>Device Address</text>
           </navLabel>
           <content src="chapters/Tmp102_Temperature_en.html#device-address" />
         </navPoint>
-        <navPoint id="navPoint382" playOrder="313">
+        <navPoint id="navPoint397" playOrder="326">
           <navLabel>
             <text>Sample rate</text>
           </navLabel>
           <content src="chapters/Tmp102_Temperature_en.html#sample-rate" />
         </navPoint>
-        <navPoint id="navPoint383" playOrder="314">
+        <navPoint id="navPoint398" playOrder="327">
           <navLabel>
             <text>Enable error output port</text>
           </navLabel>
@@ -2308,65 +2398,65 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint384" playOrder="315">
+    <navPoint id="navPoint399" playOrder="328">
       <navLabel>
         <text>PCF8574 Digital Input</text>
       </navLabel>
       <content src="chapters/Pcf8574_Digital_Input_en.html" />
-      <navPoint id="navPoint385" playOrder="315">
+      <navPoint id="navPoint400" playOrder="328">
         <navLabel>
           <text>PCF8574 Digital Input</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Input_en.html" />
       </navPoint>
-      <navPoint id="navPoint386" playOrder="316">
+      <navPoint id="navPoint401" playOrder="329">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Input_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint387" playOrder="317">
+      <navPoint id="navPoint402" playOrder="330">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Input_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint388" playOrder="318">
+      <navPoint id="navPoint403" playOrder="331">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Input_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint389" playOrder="319">
+      <navPoint id="navPoint404" playOrder="332">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Input_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint390" playOrder="319">
+        <navPoint id="navPoint405" playOrder="332">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Input_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint391" playOrder="320">
+        <navPoint id="navPoint406" playOrder="333">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Input_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint392" playOrder="321">
+        <navPoint id="navPoint407" playOrder="334">
           <navLabel>
             <text>Device Address</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Input_en.html#device-address" />
         </navPoint>
-        <navPoint id="navPoint393" playOrder="322">
+        <navPoint id="navPoint408" playOrder="335">
           <navLabel>
             <text>Input</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Input_en.html#input" />
         </navPoint>
-        <navPoint id="navPoint394" playOrder="323">
+        <navPoint id="navPoint409" playOrder="336">
           <navLabel>
             <text>Enable error output port</text>
           </navLabel>
@@ -2374,65 +2464,65 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint395" playOrder="324">
+    <navPoint id="navPoint410" playOrder="337">
       <navLabel>
         <text>PCF8574 Digital Output</text>
       </navLabel>
       <content src="chapters/Pcf8574_Digital_Output_en.html" />
-      <navPoint id="navPoint396" playOrder="324">
+      <navPoint id="navPoint411" playOrder="337">
         <navLabel>
           <text>PCF8574 Digital Output</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Output_en.html" />
       </navPoint>
-      <navPoint id="navPoint397" playOrder="325">
+      <navPoint id="navPoint412" playOrder="338">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Output_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint398" playOrder="326">
+      <navPoint id="navPoint413" playOrder="339">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Output_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint399" playOrder="327">
+      <navPoint id="navPoint414" playOrder="340">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Output_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint400" playOrder="328">
+      <navPoint id="navPoint415" playOrder="341">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Pcf8574_Digital_Output_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint401" playOrder="328">
+        <navPoint id="navPoint416" playOrder="341">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Output_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint402" playOrder="329">
+        <navPoint id="navPoint417" playOrder="342">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Output_en.html#i2c-port" />
         </navPoint>
-        <navPoint id="navPoint403" playOrder="330">
+        <navPoint id="navPoint418" playOrder="343">
           <navLabel>
             <text>Device Address</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Output_en.html#device-address" />
         </navPoint>
-        <navPoint id="navPoint404" playOrder="331">
+        <navPoint id="navPoint419" playOrder="344">
           <navLabel>
             <text>Output</text>
           </navLabel>
           <content src="chapters/Pcf8574_Digital_Output_en.html#output" />
         </navPoint>
-        <navPoint id="navPoint405" playOrder="332">
+        <navPoint id="navPoint420" playOrder="345">
           <navLabel>
             <text>Enable error output port</text>
           </navLabel>
@@ -2440,47 +2530,47 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint406" playOrder="333">
+    <navPoint id="navPoint421" playOrder="346">
       <navLabel>
         <text>FM24CL16B FRAM Read</text>
       </navLabel>
       <content src="chapters/Fm24cl16b_Fram_Read_en.html" />
-      <navPoint id="navPoint407" playOrder="333">
+      <navPoint id="navPoint422" playOrder="346">
         <navLabel>
           <text>FM24CL16B FRAM Read</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Read_en.html" />
       </navPoint>
-      <navPoint id="navPoint408" playOrder="334">
+      <navPoint id="navPoint423" playOrder="347">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Read_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint409" playOrder="335">
+      <navPoint id="navPoint424" playOrder="348">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Read_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint410" playOrder="336">
+      <navPoint id="navPoint425" playOrder="349">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Read_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint411" playOrder="337">
+      <navPoint id="navPoint426" playOrder="350">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Read_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint412" playOrder="337">
+        <navPoint id="navPoint427" playOrder="350">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Fm24cl16b_Fram_Read_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint413" playOrder="338">
+        <navPoint id="navPoint428" playOrder="351">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>
@@ -2488,47 +2578,47 @@
         </navPoint>
       </navPoint>
     </navPoint>
-    <navPoint id="navPoint414" playOrder="339">
+    <navPoint id="navPoint429" playOrder="352">
       <navLabel>
         <text>FM24CL16B FRAM Write</text>
       </navLabel>
       <content src="chapters/Fm24cl16b_Fram_Write_en.html" />
-      <navPoint id="navPoint415" playOrder="339">
+      <navPoint id="navPoint430" playOrder="352">
         <navLabel>
           <text>FM24CL16B FRAM Write</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Write_en.html" />
       </navPoint>
-      <navPoint id="navPoint416" playOrder="340">
+      <navPoint id="navPoint431" playOrder="353">
         <navLabel>
           <text>Library</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Write_en.html#library" />
       </navPoint>
-      <navPoint id="navPoint417" playOrder="341">
+      <navPoint id="navPoint432" playOrder="354">
         <navLabel>
           <text>Description</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Write_en.html#description" />
       </navPoint>
-      <navPoint id="navPoint418" playOrder="342">
+      <navPoint id="navPoint433" playOrder="355">
         <navLabel>
           <text>Data Type Support</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Write_en.html#data-type-support" />
       </navPoint>
-      <navPoint id="navPoint419" playOrder="343">
+      <navPoint id="navPoint434" playOrder="356">
         <navLabel>
           <text>Parameters and Dialog Box</text>
         </navLabel>
         <content src="chapters/Fm24cl16b_Fram_Write_en.html#parameters-and-dialog-box" />
-        <navPoint id="navPoint420" playOrder="343">
+        <navPoint id="navPoint435" playOrder="356">
           <navLabel>
             <text>Parameters and Dialog Box</text>
           </navLabel>
           <content src="chapters/Fm24cl16b_Fram_Write_en.html#parameters-and-dialog-box" />
         </navPoint>
-        <navPoint id="navPoint421" playOrder="344">
+        <navPoint id="navPoint436" playOrder="357">
           <navLabel>
             <text>I2C Port</text>
           </navLabel>

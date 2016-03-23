@@ -112,6 +112,62 @@
 </UL>
 </UL>
 <LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Counter">
+    <param name="Local" value="chapters/Counter_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/Counter_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/Counter_en.html#description">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/Counter_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/Counter_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Timer">
+    <param name="Local" value="chapters/Counter_en.html#timer">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input channel">
+    <param name="Local" value="chapters/Counter_en.html#input-channel">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input Port">
+    <param name="Local" value="chapters/Counter_en.html#input-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input Pin">
+    <param name="Local" value="chapters/Counter_en.html#input-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Input Pull type">
+    <param name="Local" value="chapters/Counter_en.html#input-pull-type">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Max counter value">
+    <param name="Local" value="chapters/Counter_en.html#max-counter-value">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Interrupt setting">
+    <param name="Local" value="chapters/Counter_en.html#interrupt-setting">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Enable reset input">
+    <param name="Local" value="chapters/Counter_en.html#enable-reset-input">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
     <param name="Name" value="Serial DMA Config">
     <param name="Local" value="chapters/Serial_Dma_Config_en.html">
 </OBJECT>

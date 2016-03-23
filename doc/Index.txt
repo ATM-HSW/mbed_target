@@ -15,6 +15,7 @@ Contents:
    chapters/OpenOCD_en
    chapters/VisualGDB_de
    chapters/Encoder_Input_en
+   chapters/Counter_en
    chapters/Serial_Dma_Config_en
    chapters/Serial_Dma_Read_en
    chapters/Serial_Dma_Write_en
