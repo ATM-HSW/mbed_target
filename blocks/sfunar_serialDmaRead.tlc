@@ -57,7 +57,7 @@
 			%<LibMdlRegCustomCode(buffer, "trailer")>		
 		%endif
 			
-	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE") || ISEQUAL(MbedTarget, "DISCO_F303VC")
 
 		%switch SerialPort_val
 			%case 1
@@ -181,7 +181,7 @@
 		%assign dma_mar_access = "%<rx_dma_stream>->M0AR"
 		%assign dma_ndtr_access = "%<rx_dma_stream>->NDTR"
 		
-	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE") || ISEQUAL(MbedTarget, "DISCO_F303VC")
 
 		%switch SerialPort_val
 			%case 1

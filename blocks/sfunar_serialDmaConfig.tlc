@@ -222,7 +222,7 @@
 			%<LibMdlRegCustomCode(buffer, "execution")>
 		%endif
 	
-	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+	%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE") || ISEQUAL(MbedTarget, "DISCO_F303VC")
 		%assign fck = 72000000
 
 		%switch SerialPort_val

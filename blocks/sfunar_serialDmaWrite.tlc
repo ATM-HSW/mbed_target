@@ -83,7 +83,7 @@
         %assign check_uart_transmit_empty = "%<uart_name>->SR & USART_SR_TXE"
         %assign clear_uart_tc = "%<uart_name>->SR &= ~(USART_SR_TC)"
 
-    %elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+    %elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE") || ISEQUAL(MbedTarget, "DISCO_F303VC")
         %switch SerialPort_val
             %case 1
                 %assign uart_name = "USART1"
