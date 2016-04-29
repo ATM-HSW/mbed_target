@@ -1,0 +1,94 @@
+%% File : sfunar_powerStep01.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 M. Marquardt, HS Wismar
+
+%implements sfunar_powerStep01 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("powerstep01.h")>
+  %<LibAddToModelSources("powerstep01")>
+  
+  %% global variable containing the CS Port and Pin Values used by any FM25L16B read/write block
+  %% lower 16 Bit contain pin number 
+  %% upper 16 Bit contain port number
+  %% example: 0b 00000000 00000001 00000000 00000001 = PA_0
+  %%          0b 00000000 00001000 01000000 00000000 = PD_14
+  %assign ::POWERSTEP01_CS = CAST("Number",0)
+  
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+      %assign spiport_val = CAST("Number",LibBlockParameterValue(SpiPort, 0))
+	  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  %assign rstport_val = CAST("Number",LibBlockParameterValue(RstPort, 0))
+	  %assign rstpin_val = CAST("Number",LibBlockParameterValue(RstPin, 0))-1
+	  %assign nummotors_val = CAST("Number",LibBlockParameterValue(NumMotors, 0))
+
+	  %assign acc_val = LibBlockMatrixParameterBaseAddr(Acc)
+	  %assign dec_val = LibBlockMatrixParameterBaseAddr(Dec)
+	  %assign maxspd_val = LibBlockMatrixParameterBaseAddr(MaxSpd)
+	  %assign minspd_val = LibBlockMatrixParameterBaseAddr(MinSpd)
+	  %assign stepmode_val = LibBlockMatrixParameterBaseAddr(StepMode)
+	  %assign voltage_val = LibBlockMatrixParameterBaseAddr(Voltage)
+	  
+	  %assign csname = "P" + FEVAL("char",csport_val+64) + "_" + FEVAL("int2str",cspin_val)
+	  %assign rstname = "P" + FEVAL("char",rstport_val+64) + "_" + FEVAL("int2str",rstpin_val)
+	  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+	  %if !((::POWERSTEP01_CS & ((1<<(csport_val+15)) | (1<<cspin_val))) == ((1<<(csport_val+15)) | (1<<cspin_val)))
+        %openfile declbuf
+		
+        POWERSTEP01 stepper_%<instance>(&spi%<spiport_val>,%<csname>,%<rstname>,%<nummotors_val>);
+
+        %closefile declbuf
+        %assign srcFile = LibGetModelDotCFile()
+        %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+          
+          stepper_%<instance>.setup(%<acc_val>, %<dec_val>, %<maxspd_val>, %<minspd_val>, (uint8_t*)%<stepmode_val>, (uint8_t*)%<voltage_val>);
+
+		%assign ::POWERSTEP01_CS = ::POWERSTEP01_CS | ((1<<(csport_val+15)) | (1<<cspin_val))
+	  %endif
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1 
+  %assign cmd_val = CAST("Number",LibBlockParameterValue(Cmd, 0))
+  
+  
+  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+  
+  %if !SLibCodeGenForSim()
+    
+    %if cmd_val == 1
+	  stepper_%<instance>.run(%<LibBlockInputSignalAddr(0, "", "", 0)>, (uint8_t*)%<LibBlockInputSignalAddr(1, "", "", 0)>);
+    %elseif cmd_val == 2
+      stepper_%<instance>.move((uint32_t*)%<LibBlockInputSignalAddr(0, "", "", 0)>, (uint8_t*)%<LibBlockInputSignalAddr(1, "", "", 0)>);
+    %endif
+  %endif
+%endfunction
