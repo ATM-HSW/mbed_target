@@ -53,6 +53,7 @@ Contents:
    chapters/Pcf8574_Digital_Output_en
    chapters/Fm24cl16b_Fram_Read_en
    chapters/Fm24cl16b_Fram_Write_en
+   chapters/PowerSTEP01_en
    
 
 

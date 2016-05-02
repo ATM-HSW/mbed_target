@@ -1595,4 +1595,78 @@
 </OBJECT>
 </UL>
 </UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="PowerSTEP01">
+    <param name="Local" value="chapters/PowerSTEP01_en.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Library">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#library">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Description">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#description">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Multi motor configuration">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#multi-motor-configuration">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Data Type Support">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#data-type-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Parameters and Dialog Box">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#parameters-and-dialog-box">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="SPI Port">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#spi-port">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Chip Select Port and Pin">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#chip-select-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Reset Port and Pin">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#reset-port-and-pin">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Command">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#command">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="# Motors">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#motors">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Acceleration">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#acceleration">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Deceleration">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#deceleration">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Max speed">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#max-speed">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Min speed">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#min-speed">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Step mode">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#step-mode">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Output voltage">
+    <param name="Local" value="chapters/PowerSTEP01_en.html#output-voltage">
+</OBJECT>
+</UL>
+</UL>
 </UL></BODY></HTML>
