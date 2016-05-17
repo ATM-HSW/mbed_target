@@ -19,7 +19,7 @@ Description
 
 This block enables motion control of a stepper motor. This can either be constant speed control (Run) or turning the motor a defined number of steps (Move), depending on the command parameter chosen. Via 
 the second input port "dir" the direction of the motor movement can be controlled. To configure the motor driver several motion constraints must be set up. As there are the acceleration, deceleration, maximum speed and minimum speed of the motor. Additionally the output voltage can be
-configured as Vs \times Voltage(%). The following table shows the range and resolution of these parameters. 
+configured as Vs*Voltage(%). The following table shows the range and resolution of these parameters. 
 
 
 +---------------+----------------------+-------------------------+-------------------------+
@@ -122,4 +122,4 @@ Selects the step mode the driver controls the motor.
 Output voltage
 ..............
 
-Controls the output voltage provided to the motor Vo = Vs \times Voltage(%)
+Controls the output voltage provided to the motor Vo = Vs*Voltage(%)
