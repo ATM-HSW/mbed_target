@@ -1,0 +1,60 @@
+%% File : sfunar_temperature_lm75_.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
+
+
+%implements sfunar_temperature_lm75 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+  %<LibAddToCommonIncludes("lm75b.h")>
+  %<LibAddToModelSources("lm75b")>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+%%  %<LibBlockSetIsExpressionCompliant(block)> 
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+      %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+      %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+      %assign subaddress_val = 144
+
+    %openfile declbuf
+
+    LM75B lm75_%<subaddress_val>(&%<i2c_name>);
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign subaddress_val = 144
+  %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+
+  %if !SLibCodeGenForSim()
+    %<y1_val> = lm75_%<subaddress_val>.read();
+  %endif
+%endfunction
