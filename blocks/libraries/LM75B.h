@@ -28,7 +28,7 @@ public:
   Connect module at I2C address addr using I2C port pins sda and scl.
   LM75B
   */
-  LM75B(PinName sda, PinName scl);
+  LM75B(I2C *i2c);
    /*!
   Destroys instance.
   */  ~LM75B();
@@ -38,6 +38,6 @@ public:
   */
   float read();
  private:
-   I2C i2c;
+   I2C *_i2c;
 };
 #endif
