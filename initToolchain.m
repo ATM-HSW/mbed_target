@@ -8,4 +8,4 @@
 setup_customtarget_mbed
 cd blocks 
 mex_compile_all
-cd ../..
+cd ..
