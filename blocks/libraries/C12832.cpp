@@ -28,9 +28,10 @@
 #define BPP    1       // Bits per pixel
 
 
-C12832::C12832(PinName mosi, PinName sck, PinName reset, PinName a0, PinName ncs, const char* name)
-    : _spi(mosi,NC,sck),_reset(reset),_A0(a0),_CS(ncs),GraphicsDisplay(name)
+C12832::C12832(SPI *spi, PinName reset, PinName a0, PinName ncs, const char* name)
+    : _reset(reset),_A0(a0),_CS(ncs),GraphicsDisplay(name)
 {
+	  _spi = spi
     orientation = 1;
     draw_mode = NORMAL;
     char_x = 0;
@@ -77,7 +78,7 @@ void C12832::wr_cmd(unsigned char cmd)
 {
     _A0 = 0;
     _CS = 0;
-    _spi.write(cmd);
+    _spi->write(cmd);
     _CS = 1;
 }
 
@@ -87,7 +88,7 @@ void C12832::wr_dat(unsigned char dat)
 {
     _A0 = 1;
     _CS = 0;
-    _spi.write(dat);
+    _spi->write(dat);
     _CS = 1;
 }
 
@@ -96,8 +97,8 @@ void C12832::wr_dat(unsigned char dat)
 void C12832::lcd_reset()
 {
 
-    _spi.format(8,3);                 // 8 bit spi mode 3
-    _spi.frequency(20000000);          // 19,2 Mhz SPI clock
+    _spi->format(8,3);                 // 8 bit spi mode 3
+//    _spi->frequency(20000000);          // 19,2 Mhz SPI clock
     _A0 = 0;
     _CS = 1;
     _reset = 0;                        // display reset

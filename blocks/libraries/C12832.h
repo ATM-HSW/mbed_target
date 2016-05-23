@@ -216,7 +216,7 @@ public:
     unsigned int get_auto_up(void);
 
     /** Vars     */
-    SPI _spi;
+    SPI *_spi;
     DigitalOut _reset;
     DigitalOut _A0;
     DigitalOut _CS;
