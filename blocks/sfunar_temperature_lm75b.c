@@ -1,11 +1,11 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2015 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2016 Dr.O.Hagendorf, HS Wismar  */
 
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_temperature_lm75
+#define S_FUNCTION_NAME                sfunar_temperature_lm75b
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -80,8 +80,6 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int errorOutputEnable;
-  int numoutputs = 1;
     
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 2);

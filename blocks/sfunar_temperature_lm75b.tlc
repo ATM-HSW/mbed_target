@@ -4,7 +4,7 @@
 %% Copyright 2016 Dr.O.Hagendorf, HS Wismar
 
 
-%implements sfunar_temperature_lm75 "C"
+%implements sfunar_temperature_lm75b "C"
 
 %include "block_common_includes.tlc"
 
@@ -38,7 +38,7 @@
 
     %openfile declbuf
 
-    LM75B lm75_%<subaddress_val>(&%<i2c_name>);
+    LM75B lm75b_%<subaddress_val>(&%<i2c_name>);
 
     %closefile declbuf
     %assign srcFile = LibGetModelDotCFile()
@@ -55,6 +55,6 @@
   %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
 
   %if !SLibCodeGenForSim()
-    %<y1_val> = lm75_%<subaddress_val>.read();
+    %<y1_val> = lm75b_%<subaddress_val>.read();
   %endif
 %endfunction
