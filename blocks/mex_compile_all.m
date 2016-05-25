@@ -13,6 +13,7 @@ for i=1:size(fi,1)
         mex( [name '.c'])
     end
     catch E
-        disp E;
+        disp (E.message);
     end
+    disp ''
 end
