@@ -83,7 +83,7 @@ static void mdlInitializeSizes(SimStruct *S)
   int idxTypeInputPorts, numElements;
 
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 8);
+  ssSetNumSFcnParams(S, 14);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -105,6 +105,13 @@ static void mdlInitializeSizes(SimStruct *S)
 
 #endif
 
+	/*
+	SampleTime, 
+	TypeOfInputs1, NumberOfInputs1, double(Row1), 
+	TypeOfInputs2, NumberOfInputs2, double(Row2), 
+	TypeOfInputs3, NumberOfInputs3, double(Row3), 
+	uint32(BufferSize), SpiPort, CsPort, CsPin
+	*/
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
@@ -114,6 +121,12 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 5, 0);
   ssSetSFcnParamTunable(S, 6, 0);
   ssSetSFcnParamTunable(S, 7, 0);
+  ssSetSFcnParamTunable(S, 8, 0);
+  ssSetSFcnParamTunable(S, 9, 0);
+  ssSetSFcnParamTunable(S,10, 0);
+  ssSetSFcnParamTunable(S,11, 0);
+  ssSetSFcnParamTunable(S,12, 0);
+  ssSetSFcnParamTunable(S,13, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -125,8 +138,8 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   
   numberOfInputs1  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 1));
-  numberOfInputs2  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 2));
-  numberOfInputs3  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 3));
+  numberOfInputs2  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 4));
+  numberOfInputs3  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, 7));
   if (!ssSetNumInputPorts(S, numberOfInputs1+numberOfInputs2+numberOfInputs3))
     return;
  	//printf("%d %d %d\r\n", numberOfInputs1, numberOfInputs2, numberOfInputs3);
@@ -135,7 +148,7 @@ static void mdlInitializeSizes(SimStruct *S)
    * Configure the input ports
    */
   portcounter = 0;
-  for(idxTypeInputPorts = 1; idxTypeInputPorts < 4; idxTypeInputPorts++) {
+  for(idxTypeInputPorts = 1; idxTypeInputPorts < 8; idxTypeInputPorts+=3) {
   	j = idxTypeInputPorts==1?numberOfInputs1:(idxTypeInputPorts==2?numberOfInputs2:numberOfInputs3);
 	  for (i = 0; i < j; i++) {
 	    //printf("%d %d %d %d: %s\r\n", portcounter, idxTypeInputPorts, i, j, mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), i)));
@@ -244,20 +257,33 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 8))
+  if (!ssSetNumRunTimeParams(S, 14))
     return;
 
+	/*
+	SampleTime, 
+	TypeOfInputs1, NumberOfInputs1, double(Row1), 
+	TypeOfInputs2, NumberOfInputs2, double(Row2), 
+	TypeOfInputs3, NumberOfInputs3, double(Row3), 
+	uint32(BufferSize), SpiPort, CsPort, CsPin
+	*/
   /*
   * Register the run-time parameter
   */
   ssRegDlgParamAsRunTimeParam(S, 0, 0, "SampleTime",   ssGetDataTypeId(S, "int32"));
 //  ssRegDlgParamAsRunTimeParam(S, 1, 1, "typeinpports1", ssGetDataTypeId(S, "uint8"));
-//  ssRegDlgParamAsRunTimeParam(S, 2, 2, "typeinpports2", ssGetDataTypeId(S, "uint8"));
-//  ssRegDlgParamAsRunTimeParam(S, 3, 3, "typeinpports3", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 4, 4, "BufferSize",   ssGetDataTypeId(S, "uint32"));
-  ssRegDlgParamAsRunTimeParam(S, 5, 5, "SpiPort",      ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 6, 6, "CsPort",       ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 7, 7, "CsPin",        ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "NumberOfInputs1", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "Row1", ssGetDataTypeId(S, "uint8"));
+//  ssRegDlgParamAsRunTimeParam(S, 4, 4, "typeinpports2", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "NumberOfInputs2", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 6, 6, "Row2", ssGetDataTypeId(S, "uint8"));
+//  ssRegDlgParamAsRunTimeParam(S, 7, 7, "typeinpports3", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 8, 8, "NumberOfInputs3", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 9, 9, "Row3", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,10,10, "BufferSize",   ssGetDataTypeId(S, "uint32"));
+  ssRegDlgParamAsRunTimeParam(S,11,11, "SpiPort",      ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,12,12, "CsPort",       ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,13,13, "CsPin",        ssGetDataTypeId(S, "uint8"));
   }
 
 #endif

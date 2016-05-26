@@ -31,7 +31,7 @@
 C12832::C12832(SPI *spi, PinName reset, PinName a0, PinName ncs, const char* name)
     : _reset(reset),_A0(a0),_CS(ncs),GraphicsDisplay(name)
 {
-	  _spi = spi
+	  _spi = spi;
     orientation = 1;
     draw_mode = NORMAL;
     char_x = 0;

@@ -57,7 +57,7 @@ public:
       *
       */
 
-    C12832(PinName mosi, PinName sck, PinName reset, PinName a0, PinName ncs, const char* name = "LCD");
+    C12832(SPI *spi, PinName reset, PinName a0, PinName ncs, const char* name = "LCD");
 
 
     /** Get the width of the screen in pixel
