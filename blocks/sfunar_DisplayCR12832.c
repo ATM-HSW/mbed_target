@@ -83,7 +83,7 @@ static void mdlInitializeSizes(SimStruct *S)
   int idxTypeInputPorts, numElements;
 
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 14);
+  ssSetNumSFcnParams(S, 18);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -127,6 +127,10 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S,11, 0);
   ssSetSFcnParamTunable(S,12, 0);
   ssSetSFcnParamTunable(S,13, 0);
+  ssSetSFcnParamTunable(S,14, 0);
+  ssSetSFcnParamTunable(S,15, 0);
+  ssSetSFcnParamTunable(S,16, 0);
+  ssSetSFcnParamTunable(S,17, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -257,7 +261,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 14))
+  if (!ssSetNumRunTimeParams(S, 18))
     return;
 
 	/*
@@ -284,6 +288,10 @@ static void mdlSetWorkWidths(SimStruct *S)
   ssRegDlgParamAsRunTimeParam(S,11,11, "SpiPort",      ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S,12,12, "CsPort",       ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S,13,13, "CsPin",        ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,14,14, "ResPort",       ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,15,15, "ResPin",        ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,16,16, "A0Port",       ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S,17,17, "A0Pin",        ssGetDataTypeId(S, "uint8"));
   }
 
 #endif

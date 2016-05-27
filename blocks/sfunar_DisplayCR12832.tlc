@@ -22,22 +22,43 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-  %assign buffersize_val = CAST("Number",LibBlockParameterValue(BufferSize, 0))
-  %assign text1 = LibBlockParameterString(Row1)
-  %assign text2 = LibBlockParameterString(Row2)
-  %assign text3 = LibBlockParameterString(Row3)
-  %openfile declbuf
-  #define BUF_LEN %<buffersize_val>
-  #define BUF1 "%<text1>"
-  #define BUF2 "%<text2>"
-  #define BUF3 "%<text3>"
-  char buffer[BUF_LEN];
-  int buf_idx=0;
-  FILE *fp;
-  %closefile declbuf 
 
-  %assign srcFile = LibGetModelDotCFile()
-  %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %if !SLibCodeGenForSim()
+    %assign spiport_val = CAST("Number",LibBlockParameterValue(SpiPort, 0))
+
+    %assign csport_val = LibBlockParameterValue(CsPort,0)
+    %assign cspin_val = LibBlockParameterValue(CsPin,0)
+    %assign cs_name = "P" + FEVAL("char",csport_val+64) + "_" + FEVAL("int2str",cspin_val-1)
+
+    %assign resport_val = LibBlockParameterValue(ResPort,0)
+    %assign respin_val = LibBlockParameterValue(ResPin,0)
+    %assign res_name = "P" + FEVAL("char",resport_val+64) + "_" + FEVAL("int2str",respin_val-1)
+
+    %assign a0port_val = LibBlockParameterValue(A0Port,0)
+    %assign a0pin_val = LibBlockParameterValue(A0Pin,0)
+    %assign a0_name = "P" + FEVAL("char",a0port_val+64) + "_" + FEVAL("int2str",a0pin_val-1)
+
+    %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+
+    %assign text1 = LibBlockParameterString(Row1)
+    %assign text2 = LibBlockParameterString(Row2)
+    %assign text3 = LibBlockParameterString(Row3)
+
+
+    %openfile declbuf
+
+    C12832 c12832_%<instance>(&spi%<spiport_val>,%<res_name>,%<a0_name>,%<cs_name>);
+
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    spi%<spiport_val>.format(8,3);                 // 8 bit spi mode 3
+    //spi%<spiport_val>.frequency(20000000);          // 19,2 Mhz SPI clock
+    c12832_%<instance>.cls();
+
+  %endif
 
 %endfunction
 
@@ -52,25 +73,32 @@
     %assign text1 = LibBlockParameterString(Row1)
     %assign text2 = LibBlockParameterString(Row2)
     %assign text3 = LibBlockParameterString(Row3)
-    
+
+    %assign csport_val = LibBlockParameterValue(CsPort,0)
+    %assign cspin_val = LibBlockParameterValue(CsPin,0)
+    %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+
     %assign str = ""
     %foreach port = nInputs1
         %assign u = LibBlockInputSignal(port, "", "", 0)
         %assign str = str + "," + u
     %endforeach
-    printf("%<text1>" %<str>);
+    c12832_%<instance>.locate(0,0);
+    c12832_%<instance>.printf("%<text1>" %<str>);
     %assign str = ""
     %foreach port = nInputs2
         %assign u = LibBlockInputSignal(port+nInputs1, "", "", 0)
         %assign str = str + "," + u
     %endforeach
-    printf("%<text2>" %<str>);
+    c12832_%<instance>.locate(0,11);
+    c12832_%<instance>.printf("%<text2>" %<str>);
     %assign str = ""
     %foreach port = nInputs3
         %assign u = LibBlockInputSignal(port+nInputs1+nInputs2, "", "", 0)
         %assign str = str + "," + u
     %endforeach
-    printf("%<text3>" %<str>);
+    c12832_%<instance>.locate(0,22);
+    c12832_%<instance>.printf("%<text3>" %<str>);
   %endif
 %endfunction
 
