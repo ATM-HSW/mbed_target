@@ -131,7 +131,7 @@
                 %assign ti1_alternate_function = "GPIO_AF2_TIM4"
                 %assign ti2_alternate_function = "GPIO_AF2_TIM4"
                 %break
-            %case 6
+            %case 5
                 %assign timer_name = "TIM8"
                 %% TI1 and TI2 alternate function
                 %assign ti1_alternate_function = "GPIO_AF3_TIM8"
@@ -208,7 +208,7 @@
                     %assign ti2_alternate_function = "GPIO_AF10_TIM4"
                 %endif
                 %break
-            %case 6
+            %case 5
                 %assign timer_name = "TIM8"
                 %% TI1 alternate function
                 %if ISEQUAL(ti1gpio_name,"GPIOA") && (Ti1Pin_val==15)
