@@ -55,7 +55,6 @@
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
     spi%<spiport_val>.format(8,3);                 // 8 bit spi mode 3
-    //spi%<spiport_val>.frequency(20000000);          // 19,2 Mhz SPI clock
     c12832_%<instance>.cls();
 
   %endif
