@@ -1,0 +1,108 @@
+%% File : sfunar_datalogger.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_TLC5952 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %assign buffersize_val = CAST("Number",LibBlockParameterValue(buffer_size, 0))
+  %openfile declbuf
+  #define BUF_LEN %<buffersize_val>
+  char buffer[BUF_LEN];
+  int buf_idx=0;
+  FILE *fp;
+  %closefile declbuf 
+
+  %assign srcFile = LibGetModelDotCFile()
+  %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign nInputs  = LibBlockNumInputPorts(block)
+    %assign rolling = [0: %<nInputs>]
+    %assign blockid = 1
+
+    %assign rollVars = ["U"]
+    buf_idx = 0;
+    %assign start = 0
+    %foreach port = nInputs
+        %assign inputportwidth = LibBlockInputSignalWidth(port)
+        %foreach signal = inputportwidth
+            %assign u = LibBlockInputSignal(port, "", "", signal)
+            %assign datatype = LibBlockInputSignalDataTypeName(port, tRealPart)
+            // %<datatype>;
+            %if ISEQUAL(start, 1)
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, ",");
+            %else
+                %assign start = 1
+            %endif
+            %switch datatype
+              %case "uint8_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hu", %<u>);
+                %break
+              %case "int8_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hd", %<u>);
+                %break
+              %case "uint16_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%u", %<u>);
+                %break
+              %case "int16_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%u", %<u>);
+                %break
+              %case "uint32_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%lu", %<u>);
+                %break
+              %case "int32_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%lu", %<u>);
+                %break
+              %case "real32_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%f", %<u>);
+                %break
+              %case "real_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%lf", %<u>);
+              %break
+              %case "boolean_T"
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, %<u>?"1":"0" );
+              %break
+              %default
+                %break
+            %endswitch
+
+        %endforeach
+    %endforeach
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "\r\n" );
+    %assign y1_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
+    %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+
+    memcpy(%<y1_ptr>, buffer, buf_idx);
+    %<y2_val> = buf_idx;
+
+    %assign errEn_val = CAST("Number",LibBlockParameterValue(errEn, 0))
+    %if errEn_val
+      %assign y = LibBlockOutputSignal(2, "", "", 0)
+      if (BUF_LEN<buf_idx)
+        %<y> = 0;
+      else
+        %<y> = 1;
+    %endif
+  %endif
+%endfunction
+
