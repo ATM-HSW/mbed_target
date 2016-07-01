@@ -1,12 +1,11 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_digitalOutput.c Simple C-MEX S-function for function call.
+ *   sfunar_udp_conf.c Simple C-MEX S-function for function call.
  *
  *   ABSTRACT:
  *     The purpose of this SFunction is to call a simple legacy
  *     function during simulation:
  *
- *        sfunar_digitalOutput(uint8 u1, uint8 p1)
  */
 
 /*
@@ -22,7 +21,7 @@
 #include "simstruc.h"
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-//#define SAMPLE_TIME                    (ssGetSFcnParam(S, 2))
+
  #define IP_ADDR        (mxArrayToString(ssGetSFcnParam(S,0)))
  #define SUB_MASK       (mxArrayToString(ssGetSFcnParam(S,1)))
  #define GATEWAY        (mxArrayToString(ssGetSFcnParam(S,2)))
@@ -45,38 +44,7 @@ static bool IsRealMatrix(const mxArray * const m);
  */
 static void mdlCheckParameters(SimStruct *S)
 {
-  /*
-   * Check the parameter 1
-   */
-  //if EDIT_OK(S, 0) {
-    //int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    //ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  //}
-
-    
-  /*
-   * Check the parameter 2
-   */
-  //if EDIT_OK(S, 1) {
-    //int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    //ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  //}
-  
-  /*
-   * Check the parameter 3
-   */
-  //if EDIT_OK(S, 2) {
-    //int_T dimsArray[2] = { 1, 15 };
-
-    /* Check the parameter attributes */
-    //ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  //}
 }
-
 
 #endif
 
@@ -88,7 +56,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 4);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -114,7 +82,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
-  //ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -126,10 +94,6 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 0))
     return;
-
-  /*
-   * Configure the input ports.
-   */
 
   /*
    * Set the number of output ports.
@@ -145,7 +109,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of sample time.
    */
-  ssSetNumSampleTimes(S, 1);
+  ssSetNumSampleTimes(S, 0);
 
   /*
    * All options have the form SS_OPTION_<name> and are documented in
@@ -197,21 +161,10 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 0))
+  if (!ssSetNumRunTimeParams(S, 1))
     return;
 
-  /*
-   * Register the run-time parameter 1
-   */
-  //ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "string"));
-  /*
-   * Register the run-time parameter 3
-   */
-  //ssRegDlgParamAsRunTimeParam(S, 1, 1, "p2", ssGetDataTypeId(S, "string"));
-  /*
-   * Register the run-time parameter 4
-   */
-  //ssRegDlgParamAsRunTimeParam(S, 2, 2, "p3", ssGetDataTypeId(S, "string"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 0, "dhcp", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
@@ -264,10 +217,10 @@ static void mdlTerminate(SimStruct *S)
  */
 static void mdlRTW(SimStruct *S)
 {
-    //We need to register some Parameters in the RTW-File for accessing them and
-    // use it for code generation
+  // We need to register some Parameters in the RTW-File for accessing them and
+  // use it for code generation
   // see sfun_frmad.tlc or sswritertwparamsettings (ssWriteRTWStr ?)
-  //it is called record field and can access by SFcnParameters.IP .....
+  // it is called record field and can access by SFcnParameters.IP .....
   if(!ssWriteRTWParamSettings(S,3,
                                 SSWRITE_VALUE_QSTR, "IP", IP_ADDR,
                                 SSWRITE_VALUE_QSTR, "submask", SUB_MASK,

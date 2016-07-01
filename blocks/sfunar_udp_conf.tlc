@@ -16,35 +16,42 @@
 
   %if !SLibCodeGenForSim()
 
-      %assign ip = SFcnParamSettings.IP
-      %assign submask = SFcnParamSettings.submask
-      %assign gateway = SFcnParamSettings.gateway
+    %assign ip = SFcnParamSettings.IP
+    %assign submask = SFcnParamSettings.submask
+    %assign gateway = SFcnParamSettings.gateway
 
-      %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-      %assign name = FEVAL("strrep",name," ","_")
-      %assign name = FEVAL("strrep",name,"-","_")
-      
-      %%Add Ethernet things to the includes
-      
-      %openfile declbuf
-      #define LWIP_TIMEVAL_PRIVATE 0
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotHFile()
-      %<LibSetSourceFileSection(srcFile, "Includes", declbuf)>
-      
-      %<LibAddToCommonIncludes("EthernetInterface.h")>
-      %openfile declbuf
-        EthernetInterface %<name>;
-      %closefile declbuf 
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %%Add Ethernet things to the includes
+    %openfile declbuf
+    #define LWIP_TIMEVAL_PRIVATE 0
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotHFile()
+    %<LibSetSourceFileSection(srcFile, "Includes", declbuf)>
+    %<LibAddToCommonIncludes("EthernetInterface.h")>
+
+    %%Add Ethernet things to the variable declarations
+    %openfile declbuf
+    EthernetInterface %<name>;
+    %closefile declbuf 
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
   %endif
 
   %if !SLibCodeGenForSim()
-       %%           ip        mask      garteway
-      %%<name>.init(%<p1_val>,%<p2_val>,%<p3_val>);
-      %<name>.init("%<ip>","%<submask>","%<gateway>");
-      %<name>.connect();
+    %assign val_dhcp = LibBlockParameterValue(dhcp,0)
+
+    %if %<val_dhcp>==0
+    %<name>.init("%<ip>","%<submask>","%<gateway>");
+    %<name>.connect();
+    %else
+    %<name>.init();
+    %<name>.connect();
+    %endif
+
   %endif
 
 %endfunction
