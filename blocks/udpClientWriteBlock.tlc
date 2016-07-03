@@ -1,0 +1,33 @@
+%implements udpClientWriteBlock "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign sock_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+
+  %assign enable_number_of_bytes_val = LibBlockParameterValue(enable_number_of_bytes,0)
+  %if enable_number_of_bytes_val
+    %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+  %else
+    %assign number_of_bytes = %<LibBlockInputSignalWidth(0)>
+  %endif
+
+  %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+
+  %%send the data
+  char* ptr = (char*)%<u1_ptr>;
+  oUDPSocket_%<sock_id>.sendTo(oEndpoint_%<sock_id>, ptr, %<number_of_bytes>);
+%endfunction

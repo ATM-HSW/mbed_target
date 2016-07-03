@@ -11,7 +11,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_udp_conf
+#define S_FUNCTION_NAME                udpConfigStack
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -27,10 +27,6 @@
  #define GATEWAY        (mxArrayToString(ssGetSFcnParam(S,2)))
 
 
-/*
- * Utility function prototypes.
- */
-static bool IsRealMatrix(const mxArray * const m);
 
 #define MDL_CHECK_PARAMETERS
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
@@ -232,33 +228,6 @@ static void mdlRTW(SimStruct *S)
 
 #endif
 
-/* Function: IsRealMatrix =================================================
- * Abstract:
- *      Verify that the mxArray is a real (double) finite matrix
- */
-static bool IsRealMatrix(const mxArray * const m)
-{
-  if (mxIsNumeric(m) &&
-      mxIsDouble(m) &&
-      !mxIsLogical(m) &&
-      !mxIsComplex(m) &&
-      !mxIsSparse(m) &&
-      !mxIsEmpty(m) &&
-      mxGetNumberOfDimensions(m) == 2) {
-    const double * const data = mxGetPr(m);
-    const size_t numEl = mxGetNumberOfElements(m);
-    size_t i;
-    for (i = 0; i < numEl; i++) {
-      if (!mxIsFinite(data[i])) {
-        return(false);
-      }
-    }
-
-    return(true);
-  } else {
-    return(false);
-  }
-}
 
 /*
  * Required S-function trailer

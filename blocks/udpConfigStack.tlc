@@ -1,5 +1,4 @@
-%%implements sfunar_digitalOutput "C"
-%implements sfunar_udp_conf "C"
+%implements udpConfigStack "C"
 
 %include "block_common_includes.tlc"
 
@@ -16,7 +15,7 @@
 
   %if !SLibCodeGenForSim()
 
-    %assign ip = SFcnParamSettings.IP
+    %assign ip =      SFcnParamSettings.IP
     %assign submask = SFcnParamSettings.submask
     %assign gateway = SFcnParamSettings.gateway
 

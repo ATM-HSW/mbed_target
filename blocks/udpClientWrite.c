@@ -3,10 +3,6 @@
  * Abstract:
  *       A 'C' template for a level 2 S-function. 
  *
- *       See sfuntmpl_basic.c
- *       for a basic C-MEX template file that uses the 
- *       most common methods.
- *
  * Copyright 1990-2013 The MathWorks, Inc.
  */
 
@@ -15,13 +11,18 @@
  * You must specify the S_FUNCTION_NAME as the name of your S-function.
  */
 
-#define S_FUNCTION_NAME  sfunar_mbed_udp_client_send
+#define S_FUNCTION_NAME  udpClientWrite
 #define S_FUNCTION_LEVEL 2
 
-#define sock_id      (mxArrayToString(ssGetSFcnParam(S,0)))
-#define des_ip       (mxArrayToString(ssGetSFcnParam(S,1)))
-#define des_port     (mxGetData(ssGetSFcnParam(S,2)))
-#define SAMPLE_TIME  (ssGetSFcnParam(S, 4))
+#include "simstruc.h"
+#define EDIT_OK(S, P_IDX) \
+ (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
+#define SAMPLE_TIME  (ssGetSFcnParam(S, 0))
+
+/*
+ * Utility function prototypes.
+ */
+static bool IsRealMatrix(const mxArray * const m);
 
 /*
  * Need to include simstruc.h for the definition of the SimStruct and
@@ -41,9 +42,6 @@
  *   matlabroot/rtw/c/libsrc/rt_matrx.h      - Macros for MATLAB API routines
  *
  */
-#include "simstruc.h"
-#include "matrix.h"
-#include "string.h"
 
 /* Error handling
  * --------------
@@ -339,66 +337,53 @@
 
 #define MDL_CHECK_PARAMETERS   /* Change to #undef to remove function */
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlCheckParameters =============================================
-   * Abstract:
-   *    mdlCheckParameters verifies new parameter settings whenever parameter
-   *    change or are re-evaluated during a simulation. When a simulation is
-   *    running, changes to S-function parameters can occur at any time during
-   *    the simulation loop.
-   *
-   *    This method can be called at any point after mdlInitializeSizes.
-   *    You should add a call to this method from mdlInitalizeSizes
-   *    to check the parameters. After setting the number of parameters
-   *    you expect in your S-function via ssSetNumSFcnParams(S,n), you should:
-   *     #if defined(MATLAB_MEX_FILE)
-   *       if (ssGetNumSFcnParams(S) == ssGetSFcnParamsCount(S)) {
-   *           mdlCheckParameters(S);
-   *           if (ssGetErrorStatus(S) != NULL) return;
-   *       } else {
-   *           return;     Simulink will report a parameter mismatch error
-   *       }
-   *     #endif
-   *
-   *     When a Simulation is running, changes to S-function parameters can
-   *     occur either at the start of a simulation step, or during a
-   *     simulation step. When changes to S-function parameters occur during
-   *     a simulation step, this method is called twice, for the same
-   *     parameter changes. The first call during the simulation step is
-   *     used to verify that the parameters are correct. After verifying the
-   *     new parameters, the simulation continues using the original
-   *     parameter values until the next simulation step at which time the
-   *     new parameter values will be used. Redundant calls are needed to
-   *     maintain simulation consistency.  Note that you cannot access the
-   *     work, state, input, output, etc. vectors in this method. This
-   *     method should only be used to validate the parameters. Processing
-   *     of the parameters should be done in mdlProcessParameters.
-   *
-   *     See matlabroot/simulink/src/sfun_errhdl.c for an example. 
-   */
   static void mdlCheckParameters(SimStruct *S)
   {
-  }
-#endif /* MDL_CHECK_PARAMETERS */
-
-
-#define MDL_PROCESS_PARAMETERS   /* Change to #undef to remove function */
-#if defined(MDL_PROCESS_PARAMETERS) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlProcessParameters ===========================================
-   * Abstract:
-   *    This method will be called after mdlCheckParameters, whenever
-   *    parameters change or get re-evaluated. The purpose of this method is
-   *    to process the newly changed parameters. For example "caching" the
-   *    parameter changes in the work vectors. Note this method is not
-   *    called when it is used with the Real-Time Workshop. Therefore,
-   *    if you use this method in an S-function which is being used with the
-   *    Real-Time Workshop, you must write your S-function such that it doesn't
-   *    rely on this method. This can be done by inlining your S-function
-   *    via the Target Language Compiler.
+  /*
+   * Check the parameter 1 (sample time)
    */
-  static void mdlProcessParameters(SimStruct *S)
-  {
+  if EDIT_OK(S, 0) {
+    const double *sampleTime = NULL;
+    const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
+
+    /* Sample time must be a real scalar value or 2 element array. */
+    if (IsRealMatrix(SAMPLE_TIME) &&
+        (stArraySize == 1 || stArraySize == 2) ) {
+      sampleTime = (real_T *) mxGetPr(SAMPLE_TIME);
+    } else {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Sample time must be a real scalar value or an array of two real values.");
+      return;
+    }
+
+    if (sampleTime[0] < 0.0 && sampleTime[0] != -1.0) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Period must be non-negative or -1 (for inherited).");
+      return;
+    }
+
+    if (stArraySize == 2 && sampleTime[0] > 0.0 &&
+        sampleTime[1] >= sampleTime[0]) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Offset must be smaller than period.");
+      return;
+    }
+
+    if (stArraySize == 2 && sampleTime[0] == -1.0 && sampleTime[1] != 0.0) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. When period is -1, offset must be 0.");
+      return;
+    }
+
+    if (stArraySize == 2 && sampleTime[0] == 0.0 &&
+        !(sampleTime[1] == 1.0)) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. When period is 0, offset must be 1.");
+      return;
+    }
   }
-#endif /* MDL_PROCESS_PARAMETERS */
+}
+#endif /* MDL_CHECK_PARAMETERS */
 
 
 
@@ -460,21 +445,8 @@ static void mdlInitializeSizes(SimStruct *S)
 {
     int i;
     int_T nInputPorts  = 0;  /* number of input ports  */
-    int_T nOutputPorts = 0;  /* number of output ports */
-    int_T needsInput   = 1;  /* direct feed through    */
-    
-    int_T inputPortIdx  = 0;
-    int_T outputPortIdx = 0; 
-    
-    //Add DWork Vector we need them as a "globale" like variable for Caculation
-    // of needed Bytes for the Sendbuffer in Code-Generation
- //   ssSetNumDWork(S,1);
- //   ssSetDWorkWidth(S,0,1);
- //   ssSetDWorkDataType(S,0,SS_UINT32);
-	//ssSetDWorkUsageType(S, 0, SS_DWORK_USED_AS_MODE);
- //   ssSetDWorkRTWIdentifier(S,0,"nBufferBytes");
 
-    ssSetNumSFcnParams(S, 6);  /* Number of expected parameters */
+    ssSetNumSFcnParams(S, 4);  /* Number of expected parameters */
     if (ssGetNumSFcnParams(S) != ssGetSFcnParamsCount(S)) {
         /*
          * If the the number of expected input parameters is not equal
@@ -501,8 +473,6 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetSFcnParamTunable(S, 1, 0);
     ssSetSFcnParamTunable(S, 2, 0);
     ssSetSFcnParamTunable(S, 3, 0);
-    ssSetSFcnParamTunable(S, 4, 0);
-    ssSetSFcnParamTunable(S, 5, 0);
 
     /* Register the number and type of states the S-Function uses */
 
@@ -510,7 +480,7 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetNumDiscStates(    S, 0);   /* number of discrete states             */
     
     // Now we need two now how many Inputports we must set
-    nInputPorts  = mxGetNumberOfElements(ssGetSFcnParam(S,3));
+    nInputPorts  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S,2));
 
     /*
      * Configure the input ports. First set the number of input ports. 
@@ -541,40 +511,27 @@ static void mdlInitializeSizes(SimStruct *S)
      *     dimensions, and dimensions of the port.
      */
 
-	for ( i = 0; i < nInputPorts; i++)
-	{
+  for ( i = 0; i < nInputPorts; i++)
+  {
 
-		ssSetInputPortWidth(S, i, 1);
-		
-		if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 3), i)), "uint8"))
-			ssSetInputPortDataType(S, i, 3);
-		else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 3), i)), "uint16"))
-			ssSetInputPortDataType(S, i, 5);
-		else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 3), i)), "uint32"))
-			ssSetInputPortDataType(S, i, 7);
-		else
-			mexWarnMsgTxt("One or more Ports Datatypes not set");
-		//if (!ssSetInputPortDimensionInfo(S, i, DYNAMICALLY_SIZED)) return;
-		//mxFree(str);
-	}
-    /*
-     * Set direct feedthrough flag (1=yes, 0=no).
-     * A port has direct feedthrough if the input is used in either
-     * the mdlOutputs or mdlGetTimeOfNextVarHit functions.
-     * See sfuntmpl_directfeed.txt.
-     */
-    //ssSetInputPortDirectFeedThrough(S, inputPortIdx, needsInput);
+    ssSetInputPortWidth(S, i, 1);
+    
+    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
+      ssSetInputPortDataType(S, i, 3);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
+      ssSetInputPortDataType(S, i, 5);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
+      ssSetInputPortDataType(S, i, 7);
+    else
+      mexWarnMsgTxt("One or more Ports Datatypes not set");
+    //if (!ssSetInputPortDimensionInfo(S, i, DYNAMICALLY_SIZED)) return;
+    //mxFree(str);
+  }
 
     /*
      * Configure the output ports. First set the number of output ports.
      */
-    if (!ssSetNumOutputPorts(S, nOutputPorts)) return;
-
-    /*
-     * Set output port dimensions for each output port index starting at 0.
-     * See comments for setting input port dimensions.
-     */
-    //if(!ssSetOutputPortDimensionInfo(S,outputPortIdx,DYNAMIC_DIMENSION)) return;
+    if (!ssSetNumOutputPorts(S, 0)) return;
 
     /*
      * Set the number of sample times. This must be a positive, nonzero
@@ -619,221 +576,6 @@ static void mdlInitializeSizes(SimStruct *S)
                SS_OPTION_DISALLOW_CONSTANT_SAMPLE_TIME);   /* general options (SS_OPTION_xx)        */
 
 } /* end mdlInitializeSizes */
-
-
-#define MDL_SET_INPUT_PORT_FRAME_DATA  /* Change to #undef to remove function */
-#if defined(MDL_SET_INPUT_PORT_FRAME_DATA) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetInputPortFrameData ========================================
-   * Abstract:
-   *    This method is called with the candidate frame setting (FRAME_YES, or
-   *    FRAME_NO) for an input port. If the proposed setting is acceptable, 
-   *    the method should go ahead and set the actual frame data setting using 
-   *    ssSetInputPortFrameData(S,portIndex,frameData).  If
-   *    the setting is unacceptable an error should generated via
-   *    ssSetErrorStatus.  Note that any other dynamic frame input or
-   *    output ports whose frame data setting are implicitly defined by virtue 
-   *    of knowing the frame data setting of the given port can also have their
-   *    frame data settings set via calls to ssSetInputPortFrameData and
-   *    ssSetOutputPortFrameData.
-   */
-   static void mdlSetInputPortFrameData(SimStruct *S, 
-                                        int       portIndex, 
-                                        Frame_T   frameData)
-  {
-  } /* end mdlSetInputPortFrameData */
-#endif /* MDL_SET_INPUT_PORT_FRAME_DATA */
-
-
-#define MDL_SET_INPUT_PORT_WIDTH   /* Change to #undef to remove function */
-#if defined(MDL_SET_INPUT_PORT_WIDTH) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetInputPortWidth ===========================================
-   * Abstract:
-   *    This method is called with the candidate width for a dynamically
-   *    sized port.  If the proposed width is acceptable, the method should
-   *    go ahead and set the actual port width using ssSetInputPortWidth.  If
-   *    the size is unacceptable an error should generated via
-   *    ssSetErrorStatus.  Note that any other dynamically sized input or
-   *    output ports whose widths are implicitly defined by virtue of knowing
-   *    the width of the given port can also have their widths set via calls
-   *    to ssSetInputPortWidth or ssSetOutputPortWidth.
-   */
-  static void mdlSetInputPortWidth(SimStruct *S, int portIndex, int width)
-  {
-  } /* end mdlSetInputPortWidth */
-#endif /* MDL_SET_INPUT_PORT_WIDTH */
-
-
-#define MDL_SET_OUTPUT_PORT_WIDTH   /* Change to #undef to remove function */
-#if defined(MDL_SET_OUTPUT_PORT_WIDTH) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetOutputPortWidth ==========================================
-   * Abstract:
-   *    This method is called with the candidate width for a dynamically
-   *    sized port.  If the proposed width is acceptable, the method should
-   *    go ahead and set the actual port width using ssSetOutputPortWidth.  If
-   *    the size is unacceptable an error should generated via
-   *    ssSetErrorStatus.  Note that any other dynamically sized input or
-   *    output ports whose widths are implicitly defined by virtue of knowing
-   *    the width of the given port can also have their widths set via calls
-   *    to ssSetInputPortWidth or ssSetOutputPortWidth.
-   */
-  static void mdlSetOutputPortWidth(SimStruct *S, int portIndex, int width)
-  {
-  } /* end mdlSetOutputPortWidth */
-#endif /* MDL_SET_OUTPUT_PORT_WIDTH */
-
-
-#undef MDL_SET_INPUT_PORT_DIMENSION_INFO /* Change to #define to add function */
-#if defined(MDL_SET_INPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetInputPortDimensionInfo ====================================
-   * Abstract:
-   *    This method is called with the candidate dimensions for an input port
-   *    with unknown dimensions. If the proposed dimensions are acceptable, the 
-   *    method should go ahead and set the actual port dimensions.  
-   *    If they are unacceptable an error should be generated via 
-   *    ssSetErrorStatus.  
-   *    Note that any other input or output ports whose dimensions are  
-   *    implicitly defined by virtue of knowing the dimensions of the given 
-   *    port can also have their dimensions set.
-   *
-   *    See matlabroot/simulink/src/sfun_matadd.c for an example. 
-   */
-  static void mdlSetInputPortDimensionInfo(SimStruct        *S,         
-                                           int_T            portIndex,
-                                           const DimsInfo_T *dimsInfo)
-  {
-  } /* mdlSetInputPortDimensionInfo */
-#endif /* MDL_SET_INPUT_PORT_DIMENSION_INFO */
-
-
-#undef MDL_SET_OUTPUT_PORT_DIMENSION_INFO /* Change to #define to add function*/
-#if defined(MDL_SET_OUTPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetOutputPortDimensionInfo ===================================
-   * Abstract:
-   *    This method is called with the candidate dimensions for an output port 
-   *    with unknown dimensions. If the proposed dimensions are acceptable, the 
-   *    method should go ahead and set the actual port dimensions.  
-   *    If they are unacceptable an error should be generated via 
-   *    ssSetErrorStatus.  
-   *    Note that any other input or output ports whose dimensions are  
-   *    implicitly defined by virtue of knowing the dimensions of the given 
-   *    port can also have their dimensions set.
-   *
-   *    See matlabroot/simulink/src/sfun_matadd.c for an example. 
-   */
-  static void mdlSetOutputPortDimensionInfo(SimStruct        *S,        
-                                            int_T            portIndex,
-                                            const DimsInfo_T *dimsInfo)
-  {
-  } /* mdlSetOutputPortDimensionInfo */
-#endif /* MDL_SET_OUTPUT_PORT_DIMENSION_INFO */
-
-
-#define MDL_SET_DEFAULT_PORT_DIMENSION_INFO /* Change to #define to add fcn */
-#if defined(MDL_SET_DEFAULT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetDefaultPortDimensionInfo ==================================
-   * Abstract:
-   *    This method is called when there is not enough information in your
-   *    model to uniquely determine the port dimensionality of signals
-   *    entering or leaving your block. When this occurs, Simulink's
-   *    dimension propagation engine calls this method to ask you to set
-   *    your S-functions default dimensions for any input and output ports
-   *    that are dynamically sized.
-   *
-   *    If you do not provide this method and you have dynamically sized ports
-   *    where Simulink does not have enough information to propagate the
-   *    dimensionality to your S-function, then Simulink will set these unknown
-   *    ports to the 'block width' which is determined by examining any known
-   *    ports. If there are no known ports, the width will be set to 1.
-   *
-   *    See matlabroot/simulink/src/sfun_matadd.c for an example. 
-   */
-  static void mdlSetDefaultPortDimensionInfo(SimStruct *S)
-  {
-  } /* mdlSetDefaultPortDimensionInfo */
-#endif /* MDL_SET_DEFAULT_PORT_DIMENSION_INFO */
-
-
-#define MDL_SET_INPUT_PORT_SAMPLE_TIME
-#if defined(MDL_SET_INPUT_PORT_SAMPLE_TIME) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetInputPortSampleTime =======================================
-   * Abstract:
-   *    This method is called with the candidate sample time for an inherited
-   *    sample time input port. If the proposed sample time is acceptable, the
-   *    method should go ahead and set the actual port sample time using
-   *    ssSetInputPortSampleTime.  If the sample time is unacceptable an error
-   *    should generated via ssSetErrorStatus.  Note that any other inherited
-   *    input or output ports whose sample times are implicitly defined by
-   *    virtue of knowing the sample time of the given port can also have
-   *    their sample times set via calls to ssSetInputPortSampleTime or
-   *    ssSetOutputPortSampleTime.
-   *
-   *    When inherited port based sample times are specified, we are guaranteed
-   *    that the sample time will be one of the following:
-   *                    [sampleTime, offsetTime]
-   *       continuous   [0.0       , 0.0       ]
-   *       discrete     [period    , offset    ]  where 0.0 < period < inf
-   *                                                    0.0 <= offset < period
-   *    Constant, triggered, and variable step sample times will not be
-   *    propagated to S-functions with port based sample times.
-   *
-   *    Generally the mdlSetInputPortSampleTime or mdlSetOutputPortSampleTime
-   *    is called once with the input port sample time. However, there can be
-   *    cases where this function will be called more than once. This happens 
-   *    when the simulation engine is converting continuous sample times to 
-   *    continuous but fixed in minor steps sample times. When this occurs, the
-   *    original values of the sample times specified in mdlInitializeSizes 
-   *    will be restored before calling this method again. 
-   *
-   *    The final sample time specified at the port may be different (but
-   *    equivalent to) from what was specified in this method. This occurs
-   *    when:
-   *      o) Using a fixed step solver and the port has a continuous but fixed
-   *         in minor step sample time. In this case the sample time will
-   *         be converted to the fundamental sample time for the model.
-   *      o) We are adjusting sample times for numerical correctness. For 
-   *         example [0.2499999999999, 0] is converted to [0.25, 0].
-   *    S-functions are not explicitly notified of "converted" sample times.
-   *    They can examine the final sample times in mdlInitializeSampleTimes.
-   */
-  static void mdlSetInputPortSampleTime(SimStruct *S,
-                                        int_T     portIdx,
-                                        real_T    sampleTime,
-                                        real_T    offsetTime)
-  {
-  } /* end mdlSetInputPortSampleTime */
-#endif /* MDL_SET_INPUT_PORT_SAMPLE_TIME */
-
-
-#define MDL_SET_OUTPUT_PORT_SAMPLE_TIME
-#if defined(MDL_SET_OUTPUT_PORT_SAMPLE_TIME) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetOutputPortSampleTime ======================================
-   * Abstract:
-   *    This method is called with the candidate sample time for an inherited
-   *    sample time output port. If the proposed sample time is acceptable, the
-   *    method should go ahead and set the actual port sample time using
-   *    ssSetOutputPortSampleTime.  If the sample time is unacceptable an error
-   *    should generated via ssSetErrorStatus.  Note that any other inherited
-   *    input or output ports whose sample times are implicitly defined by
-   *    virtue of knowing the sample time of the given port can also have
-   *    their sample times set via calls to ssSetInputPortSampleTime or
-   *    ssSetOutputPortSampleTime.
-   *
-   *    Normally, sample times are propagated forwards, however if sources
-   *    feeding this block have an inherited sample time, then Simulink
-   *    may choose to back propagate known sample times to this block.
-   *    When back propagating sample times, we call this method in succession
-   *    for all inherited output port signals.
-   *
-   *    See mdlSetInputPortSampleTimes for more information about when this
-   *    method is called.
-   */
-  static void mdlSetOutputPortSampleTime(SimStruct *S,
-                                         int_T     portIdx,
-                                         real_T    sampleTime,
-                                         real_T    offsetTime)
-  {
-  } /* end mdlSetOutputPortSampleTime */
-#endif /* MDL_SET_OUTPUT_PORT_SAMPLE_TIME */
 
 
 /* Function: mdlInitializeSampleTimes =========================================
@@ -948,154 +690,6 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 } /* end mdlInitializeSampleTimes */
 
 
-#define MDL_SET_INPUT_PORT_DATA_TYPE   /* Change to #undef to remove function */
-#if defined(MDL_SET_INPUT_PORT_DATA_TYPE) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetInputPortDataType =========================================
-   * Abstract:
-   *    This method is called with the candidate data type id for a dynamically
-   *    typed input port.  If the proposed data type is acceptable, the method
-   *    should go ahead and set the actual port data type using
-   *    ssSetInputPortDataType.  If the data type is unacceptable an error
-   *    should generated via ssSetErrorStatus.  Note that any other dynamically
-   *    typed input or output ports whose data types are implicitly defined by
-   *    virtue of knowing the data type of the given port can also have their
-   *    data types set via calls to ssSetInputPortDataType or 
-   *    ssSetOutputPortDataType.  
-   *
-   *    See matlabroot/simulink/include/simstruc_types.h for built-in
-   *    type defines: SS_DOUBLE, SS_BOOLEAN, etc.
-   *
-   *    See matlabroot/simulink/src/sfun_dtype_io.c for an example. 
-   */
-  static void mdlSetInputPortDataType(SimStruct *S, int portIndex,DTypeId dType)
-  {
-  } /* mdlSetInputPortDataType */
-#endif /* MDL_SET_INPUT_PORT_DATA_TYPE */
-
-
-#define MDL_SET_OUTPUT_PORT_DATA_TYPE  /* Change to #undef to remove function */
-#if defined(MDL_SET_OUTPUT_PORT_DATA_TYPE) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetOutputPortDataType ========================================
-   * Abstract:
-   *    This method is called with the candidate data type id for a dynamically
-   *    typed output port.  If the proposed data type is acceptable, the method
-   *    should go ahead and set the actual port data type using
-   *    ssSetOutputPortDataType.  If the data type is unacceptable an error
-   *    should generated via ssSetErrorStatus.  Note that any other dynamically
-   *    typed input or output ports whose data types are implicitly defined by
-   *    virtue of knowing the data type of the given port can also have their
-   *    data types set via calls to ssSetInputPortDataType or 
-   *    ssSetOutputPortDataType.  
-   *
-   *    See matlabroot/simulink/src/sfun_dtype_io.c for an example. 
-   */
-  static void mdlSetOutputPortDataType(SimStruct *S,int portIndex,DTypeId dType)
-  {
-  } /* mdlSetOutputPortDataType */
-#endif /* MDL_SET_OUTPUT_PORT_DATA_TYPE */
-
-
-#define MDL_SET_DEFAULT_PORT_DATA_TYPES /* Change to #undef to remove function*/
-#if defined(MDL_SET_DEFAULT_PORT_DATA_TYPES) && defined(MATLAB_MEX_FILE)
-  /* Function:  mdlSetDefaultPortDataTypes =====================================
-   * Abstract:
-   *    This method is called when there is not enough information in your
-   *    model to uniquely determine the input and output data types
-   *    for your block. When this occurs, Simulink's data type propagation 
-   *    engine calls this method to ask you to set your S-function default 
-   *    data type for any dynamically typed input and output ports.
-   *
-   *    If you do not provide this method and you have dynamically typed
-   *    ports where Simulink does not have enough information to propagate
-   *    data types to your S-function, then Simulink will assign the
-   *    data type to the largest known port data type of your S-function.
-   *    If there are no known data types, then Simulink will set the
-   *    data type to double.
-   *
-   *    See matlabroot/simulink/src/sfun_dtype_io.c for an example. 
-   */
-  static void mdlSetDefaultPortDataTypes(SimStruct *S)
-  {
-  } /* mdlSetDefaultPortDataTypes */
-#endif /* MDL_SET_DEFAULT_PORT_DATA_TYPES */
-
-
-#define MDL_SET_INPUT_PORT_COMPLEX_SIGNAL   /* Change to #undef to remove */
-#if defined(MDL_SET_INPUT_PORT_COMPLEX_SIGNAL) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetInputPortComplexSignal ====================================
-   * Abstract:
-   *    This method is called with the candidate complexity signal setting
-   *    (COMPLEX_YES or COMPLEX_NO) for an input port whos complex signal
-   *    attribute is set to COMPLEX_INHERITED. If the proposed complexity is
-   *    acceptable, the method should go ahead and set the actual complexity
-   *    using ssSetInputPortComplexSignal. If the complex setting is
-   *    unacceptable an error should generated via ssSetErrorStatus.  Note that
-   *    any other unknown ports whose complexity is implicitly defined by virtue
-   *    of knowing the complexity of the given port can also have their
-   *    complexity set via calls to ssSetInputPortComplexSignal or
-   *    ssSetOutputPortComplexSignal.  
-   *
-   *    See matlabroot/simulink/src/sfun_cplx.c for an example. 
-   */
-  static void mdlSetInputPortComplexSignal(SimStruct *S, 
-                                           int       portIndex, 
-                                           CSignal_T cSignalSetting)
-  {
-  } /* mdlSetInputPortComplexSignal */
-#endif /* MDL_SET_INPUT_PORT_COMPLEX_SIGNAL */
-
-
-#define MDL_SET_OUTPUT_PORT_COMPLEX_SIGNAL  /* Change to #undef to remove */
-#if defined(MDL_SET_OUTPUT_PORT_COMPLEX_SIGNAL) && defined(MATLAB_MEX_FILE)
-  /* Function: mdlSetOutputPortComplexSignal ===================================
-   * Abstract:
-   *    This method is called with the candidate complexity signal setting
-   *    (COMPLEX_YES or COMPLEX_NO) for an output port whos complex signal
-   *    attribute is set to COMPLEX_INHERITED. If the proposed complexity is
-   *    acceptable, the method should go ahead and set the actual complexity
-   *    using ssSetOutputPortComplexSignal. If the complex setting is
-   *    unacceptable an error should generated via ssSetErrorStatus.  Note that
-   *    any other unknown ports whose complexity is implicitly defined by virtue
-   *    of knowing the complexity of the given port can also have their
-   *    complexity set via calls to ssSetInputPortComplexSignal or
-   *    ssSetOutputPortComplexSignal.  
-   *
-   *    See matlabroot/simulink/src/sfun_cplx.c for an example. 
-   */
-  static void mdlSetOutputPortComplexSignal(SimStruct *S, 
-                                            int       portIndex, 
-                                            CSignal_T cSignalSetting)
-  {
-  } /* mdlSetOutputPortComplexSignal */
-#endif /* MDL_SET_OUTPUT_PORT_COMPLEX_SIGNAL */
-
-
-#define MDL_SET_DEFAULT_PORT_COMPLEX_SIGNALS /* Change to #undef to remove */
-#if defined(MDL_SET_DEFAULT_PORT_COMPLEX_SIGNALS) && defined(MATLAB_MEX_FILE)
-  /* Function:  mdlSetDefaultPortComplexSignals ================================
-   * Abstract:
-   *    This method is called when there is not enough information in your
-   *    model to uniquely determine the complexity (COMPLEX_NO, COMPLEX_YES) 
-   *    of signals entering your block. When this occurs, Simulink's 
-   *    complex signal propagation engine calls this method to ask you to set
-   *    your S-function default complexity type for any input and output ports
-   *    who's complex signal attribute is set to COMPLEX_INHERITED.
-   *
-   *    If you do not provide this method and you have COMPLEX_INHERITED
-   *    ports where Simulink does not have enough information to propagate
-   *    the complexity to your S-function, then Simulink will set
-   *    these unkown ports to COMPLEX_YES if any of your S-function
-   *    ports are currently set to COMPLEX_YES, otherwise the unknown
-   *    ports will be set to COMPLEX_NO.
-   *
-   *    See matlabroot/simulink/src/sfun_cplx.c for an example. 
-   */
-  static void mdlSetDefaultPortComplexSignals(SimStruct *S)
-  {
-  } /* mdlSetDefaultPortComplexSignals */
-#endif /* MDL_SET_DEFAULT_PORT_COMPLEX_SIGNALS */
-
-
 #define MDL_SET_WORK_WIDTHS   /* Change to #undef to remove function */
 #if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
   /* Function: mdlSetWorkWidths ===============================================
@@ -1119,108 +713,17 @@ static void mdlInitializeSampleTimes(SimStruct *S)
    */
   static void mdlSetWorkWidths(SimStruct *S)
   {
+  /* Set number of run-time parameters */
+  if (!ssSetNumRunTimeParams(S, 2))
+    return;
+
+  /*
+   * Register the run-time parameter 1
+   */
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SampleTime",  ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "sock_ID", ssGetDataTypeId(S, "uint8"));
   }
 #endif /* MDL_SET_WORK_WIDTHS */
-
-
-#define MDL_INITIALIZE_CONDITIONS   /* Change to #undef to remove function */
-#if defined(MDL_INITIALIZE_CONDITIONS)
-  /* Function: mdlInitializeConditions ========================================
-   * Abstract:
-   *    In this function, you should initialize the continuous and discrete
-   *    states for your S-function block.  The initial states are placed
-   *    in the state vector, ssGetContStates(S) or ssGetDiscStates(S).
-   *    You can also perform any other initialization activities that your
-   *    S-function may require. Note, this method will be called at the
-   *    start of simulation and if it is present in an enabled subsystem
-   *    configured to reset states, it will be call when the enabled subsystem
-   *    restarts execution to reset the states.
-   *
-   *    You can use the ssIsFirstInitCond(S) macro to determine if this is
-   *    is the first time mdlInitializeConditions is being called.
-   */
-  static void mdlInitializeConditions(SimStruct *S)
-  {
-  }
-#endif /* MDL_INITIALIZE_CONDITIONS */
-
-
-#define MDL_START  /* Change to #undef to remove function */
-#if defined(MDL_START)
-  /* Function: mdlStart =======================================================
-   * Abstract:
-   *    This function is called once at start of model execution. If you
-   *    have states that should be initialized once, this is the place
-   *    to do it.
-   */
-  static void mdlStart(SimStruct *S)
-  {
-
-  }
-#endif /*  MDL_START */
-
-
-/* Define to indicate that this S-Function has the mdlG[S]etSimState mothods */
-#define MDL_SIM_STATE /* Change to #undef to remove this function */
-#if defined(MDL_SIM_STATE)
-  /* Function: mdlGetSimState ===========================================
-   * Abstract:
-   *    Package complete simulation state (this includes all the run-time data
-   *    that can change *after* mdlStart) as a MATLAB data structure and return
-   *    it.
-   */
-  static mxArray* mdlGetSimState(SimStruct* S)
-  {
-  }
-
-  /* Function: mdlSetSimState ===========================================
-   * Abstract:
-   *    Unack inSimState MATLAB data structure which contains the complete
-   *    simulation state (this includes all the run-time data that can change
-   *    *after* mdlStart) into the appropriate locations.
-   */
-  static void mdlSetSimState(SimStruct* S, const mxArray* inSimState)
-  {
-  }
-#endif /* MDL_SIM_STATE */
-
-
-#undef MDL_GET_TIME_OF_NEXT_VAR_HIT  /* Change to #undef to remove function */
-#if defined(MDL_GET_TIME_OF_NEXT_VAR_HIT) && (defined(MATLAB_MEX_FILE) || \
-                                              defined(NRT))
-  /* Function: mdlGetTimeOfNextVarHit =========================================
-   * Abstract:
-   *    This function is called to get the time of the next variable sample
-   *    time hit. This function is called once for every major integration time
-   *    step. It must return time of next hit by using ssSetTNext. The time of
-   *    the next hit must be greater than ssGetT(S).
-   *
-   *    Note, the time of next hit can be a function of the input signal(s).
-   */
-
-  static void mdlGetTimeOfNextVarHit(SimStruct *S)
-  {
-      time_T timeOfNextHit = ssGetT(S) /* + offset */ ;
-      ssSetTNext(S, timeOfNextHit);
-  }
-#endif /* MDL_GET_TIME_OF_NEXT_VAR_HIT */
-
-
-#define MDL_ZERO_CROSSINGS   /* Change to #undef to remove function */
-#if defined(MDL_ZERO_CROSSINGS) && (defined(MATLAB_MEX_FILE) || defined(NRT))
-  /* Function: mdlZeroCrossings ===============================================
-   * Abstract:
-   *    If your S-function has registered CONTINUOUS_SAMPLE_TIME and there
-   *    are signals entering the S-function or internally generated signals
-   *    which have discontinuities, you can use this method to locate the
-   *    discontinuities. When called, this method must update the
-   *    ssGetNonsampleZCs(S) vector.
-   */
-  static void mdlZeroCrossings(SimStruct *S)
-  {
-  }
-#endif /* MDL_ZERO_CROSSINGS */
-
 
 /* Function: mdlOutputs =======================================================
  * Abstract:
@@ -1231,34 +734,6 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
 } /* end mdlOutputs */
-
-
-#define MDL_UPDATE  /* Change to #undef to remove function */
-#if defined(MDL_UPDATE)
-  /* Function: mdlUpdate ======================================================
-   * Abstract:
-   *    This function is called once for every major integration time step.
-   *    Discrete states are typically updated here, but this function is useful
-   *    for performing any tasks that should only take place once per
-   *    integration step.
-   */
-  static void mdlUpdate(SimStruct *S, int_T tid)
-  {
-  }
-#endif /* MDL_UPDATE */
-
-
-#define MDL_DERIVATIVES  /* Change to #undef to remove function */
-#if defined(MDL_DERIVATIVES)
-  /* Function: mdlDerivatives =================================================
-   * Abstract:
-   *    In this function, you compute the S-function block's derivatives.
-   *    The derivatives are placed in the derivative vector, ssGetdX(S).
-   */
-  static void mdlDerivatives(SimStruct *S)
-  {
-  }
-#endif /* MDL_DERIVATIVES */
 
 
 /* Function: mdlTerminate =====================================================
@@ -1559,34 +1034,59 @@ static void mdlTerminate(SimStruct *S)
    */
   static void mdlRTW(SimStruct *S)
   {
-      int i;
-	real_T  nBufferBytes = 0;
-	real_T *des_port_n = des_port;
+  int i;
+  real_T  nBufferBytes = 0;
 
-	//Now Calculate the Bytes of the Send Buffer
-	for (i = 0; i < mxGetNumberOfElements(ssGetSFcnParam(S, 3)); i++)
-	{
-		if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 3), i)), "uint8"))
-			nBufferBytes++;
-		else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 3), i)), "uint16"))
-			nBufferBytes += 2;
-		else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 3), i)), "uint32"))
-			nBufferBytes += 4;
-		else
-			mexWarnMsgTxt("One or more Ports Datatypes not set");
-	}
+  //Now Calculate the Bytes of the Send Buffer
+  for (i = 0; i < mxGetNumberOfElements(ssGetSFcnParam(S, 2)); i++)
+  {
+    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
+      nBufferBytes++;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
+      nBufferBytes += 2;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
+      nBufferBytes += 4;
+    else
+      mexWarnMsgTxt("One or more Ports Datatypes not set");
+  }
 
-	//now we wanted to write some Parameters to the rtw-file and
-	//use them for sending data to the right destination
-	if (!ssWriteRTWParamSettings(S, 4,
-		SSWRITE_VALUE_QSTR, "SOCK_ID", sock_id,
-		SSWRITE_VALUE_QSTR, "DES_IP", des_ip,
-		SSWRITE_VALUE_NUM, "DES_PORT", (*des_port_n),
-		SSWRITE_VALUE_NUM, "NBUFFERBYTES", (nBufferBytes+1)))
-		return;
+  //now we wanted to write some Parameters to the rtw-file and
+  //use them for sending data to the right destination
+  if (!ssWriteRTWParamSettings(S, 1,
+    SSWRITE_VALUE_NUM, "NBUFFERBYTES", (nBufferBytes+1)))
+    return;
   }
 #endif /* MDL_RTW */
 
+/* Function: IsRealMatrix =================================================
+ * Abstract:
+ *      Verify that the mxArray is a real (double) finite matrix
+ */
+static bool IsRealMatrix(const mxArray * const m)
+{
+    if (mxIsNumeric(m)  &&  
+        mxIsDouble(m)   && 
+        !mxIsLogical(m) &&
+        !mxIsComplex(m) &&  
+        !mxIsSparse(m)  && 
+        !mxIsEmpty(m)   &&
+        mxGetNumberOfDimensions(m) == 2) {
+
+        const double * const data = mxGetPr(m);
+        const size_t numEl = mxGetNumberOfElements(m);
+        size_t i;
+
+        for (i = 0; i < numEl; i++) {
+            if (!mxIsFinite(data[i])) {
+                return(false);
+            }
+        }
+
+        return(true);
+    } else {
+        return(false);
+    }
+}
 
 /*=============================*
  * Required S-function trailer *

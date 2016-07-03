@@ -1,0 +1,40 @@
+%implements udpConfigSocket "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+
+    %assign socket_id  = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+    %assign destination_ip   = SFcnParamSettings.DES_IP
+    %assign destination_port = FEVAL("int2str",LibBlockParameterValue(des_port,0))
+
+    %openfile declbuf
+    UDPSocket oUDPSocket_%<socket_id>;
+    Endpoint oEndpoint_%<socket_id>;
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    oUDPSocket_%<socket_id>.init();
+    oEndpoint_%<socket_id>.set_address("%<destination_ip>",%<destination_port>);
+  %endif
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+%endfunction
