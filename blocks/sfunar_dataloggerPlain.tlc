@@ -98,10 +98,11 @@
     %assign errEn_val = CAST("Number",LibBlockParameterValue(errEn, 0))
     %if errEn_val
       %assign y = LibBlockOutputSignal(2, "", "", 0)
-      if (BUF_LEN<buf_idx)
+      if (BUF_LEN>buf_idx) {
         %<y> = 0;
-      else
+      } else {
         %<y> = 1;
+      }
     %endif
   %endif
 %endfunction
