@@ -30,7 +30,7 @@ Parameters and Dialog Box
 Serial Port
 ...........
 
-Selects the hardware UART peripheral of an STM32 MCU. The port number are related to the actual USART/UART numbers referred to the data sheet of the used MCU.
+Selects the hardware UART peripheral of an STM32 MCU. The port number is related to the actual USART/UART number referred to the data sheet of the used MCU.
 
 Port Name
 .........

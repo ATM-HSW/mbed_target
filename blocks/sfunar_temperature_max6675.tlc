@@ -1,0 +1,77 @@
+%% File : sfunar_temperature_max6675.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 M. Marquardt, HS Wismar
+
+%implements sfunar_temperature_max6675 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("max6675.h")>
+  %<LibAddToModelSources("max6675")>
+  
+  %% global variable containing the CS Port and Pin Values used by any TMP123 block
+  %% lower 16 Bit contain pin number 
+  %% upper 16 Bit contain port number
+  %% example: 0b 00000000 00000001 00000000 00000001 = PA_0
+  %%          0b 00000000 00001000 01000000 00000000 = PD_14
+  %assign ::MAX6675_CS = CAST("Number",0)
+  
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+      %assign spiport_val = CAST("Number",LibBlockParameterValue(SpiPort, 0))
+	  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+	  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+	  
+	  %assign pname = "P" + FEVAL("char",csport_val+64) + "_" + FEVAL("int2str",cspin_val)
+	  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+	  
+	  %if !((::MAX6675_CS & ((1<<(csport_val+15)) | (1<<cspin_val))) == ((1<<(csport_val+15)) | (1<<cspin_val)))
+        %openfile declbuf
+		
+        MAX6675 max6675_%<instance>(&spi%<spiport_val>,%<pname>);
+
+        %closefile declbuf
+        %assign srcFile = LibGetModelDotCFile()
+        %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+		
+		%assign ::MAX6675_CS = ::MAX6675_CS | ((1<<(csport_val+15)) | (1<<cspin_val))
+	  %endif
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+  %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1 
+  
+  
+  %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+  
+  %if !SLibCodeGenForSim()
+
+	%<LibBlockOutputSignal(0, "", "", 0)> = max6675_%<instance>.get_temp();
+
+  %endif
+%endfunction
