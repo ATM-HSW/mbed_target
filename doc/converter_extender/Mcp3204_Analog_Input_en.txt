@@ -22,22 +22,22 @@ Description
 This block return the conversion result of one specified analog input channel of the MCP3204 analog to digital converter. The ADC can be configured in single ended or (pseudo)differential mode.
 The following table shows the channel configuration in differential mode.
 
-+-----------+---------------+
-|  Channel  | resulting     |
-| Selection | configuration |
-+===========+===============+
-| Channel 1 | CH1 = IN+     |
-|           | CH2 = IN-     |
-+-----------+---------------+
-| Channel 2 | CH1 = IN-     |
-|           | CH2 = IN+     |
-+-----------+---------------+
-| Channel 3 | CH3 = IN+     |
-|           | CH4 = IN-     |
-+-----------+---------------+
-| Channel 4 | CH3 = IN-     |
-|           | CH4 = IN+     |
-+-----------+---------------+
++------------+-----------------+
+| Channel    |  resulting      |
+| Selection  |  configuration  |
++============+=================+
+| Channel 1  |  CH1 = IN+      |
+|            |  CH2 = IN-      |
++------------+-----------------+
+| Channel 2  |  CH1 = IN-      |
+|            |  CH2 = IN+      |
++------------+-----------------+
+| Channel 3  |  CH3 = IN+      |
+|            |  CH4 = IN-      |
++------------+-----------------+
+| Channel 4  |  CH3 = IN-      |
+|            |  CH4 = IN+      |
++------------+-----------------+
 
 .. attention::
 	In pseudo differential input mode the IN+ input can range from IN- to (Vref+IN-). The IN- input is limited to +/- 100mV from the Vss rail.

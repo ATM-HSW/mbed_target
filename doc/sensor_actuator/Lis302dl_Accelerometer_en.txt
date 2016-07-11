@@ -22,8 +22,9 @@ filter inside the accelerometer can be activated an configured with different cu
 The measured force is provided in mg.
 
 +--------------+-------------+-------------+ 
-|              |   cut-off frequency [Hz]  |
-| filter level | @rate 100Hz | @rate 400Hz |
+| filter level |   cut-off frequency [Hz]  |
++              +-------------+-------------+
+|              | @rate 100Hz | @rate 400Hz |
 +==============+=============+=============+
 |   level 1    |      2      |      8      |
 +--------------+-------------+-------------+

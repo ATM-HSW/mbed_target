@@ -9,53 +9,23 @@ Welcome to mbed_target_doc's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 1
+   :numbered: 3
+   :maxdepth: 2
 
    getting_started
-   chapters/OpenOCD_en
-   chapters/VisualGDB_de
-   chapters/Encoder_Input_en
-   chapters/Counter_en
-   chapters/Serial_Dma_Config_en
-   chapters/Serial_Dma_Read_en
-   chapters/Serial_Dma_Write_en
-   chapters/Random_Number_Generator_en
-   chapters/Gpio_Runtime_en
-   chapters/Dac_Runtime_en
-   chapters/MPU9250_6_DoF_Motion_Sensor_en
-   chapters/AK8963_3_DoF_Motion_Sensor_en
-   chapters/Digital_Pressure_Sensor_en
-   chapters/Max11300_Config_en
-   chapters/Max11300_Digital_Input_en
-   chapters/Max11300_Digital_Output_en
-   chapters/Max11300_Analog_Input_en
-   chapters/Max11300_Analog_Output_en
-   chapters/Max11300_Temperature_en
-   chapters/Mcp3204_Analog_Input_en
-   chapters/Mcp4822_Analog_Output_en
-   chapters/Tmp123_Temperature_en
-   chapters/Fm25l16b_Fram_Read_en
-   chapters/Fm25l16b_Fram_Write_en
-   chapters/Spi_Master_Read_Write_en
-   chapters/Lis302dl_Accelerometer_en
-   chapters/L3gd20_Gyroscope_en
-   chapters/Spi_Master_Config_en
-   chapters/Spi_Slave_Config_en
-   chapters/Spi_Slave_Read_en
-   chapters/Spi_Slave_Write_en
-   chapters/I2c_Config_en
-   chapters/I2c_Read_en
-   chapters/I2c_Write_en
-   chapters/Mcp3428_Analog_Input_en
-   chapters/Mcp4728_Analog_Output_en
-   chapters/Tmp102_Temperature_en
-   chapters/Pcf8574_Digital_Input_en
-   chapters/Pcf8574_Digital_Output_en
-   chapters/Fm24cl16b_Fram_Read_en
-   chapters/Fm24cl16b_Fram_Write_en
-   chapters/PowerSTEP01_en
-   
-
+   installation/Installation__en
+   mbed/gpio__en
+   mbed/serial__en
+   mbed/i2c__en
+   mbed/spi__en
+   mbed/rtos__en
+   mbed/ethernet__en
+   mbed/utilities__en
+   targets/_targets__en
+   target_specific/_target_specific_en
+   sensor_actuator/_sensor_actuator_en
+   converter_extender/_converter_extender_en
+   memory/_memory_en
 
 Indices and tables
 ==================

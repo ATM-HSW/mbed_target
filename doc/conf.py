@@ -47,7 +47,7 @@ master_doc = 'Index'
 
 # General information about the project.
 project = u'mbed_target_doc'
-copyright = u'2015-2016, Mathias Marquardt'
+copyright = u'2015-2016, Mathias Marquardt, Dr.O.Hagendorf'
 author = u'Mathias Marquardt'
 
 # The version info for the project you're documenting, acts as replacement for
