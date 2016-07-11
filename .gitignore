@@ -10,14 +10,15 @@
 *.mex*
 
 *.bak
-*.o
-*.elf
-*.d
 *.bin
+*.d
+*.elf
+*.o
+
 **/slprj/*
 **/*_slprj/*
 **/Debug/*
-**/_build/**
+doc/_build/**/*
 
 *~
 *.autosave
