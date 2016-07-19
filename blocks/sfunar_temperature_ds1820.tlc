@@ -1,0 +1,66 @@
+%% File : sfunar_temperature_max6675.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 M. Marquardt, HS Wismar
+
+%implements sfunar_temperature_ds1820 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("ds1820.h")>
+  %<LibAddToModelSources("ds1820")>
+    
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+      %assign OwBus_val = CAST("Number",LibBlockParameterValue(OwBus, 0))
+	  %assign DeviceId_val = LibBlockMatrixParameterBaseAddr(DeviceId)
+
+      %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+      %assign name = FEVAL("strrep",name," ","_")
+
+	    %openfile declbuf
+		
+        DS1820 %<name>(&onewire%<OwBus_val>);
+
+        %closefile declbuf
+        %assign srcFile = LibGetModelDotCFile()
+        %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+        %<name>.search_device((uint8_t*)%<DeviceId_val>);
+        
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign name = FEVAL("strrep",name," ","_")
+
+
+  %if !SLibCodeGenForSim()
+	%<LibBlockOutputSignal(0, "", "", 0)> = %<name>.temperature();
+
+    %<name>.convert_temperature(0, DS1820::all_devices);
+  %endif
+%endfunction
