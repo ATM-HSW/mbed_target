@@ -6,7 +6,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_temperature_ds1820
+#define S_FUNCTION_NAME                sfunar_oneWireSearchRom
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -50,7 +50,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 1);
 
   
 #if defined(MATLAB_MEX_FILE)
@@ -76,8 +76,6 @@ static void mdlInitializeSizes(SimStruct *S)
   
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);	// OwPort
-  ssSetSFcnParamTunable(S, 1, 0);	// DeviceId
-  ssSetSFcnParamTunable(S, 2, 0);	// IDavail
 
   ssSetNumPWork(S, 0);
 
@@ -97,8 +95,8 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumOutputPorts(S, 1))
     return;   
 	  
-	ssSetOutputPortDataType(S, 0, SS_SINGLE);
-	ssSetOutputPortWidth(S, 0, 1);
+	ssSetOutputPortDataType(S, 0, SS_UINT8);
+	ssSetOutputPortWidth(S, 0, 8);
 	ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
 	ssSetOutputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL);
 	ssSetOutputPortOutputExprInRTW(S, 0, 1);
@@ -164,15 +162,13 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 3))
+  if (!ssSetNumRunTimeParams(S, 1))
     return;
 
   /*
    * Register the run-time parameter 1
    */
   ssRegDlgParamAsRunTimeParam(S, 0, 0, "OwBus", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "DeviceId", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "IDavail", ssGetDataTypeId(S, "uint8"));
 
 }
 

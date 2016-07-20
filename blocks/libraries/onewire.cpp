@@ -4,6 +4,8 @@
 
 OneWire::OneWire(PinName data) : _data(data)
 {
+	diff = OW_LAST_DEVICE;
+	search_done = false;
 }
 	
 bool OneWire::reset()

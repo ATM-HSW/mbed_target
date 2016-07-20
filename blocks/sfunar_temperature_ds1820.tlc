@@ -33,7 +33,8 @@
   %if !SLibCodeGenForSim()
       %assign OwBus_val = CAST("Number",LibBlockParameterValue(OwBus, 0))
 	  %assign DeviceId_val = LibBlockMatrixParameterBaseAddr(DeviceId)
-
+      %assign IDavail_val = CAST("Number",LibBlockParameterValue(IDavail, 0))
+	
       %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
 
@@ -45,7 +46,11 @@
         %assign srcFile = LibGetModelDotCFile()
         %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
+    %if IDavail_val == 1
         %<name>.search_device((uint8_t*)%<DeviceId_val>);
+    %else
+        %<name>.search_device();
+    %endif
         
   %endif
 %endfunction
@@ -53,13 +58,13 @@
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
-
+ 
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
 
 
   %if !SLibCodeGenForSim()
-	%<LibBlockOutputSignal(0, "", "", 0)> = %<name>.temperature();
+    %<LibBlockOutputSignal(0, "", "", 0)> = %<name>.temperature();
 
     %<name>.convert_temperature(0, DS1820::all_devices);
   %endif

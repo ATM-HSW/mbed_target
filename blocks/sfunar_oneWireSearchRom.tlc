@@ -1,0 +1,38 @@
+%% File : sfunar_temperature_max6675.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 M. Marquardt, HS Wismar
+
+%implements sfunar_oneWireSearchRom "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+    
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+      %assign OwBus_val = CAST("Number",LibBlockParameterValue(OwBus, 0))
+
+        onewire%<OwBus_val>.search_rom(%<LibBlockOutputSignalAddr(0, "", "", 0)>);
+        
+  %endif
+%endfunction
+
+
