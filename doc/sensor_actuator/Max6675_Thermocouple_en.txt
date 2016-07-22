@@ -1,0 +1,44 @@
+MAX6675 Thermocouple
+====================
+
+Temperature measurement with a MAX6675 connected to a type-K thermocouple.
+
+
+Library
+-------
+
+/SPI/Sensors
+
+Description
+-----------
+
+.. image:: ../images/Max6675_Thermocouple_block.png
+   :scale: 50 %
+
+This block reads the temperature measurement of a cold-junction-compensated K-thermocouple-to-digital converter MAX6675 in [°C]. Minimal temperature is 0°C and maximum temperature is 1023.75°C with a resolution of
+0.25°C. 
+A measurement value of -1 indicates an open thermocouple input.
+
+..note::
+	Maximum conversion time is stated as 0.22s in the data sheet. Since pulling CS low stops any ongoing conversion, it must kept high for the conversion time to guarantee a new measurement.
+
+Data Type Support
+-----------------
+
+The block's output value is of data type single.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/Max6675_Thermocouple_mask.png
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+Configuration of the MCU Pin the device's chip select input is connected to.

@@ -13,4 +13,6 @@ Contents:
    L3gd20_Gyroscope_en
    Tmp102_Temperature_en
    Tmp123_Temperature_en
+   DS1820_Temperature_en
+   Max6675_Thermocouple_en
    PowerSTEP01_en

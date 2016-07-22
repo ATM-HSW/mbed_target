@@ -1,0 +1,41 @@
+One Wire Config
+===============
+
+Configuration of a GPIO pin to be used as data line in a One Wire bus.
+
+Library
+-------
+
+/OneWire
+
+Description
+-----------
+
+.. image:: ../images/One_Wire_Config_block.png
+   :scale: 50 %
+
+This block configures the MCU as a One Wire Bus master and uses the configured pin as data line.
+
+.. note::
+	The One Wire class only supports external power supply for the connected slaves. Parasite power is not supported yet!
+
+Data Type Support
+-----------------
+
+This block has no input or output ports.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/One_Wire_Config_mask.png
+
+
+OneWire Bus
+............
+
+Selects an identifier for the bus that should correspond in the device's configuration which are connected to this particular bus.
+
+OneWire Port and Pin
+.....................
+
+Selects the GPIO port and pin of the MCU used as One Wire data line.

@@ -18,6 +18,7 @@ Contents:
    mbed/serial__en
    mbed/i2c__en
    mbed/spi__en
+   mbed/one_wire__en
    mbed/rtos__en
    mbed/ethernet__en
    mbed/utilities__en

@@ -7,7 +7,7 @@ Temperature measurement with a TMP123 temperature sensor.
 Library
 -------
 
-/SPI
+/SPI/Sensors
 
 Description
 -----------
