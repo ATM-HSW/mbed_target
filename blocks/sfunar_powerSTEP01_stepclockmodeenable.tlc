@@ -1,0 +1,77 @@
+%% File : sfunar_powerStep01.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 Sven Lack, HS Wismar
+
+%implements sfunar_powerSTEP01_stepclockmodeenable "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("DevSPI.h")>
+  %<LibAddToCommonIncludes("powerstep01_class.h")>
+
+%<LibAddToModelSources("powerstep01_class")>  
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign SSEL_port_val = LibBlockParameterValue(SSELPort, 0)
+  %assign SSEL_pin_val = LibBlockParameterValue(SSELPin, 0)
+  %assign ssel = "P" + FEVAL("char",SSEL_port_val+64) + "_" + FEVAL("int2str",SSEL_pin_val-1)
+  
+  %assign SPI_Nummer = LibBlockParameterValue(SPINr,0)
+  %assign spiport_name = "spi" + FEVAL("int2str",SPI_Nummer)
+  
+  %assign NumMotors_val_1 = LibBlockParameterValue(NumMotors,0)	
+  
+  	%switch NumMotors_val_1
+		%case 1
+			%assign motor = "motor_1_"+spiport_name+ssel
+			%break
+		%case 2
+			%assign motor = "motor_2_"+spiport_name+ssel
+			%break
+		%case 3
+			%assign motor = "motor_3_"+spiport_name+ssel
+			%break
+		%default
+			%break
+	%endswitch
+
+  %assign dir = LibBlockInputSignal(0, "", "", 0)
+
+
+  
+  %if !SLibCodeGenForSim()
+    if (%<dir> == 1)
+		%<motor>->  StepClockModeEnable((StepperMotor::direction_t)%<dir>);
+	else
+		%<motor>->  StepClockModeEnable((StepperMotor::direction_t)%<dir>);
+		
+	
+	
+  %endif
+%endfunction
