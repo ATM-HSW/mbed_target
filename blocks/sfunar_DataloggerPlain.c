@@ -137,12 +137,16 @@ static void mdlInitializeSizes(SimStruct *S)
       ssSetInputPortDataType(S, i, SS_UINT16);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint32"))
       ssSetInputPortDataType(S, i, SS_UINT32);
+//    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint64"))
+//      ssSetInputPortDataType(S, i, SS_UINT64);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int8"))
       ssSetInputPortDataType(S, i, SS_INT8);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int16"))
       ssSetInputPortDataType(S, i, SS_INT16);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int32"))
       ssSetInputPortDataType(S, i, SS_INT32);
+//    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int64"))
+//      ssSetInputPortDataType(S, i, SS_UINT64);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "single"))
       ssSetInputPortDataType(S, i, SS_SINGLE);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "double"))

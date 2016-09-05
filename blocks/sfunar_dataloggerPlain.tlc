@@ -56,23 +56,29 @@
             %endif
             %switch datatype
               %case "uint8_T"
-                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hu", %<u>);
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hhu", %<u>);
                 %break
               %case "int8_T"
-                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hd", %<u>);
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hhd", %<u>);
                 %break
               %case "uint16_T"
-                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%u", %<u>);
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hu", %<u>);
                 %break
               %case "int16_T"
-                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%u", %<u>);
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%hd", %<u>);
                 %break
               %case "uint32_T"
-                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%lu", %<u>);
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%u", %<u>);
                 %break
               %case "int32_T"
-                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%lu", %<u>);
+                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%d", %<u>);
                 %break
+%%              %case "uint64_T"
+%%                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%lu", %<u>);
+%%                %break
+%%              %case "int64_T"
+%%                buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%ld", %<u>);
+%%                %break
               %case "real32_T"
                 buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%f", %<u>);
                 %break
