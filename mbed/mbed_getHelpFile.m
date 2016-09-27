@@ -33,6 +33,6 @@ end
 function addStruct(blockname, htmlfile)
   global cellBlocks;
   global cellFiles;
-  cellBlocks = {cellBlocks{:}, blockname};
-  cellFiles = {cellFiles{:}, htmlfile};
+  cellBlocks = [cellBlocks, {blockname}];
+  cellFiles = [cellFiles, {htmlfile}];
 end
