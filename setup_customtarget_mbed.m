@@ -1,6 +1,6 @@
 function setup_customtarget_mbed
 
-addpath(fullfile(pwd,'mbed'),fullfile(pwd,'blocks'));
+addpath(fullfile(pwd,'mbed'),fullfile(pwd,'blocks'),fullfile(pwd,'blocks','mex'),fullfile(pwd,'blocks','slx'));
 
 result = savepath;
 if result==1

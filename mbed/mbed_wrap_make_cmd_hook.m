@@ -14,6 +14,7 @@ if ispc
     [~,modelName,~] = fileparts( which (bdroot));
     buildAreaDstFolder = fullfile(lCodeGenFolder, [modelName '_slprj']);
     args.makeCmd = [['@echo off & copy "' fullfile(buildAreaDstFolder, [args.modelName '.mk']) '" "' fullfile(buildAreaDstFolder, 'Makefile') '"'] ' & make.exe'];
+    args.verbose = 1;
     makeCmd = setup_for_default(args);
 else
     %disp('no ispc');
