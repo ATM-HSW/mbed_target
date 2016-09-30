@@ -1,19 +1,13 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_PWMOutput.c Simple C-MEX S-function for function call.
- *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- *        sfunar_servoOutput(uint8 u1, uint8 p1)
+ *   PWMOutput.c Simple C-MEX S-function for function call.
  *
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_PWMOutput
+#define S_FUNCTION_NAME                PWMOutput
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -85,36 +79,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-
-  /*
-   * Check the parameter 2 (port name (A..K)
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-
-  /*
-   * Check the parameter 3 (pin number (0..15))
-   */
-    if EDIT_OK(S, 2) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-
-  /*
-   * Check the parameter 4 (periode (micro seconds))
-   */
-    if EDIT_OK(S, 3) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 3, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 #endif
@@ -151,9 +115,9 @@ static void mdlInitializeSizes(SimStruct *S)
 
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
-  ssSetSFcnParamTunable(S, 1, 1);
-  ssSetSFcnParamTunable(S, 2, 1);
-  ssSetSFcnParamTunable(S, 3, 1);
+  ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -257,17 +221,17 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 2
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "p1", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "PortName", ssGetDataTypeId(S, "uint8"));
 
   /*
    * Register the run-time parameter 3
    */
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "PinNumber", ssGetDataTypeId(S, "uint8"));
 
   /*
    * Register the run-time parameter 4
    */
-  ssRegDlgParamAsRunTimeParam(S, 3, 2, "p3", ssGetDataTypeId(S, "uint32"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "Period", ssGetDataTypeId(S, "uint32"));
 }
 
 #endif

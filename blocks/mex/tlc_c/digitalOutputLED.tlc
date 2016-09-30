@@ -1,0 +1,76 @@
+%% File : sfunar_digitalOutput.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
+
+%implements digitalOutputLED "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+
+  %<LibBlockSetIsExpressionCompliant(block)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %assign led_number = LibBlockParameterValue(LED, 0)
+    %switch(led_number)
+      %case 1
+        %assign pname = "LED1"
+        %break
+      %case 2
+        %assign pname = "LED2"
+        %break
+      %case 3
+        %assign pname = "LED3"
+        %break
+      %case 4
+        %assign pname = "LED4"
+        %break
+      %default
+        %assign pname = "LED1"
+        %break
+    %endswitch
+
+    %openfile declbuf
+    DigitalOut %<name>(%<pname>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %%
+    %<name> = %<u1_val>;
+    %%
+  %endif
+%endfunction

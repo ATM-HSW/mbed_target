@@ -1,19 +1,13 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_digitalInput.c Simple C-MEX S-function for function call.
- *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- *        uint8 y1 = sfunar_digitalInput(uint8 p1)
+ *   analogOutput.c Simple C-MEX S-function for function call.
  *
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_digitalInput
+#define S_FUNCTION_NAME                analogOutput
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -23,7 +17,7 @@
 #include "simstruc.h"
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-#define SAMPLE_TIME                    (ssGetSFcnParam(S, 1))
+#define SAMPLE_TIME                    (ssGetSFcnParam(S, 0))
 
 /*
  * Utility function prototypes.
@@ -43,26 +37,16 @@ static bool IsRealMatrix(const mxArray * const m);
 static void mdlCheckParameters(SimStruct *S)
 {
   /*
-   * Check the parameter 1
+   * Check the parameter 0 (sample time)
    */
   if EDIT_OK(S, 0) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-
-  /*
-   * Check the parameter 2 (sample time)
-   */
-  if EDIT_OK(S, 1) {
-    const double * sampleTime = NULL;
+    const real_T * sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
 
     /* Sample time must be a real scalar value or 2 element array. */
     if (IsRealMatrix(SAMPLE_TIME) &&
         (stArraySize == 1 || stArraySize == 2) ) {
-      sampleTime = mxGetPr(SAMPLE_TIME);
+      sampleTime = (real_T *) mxGetPr(SAMPLE_TIME);
     } else {
       ssSetErrorStatus(S,
                        "Invalid sample time. Sample time must be a real scalar value or an array of two real values.");
@@ -95,26 +79,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-
-		/*
-		 * Check the parameter 3
-		 */
-		if EDIT_OK(S, 2) {
-		  int_T dimsArray[2] = { 1, 1 };
-		
-		  /* Check the parameter attributes */
-		  ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-		}
-		
-		/*
-		 * Check the parameter 4
-		 */
-		if EDIT_OK(S, 3) {
-		  int_T dimsArray[2] = { 1, 1 };
-		
-		  /* Check the parameter attributes */
-		  ssCheckSFcnParamValueAttribs(S, 3, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-		}
 }
 
 #endif
@@ -126,6 +90,13 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
+  uint8_T inputVariant;
+  const DTypeId typeMapping[]={
+      SS_UINT16, /* 0x0YYY */
+      SS_SINGLE  /* 0.. 1.0f */
+  };
+  DTypeId inputType;
+
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 4);
 
@@ -163,23 +134,33 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  if (!ssSetNumInputPorts(S, 0))
+  if (!ssSetNumInputPorts(S, 1))
     return;
+
+  /*
+   * Configure the input port 1
+   */
+  inputVariant = (uint8_T)mxGetScalar(ssGetSFcnParam(S,3));
+  if(inputVariant > (sizeof(typeMapping)/sizeof(typeMapping[0]))){
+      ssSetErrorStatus(S,"Input variant is not valid!");
+      return;
+  }
+  
+  inputType = typeMapping[inputVariant-1];
+  ssSetInputPortDataType(S, 0, inputType);
+  ssSetInputPortWidth(S, 0, 1);
+  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetInputPortDirectFeedThrough(S, 0, 1);
+  ssSetInputPortAcceptExprInRTW(S, 0, 1);
+  ssSetInputPortOverWritable(S, 0, 1);
+  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetInputPortRequiredContiguous(S, 0, 1);
 
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 1))
+  if (!ssSetNumOutputPorts(S, 0))
     return;
-
-  /*
-   * Configure the output port 1
-   */
-  ssSetOutputPortDataType(S, 0, SS_UINT8);
-  ssSetOutputPortWidth(S, 0, 1);
-  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-  ssSetOutputPortOutputExprInRTW(S, 0, 1);
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -214,7 +195,7 @@ static void mdlInitializeSizes(SimStruct *S)
  */
 static void mdlInitializeSampleTimes(SimStruct *S)
 {
-  const double * const sampleTime = mxGetPr(SAMPLE_TIME);
+  const real_T * const sampleTime = mxGetPr(SAMPLE_TIME);
   const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {
@@ -254,31 +235,17 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "PortName", ssGetDataTypeId(S, "uint8"));
+
   /*
    * Register the run-time parameter 3
    */
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "PinNumber", ssGetDataTypeId(S, "uint8"));
+
   /*
    * Register the run-time parameter 4
    */
-  ssRegDlgParamAsRunTimeParam(S, 3, 2, "p3", ssGetDataTypeId(S, "uint8"));
-}
-
-#endif
-
-#define MDL_START
-#if defined(MDL_START)
-
-/* Function: mdlStart =====================================================
- * Abstract:
- *    This function is called once at start of model execution. If you
- *    have states that should be initialized once, this is the place
- *    to do it.
- */
-static void mdlStart(SimStruct *S)
-{
-    UNUSED_PARAMETER(S);
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "Mode", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif

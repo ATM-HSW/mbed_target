@@ -1,9 +1,9 @@
 %% File : sfunar_analogOutput.tlc
 %%
 %% Copyright 2010-2011 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_analogOutput "C"
+%implements analogOutput "C"
 
 %include "block_common_includes.tlc"
 
@@ -15,42 +15,40 @@
 
 %endfunction
 
+
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
   %if !SLibCodeGenForSim()
 
-      %assign p1_val = LibBlockParameterValue(p1, 0)
-      %assign p2_val = LibBlockParameterValue(p2, 0)
+    %assign nPortName = LibBlockParameterValue(PortName, 0)
+    %assign nPinNumber = LibBlockParameterValue(PinNumber, 0)
+    %assign pname = "P" + FEVAL("char",nPortName+64) + "_" + FEVAL("int2str",nPinNumber-1)
 
-      %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-      %assign name = FEVAL("strrep",name," ","_")
-      %assign name = FEVAL("strrep",name,"-","_")
-      %assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val-1)
-      %openfile declbuf
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
 
-      AnalogOut %<name>(%<pname>);
+    %openfile declbuf
+    AnalogOut %<name>(%<pname>);
+    %closefile declbuf
 
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
   %endif
 %endfunction
 
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
-
   %if !SLibCodeGenForSim()
     %assign u1_val = LibBlockInputSignal(0, "", "", 0)
-    %assign inputVariant = LibBlockParameterValue(p3, 0)
+    %assign nMode = LibBlockParameterValue(Mode, 0)
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
     %assign name = FEVAL("strrep",name,"-","_")
     %%
-    %switch inputVariant
+    %switch nMode
     %case 1
       %<name>.write_u16(%<u1_val>);
       %break

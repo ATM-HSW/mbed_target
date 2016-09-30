@@ -1,9 +1,9 @@
 %% File : sfunar_Interrupt.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_Interrupt "C"
+%implements Interrupt "C"
 
 %include "block_common_includes.tlc"
 
@@ -30,23 +30,23 @@
   %if !SLibCodeGenForSim()
     %assign srcFile = LibGetModelDotCFile()
 
-    %assign p1_val = LibBlockParameterValue(p1, 0)
-    %assign p2_val = LibBlockParameterValue(p2, 0)
-    %assign p3_val = LibBlockParameterValue(p3, 0)
+    %assign nPortName = LibBlockParameterValue(PortName, 0)
+    %assign nPinNumber = LibBlockParameterValue(PinNumber, 0)
+    %assign pname = "P" + FEVAL("char",nPortName+64) + "_" + FEVAL("int2str",nPinNumber-1)
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
     %assign name = FEVAL("strrep",name,"-","_")
-    %assign pname = "P" + FEVAL("char",p1_val+64) + "_" + FEVAL("int2str",p2_val-1)
+
     %openfile declbuf
-
     InterruptIn %<name>(%<pname>);
-
     %closefile declbuf
+
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
     %% PullDefault, PullUp, PullDown, PullNone
-    %switch(p3_val)
+    %assign nInterruptMode = LibBlockParameterValue(InterruptMode, 0)
+    %switch(nInterruptMode)
       %case 1
         %<name>.rise(NULL);
         %<name>.fall(NULL);
@@ -67,6 +67,7 @@
     /* %<Type> block: %<Name> */
     void %<name>_interrupt();
     %closefile declbuf
+
     %<LibSetSourceFileSection(srcFile,"Declarations", declbuf)>
 
     %openfile declbuf
@@ -76,6 +77,7 @@
     }
 
     %closefile declbuf
+
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
   %endif

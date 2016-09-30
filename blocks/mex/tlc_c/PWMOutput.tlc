@@ -1,9 +1,9 @@
 %% File : sfunar_PWMOutput.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_PWMOutput "C"
+%implements PWMOutput "C"
 
 %include "block_common_includes.tlc"
 
@@ -17,29 +17,27 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
-  %assign p1_val = LibBlockParameterValue(p1, 0)
-  %assign p2_val = LibBlockParameterValue(p2, 0)
-  %assign p3_val = LibBlockParameterValue(p3, 0)
-
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-  %assign pname = "P" + FEVAL("char",p1_val+64) + "_" + FEVAL("int2str",p2_val-1)
-
   %if !SLibCodeGenForSim()
+
+    %assign nPortName = LibBlockParameterValue(PortName, 0)
+    %assign nPinNumber = LibBlockParameterValue(PinNumber, 0)
+    %assign pname = "P" + FEVAL("char",nPortName+64) + "_" + FEVAL("int2str",nPinNumber-1)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+    PwmOut %<name>(%<pname>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %assign nPeriod = LibBlockParameterValue(Period, 0)
     %%
-    %<name>.period_us(%<p3_val>);
+    %<name>.period_us(%<nPeriod>);
     %%
-  %endif
-
-  %if !SLibCodeGenForSim()
-      %openfile declbuf
-
-      PwmOut %<name>(%<pname>);
-
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
   %endif
 %endfunction
 
@@ -47,12 +45,12 @@
 %% Function: Outputs ======================================================
 %%
 %function Outputs(block, system) Output
-
   %if !SLibCodeGenForSim()
     %assign u1_val = LibBlockInputSignal(0, "", "", 0)
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
     %%
     %<name>.write(%<u1_val>);
 
