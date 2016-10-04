@@ -27,6 +27,10 @@ function createStruct()
   addStruct('analogOutput', 'mbed/gpio_Analog_Output_en');
   addStruct('analogInput', 'mbed/gpio_Analog_Input_en');
   addStruct('Servo', 'mbed/gpio_Servo_Output_en');
+  addStruct('RTOScreateThread', 'mbed/rtos_Thread_en');
+  addStruct('RTOSmailSend', 'mbed/rtos_Mail_Send_en');
+  addStruct('RTOSmailReceive', 'mbed/rtos_Mail_Receive_en');
+%   addStruct('', '');
 %   addStruct('', '');
 end
 

@@ -1,10 +1,10 @@
 %% File : sfunar_encoderInput.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015-16 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements sfunar_createThread "C"
+%implements RTOScreateThread "C"
 
 %include "block_common_includes.tlc"
 
@@ -19,10 +19,10 @@
 %% Function: Start ========================================================
 %function Start(block, system) Output
 
-  %assign priority_val = LibBlockParameterValue(p1, 0) %% Priority
-  %assign stackOption_val = LibBlockParameterValue(p2, 0) %% StackOption
-  %assign stackSize_val = CAST("Number",LibBlockParameterValue(p3, 0)) %% Stacksize
-  %assign timing_val = CAST("Number",LibBlockParameterValue(p4, 0))  %% Timing
+  %assign priority_val = LibBlockParameterValue(ThreadPriority, 0) %% Priority
+  %assign stackOption_val = LibBlockParameterValue(StackOption, 0) %% StackOption
+  %assign stackSize_val = CAST("Number",LibBlockParameterValue(StackSize, 0)) %% Stacksize
+  %assign timing_val = CAST("Number",LibBlockParameterValue(Timing, 0))  %% Timing
 
   %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
   %assign name = FEVAL("strrep",name," ","_")
@@ -65,73 +65,74 @@
     %openfile declbuf
     /* %<Type> block: %<Name> */
     extern void %<name>_thread(void const *);
-	%if timing_val > 0
-		extern osThreadId %<name>_id;
-	%endif
+    %if timing_val > 0
+      extern osThreadId %<name>_id;
+    %endif
     %closefile declbuf
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_glob_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_glob_decl",declbuf)>
-	
-	%if timing_val > 0
-		%openfile declbuf
-		/* %<Type> block: %<Name> */
-		void %<name>_callback(void const *param)
-		{
-		  osSignalSet(%<name>_id, 0x1);
-		}
-		%closefile declbuf
-		%<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_fcn_decl")>
-		%<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_fcn_decl",declbuf)>
+
+    %if timing_val > 0
+      %openfile declbuf
+      /* %<Type> block: %<Name> */
+      void %<name>_callback(void const *param)
+      {
+        osSignalSet(%<name>_id, 0x1);
+      }
+      %closefile declbuf
+      %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_fcn_decl")>
+      %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_fcn_decl",declbuf)>
     %endif
-	
+
     %openfile declbuf
     /* %<Type> block: %<Name> */
     Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);
-		
-	%if timing_val > 0	
-        RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
-	%endif
-	
+
+    %if timing_val > 0
+      RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
+    %endif
     %closefile declbuf
+
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
 
-	%if timing_val > 0
-		%openfile buff
-			/* %<Type> block: %<Name> */    
-			%<name>_timer.start(%<timing_val>);
-		%closefile buff
-		%<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
-		%<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
-    %endif
-  %endif
+    %if timing_val > 0
+      %openfile buff
+      /* %<Type> block: %<Name> */    
+      %<name>_timer.start(%<timing_val>);
+      %closefile buff
 
-  %if !SLibCodeGenForSim()
+      %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
+      %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
+    %endif
+
     %openfile declbuf
     /* %<Type> block: %<Name> */
-	void %<name>_thread(void const *argument) {
-	
-	%if timing_val > 0
-	%<name>_id = Thread::gettid();
-	%endif
-	
-	while(1) {
-	  %if timing_val > 0
-		Thread::signal_wait(0x1,osWaitForever);
-	  %endif
-	  %<LibBlockExecuteFcnCall(block,0)>
-	}
-	}
+    void %<name>_thread(void const *argument) {
+
+    %if timing_val > 0
+    %<name>_id = Thread::gettid();
+    %endif
+
+      while(1) {
+      %if timing_val > 0
+        Thread::signal_wait(0x1,osWaitForever);
+      %endif
+        %<LibBlockExecuteFcnCall(block,0)>
+      }
+    }
     %closefile declbuf
+
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
-	
-	%if timing_val > 0
-		%openfile declbuf	
-			osThreadId %<name>_id;
-		%closefile declbuf	
-		%<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-	%endif
+
+    %if timing_val > 0
+      %openfile declbuf
+      osThreadId %<name>_id;
+      %closefile declbuf
+
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %endif
   %endif
 
 %endfunction
