@@ -1,44 +1,59 @@
 Digital Output LED
 ==================
 
-short descr.
-
-
-Library
--------
-
-GPIO
-
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
-   :scale: 50 %
+This block writes a digital value to an output pin connected to a LED. The output pin depends on the specific target. LEDs and corresponding pins are defined in PinNames.h.
 
-description
+.. image:: ../images/block_LED.png
+   :width: 250 px
 
-.. warning::
-	warning
-
-.. attention::
-	attention
 
 Data Type Support
 -----------------
 
-input/output port expects a *uint8* data type ...
+The input port expects an *uint8* data type.
 
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/Counter_mask.png
+.. image:: ../images/mask_LED.png
 
-Param1
-......
+LED Number
+....................
+specifies the LED. Possible values are LED1, LED2, LED3 and LED4.
 
-Param1 desc
 
-Param2
-......
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
-Param2 desc
+Example
+-------
+
+In the example a button is read in. This vlaue is written to a LED.
+
+.. image:: ../images/example_UserbuttonLED.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Initialization Function
+.......................
+
+creates a global instance
+
+   DigitalOut **<instance name>**\ (\ *<LED Number>*\ );
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+   **<instance name>**\  = ((uint8_T)\ *rvalue*\ );

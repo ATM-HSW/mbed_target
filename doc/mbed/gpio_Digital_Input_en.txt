@@ -1,44 +1,60 @@
 Digital Input
 =============
 
-short descr.
-
-
-Library
--------
-
-GPIO
-
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
-   :scale: 50 %
+This block reads a digital value from an input pin.
 
-description
-
-.. warning::
-	warning
-
-.. attention::
-	attention
-
-Data Type Support
------------------
-
-input/output port expects a *uint8* data type ...
+.. image:: ../images/block_Digitalin.png
+   :width: 250 px
 
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/Counter_mask.png
+.. image:: ../images/mask_Digitalin.png
 
-Param1
-......
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
 
-Param1 desc
+Input Mode
+...........
+specifies the pin input mode. The possible values correspond to the values defined in the mbed DigitalIn class: PullDefault, PullUp, PullDown, PullNone
 
-Param2
-......
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
-Param2 desc
+Example
+-------
+
+In the example an input pin is read in by an Digital Input Block. This vlaue is written to a pin by an Digital Output block.
+
+.. image:: ../images/example_DigitaloutDigitalin.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Initialization Function
+.......................
+
+creates a global instance
+
+   DigitalIn **<instance name>**\ (P\ *<Port Name>*\ _\ *<Pin Number>*);
+
+and a line in void **<Model Name>**\ _initialize(void) function
+
+   **<instance name>**\ .mode(*<Input Mode>*);
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+   *lvalue*\  = ((uint8_T)\ **<instance name>**\ );
