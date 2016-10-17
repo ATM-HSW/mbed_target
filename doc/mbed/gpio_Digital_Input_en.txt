@@ -6,13 +6,18 @@ Description
 
 This block reads a digital value from an input pin.
 
-.. image:: ../images/block_Digitalin.png
+.. image:: ../images/block_Digital_Input.png
    :width: 250 px
+
+Data Type Support
+-----------------
+
+The output port writes an *uint8* data type.
 
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/mask_Digitalin.png
+.. image:: ../images/mask_Digital_Input.png
 
 Port Name/Pin Number
 ....................

@@ -6,7 +6,7 @@ Description
 
 This block writes a digital value to an output pin.
 
-.. image:: ../images/block_Digitalout.png
+.. image:: ../images/block_Digital_Output.png
    :width: 250 px
 
 Data Type Support
@@ -17,7 +17,7 @@ The input port expects an *uint8* data type.
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/mask_Digitalout.png
+.. image:: ../images/mask_Digital_Output.png
 
 Port Name/Pin Number
 ....................

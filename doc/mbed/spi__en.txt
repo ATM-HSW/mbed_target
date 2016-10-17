@@ -11,4 +11,4 @@ Contents:
    Spi_Slave_Config_en
    Spi_Slave_Read_en
    Spi_Slave_Write_en
-   Spi_Dma_Config_en
+..   Spi_Dma_Config_en

@@ -1,5 +1,5 @@
-SPI Master Config
-=================
+SPI Master Configuration
+========================
 
 This block sets up the SPI connection on the mbed board.
 

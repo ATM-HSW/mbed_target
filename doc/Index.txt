@@ -12,21 +12,18 @@ Contents:
    :numbered: 3
    :maxdepth: 2
 
-   getting_started
    installation/Installation__en
+   getting_started
    mbed/gpio__en
-   mbed/serial__en
-   mbed/i2c__en
-   mbed/spi__en
-   mbed/one_wire__en
+   mbed/serial_busses__en
    mbed/rtos__en
-   mbed/ethernet__en
    mbed/utilities__en
-   targets/_targets__en
-   target_specific/_target_specific_en
-   sensor_actuator/_sensor_actuator_en
-   converter_extender/_converter_extender_en
-   memory/_memory_en
+..   target_specific/_target_specific_en
+..   sensor_actuator/_sensor_actuator_en
+..   converter_extender/_converter_extender_en
+..   memory/_memory_en
+..   targets/_targets__en
+..   mbed/ethernet__en
 
 Indices and tables
 ==================

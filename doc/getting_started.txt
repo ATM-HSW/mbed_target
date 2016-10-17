@@ -2,4 +2,3 @@ Getting Started
 ===============
 
 First steps
------------

@@ -1,5 +1,5 @@
-One Wire Config
-===============
+One Wire Configuration
+======================
 
 Configuration of a GPIO pin to be used as data line in a One Wire bus.
 

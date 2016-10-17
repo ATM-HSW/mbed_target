@@ -6,5 +6,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   Installation_OpenOCD_en
-   Installation_VisualGDB_de
+   Installation_prerequisites__en
+   Setup_matlab__en
+..   Installation_OpenOCD__en
+..   Installation_VisualGDB__de

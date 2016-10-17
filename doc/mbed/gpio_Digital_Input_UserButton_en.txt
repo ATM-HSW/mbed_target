@@ -1,44 +1,47 @@
 Digital Input User Button
 =========================
 
-short descr.
-
-
-Library
--------
-
-GPIO
-
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
-   :scale: 50 %
+This block reads a digital value from an input pin connected to the User Button. The mcu input pin depends on the specific target. Buttons and corresponding pins are defined in PinNames.h.
 
-description
-
-.. warning::
-	warning
-
-.. attention::
-	attention
+.. image:: ../images/block_Digital_Input_UserButton.png
+   :width: 250 px
 
 Data Type Support
 -----------------
 
-input/output port expects a *uint8* data type ...
+The output port writes an *uint8* data type.
 
-Parameters and Dialog Box
--------------------------
+Example
+-------
 
-.. image:: ../images/Counter_mask.png
+In the example the mcu pin defined as USER_BUTTON is read in. This vlaue is written to a mcu pin defined as LED1.
 
-Param1
-......
+.. image:: ../images/example_DigitalUserbuttonLED.png
+   :scale: 50 %
 
-Param1 desc
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
-Param2
-......
+Initialization Function
+.......................
 
-Param2 desc
+creates a global instance
+
+   DigitalIn **<instance name>**\ (USER_BUTTON);
+
+and a line in void **<Model Name>**\ _initialize(void) function
+
+   **<instance name>**\ .mode(PullDefault);
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+   *lvalue*\  = ((uint8_T)\ **<instance name>**\ );

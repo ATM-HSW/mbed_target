@@ -4,9 +4,9 @@ Digital Output LED
 Description
 -----------
 
-This block writes a digital value to an output pin connected to a LED. The output pin depends on the specific target. LEDs and corresponding pins are defined in PinNames.h.
+This block writes a digital value to an output pin connected to a LED. The mcu output pin depends on the specific target. LEDs and corresponding pins are defined in PinNames.h.
 
-.. image:: ../images/block_LED.png
+.. image:: ../images/block_Digital_Output_LED.png
    :width: 250 px
 
 
@@ -32,9 +32,9 @@ specifies the time interval between samples. To inherit the sample time, set thi
 Example
 -------
 
-In the example a button is read in. This vlaue is written to a LED.
+In the example the mcu pin defined as USER_BUTTON is read in. This vlaue is written to a mcu pin defined as LED1.
 
-.. image:: ../images/example_UserbuttonLED.png
+.. image:: ../images/example_DigitalUserbuttonLED.png
    :scale: 50 %
 
 
