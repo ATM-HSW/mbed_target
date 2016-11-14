@@ -14,7 +14,9 @@
 %assign Language   = "C"
 
 
-%assign SuppressSetEventsForThisBaseRateFcn = TLC_FALSE
+%% The model_SetEventsForThisBaseRate function is not required for the
+%% VxWorks environment, i.e., when using an operating system.
+%assign SuppressSetEventsForThisBaseRateFcn = (TargetOS == "VxWorksExample")
 %assign InlineSetEventsForThisBaseRateFcn  = TLC_TRUE
 %assign SuppressMultiTaskScheduler = TLC_TRUE
 %assign UseRTOS = TLC_FALSE
@@ -36,7 +38,7 @@
   rtwoptions(oIdx).prompt        = 'Mbed options';
   rtwoptions(oIdx).type          = 'Category';
   rtwoptions(oIdx).enable        = 'on';
-  rtwoptions(oIdx).default       = 9;  % number of items under this category excluding this one.
+  rtwoptions(oIdx).default       = 6;  % number of items under this category excluding this one.
   rtwoptions(oIdx).popupstrings  = '';
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
@@ -47,36 +49,14 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Version: ';
+  rtwoptions(oIdx).prompt         = 'mbed Target: ';
   rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = 'mbed 2|mbed-os 5';
-  rtwoptions(oIdx).tlcvariable    = 'MbedVersion';
-  rtwoptions(oIdx).makevariable   = 'MBEDVERSION';
-  rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed version 2 or 5']);
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedVersion'')';
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbed Target v2: ';
-  rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets('mbed 2');
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets();mbed_tlc_opencallback();
   rtwoptions(oIdx).tlcvariable    = 'MbedTarget';
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget2'')';
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbed Target v5: ';
-  rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets('mbed-os 5');
-  rtwoptions(oIdx).tlcvariable    = 'MbedTarget5';
-  rtwoptions(oIdx).makevariable   = 'MBEDTARGET5';
-  rtwoptions(oIdx).enable         = 'off';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget5'')';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
 
 
   oIdx = oIdx + 1;
@@ -112,18 +92,6 @@
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedDrive'')';
-
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbedls';
-  rtwoptions(oIdx).type           = 'Pushbutton';
-  rtwoptions(oIdx).default        = '';
-  rtwoptions(oIdx).tlcvariable    = '';
-  rtwoptions(oIdx).makevariable   = '';
-  rtwoptions(oIdx).enable         = '';
-  rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedls'')';
 
 
   oIdx = oIdx + 1;
