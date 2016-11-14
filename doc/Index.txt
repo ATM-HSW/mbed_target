@@ -18,12 +18,13 @@ Contents:
    mbed/serial_busses__en
    mbed/rtos__en
    mbed/utilities__en
-..   target_specific/_target_specific_en
-..   sensor_actuator/_sensor_actuator_en
-..   converter_extender/_converter_extender_en
-..   memory/_memory_en
-..   targets/_targets__en
-..   mbed/ethernet__en
+   targets/_targets__en
+   target_specific/_target_specific_en
+   sensor_actuator/_sensor_actuator_en
+   converter_extender/_converter_extender_en
+   memory/_memory_en
+   mbed/ethernet__en
+   power/power__en
 
 Indices and tables
 ==================

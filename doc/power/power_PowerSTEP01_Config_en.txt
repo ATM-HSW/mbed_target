@@ -1,0 +1,202 @@
+PowerSTEP01_Config
+=====================================================
+
+Description
+-----------
+
+This block configures up to three stepper motor drivers on a single SPI bus. 
+The stepper motor driver IC powerSTEP01 and L6470 are supported.
+With this block you can make all the necessary settings for the motor driver.
+Each model that uses this block also needs an "SPI Master Config" block. 
+
+.. image:: ../images/powerSTEP01_Config_block.png
+   :width: 250 px
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/powerSTEP01_Config_Mask.png
+
+SPI Port
+.........
+specify the SPI port number that should be used by the block.
+
+SSEL Port/Pin
+.............
+specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Reset Port/Pin
+..............
+specify the mcu pin which is connected to the reset pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Motor 2/3 active
+................
+The checkbox "Motor 2 active" and "Motor 3 active" determine how many motors are connected to the SPI bus (Daisychain). "Motor 3 active" should only be activated if "Motor 2 active" is already been activated.
+
+ACC
+...
+specifies the acceleration rate in [step/s^2]. The value for the acceleration rate must be in the range from 14.55 to 59590 step/s^2.
+
+DEC
+...
+specifies the deceleration rate in [step/s^2]. The value for the deceleration rate must be in the range from 14.55 to 59590 step/s^2.
+
+Max Speed
+.........
+specifies the maximum speed in [step/s]. The value for the maximum speed must be in the range from 15.25 to 15610 step/s.
+
+Min Speed
+.........
+specifies the minimum speed in [step/s]. The value for the minimum speed must be in the range from 0 to 976.3 step/s.
+
+Full Step Speed
+...............
+specifies the full step speed in [step/s]. The value for the full step speed must be in the range from 7.63 to 15625 step/s.
+
+Overcurrent
+...........
+specifies the overcurrent threshold for the driver in [mV]. 
+The value for the overcurrent threshold must be in the range from 31.25 to 1000 mV and in steps of 31.25 mV. 
+The real current in the motor is calculated as follows: 
+
+	I :sub:`motor` = U :sub:`Overcurrent_threshold` / R :sub:`shunt` 
+		
+Step Mode
+.........
+specifies the step mode of the driver (microstepping ). The possible values correspond to the values defined in the StepperMotor class:
+
++---------------------------+-------------------------+
+|Step mode                  | Description             |
++===========================+=========================+
+|STEP_MODE_FULL             | Full-step               |                                     
++---------------------------+-------------------------+
+| STEP_MODE_HALF            | Half-step               |
++---------------------------+-------------------------+
+|STEP_MODE_1_4              | 1/4 microstep           |
++---------------------------+-------------------------+
+|STEP_MODE_1_8              | 1/8 microstep           |
++---------------------------+-------------------------+
+|STEP_MODE_1_16             | 1/16 microstep          |
++---------------------------+-------------------------+
+|STEP_MODE_1_32             | 1/32 microstep          |
++---------------------------+-------------------------+
+|STEP_MODE_1_64             | 1/64 microstep          |
++---------------------------+-------------------------+
+|STEP_MODE_1_128            | 1/128 microstep         |
++---------------------------+-------------------------+
+
+Hold torque
+...........
+specifies the hold torque in [mV]. The value for the hold torque must be in the range from 7.8 to 1000 mV.
+The real current in the motor is calculated as follows: 
+
+	I :sub:`motor` = U :sub:`Hold_torque_threshold` / R :sub:`shunt` 
+
+Run torque
+...........
+specifies the run torque in [mV]. The value for the run torque must be in the range from 7.8 to 1000 mV.
+The real current in the motor is calculated as follows: 
+
+	I :sub:`motor` = U :sub:`Run_torque_threshold` / R :sub:`shunt` 
+
+ACC torque
+...........
+specifies the acceleration torque in [mV]. The value for the acceleration torque must be in the range from 7.8 to 1000 mV.
+The real current in the motor is calculated as follows: 
+	
+	I :sub:`motor` = U :sub:`ACC_torque_threshold` / R :sub:`shunt` 
+
+DEC torque
+...........
+specifies the deceleration torque in [mV]. The value for the deceleration torque must be in the range from 7.8 to 1000 mV.
+The real current in the motor is calculated as follows: 
+	
+	I :sub:`motor` = U :sub:`DEC_torque_threshold` / R :sub:`shunt` 
+
+Example
+-------
+
+.. image:: ../images/powerSTEP01_Config_example.png
+
+
+Code Generation
+---------------
+
+The variable, structure and instance names of mbed classes are based on **<name>**\  \created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Initialization Function
+.......................
+
+creates global structures for the motor parameters of each motor
+
+.. line-block::
+	powerstep01_Init_u  \powerstep01_Init_u_i_\ **<name>**\ ;
+	
+	powerstep01_Init_u_t  \initDeviceParameters_\ **<name>**\ _motor_NR   =
+	{
+		\powerstep01_Init_u_i_\ **<name>**\ .cm.cp.cmVmSelection = POWERSTEP01_CM_VM_CURRENT,	  
+		**<ACC>**\ , // Acceleration rate in step/s2, range 14.55 to 59590 steps/s^2
+		**<DEC>**\ , // Deceleration rate in step/s2, range 14.55 to 59590 steps/s^2
+		**<Max Speed>**\ , // Maximum speed in step/s, range 15.25 to 15610 steps/s
+		**<Min Speed>**\ , // Minimum speed in step/s, range 0 to 976.3 steps/s
+		POWERSTEP01_LSPD_OPT_OFF, // Low speed optimization bit, enum powerstep01_LspdOpt_t
+		**<Full Step Speed>**\ , // Full step speed in step/s, range 7.63 to 15625 steps/s
+		POWERSTEP01_BOOST_MODE_OFF, // Boost of the amplitude square wave, enum powerstep01_BoostMode_t
+		**<Overcurrent>**\ , // Overcurrent threshold settings via enum powerstep01_OcdTh_t
+		**<Step Mode>**\ , // Step mode settings via enum motorStepMode_t
+		POWERSTEP01_SYNC_SEL_DISABLED, // Synch. Mode settings via enum powerstep01_SyncSel_t
+			(POWERSTEP01_ALARM_EN_OVERCURRENT|
+			POWERSTEP01_ALARM_EN_THERMAL_SHUTDOWN|
+			POWERSTEP01_ALARM_EN_THERMAL_WARNING|
+			POWERSTEP01_ALARM_EN_UVLO|
+			POWERSTEP01_ALARM_EN_STALL_DETECTION|
+			POWERSTEP01_ALARM_EN_SW_TURN_ON|
+			POWERSTEP01_ALARM_EN_WRONG_NPERF_CMD), // Alarm settings via bitmap enum powerstep01_AlarmEn_t
+		POWERSTEP01_IGATE_64mA, // Gate sink/source current via enum powerstep01_Igate_t 
+		POWERSTEP01_TBOOST_0ns, // Duration of the overboost phase during gate turn-off via enum powerstep01_Tboost_t
+		POWERSTEP01_TCC_500ns, // Controlled current time via enum powerstep01_Tcc_t
+		POWERSTEP01_WD_EN_DISABLE, // External clock watchdog, enum powerstep01_WdEn_t  
+		POWERSTEP01_TBLANK_375ns, // Duration of the blanking time via enum powerstep01_TBlank_t
+		POWERSTEP01_TDT_125ns, // Duration of the dead time via enum powerstep01_Tdt_t
+
+		/* current mode parameters */
+		**<Hold torque>**\ , // Hold torque in mV, range from 7.8mV to 1000 mV
+		**<Run torque>**\ , // Running torque in mV, range from 7.8mV to 1000 mV 
+		**<ACC torque>**\ , // Acceleration torque in mV, range from 7.8mV to 1000 mV
+		**<DEC torque>**\ , // Deceleration torque in mV, range from 7.8mV to 1000 mV
+		POWERSTEP01_TOFF_FAST_8us, //Maximum fast decay time , enum powerstep01_ToffFast_t 
+		POWERSTEP01_FAST_STEP_12us, //Maximum fall step time , enum powerstep01_FastStep_t 
+		3.0, // Minimum on-time in us, range 0.5us to 64us
+		21.0, // Minimum off-time in us, range 0.5us to 64us 
+		POWERSTEP01_CONFIG_INT_16MHZ_OSCOUT_2MHZ, // Clock setting , enum powerstep01_ConfigOscMgmt_t
+		POWERSTEP01_CONFIG_SW_HARD_STOP, // External switch hard stop interrupt mode, enum powerstep01_ConfigSwMode_t
+		POWERSTEP01_CONFIG_TQ_REG_TVAL_USED, // External torque regulation enabling , enum powerstep01_ConfigEnTqReg_t
+		POWERSTEP01_CONFIG_VS_COMP_DISABLE, // Motor Supply Voltage Compensation enabling , enum powerstep01_ConfigEnVscomp_t 
+		POWERSTEP01_CONFIG_OC_SD_DISABLE, // Over current shutwdown enabling, enum powerstep01_ConfigOcSd_t
+		POWERSTEP01_CONFIG_UVLOVAL_LOW, // UVLO Threshold via powerstep01_ConfigUvLoVal_t
+		POWERSTEP01_CONFIG_VCCVAL_15V, // VCC Val, enum powerstep01_ConfigVccVal_t
+		POWERSTEP01_CONFIG_TSW_048us, // Switching period, enum powerstep01_ConfigTsw_t
+		POWERSTEP01_CONFIG_PRED_DISABLE // Predictive current enabling , enum powerstep01_ConfigPredEn_t 
+	};
+	
+creates a global instance from POWERSTEP01
+
+	POWERSTEP01 motor_NR_spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ ;   
+
+creates a global instance from DevSPI	
+	
+	DevSPI \dev_spi_\ **<name>**\ (& **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ );
+
+and two lines in void <Model Name>_initialize(void) function
+
+	motor_NR_spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ = new POWERSTEP01(P\ **<RESET Port Name>**\ _\ **<RESET Pin Number>**\ , P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ , \dev_spi_\ **<name>**\);
+	
+	motor_NR_spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\->Init( \initDeviceParameters_\ **<name>**\ _motor_NR )
+
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+--
