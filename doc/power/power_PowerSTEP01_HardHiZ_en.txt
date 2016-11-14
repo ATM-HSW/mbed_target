@@ -1,0 +1,55 @@
+PowerSTEP01_HardHiZ
+=====================================================
+
+Description
+-----------
+
+This block immediatly stops the motor and disable the power bridge. The HardHiZ command immediately disables the power bridges
+(high impedance state) and raises the HiZ flag. When the motor is stopped, a HardHiZ command forces the bridges to enter high impedance state.
+This command can be given anytime and is immediately executed.
+
+.. image:: ../images/powerSTEP01_HardHiZ_block.png
+   :width: 250 px
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/powerSTEP01_HardHiZ_Mask.png
+
+SPI Port
+.........
+specify the SPI port number that should be used by the block.
+
+Motor Number
+............
+specifies the motor in the daisychain.
+
+SSEL Port/Pin
+....................
+specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+.. image:: ../images/powerSTEP01_HardHiZ_example.png
+
+
+Code Generation
+---------------
+
+Initialization Function
+.......................
+
+--
+
+Step Function
+.............
+
+creates two lines in void **<Model Name>**\ _step(void) function
+
+    if ( **<SET>**\ == 1)
+		\motor_\ **<Motor Number>**\ _spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ ->  HardHiZ();

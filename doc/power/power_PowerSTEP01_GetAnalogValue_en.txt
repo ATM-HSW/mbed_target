@@ -1,0 +1,85 @@
+PowerSTEP01_GetAnalogValue
+=====================================================
+
+Description
+-----------
+
+This block reads a parameter value from the selected motor driver.
+Issues PowerStep01 Get Parameter command and convert the result to float value.
+
+.. image:: ../images/powerSTEP01_GetAnalogValue_block.png
+   :width: 250 px
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/powerSTEP01_GetAnalogValue_Mask.png
+
+SPI Port
+.........
+specify the SPI port number that should be used by the block.
+
+Motor Number
+............
+specifies the motor in the daisychain.
+
+SSEL Port/Pin
+....................
+specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Parameter
+.........
+specify the parameter that should be read by this block. The possible values correspond to the values defined in the POWERSTEP01 class: 
+
+	+---------------------------+-----------------------+
+	| POWERSTEP01_ABS_POS       | Current Position      |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_MARK          | Marked Position       |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_ACC           | Acceleration          |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_DEC           | Deceleration          |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_SPEED         | Current Speed         |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_MAX_SPEED     | Maximum Speed         |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_MIN_SPEED     | Minimum Speed         |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_FS_SPD        | Full Step Speed       |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_OCD_TH        | Overcurrent           |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_TVAL_HOLD     | Hold Torque           |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_TVAL_RUN      | Run Torque            |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_TVAL_ACC      | Acceleration Torque   |
+	+---------------------------+-----------------------+
+	| POWERSTEP01_TVAL_DEC      | Deceleration Torque   |
+	+---------------------------+-----------------------+
+
+Example
+-------
+
+.. image:: ../images/powerSTEP01_GetAnalogValue_example.png
+
+
+Code Generation
+---------------
+
+Initialization Function
+.......................
+
+--
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+   **<ParameterValue>**\ = ( \motor_\ **<Motor Number>**\ _spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ ->  GetAnalogValue( **<Parameter>**\ ));

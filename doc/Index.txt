@@ -27,6 +27,7 @@ Contents:
    sensor_actuator/_sensor_actuator_en
    converter_extender/_converter_extender_en
    memory/_memory_en
+   power/power__en
 
 Indices and tables
 ==================

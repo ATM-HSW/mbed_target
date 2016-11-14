@@ -1,0 +1,61 @@
+PowerSTEP01_SoftHiZ
+=====================================================
+
+Description
+-----------
+
+This block stops the motor by using the device deceleration and disables the power bridges.
+The SoftHiZ command disables the power bridges (high impedance state) after a deceleration to zero.
+The deceleration value used is the one stored in the DEC register.
+When bridges are disabled, the HiZ flag is raised.
+When the motor is stopped, a SoftHiZ command forces the bridges to enter high impedance state.
+This command can be given anytime and is immediately executed.
+This command keeps the BUSY flag low until the motor is stopped.
+
+.. image:: ../images/powerSTEP01_SoftHiZ_block.png
+   :width: 250 px
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/powerSTEP01_SoftHiZ_Mask.png
+
+SPI Port
+.........
+specify the SPI port number that should be used by the block.
+
+Motor Number
+............
+specifies the motor in the daisychain.
+
+SSEL Port/Pin
+....................
+specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+.. image:: ../images/powerSTEP01_SoftHiZ_example.png
+
+
+Code Generation
+---------------
+
+Initialization Function
+.......................
+
+--
+
+Step Function
+.............
+
+creates two lines in void **<Model Name>**\ _step(void) function
+
+    if ( **<SET>**\ == 1)
+		\motor_\ **<Motor Number>**\ _spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ ->  SoftHiZ();
+		
+		

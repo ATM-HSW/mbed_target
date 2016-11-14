@@ -1,0 +1,57 @@
+PowerSTEP01_SoftStop
+=====================================================
+
+Description
+-----------
+
+This block stops the motor by using the device deceleration. The SoftStop command causes an immediate deceleration to zero speed and a consequent motor stop.
+The deceleration value used is the one stored in the DEC register. When the motor is in high impedance state, a SoftStop command forces the bridges to exit from high impedance state.
+No motion is performed.
+This command can be given anytime and is immediately executed.
+This command keeps the BUSY flag low until the motor is stopped.
+
+.. image:: ../images/powerSTEP01_SoftStop_block.png
+   :width: 250 px
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/powerSTEP01_SoftStop_Mask.png
+
+SPI Port
+.........
+specify the SPI port number that should be used by the block.
+
+Motor Number
+............
+specifies the motor in the daisychain.
+
+SSEL Port/Pin
+....................
+specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+.. image:: ../images/powerSTEP01_SoftStop_example.png
+
+
+Code Generation
+---------------
+
+Initialization Function
+.......................
+
+--
+
+Step Function
+.............
+
+creates two lines in void **<Model Name>**\ _step(void) function
+
+    if ( **<SET>**\ ) == 1)
+		\motor_\ **<Motor Number>**\ _spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ ->  SoftStop();

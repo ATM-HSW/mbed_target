@@ -1,0 +1,53 @@
+PowerSTEP01_GetMaxSpeed
+=====================================================
+
+Description
+-----------
+
+This block reads the set maximum speed value from the selected motor driver.
+
+.. image:: ../images/powerSTEP01_GetMaxSpeed_block.png
+   :width: 250 px
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/powerSTEP01_GetMaxSpeed_Mask.png
+
+SPI Port
+.........
+specify the SPI port number that should be used by the block.
+
+Motor Number
+............
+specifies the motor in the daisychain.
+
+SSEL Port/Pin
+....................
+specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+.. image:: ../images/powerSTEP01_GetMaxSpeed_example.png
+
+
+Code Generation
+---------------
+
+Initialization Function
+.......................
+
+--
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+   **<MaxSpeed>**\ = (signed int)( \motor_\ **<Motor Number>**\ _spi **<SPI Port>**\ P\ **<SSEL Port Name>**\ _\ **<SSEL Pin Number>**\ ->GetMaxSpeed());
+
