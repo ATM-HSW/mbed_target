@@ -1,0 +1,8 @@
+{% extends "makefile/Simulink_Makefile.tmpl" %}
+
+{% block sys_libs %}
+{% for lib in ["-lstdc++", "-lsupc++", "-lm", "-lc", "-lgcc", "-lnosys"] -%}
+MBED_LD_SYS_LIBS += {{lib}}
+{% endfor %}
+{%- endblock %}
+

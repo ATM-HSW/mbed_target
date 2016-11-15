@@ -38,7 +38,7 @@
   rtwoptions(oIdx).prompt        = 'Mbed options';
   rtwoptions(oIdx).type          = 'Category';
   rtwoptions(oIdx).enable        = 'on';
-  rtwoptions(oIdx).default       = 6;  % number of items under this category excluding this one.
+  rtwoptions(oIdx).default       = 10;  % number of items under this category excluding this one.
   rtwoptions(oIdx).popupstrings  = '';
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
@@ -57,6 +57,29 @@
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
+
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'detect mbed target (mbedls)';
+  rtwoptions(oIdx).type           = 'Pushbutton';
+  rtwoptions(oIdx).default        = '';
+  rtwoptions(oIdx).tlcvariable    = '';
+  rtwoptions(oIdx).makevariable   = '';
+  rtwoptions(oIdx).enable         = '';
+  rtwoptions(oIdx).tooltip        = sprintf(['']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedls'')';
+
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'use mbedls autodetect';
+  rtwoptions(oIdx).type           = 'Checkbox';
+  rtwoptions(oIdx).default        = mbed.Prefs.getMbedAutoDetect();
+  rtwoptions(oIdx).tlcvariable    = 'mbedlsAutodetect';
+  rtwoptions(oIdx).makevariable   = 'MBEDLSAUTODETECT';
+  rtwoptions(oIdx).tooltip        = ['use mbedls to detect mbed Virtual Drive and Virtual COM Port before flashing'];
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedlsAutodetect'')';
 
 
   oIdx = oIdx + 1;

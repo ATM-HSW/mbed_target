@@ -222,7 +222,16 @@ function setComPort(port)
     end
     mbed.Prefs.setPref('ComPort', port);
 end
+%%
+function port = getMbedAutoDetect
+    port = mbed.Prefs.getPref('MbedAutoDetect');
 
+end
+
+%%
+function setMbedAutoDetect(port)
+    mbed.Prefs.setPref('MbedAutoDetect', port);
+end
 end
 
 %%
