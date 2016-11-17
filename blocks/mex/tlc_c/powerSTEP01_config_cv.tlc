@@ -228,8 +228,8 @@
           %<dec_torque_val>,                // Deceleration torque in mV, range from 7.8mV to 1000 mV
           POWERSTEP01_TOFF_FAST_8us,        //Maximum fast decay time , enum powerstep01_ToffFast_t
           POWERSTEP01_FAST_STEP_12us,       //Maximum fall step time , enum powerstep01_FastStep_t
-          3.0, // Minimum on-time in us, range 0.5us to 64us
-          21.0, // Minimum off-time in us, range 0.5us to 64us
+          3.0,                              // Minimum on-time in us, range 0.5us to 64us
+          21.0,                             // Minimum off-time in us, range 0.5us to 64us
           POWERSTEP01_CONFIG_INT_16MHZ_OSCOUT_2MHZ, // Clock setting , enum powerstep01_ConfigOscMgmt_t
           POWERSTEP01_CONFIG_SW_HARD_STOP,          // External switch hard stop interrupt mode, enum powerstep01_ConfigSwMode_t
           POWERSTEP01_CONFIG_TQ_REG_TVAL_USED,      // External torque regulation enabling , enum powerstep01_ConfigEnTqReg_t
@@ -331,8 +331,8 @@
             %<dec_torque_val_1>,            // Deceleration torque in mV, range from 7.8mV to 1000 mV
             POWERSTEP01_TOFF_FAST_8us,      //Maximum fast decay time , enum powerstep01_ToffFast_t
             POWERSTEP01_FAST_STEP_12us,     //Maximum fall step time , enum powerstep01_FastStep_t
-            3.0, // Minimum on-time in us, range 0.5us to 64us
-            21.0, // Minimum off-time in us, range 0.5us to 64us
+            3.0,                            // Minimum on-time in us, range 0.5us to 64us
+            21.0,                           // Minimum off-time in us, range 0.5us to 64us
             POWERSTEP01_CONFIG_INT_16MHZ_OSCOUT_2MHZ, // Clock setting , enum powerstep01_ConfigOscMgmt_t
             POWERSTEP01_CONFIG_SW_HARD_STOP,          // External switch hard stop interrupt mode, enum powerstep01_ConfigSwMode_t
             POWERSTEP01_CONFIG_TQ_REG_TVAL_USED,      // External torque regulation enabling , enum powerstep01_ConfigEnTqReg_t
@@ -435,8 +435,8 @@
             %<dec_torque_val_2>,            // Deceleration torque in mV, range from 7.8mV to 1000 mV
             POWERSTEP01_TOFF_FAST_8us,      //Maximum fast decay time , enum powerstep01_ToffFast_t
             POWERSTEP01_FAST_STEP_12us,     //Maximum fall step time , enum powerstep01_FastStep_t
-            3.0, // Minimum on-time in us, range 0.5us to 64us
-            21.0, // Minimum off-time in us, range 0.5us to 64us
+            3.0,                            // Minimum on-time in us, range 0.5us to 64us
+            21.0,                           // Minimum off-time in us, range 0.5us to 64us
             POWERSTEP01_CONFIG_INT_16MHZ_OSCOUT_2MHZ, // Clock setting , enum powerstep01_ConfigOscMgmt_t
             POWERSTEP01_CONFIG_SW_HARD_STOP,          // External switch hard stop interrupt mode, enum powerstep01_ConfigSwMode_t
             POWERSTEP01_CONFIG_TQ_REG_TVAL_USED,      // External torque regulation enabling , enum powerstep01_ConfigEnTqReg_t
