@@ -58,8 +58,8 @@ else
     disp('Can not find make.exe. Please install GNU make 3.81vfor Windows or better and add the bin folder to System or User Path');
 end
 
-[ok, where, version] = getPython();
-if ok
+[okPython, where, version] = getPython();
+if okPython
     disp(' ');
     disp('found Python version');
     disp(version);
@@ -79,7 +79,7 @@ if ok
     disp(where); 
     disp('All versions newer than 0.9.10 are OK for mbed5 compatibility');
 else
-    disp('Can not find mbed.exe. When you want to use mbed5 targets, please install mbed with "pip install mbed"');
+    disp('Can not find mbed.exe. When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
 end
 
 [ok, where, version] = getMbedls();
@@ -91,7 +91,7 @@ if ok
     disp(where); 
     disp('All versions newer than 1.2.9 are OK for mbed5 compatibility');
 else
-    disp('Can not find mbed.exe. When you want to use mbed5 targets, please install mbedls with "pip install mbedls"');
+    disp('Can not find mbedls.exe. When you want to use mbed5 targets, please install mbedls with "pip install mbed-ls"');
 end
 if ok
     [status,out]=system('mbedls');
