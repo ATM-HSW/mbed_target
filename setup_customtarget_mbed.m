@@ -34,3 +34,177 @@ if exist('setup_userprefs.m','file')>0
     setup_userprefs;
 end
 
+[ok, where, version] = getGCC();
+if ok
+    disp(' ');
+    disp('found gcc version:');
+    disp(version);
+    disp('in folder:');
+    disp(where); 
+    disp('All versions newer than 4.8 are OK');
+else
+    disp('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain 4.8-2014-q3-update or better and add the bin folder to System or User Path');
+end
+
+[ok, where, version] = getMake();
+if ok
+    disp(' ');
+    disp('found make version:');
+    disp(version);
+    disp('in folder:');
+    disp(where); 
+    disp('All versions newer than 3.81 are OK');
+else
+    disp('Can not find make.exe. Please install GNU make 3.81vfor Windows or better and add the bin folder to System or User Path');
+end
+
+[ok, where, version] = getPython();
+if ok
+    disp(' ');
+    disp('found Python version');
+    disp(version);
+    disp('in folder:');
+    disp(where); 
+    disp('All versions newer than 2.7.9 are OK for mbed5 compatibility');
+else
+    disp('Can not find python.exe. When you want to use mbed5 targets, please install Python 2.7.9 or newer');
+end
+
+[ok, where, version] = getMbed();
+if ok
+    disp(' ');
+    disp('found mbedls version');
+    disp(version);
+    disp('in folder:');
+    disp(where); 
+    disp('All versions newer than 0.9.10 are OK for mbed5 compatibility');
+else
+    disp('Can not find mbed.exe. When you want to use mbed5 targets, please install mbed with "pip install mbed"');
+end
+
+[ok, where, version] = getMbedls();
+if ok
+    disp(' ');
+    disp('found mbed version');
+    disp(version);
+    disp('in folder:');
+    disp(where); 
+    disp('All versions newer than 1.2.9 are OK for mbed5 compatibility');
+else
+    disp('Can not find mbed.exe. When you want to use mbed5 targets, please install mbedls with "pip install mbedls"');
+end
+if ok
+    [status,out]=system('mbedls');
+    if(size(out,2)>1)
+        disp(' ')
+        disp('found a mbed board:')
+        disp(out);
+    end
+end
+end
+
+
+function [ok, where, version] = getPython
+[status,out]=system('where python');
+ok = false;
+where = '';
+version = '';
+if status ~= 0
+    return;
+end
+lines=strfind(out,10);
+where = out(1:lines(1)-1);
+[status,out]=system('python --version');
+if status ~= 0 OR isempty(strfind(out,'2.7'))
+    ok = false;
+else
+    ok = true;
+end
+if ok
+    version = out(strfind(out,'2.7'):end-1);
+end
+end
+
+function [ok, where, version] = getGCC
+[status,out]=system('where arm-none-eabi-gcc');
+ok = false;
+where = '';
+version = '';
+if status ~= 0
+    return;
+end
+lines=strfind(out,10);
+where = out(1:lines(1)-1);
+[status,out]=system('arm-none-eabi-gcc --version');
+if status ~= 0
+    ok = false;
+else
+    ok = true;
+end
+if ok
+    version = out(1:strfind(out,10)-1);
+end
+end
+
+function [ok, where, version] = getMake
+[status,out]=system('where make');
+ok = false;
+where = '';
+version = '';
+if status ~= 0
+    return;
+end
+lines=strfind(out,10);
+where = out(1:lines(1)-1);
+[status,out]=system('make -v');
+if status ~= 0
+    ok = false;
+else
+    ok = true;
+end
+if ok
+    version = out(1:strfind(out,10)-1);
+end
+end
+
+function [ok, where, version] = getMbed
+[status,out]=system('where mbed');
+ok = false;
+where = '';
+version = '';
+if status ~= 0
+    return;
+end
+lines=strfind(out,10);
+where = out(1:lines(1)-1);
+[status,out]=system('mbed --version');
+if status ~= 0
+    ok = false;
+else
+    ok = true;
+end
+if ok
+    version = out(1:strfind(out,10)-1);
+end
+end
+
+function [ok, where, version] = getMbedls
+[status,out]=system('where mbedls');
+ok = false;
+where = '';
+version = '';
+if status ~= 0
+    return;
+end
+lines=strfind(out,10);
+where = out(1:lines(1)-1);
+[status,out]=system('mbedls --version');
+if status ~= 0
+    ok = false;
+else
+    ok = true;
+end
+if ok
+    version = out(1:strfind(out,10)-1);
+end
+end
