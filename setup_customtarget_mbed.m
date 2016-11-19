@@ -41,9 +41,9 @@ if ok
     disp(version);
     disp('in folder:');
     disp(where); 
-    disp('All versions newer than 4.8 are OK');
+    disp('All versions newer than 4.8 are OK for mbed_target');
 else
-    disp('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain 4.8-2014-q3-update or better and add the bin folder to System or User Path');
+    error('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain 4.8-2014-q3-update or better and add the bin folder to System or User Path');
 end
 
 [ok, where, version] = getMake();
@@ -53,9 +53,9 @@ if ok
     disp(version);
     disp('in folder:');
     disp(where); 
-    disp('All versions newer than 3.81 are OK');
+    disp('All versions newer than 3.81 are OK for mbed_target');
 else
-    disp('Can not find make.exe. Please install GNU make 3.81vfor Windows or better and add the bin folder to System or User Path');
+    error('Can not find make.exe. Please install GNU make 3.81vfor Windows or better and add the bin folder to System or User Path');
 end
 
 [okPython, where, version] = getPython();
@@ -65,41 +65,72 @@ if okPython
     disp(version);
     disp('in folder:');
     disp(where); 
-    disp('All versions newer than 2.7.9 are OK for mbed5 compatibility');
+    disp('All versions newer than 2.7.9 are OK for mbed_target and mbed5 compatibility');
 else
-    disp('Can not find python.exe. When you want to use mbed5 targets, please install Python 2.7.9 or newer');
+    warning('Can not find python.exe. When you want to use mbed5 targets, please install Python 2.7.9 or newer');
 end
 
 [ok, where, version] = getMbed();
 if ok
     disp(' ');
-    disp('found mbedls version');
+    disp('found mbed-cli version');
     disp(version);
     disp('in folder:');
     disp(where); 
-    disp('All versions newer than 0.9.10 are OK for mbed5 compatibility');
+    disp('All versions newer than 0.9.10 are OK for mbed_target and mbed5 compatibility');
 else
-    disp('Can not find mbed.exe. When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
+    disp(' ');
+    disp('Can not find mbed-cli.');
+    if okPython
+        choice = txtmenu('Do you want to install mbed-cli?','yes','no');
+        if choice==0
+            disp('Please check the output of the installation. Or rerun this setup.');
+            system('pip install mbed-cli');
+        else
+            warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
+        end
+    else
+        warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
+    end
 end
 
-[ok, where, version] = getMbedls();
-if ok
+[okMbedls, where, version] = getMbedls();
+if okMbedls
     disp(' ');
-    disp('found mbed version');
+    disp('found mbed-ls version');
     disp(version);
     disp('in folder:');
     disp(where); 
-    disp('All versions newer than 1.2.9 are OK for mbed5 compatibility');
+    disp('All versions newer than 1.2.9 are OK for mbed_target and mbed5 compatibility');
 else
-    disp('Can not find mbedls.exe. When you want to use mbed5 targets, please install mbedls with "pip install mbed-ls"');
+    disp(' ');
+    disp('Can not find mbed-ls.');
+    if okPython
+        choice = txtmenu('Do you want to install mbed-ls?','yes','no');
+        if choice==0
+            disp('Please check the output of the installation. Or rerun this setup.');
+            system('pip install mbed-ls');
+        else
+            warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-ls"');
+        end
+    else
+        warning('When you want to use mbed5 targets, please install mbedls with "pip install mbed-ls"');
+    end
 end
-if ok
+if okMbedls
     [status,out]=system('mbedls');
     if(size(out,2)>1)
-        disp(' ')
+        disp(' ');
         disp('found a mbed board:')
         disp(out);
     end
+end
+
+try 
+    mbed_getTargetRootPath();
+catch
+    disp(' ');
+    error('Checking mbed_target Matlab path setting. Please check the path if multiple mbed_targets are configured.')
 end
 end
 

@@ -1,8 +1,7 @@
 function ret = mbed_getTargetRootPath()
   ret = '';
   a=strsplit(path,{';', '\n'},'CollapseDelimiters',false, 'DelimiterType','RegularExpression');
-  %b=regexp(a,'\\mbed_\w*\\mbed');
-  b=regexp(a,'\\mbed_\w*\\blocks\\slx');
+  b=regexp(a,'\\mbed_target\\blocks\\slx');
   c = find(cellfun(@func, b));
   if size(c)==1
       ret = fileparts(fileparts(char(a(c))));
