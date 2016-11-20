@@ -1,45 +1,21 @@
 Servo
 =====
 
-short descr.
-
-
-Library
--------
-
-GPIO
-
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
-   :scale: 50 %
-
 description
 
-.. warning::
-	warning
+.. image:: ../images/block_Servo_Output.png
+   :scale: 50 %
 
-.. attention::
-	attention
 
 Data Type Support
 -----------------
 
 input/output port expects a *uint8* data type ...
 
+Parameters Dialog Box
+---------------------
 
-Parameters and Dialog Box
--------------------------
-
-.. image:: ../images/Counter_mask.png
-
-Param1
-......
-
-Param1 desc
-
-Param2
-......
-
-Param2 desc
+.. image:: ../images/mask_Servo_Output.png

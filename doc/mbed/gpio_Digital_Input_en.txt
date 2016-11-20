@@ -12,10 +12,10 @@ This block reads a digital value from an input pin.
 Data Type Support
 -----------------
 
-The output port writes an *uint8* data type.
+The output port writes values with an *uint8* data type.
 
-Parameters and Dialog Box
--------------------------
+Parameters Dialog Box
+---------------------
 
 .. image:: ../images/mask_Digital_Input.png
 
@@ -44,16 +44,23 @@ Code Generation
 ---------------
 Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
-Initialization Function
-.......................
+Global parts
+............
 
 creates a global instance
 
-   DigitalIn **<instance name>**\ (P\ *<Port Name>*\ _\ *<Pin Number>*);
+.. code-block:: c++
+
+  DigitalIn <instance name>(P<Port Name>_<Pin Number>);
+
+Initialization Function
+.......................
 
 and a line in void **<Model Name>**\ _initialize(void) function
 
-   **<instance name>**\ .mode(*<Input Mode>*);
+.. code-block:: c++
+
+  <instance name>.mode(<Input Mode>);
 
 in \ **<Model Name>**\ .cpp.
 
@@ -62,4 +69,6 @@ Step Function
 
 creates one line in void **<Model Name>**\ _step(void) function
 
-   *lvalue*\  = ((uint8_T)\ **<instance name>**\ );
+.. code-block:: c++
+
+  lvalue = ((uint8_T)<instance name>);

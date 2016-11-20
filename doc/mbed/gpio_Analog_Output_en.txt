@@ -1,44 +1,73 @@
 Analog Output
 =============
 
-short descr.
-
-
-Library
--------
-
-GPIO
-
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
+Creates an analog voltage output at the specified analog ouput pin using an integrated DAC.
+
+The input to this block is a *real32* float between 0 and 1.0 (in %) or an *uint16* integer between 0 and 1024/4096/.. corresponding to an output voltage between 0 to V\ :sub:`outmax`\ .
+
+.. image:: ../images/block_Analog_Output.png
    :scale: 50 %
-
-description
-
-.. warning::
-	warning
-
-.. attention::
-	attention
 
 Data Type Support
 -----------------
 
-input/output port expects a *uint8* data type ...
+The input port expects values with *real32* or *uint16* data types.
 
-Parameters and Dialog Box
--------------------------
+Parameters Dialog Box
+---------------------
 
-.. image:: ../images/Counter_mask.png
+.. image:: ../images/mask_Analog_Output.png
 
-Param1
-......
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
 
-Param1 desc
+Input data format
+...........
+specifies the data type of the input port. It can be choose between *real32* and *uint16*.
 
-Param2
-......
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
-Param2 desc
+Example
+-------
+
+In the example an analog input pin is read in by an Analog Input Block. This value is written to an analog output pin by an Analog Output block.
+
+.. image:: ../images/example_AnalogOutAnalogIn.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+creates a global instance
+
+.. code-block:: c++
+
+  AnalogOut <instance name>(P<Port Name>_<Pin Number>);
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  <instance name> = ((uint16_T)rvalue);
+
+or
+
+.. code-block:: c++
+
+  <instance name> = ((real32_T)rvalue);

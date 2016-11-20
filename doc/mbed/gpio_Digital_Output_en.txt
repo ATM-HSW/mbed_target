@@ -14,8 +14,8 @@ Data Type Support
 
 The input port expects an *uint8* data type.
 
-Parameters and Dialog Box
--------------------------
+Parameters Dialog Box
+---------------------
 
 .. image:: ../images/mask_Digital_Output.png
 
@@ -34,7 +34,7 @@ specifies the time interval between samples. To inherit the sample time, set thi
 Example
 -------
 
-In the example an input pin is read in by an Digital Input Block. This vlaue is written to a pin by an Digital Output block.
+In the example an input pin is read in by an Digital Input Block. This value is written to a pin by an Digital Output block.
 
 .. image:: ../images/example_DigitaloutDigitalin.png
    :scale: 50 %
@@ -44,18 +44,24 @@ Code Generation
 ---------------
 Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
-Initialization Function
-.......................
+Global parts
+............
 
 creates a global instance
 
-   DigitalInOut **<instance name>**\ (P\ *<Port Name>*\ _\ *<Pin Number>*);
+.. code-block:: c++
+
+  DigitalInOut <instance name>(P<Port Name>_<Pin Number>);
+
+Initialization Function
+.......................
 
 and two lines in void **<Model Name>**\ _initialize(void) function
 
-   **<instance name>**\ .output();
+.. code-block:: c++
 
-   **<instance name>**\ .mode(*<Output Mode>*);
+  <instance name>.output();
+  <instance name>.mode(<Output Mode>);
 
 in \ **<Model Name>**\ .cpp.
 
@@ -64,5 +70,6 @@ Step Function
 
 creates one line in void **<Model Name>**\ _step(void) function
 
-   **<instance name>**\  = ((uint8_T)\ *rvalue*\ );
-   
+.. code-block:: c++
+
+  <instance name> = (uint8_T)rvalue;

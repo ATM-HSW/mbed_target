@@ -15,8 +15,8 @@ Data Type Support
 
 The input port expects an *uint8* data type.
 
-Parameters and Dialog Box
--------------------------
+Parameters Dialog Box
+---------------------
 
 .. image:: ../images/mask_LED.png
 
@@ -42,12 +42,14 @@ Code Generation
 ---------------
 Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
-Initialization Function
-.......................
+Global parts
+............
 
 creates a global instance
 
-   DigitalOut **<instance name>**\ (\ *<LED Number>*\ );
+.. code-block:: c++
+
+  DigitalOut <instance name>(<LED Number>);
 
 in \ **<Model Name>**\ .cpp.
 
@@ -56,4 +58,6 @@ Step Function
 
 creates one line in void **<Model Name>**\ _step(void) function
 
-   **<instance name>**\  = ((uint8_T)\ *rvalue*\ );
+.. code-block:: c++
+
+  <instance name> = ((uint8_T)rvalue);

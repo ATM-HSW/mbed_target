@@ -1,0 +1,487 @@
+//
+// File: Rasterung_Current_Voltage.cpp
+//
+// Code generated for Simulink model 'Rasterung_Current_Voltage'.
+//
+// Model version                  : 1.14
+// Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
+// C/C++ source code generated on : Mon Nov 14 23:25:47 2016
+//
+// Target selection: mbed.tlc
+// Embedded hardware selection: ARM Compatible->ARM Cortex
+// Code generation objectives: Unspecified
+// Validation result: Not run
+//
+#include "Rasterung_Current_Voltage.h"
+#include "Rasterung_Current_Voltage_private.h"
+
+// Named constants for Chart: '<Root>/Chart'
+#define Rasterung_Cu_IN_NO_ACTIVE_CHILD ((uint8_T)0U)
+#define Rasterung_Curren_IN_x_Bewegung1 ((uint8_T)3U)
+#define Rasterung_Curren_IN_y_Bewegung1 ((uint8_T)5U)
+#define Rasterung_Current_IN_x_Bewegung ((uint8_T)2U)
+#define Rasterung_Current_IN_y_Bewegung ((uint8_T)4U)
+#define Rasterung_Current_Volta_IN_Init ((uint8_T)1U)
+
+// Block signals (auto storage)
+B_Rasterung_Current_Voltage_T Rasterung_Current_Voltage_B;
+
+// Block states (auto storage)
+DW_Rasterung_Current_Voltage_T Rasterung_Current_Voltage_DW;
+
+// Real-time model
+RT_MODEL_Rasterung_Current_Vo_T Rasterung_Current_Voltage_M_;
+RT_MODEL_Rasterung_Current_Vo_T *const Rasterung_Current_Voltage_M = &Rasterung_Current_Voltage_M_;
+
+static void rate_scheduler(void);
+
+SPI spi1(PA_7, PA_6, PA_5);
+
+powerstep01_Init_u powerstep01_Init_u_i_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode1;
+powerstep01_Init_u powerstep01_Init_u_i_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode2;
+
+powerstep01_Init_u_t initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1; // = {
+  // common parameters
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.cmVmSelection  = POWERSTEP01_CM_VM_VOLTAGE;         // enum powerstep01_CmVm_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.acceleration=12.0;                                // Acceleration rate in step/s2, range 14.55 to 59590 steps/s^2
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.deceleration=12.0;                                // Deceleration rate in step/s2, range 14.55 to 59590 steps/s^2
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.maxSpeed=300.0;                               // Maximum speed in step/s, range 15.25 to 15610 steps/s
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.minSpeed=0.0;                                 // Minimum speed in step/s, range 0 to 976.3 steps/s
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.lowSpeedOptimization=POWERSTEP01_LSPD_OPT_OFF,            // Low speed optimization bit, enum powerstep01_LspdOpt_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.fullStepSpeed=250.0;                               // Full step speed in step/s, range 7.63 to 15625 steps/s
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.boostMode=POWERSTEP01_BOOST_MODE_OFF,          // Boost of the amplitude square wave, enum powerstep01_BoostMode_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.ocdThreshold=100.0;                               // Overcurrent threshold settings via enum powerstep01_OcdTh_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.stepMode=STEP_MODE_1_128;                     // Step mode settings via enum motorStepMode_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.syncClockSelection=POWERSTEP01_SYNC_SEL_DISABLED;       // Synch. Mode settings via enum powerstep01_SyncSel_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.alarmsSelection=(POWERSTEP01_ALARM_EN_OVERCURRENT|
+   POWERSTEP01_ALARM_EN_THERMAL_SHUTDOWN|
+   POWERSTEP01_ALARM_EN_THERMAL_WARNING|
+   POWERSTEP01_ALARM_EN_UVLO|
+   POWERSTEP01_ALARM_EN_STALL_DETECTION|
+   POWERSTEP01_ALARM_EN_SW_TURN_ON|
+   POWERSTEP01_ALARM_EN_WRONG_NPERF_CMD),// Alarm settings via bitmap enum powerstep01_AlarmEn_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.iGate=POWERSTEP01_IGATE_64mA;              // Gate sink/source current via enum powerstep01_Igate_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.tBoost=POWERSTEP01_TBOOST_0ns;              // Duration of the overboost phase during gate turn-off via enum powerstep01_Tboost_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.tcc=POWERSTEP01_TCC_500ns;               // Controlled current time via enum powerstep01_Tcc_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.wdEn=POWERSTEP01_WD_EN_DISABLE;           // External clock watchdog, enum powerstep01_WdEn_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.tBlank=POWERSTEP01_TBLANK_375ns;            // Duration of the blanking time via enum powerstep01_TBlank_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.cp.tdt=POWERSTEP01_TDT_125ns;               // Duration of the dead time via enum powerstep01_Tdt_t
+
+  // voltage mode parameters
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.kvalHold=50.0;                                // Hold torque in mV, range from 7.8mV to 1000 mV
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.kvalRun=50.0;                                // Running torque in mV, range from 7.8mV to 1000 mV
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.kvalAcc=50.0;                                // Acceleration torque in mV, range from 7.8mV to 1000 mV
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.kvalDec=50.0;                                // Deceleration torque in mV, range from 7.8mV to 1000 mV
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.intersectSpeed=61.5;                                // INT_SPEED
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.startSlope=250.038;                             // ST_SLP
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.accelerationFinalSlope=0.063;                               // FN_SLP_ACC
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.decelerationFinalSlope=0.063;                               // FN_SLP_DEC
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.thermalCompensationFactor=1.0;                                 // K_THERM
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.stallThreshold=10;                                  // STALL_TH
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.oscClkSel=POWERSTEP01_CONFIG_INT_16MHZ_OSCOUT_2MHZ;// Clock setting , enum powerstep01_ConfigOscMgmt_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.swMode=POWERSTEP01_CONFIG_SW_HARD_STOP;     // External switch hard stop interrupt mode, enum powerstep01_ConfigSwMode_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.enVsComp=POWERSTEP01_CONFIG_VS_COMP_DISABLE;  // Motor Supply Voltage Compensation enabling , enum powerstep01_ConfigEnVscomp_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.ocSd=POWERSTEP01_CONFIG_OC_SD_DISABLE;    // Over current shutwdown enabling, enum powerstep01_ConfigOcSd_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.uvloVal=POWERSTEP01_CONFIG_UVLOVAL_LOW;      // UVLO Threshold via powerstep01_ConfigUvLoVal_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.vccVal=POWERSTEP01_CONFIG_VCCVAL_15V;       // VCC Val, enum powerstep01_ConfigVccVal_t
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.fPwmInt=POWERSTEP01_CONFIG_PWM_DIV_1;        // F_PWM_INT
+  initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1.vm.fPwmDec=POWERSTEP01_CONFIG_PWM_MUL_0_75;      //F_PWM_DEC
+//};
+
+powerstep01_Init_u_t initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_2 = {
+  // common parameters
+  powerstep01_Init_u_i_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode2.cm.cp.cmVmSelection = POWERSTEP01_CM_VM_CURRENT,         // enum powerstep01_CmVm_t
+  12.0,                                // Acceleration rate in step/s2, range 14.55 to 59590 steps/s^2
+  12.0,                                // Deceleration rate in step/s2, range 14.55 to 59590 steps/s^2
+  300.0,                               // Maximum speed in step/s, range 15.25 to 15610 steps/s
+  0.0,                                 // Minimum speed in step/s, range 0 to 976.3 steps/s
+  POWERSTEP01_LSPD_OPT_OFF,            // Low speed optimization bit, enum powerstep01_LspdOpt_t
+  250.0,                               // Full step speed in step/s, range 7.63 to 15625 steps/s
+  POWERSTEP01_BOOST_MODE_OFF,          // Boost of the amplitude square wave, enum powerstep01_BoostMode_t
+  100.0,                               // Overcurrent threshold settings via enum powerstep01_OcdTh_t
+  STEP_MODE_FULL,                      // Step mode settings via enum motorStepMode_t
+  POWERSTEP01_SYNC_SEL_DISABLED,       // Synch. Mode settings via enum powerstep01_SyncSel_t
+  (POWERSTEP01_ALARM_EN_OVERCURRENT|
+   POWERSTEP01_ALARM_EN_THERMAL_SHUTDOWN|
+   POWERSTEP01_ALARM_EN_THERMAL_WARNING|
+   POWERSTEP01_ALARM_EN_UVLO|
+   POWERSTEP01_ALARM_EN_STALL_DETECTION|
+   POWERSTEP01_ALARM_EN_SW_TURN_ON|
+   POWERSTEP01_ALARM_EN_WRONG_NPERF_CMD),// Alarm settings via bitmap enum powerstep01_AlarmEn_t
+  POWERSTEP01_IGATE_64mA,              // Gate sink/source current via enum powerstep01_Igate_t
+  POWERSTEP01_TBOOST_0ns,              // Duration of the overboost phase during gate turn-off via enum powerstep01_Tboost_t
+  POWERSTEP01_TCC_500ns,               // Controlled current time via enum powerstep01_Tcc_t
+  POWERSTEP01_WD_EN_DISABLE,           // External clock watchdog, enum powerstep01_WdEn_t
+  POWERSTEP01_TBLANK_375ns,            // Duration of the blanking time via enum powerstep01_TBlank_t
+  POWERSTEP01_TDT_125ns,               // Duration of the dead time via enum powerstep01_Tdt_t
+
+  // current mode parameters
+  50.0,                                // Hold torque in mV, range from 7.8mV to 1000 mV
+  50.0,                                // Running torque in mV, range from 7.8mV to 1000 mV
+  50.0,                                // Acceleration torque in mV, range from 7.8mV to 1000 mV
+  50.0,                                // Deceleration torque in mV, range from 7.8mV to 1000 mV
+  POWERSTEP01_TOFF_FAST_8us,           //Maximum fast decay time , enum powerstep01_ToffFast_t
+  POWERSTEP01_FAST_STEP_12us,          //Maximum fall step time , enum powerstep01_FastStep_t
+  3.0,                                 // Minimum on-time in us, range 0.5us to 64us
+  21.0,                                // Minimum off-time in us, range 0.5us to 64us
+  POWERSTEP01_CONFIG_INT_16MHZ_OSCOUT_2MHZ,// Clock setting , enum powerstep01_ConfigOscMgmt_t
+  POWERSTEP01_CONFIG_SW_HARD_STOP,     // External switch hard stop interrupt mode, enum powerstep01_ConfigSwMode_t
+  POWERSTEP01_CONFIG_TQ_REG_TVAL_USED, // External torque regulation enabling , enum powerstep01_ConfigEnTqReg_t
+  POWERSTEP01_CONFIG_VS_COMP_DISABLE,  // Motor Supply Voltage Compensation enabling , enum powerstep01_ConfigEnVscomp_t
+  POWERSTEP01_CONFIG_OC_SD_DISABLE,    // Over current shutwdown enabling, enum powerstep01_ConfigOcSd_t
+  POWERSTEP01_CONFIG_UVLOVAL_LOW,      // UVLO Threshold via powerstep01_ConfigUvLoVal_t
+  POWERSTEP01_CONFIG_VCCVAL_15V,       // VCC Val, enum powerstep01_ConfigVccVal_t
+  POWERSTEP01_CONFIG_TSW_048us,        // Switching period, enum powerstep01_ConfigTsw_t
+  POWERSTEP01_CONFIG_PRED_DISABLE      // Predictive current enabling , enum powerstep01_ConfigPredEn_t
+};
+
+POWERSTEP01 *motor_1_spi1PB_6;         // Konstruktor in powerstep01_class.h
+POWERSTEP01 *motor_2_spi1PB_6;
+DevSPI
+  dev_spi_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode
+  (&spi1);
+
+#define BUF_LEN                        100
+
+char buffer[BUF_LEN];
+int buf_idx= 0;
+FILE *fp;
+Serial serial1(PA_2, PA_3);
+
+//
+//   This function updates active task flag for each subrate.
+// The function is called at model base rate, hence the
+// generated code self-manages all its subrates.
+//
+static void rate_scheduler(void)
+{
+  // Compute which subrates run during the next base time step.  Subrates
+  //  are an integer multiple of the base rate counter.  Therefore, the subtask
+  //  counter is reset when it reaches its limit (zero means run).
+
+  (Rasterung_Current_Voltage_M->Timing.TaskCounters.TID[1])++;
+  if ((Rasterung_Current_Voltage_M->Timing.TaskCounters.TID[1]) > 99) {// Sample time: [0.1s, 0.0s] 
+    Rasterung_Current_Voltage_M->Timing.TaskCounters.TID[1] = 0;
+  }
+}
+
+// Model step function
+void Rasterung_Current_Voltage_step(void)
+{
+  // local block i/o variables
+  real_T rtb_PowerSTEP01GetAnalogValueCu;
+  int32_T rtb_DataTypeConversion9;
+  int32_T rtb_DataTypeConversion11;
+  int32_T rtb_DataTypeConversion5;
+  int32_T rtb_PowerSTEP01GetPosition;
+  uint32_T rtb_Datalogger_o2;
+  uint8_T rtb_Datalogger_o1[100];
+  uint8_T rtb_PowerSTEP01IsDeviceBusy1;
+  boolean_T rtb_LogicalOperator;
+  real_T tmp;
+  if (Rasterung_Current_Voltage_M->Timing.TaskCounters.TID[1] == 0) {
+    // S-Function (powerSTEP01_isdevicebusy): '<Root>/PowerSTEP01 IsDeviceBusy'
+    rtb_PowerSTEP01IsDeviceBusy1 = motor_1_spi1PB_6-> IsDeviceBusy();
+
+    // DataTypeConversion: '<Root>/Data Type Conversion9'
+    rtb_DataTypeConversion9 = rtb_PowerSTEP01IsDeviceBusy1;
+
+    // S-Function (powerSTEP01_isdevicebusy): '<Root>/PowerSTEP01 IsDeviceBusy1' 
+    rtb_PowerSTEP01IsDeviceBusy1 = motor_2_spi1PB_6-> IsDeviceBusy();
+
+    // DataTypeConversion: '<Root>/Data Type Conversion11'
+    rtb_DataTypeConversion11 = rtb_PowerSTEP01IsDeviceBusy1;
+
+    // Logic: '<Root>/Logical Operator' incorporates:
+    //   DataTypeConversion: '<Root>/Data Type Conversion10'
+    //   DataTypeConversion: '<Root>/Data Type Conversion8'
+
+    rtb_LogicalOperator = ((rtb_DataTypeConversion9 != 0) ||
+      (rtb_DataTypeConversion11 != 0));
+
+    // Chart: '<Root>/Chart'
+    if (Rasterung_Current_Voltage_DW.temporalCounter_i1 < 15U) {
+      Rasterung_Current_Voltage_DW.temporalCounter_i1++;
+    }
+
+    // Gateway: Chart
+    // During: Chart
+    if (Rasterung_Current_Voltage_DW.is_active_c3_Rasterung_Current_ == 0U) {
+      // Entry: Chart
+      Rasterung_Current_Voltage_DW.is_active_c3_Rasterung_Current_ = 1U;
+
+      // Entry Internal: Chart
+      // Transition: '<S1>:7'
+      Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+        Rasterung_Current_Volta_IN_Init;
+
+      // Entry 'Init': '<S1>:6'
+      Rasterung_Current_Voltage_B.steps_x = 0.0;
+      Rasterung_Current_Voltage_B.steps_y = 0.0;
+    } else {
+      switch (Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage) {
+       case Rasterung_Current_Volta_IN_Init:
+        // During 'Init': '<S1>:6'
+        // Transition: '<S1>:3'
+        Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+          Rasterung_Current_IN_y_Bewegung;
+        Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+        // Entry 'y_Bewegung': '<S1>:1'
+        Rasterung_Current_Voltage_B.steps_y = 0.0;
+        break;
+
+       case Rasterung_Current_IN_x_Bewegung:
+        // During 'x_Bewegung': '<S1>:2'
+        if ((Rasterung_Current_Voltage_DW.temporalCounter_i1 >= 10U) &&
+            (!rtb_LogicalOperator)) {
+          // Transition: '<S1>:5'
+          if (Rasterung_Current_Voltage_B.steps_y == 0.0) {
+            // Transition: '<S1>:13'
+            Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+              Rasterung_Curren_IN_y_Bewegung1;
+            Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+            // Entry 'y_Bewegung1': '<S1>:11'
+            Rasterung_Current_Voltage_B.steps_y = 1000.0;
+          } else {
+            if (Rasterung_Current_Voltage_B.steps_y == 1000.0) {
+              // Transition: '<S1>:16'
+              Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+                Rasterung_Current_IN_y_Bewegung;
+              Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+              // Entry 'y_Bewegung': '<S1>:1'
+              Rasterung_Current_Voltage_B.steps_y = 0.0;
+            }
+          }
+        }
+        break;
+
+       case Rasterung_Curren_IN_x_Bewegung1:
+        // During 'x_Bewegung1': '<S1>:19'
+        if ((Rasterung_Current_Voltage_DW.temporalCounter_i1 >= 10U) &&
+            (!rtb_LogicalOperator)) {
+          // Transition: '<S1>:22'
+          if (Rasterung_Current_Voltage_B.steps_y == 0.0) {
+            // Transition: '<S1>:13'
+            Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+              Rasterung_Curren_IN_y_Bewegung1;
+            Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+            // Entry 'y_Bewegung1': '<S1>:11'
+            Rasterung_Current_Voltage_B.steps_y = 1000.0;
+          } else {
+            if (Rasterung_Current_Voltage_B.steps_y == 1000.0) {
+              // Transition: '<S1>:16'
+              Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+                Rasterung_Current_IN_y_Bewegung;
+              Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+              // Entry 'y_Bewegung': '<S1>:1'
+              Rasterung_Current_Voltage_B.steps_y = 0.0;
+            }
+          }
+        }
+        break;
+
+       case Rasterung_Current_IN_y_Bewegung:
+        // During 'y_Bewegung': '<S1>:1'
+        if ((Rasterung_Current_Voltage_DW.temporalCounter_i1 >= 10U) &&
+            (!rtb_LogicalOperator)) {
+          // Transition: '<S1>:4'
+          if (Rasterung_Current_Voltage_B.steps_x > 5000.0) {
+            // Transition: '<S1>:20'
+            Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+              Rasterung_Curren_IN_x_Bewegung1;
+            Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+            // Entry 'x_Bewegung1': '<S1>:19'
+            Rasterung_Current_Voltage_B.steps_x = 0.0;
+          } else {
+            if (Rasterung_Current_Voltage_B.steps_x < 5001.0) {
+              // Transition: '<S1>:21'
+              Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+                Rasterung_Current_IN_x_Bewegung;
+              Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+              // Entry 'x_Bewegung': '<S1>:2'
+              Rasterung_Current_Voltage_B.steps_x += 500.0;
+            }
+          }
+        }
+        break;
+
+       default:
+        // During 'y_Bewegung1': '<S1>:11'
+        if ((Rasterung_Current_Voltage_DW.temporalCounter_i1 >= 10U) &&
+            (!rtb_LogicalOperator)) {
+          // Transition: '<S1>:17'
+          if (Rasterung_Current_Voltage_B.steps_x > 5000.0) {
+            // Transition: '<S1>:20'
+            Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+              Rasterung_Curren_IN_x_Bewegung1;
+            Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+            // Entry 'x_Bewegung1': '<S1>:19'
+            Rasterung_Current_Voltage_B.steps_x = 0.0;
+          } else {
+            if (Rasterung_Current_Voltage_B.steps_x < 5001.0) {
+              // Transition: '<S1>:21'
+              Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+                Rasterung_Current_IN_x_Bewegung;
+              Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+
+              // Entry 'x_Bewegung': '<S1>:2'
+              Rasterung_Current_Voltage_B.steps_x += 500.0;
+            }
+          }
+        }
+        break;
+      }
+    }
+
+    // End of Chart: '<Root>/Chart'
+
+    // DataTypeConversion: '<Root>/Data Type Conversion7'
+    tmp = floor(Rasterung_Current_Voltage_B.steps_y);
+    if (rtIsNaN(tmp) || rtIsInf(tmp)) {
+      tmp = 0.0;
+    } else {
+      tmp = fmod(tmp, 4.294967296E+9);
+    }
+
+    rtb_PowerSTEP01GetPosition = tmp < 0.0 ? -(int32_T)(uint32_T)-tmp : (int32_T)
+      (uint32_T)tmp;
+
+    // End of DataTypeConversion: '<Root>/Data Type Conversion7'
+
+    // S-Function (powerSTEP01_goto): '<Root>/PowerSTEP01 Goto1'
+    motor_2_spi1PB_6-> GoTo(rtb_PowerSTEP01GetPosition);
+
+    // S-Function (powerSTEP01_getposition): '<Root>/PowerSTEP01 GetPosition'
+    rtb_PowerSTEP01GetPosition = (motor_2_spi1PB_6->GetPosition());
+
+    // S-Function (powerSTEP01_getanalogvalue_cv): '<Root>/PowerSTEP01 GetAnalogValue Current//Voltage Mode' 
+    rtb_PowerSTEP01GetAnalogValueCu = motor_1_spi1PB_6-> GetAnalogValue
+      (POWERSTEP01_ABS_POS);
+
+    // DataTypeConversion: '<Root>/Data Type Conversion5'
+    tmp = floor(rtb_PowerSTEP01GetAnalogValueCu);
+    if (rtIsNaN(tmp) || rtIsInf(tmp)) {
+      tmp = 0.0;
+    } else {
+      tmp = fmod(tmp, 4.294967296E+9);
+    }
+
+    rtb_DataTypeConversion5 = tmp < 0.0 ? -(int32_T)(uint32_T)-tmp : (int32_T)
+      (uint32_T)tmp;
+
+    // End of DataTypeConversion: '<Root>/Data Type Conversion5'
+
+    // S-Function (sfunar_DataloggerPlain): '<Root>/Datalogger'
+    buf_idx = 0;
+
+    // int32_T;
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%d", rtb_PowerSTEP01GetPosition);
+
+    // int32_T;
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, ",");
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%d", rtb_DataTypeConversion5);
+
+    // int32_T;
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, ",");
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%d", rtb_DataTypeConversion9);
+
+    // int32_T;
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, ",");
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "%d", rtb_DataTypeConversion11);
+    buf_idx+=snprintf(buffer+buf_idx, BUF_LEN, "\r\n" );
+    memcpy(&rtb_Datalogger_o1[0], buffer, buf_idx);
+    rtb_Datalogger_o2 = buf_idx;
+
+    // S-Function (sfunar_serialWriteBlock): '<Root>/Serial Write'
+#if DEVICE_SERIAL_ASYNCH
+
+    const uint8_t* ptr = (const char*)&rtb_Datalogger_o1[0];
+    int len = rtb_Datalogger_o2;
+    serial1.write(ptr, len, 0, 0);
+
+#else
+
+    const char* ptr = (const char*)&rtb_Datalogger_o1[0];
+    const char* end = ptr + rtb_Datalogger_o2;
+    while (ptr != end) {
+      if (serial1.putc(*ptr++) == EOF) {
+        break;
+      }
+    }
+
+#endif
+
+  }
+
+  rate_scheduler();
+}
+
+// Model initialize function
+void Rasterung_Current_Voltage_initialize(void)
+{
+  // Registration code
+
+  // initialize non-finites
+  rt_InitInfAndNaN(sizeof(real_T));
+
+  // initialize real-time model
+  (void) memset((void *)Rasterung_Current_Voltage_M, 0,
+                sizeof(RT_MODEL_Rasterung_Current_Vo_T));
+
+  // block I/O
+  (void) memset(((void *) &Rasterung_Current_Voltage_B), 0,
+                sizeof(B_Rasterung_Current_Voltage_T));
+
+  // states (dwork)
+  (void) memset((void *)&Rasterung_Current_Voltage_DW, 0,
+                sizeof(DW_Rasterung_Current_Voltage_T));
+
+  // Start for S-Function (sfunar_spiConfig): '<Root>/SPI Master Config'
+  spi1.format(8,0);
+  spi1.frequency(100000);
+
+  // Start for S-Function (powerSTEP01_config_cv): '<Root>/powerSTEP01 Config Current//Voltage Mode' 
+  motor_1_spi1PB_6 = new POWERSTEP01(PA_15,PB_6,
+    dev_spi_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode);
+  motor_2_spi1PB_6 = new POWERSTEP01(PA_15,PB_6,
+    dev_spi_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode);
+  if (motor_1_spi1PB_6->Init
+      (&initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_1)
+      != COMPONENT_OK)
+    exit(EXIT_FAILURE);
+  if (motor_2_spi1PB_6->Init
+      (&initDeviceParameters_Rasterung_Current_Voltage_powerSTEP01_Config_Current__Voltage_Mode_motor_2)
+      != COMPONENT_OK)
+    exit(EXIT_FAILURE);
+
+  // Start for S-Function (sfunar_serialConfig): '<Root>/Serial Configuration'
+  serial1.baud(9600);
+
+  // InitializeConditions for Chart: '<Root>/Chart'
+  Rasterung_Current_Voltage_DW.temporalCounter_i1 = 0U;
+  Rasterung_Current_Voltage_DW.is_active_c3_Rasterung_Current_ = 0U;
+  Rasterung_Current_Voltage_DW.is_c3_Rasterung_Current_Voltage =
+    Rasterung_Cu_IN_NO_ACTIVE_CHILD;
+  Rasterung_Current_Voltage_B.steps_x = 0.0;
+  Rasterung_Current_Voltage_B.steps_y = 0.0;
+}
+
+// Model terminate function
+void Rasterung_Current_Voltage_terminate(void)
+{
+  // (no terminate code required)
+}
+
+//
+// File trailer for generated code.
+//
+// [EOF]
+//
