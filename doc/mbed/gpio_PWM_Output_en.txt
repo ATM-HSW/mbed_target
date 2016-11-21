@@ -4,7 +4,8 @@ PWM
 Description
 -----------
 
-description
+Creates an pwm output signal on the specified digital output pin using a configurable PWM period.
+The input to this block is a *real32* float between 0.0f and 1.0f corresponding to 0 to 100% pulsewidth.
 
 .. image:: ../images/block_PWM_Output.png
    :scale: 50 %
@@ -12,10 +13,65 @@ description
 Data Type Support
 -----------------
 
-input/output port expects a *uint8* data type ...
+The input port expects values with *real32* data type.
 
 Parameters Dialog Box
 ---------------------
 
 .. image:: ../images/mask_PWM_Output.png
 
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Periode
+.......
+specifies the periode of the PWM timer in |micro|\ s. 
+
+.. |micro| unicode:: 0xB5 .. copyright sign
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+In the example the value of a ramp function is written to a PWM digital output pin.
+
+.. image:: ../images/example_PWM.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+creates a global instance
+
+.. code-block:: c++
+
+  PwmOut <instance name>(P<Port Name>_<Pin Number>);
+
+Initialization Function
+.......................
+
+and a line in void **<Model Name>**\ _initialize(void) function
+
+.. code-block:: c++
+
+  <instance name>.period_us(<Periode>);
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  <instance name>.write((real32_T)rvalue);

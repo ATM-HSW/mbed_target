@@ -49,14 +49,14 @@ if "%1" == "clean" (
 
 
 REM Check if sphinx-build is available and fallback to Python version if any
-%SPHINXBUILD% 2> nul
+%SPHINXBUILD% 2> nul > nul
 if errorlevel 9009 goto sphinx_python
 goto sphinx_ok
 
 :sphinx_python
 
 set SPHINXBUILD=python -m sphinx.__init__
-%SPHINXBUILD% 2> nul
+%SPHINXBUILD% 2> nul > nul
 if errorlevel 9009 (
 	echo.
 	echo.The 'sphinx-build' command was not found. Make sure you have Sphinx
