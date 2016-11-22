@@ -9,9 +9,9 @@ Contents:
    serial_Serial_Config_en
    serial_Serial_Read_en
    serial_Serial_Write_en
-..   serial_USB_Serial_Config_en
-..   serial_USB_Serial_Read_en
-..   serial_USB_Serial_Write_en
+   serial_USB_Serial_Config_en
+   serial_USB_Serial_Read_en
+   serial_USB_Serial_Write_en
 ..   Serial_Dma_Config_en
 ..   Serial_Dma_Read_en
 ..   Serial_Dma_Write_en

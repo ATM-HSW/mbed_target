@@ -4,18 +4,79 @@ Servo
 Description
 -----------
 
-description
+Generates a PWM signal with a period of 20ms to control a standard RC-servo. Minimal and maximal pulsewidth can be configured because they depend on the servo. Typical values are 1ms and 2ms.
+
+The Servo Output block uses internally a preconfigured PWM block and a 1-D Lookup table.
+
+The input to this block is a *real32* float between 0.0f and 1.0f corresponding to a pulsewidth in %. The generated pulse width varies between the configured minimal (input = 0%) and maximal (input = 100%) pulse widths.
 
 .. image:: ../images/block_Servo_Output.png
    :scale: 50 %
 
-
 Data Type Support
 -----------------
 
-input/output port expects a *uint8* data type ...
+The input port expects values with *real32* data type.
 
 Parameters Dialog Box
 ---------------------
 
 .. image:: ../images/mask_Servo_Output.png
+
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Pulse width min (ms)
+....................
+specifies the minimal periode of the PWM timer in ms.
+
+Pulse width max (ms)
+....................
+specifies the maximal periode of the PWM timer in ms.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+In the example the value of a ramp function is written to a PWM digital output pin. The PWM periode varies between 1ms and 2ms.
+
+.. image:: ../images/example_Servo.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+creates a global instance
+
+.. code-block:: c++
+
+  PwmOut <instance name>(P<Port Name>_<Pin Number>);
+
+Initialization Function
+.......................
+
+and a line in void **<Model Name>**\ _initialize(void) function
+
+.. code-block:: c++
+
+  <instance name>.period_us(20000U);
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  <instance name>.write((real32_T)rvalue_DLookupTable);
