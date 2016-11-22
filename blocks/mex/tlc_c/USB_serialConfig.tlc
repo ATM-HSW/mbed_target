@@ -1,10 +1,10 @@
-%% File : sfunar_serialConfig.tlc
+%% File : USB_serialConfig.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements sfunar_usbSerialConfig "C"
+%implements USB_serialConfig "C"
 
 %include "block_common_includes.tlc"
 

@@ -1,18 +1,13 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_digitalOutput.c Simple C-MEX S-function for function call.
+ *   USB_serialRead.c Simple C-MEX S-function for function call.
  *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- *        sfunar_digitalOutput(uint8 u1, uint8 p1)
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_usbSerialWrite
+#define S_FUNCTION_NAME                USB_serialRead
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -86,7 +81,7 @@ static void mdlCheckParameters(SimStruct *S)
   }
   
   /*
-   * Check the parameter 2 (numData)
+   * Check the parameter 1 (PortWidth)
    */
   if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
@@ -94,7 +89,6 @@ static void mdlCheckParameters(SimStruct *S)
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 1, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
-  
 }
 
 
@@ -107,6 +101,7 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
+	int_T *portwidth;
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 2);
 
@@ -142,47 +137,34 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  if(*mxGetPr(ssGetSFcnParam(S, 1)) > 0)
-  { 
-    if (!ssSetNumInputPorts(S, 2))
-        return;    
-      /*
-       * Configure the input port 2
-       */
-      ssSetInputPortDataType(S, 1, SS_UINT32);
-      ssSetInputPortWidth(S, 1, 1);
-      ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
-      ssSetInputPortDirectFeedThrough(S, 1, 1);
-      ssSetInputPortAcceptExprInRTW(S, 1, 1);
-      ssSetInputPortOverWritable(S, 1, 1);
-      ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-      ssSetInputPortRequiredContiguous(S, 1, 1);
-  }
-  else
-  {      
-    if (!ssSetNumInputPorts(S, 1))
-        return;
-  }
+  if (!ssSetNumInputPorts(S, 0))
+    return;
 
-  /*
-   * Configure the input port 1
-   */
-  ssSetInputPortDataType(S, 0, SS_UINT8);
-  ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
-  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetInputPortDirectFeedThrough(S, 0, 1);
-  ssSetInputPortAcceptExprInRTW(S, 0, 1);
-  ssSetInputPortOverWritable(S, 0, 1);
-  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-  ssSetInputPortRequiredContiguous(S, 0, 1);
-
-  
-  
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 0))
-    return;  
+  if (!ssSetNumOutputPorts(S, 2))
+    return;
+  
+  /*
+   * Configure the output port 1 (data)
+   */
+  portwidth = (int_T*)mxGetData(ssGetSFcnParam(S,1)); 
+  ssSetOutputPortDataType(S, 0, SS_UINT8);
+  ssSetOutputPortWidth(S, 0, portwidth[0]);
+  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL);
+  ssSetOutputPortOutputExprInRTW(S, 0, 1);
+  
+  /*
+   * Configure the output port 2 (data length)
+   */
+  ssSetOutputPortDataType(S, 1, SS_UINT32);
+  ssSetOutputPortWidth(S, 1, 1);
+  ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 1, 1);
+  
   
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -206,7 +188,8 @@ static void mdlInitializeSizes(SimStruct *S)
                SS_OPTION_EXCEPTION_FREE_CODE |
                SS_OPTION_WORKS_WITH_CODE_REUSE |
                SS_OPTION_SFUNCTION_INLINED_FOR_RTW |
-               SS_OPTION_DISALLOW_CONSTANT_SAMPLE_TIME);
+               SS_OPTION_DISALLOW_CONSTANT_SAMPLE_TIME |
+			   SS_OPTION_ALLOW_PARTIAL_DIMENSIONS_CALL);
 }
 
 /* Function: mdlInitializeSampleTimes =====================================
@@ -255,9 +238,9 @@ static void mdlSetWorkWidths(SimStruct *S)
     return;
 
   /*
-   * Register the run-time parameter 1 numData
+   * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "numData", ssGetDataTypeId(S, "boolean"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "PortWidth", ssGetDataTypeId(S, "int32"));
 }
 
 #endif

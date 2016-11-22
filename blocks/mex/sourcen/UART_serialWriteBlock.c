@@ -1,21 +1,13 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_serialWrite.c Simple C-MEX S-function for function call.
+ *   UART_serialWrite.c Simple C-MEX S-function for function call.
  *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- *        serialWrite(uint8 u1[],int16 size(u1,1))
- *
- *   Simulink version           : 7.3 (R2009a) 15-Jan-2009
- *   C source code generated on : 06-Jul-2009 17:01:33
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_serialWriteBlock
+#define S_FUNCTION_NAME                UART_serialWriteBlock
 #define S_FUNCTION_LEVEL               2
 
 /*

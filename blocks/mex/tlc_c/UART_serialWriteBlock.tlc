@@ -1,9 +1,9 @@
 %% File : sfunar_serialWrite.tlc
 %%
 %% Copyright 2010-2011 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_serialWriteBlock "C"
+%implements UART_serialWriteBlock "C"
 
 %include "block_common_includes.tlc"
 

@@ -1,34 +1,33 @@
-%% File : sfunar_serialWrite.tlc
+%% File : sfunar_serialRead.tlc
 %%
 %% Copyright 2010-2011 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_serialWrite "C"
+%implements UART_serialRead "C"
 
 %include "block_common_includes.tlc"
 
 %% Function: BlockTypeSetup ===============================================
 %function BlockTypeSetup(block, system) void
 
-    %% Ensure required header files are included
-    %<MbedCommonBlockTypeSetup(block, system)>
-
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
 %endfunction
+
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
   %if !SLibCodeGenForSim()
+    %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
     %assign p1_val = LibBlockParameterValue(p1,0)
     %assign name = "serial" + FEVAL("int2str",p1_val)
 
-    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
-    %assign u1_dim1_val = LibBlockInputSignalWidth(0)
-    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
-
-    %%
-    %% %<name>.write( %<u1_ptr>, (int16_T)%<u1_dim1_val>);
-    %<name>.putc(%<u1_val>);
-    %%
+    if(%<name>.readable()) {
+      %<y1_val> = %<name>.getc();
+    } else {
+      %<y1_val> = -1;
+    }
   %endif
 %endfunction

@@ -1,9 +1,9 @@
-%% File : sfunar_serialConfig.tlc
+%% File : UART_serialConfig.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_serialConfig "C"
+%implements UART_serialConfig "C"
 
 %include "block_common_includes.tlc"
 
