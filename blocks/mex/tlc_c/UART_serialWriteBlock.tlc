@@ -17,12 +17,13 @@
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
-
   %if !SLibCodeGenForSim()
-    %assign serial_port_val = LibBlockParameterValue(serial_port,0)
-    %assign name = "serial" + FEVAL("int2str",serial_port_val)
-    %assign enable_number_of_bytes_val = LibBlockParameterValue(enable_number_of_bytes,0)
-    %if enable_number_of_bytes_val
+    %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
+    %assign name = "serial" + FEVAL("int2str",SerialPort_val-1)
+
+    %assign enNumberOfBytes_val = LibBlockParameterValue(enNumberOfBytes,0)
+
+    %if enNumberOfBytes_val
         %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
     %else
         %assign number_of_bytes = %<LibBlockInputSignalWidth(0)>

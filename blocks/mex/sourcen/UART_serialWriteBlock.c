@@ -79,16 +79,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-
-  /*
-   * Check the parameter 2
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "serial_port", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 #endif
@@ -242,9 +232,9 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SampleTime",  ssGetDataTypeId(S, "int32"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "serial_port", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "enable_number_of_bytes",    ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SampleTime",      ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SerialPort",      ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "enNumberOfBytes", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif

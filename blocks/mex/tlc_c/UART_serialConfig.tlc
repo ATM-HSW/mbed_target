@@ -17,34 +17,35 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
-  %assign p1_val = LibBlockParameterValue(p1,0)
-  %assign p6_val = LibBlockParameterValue(p6,0)
-  %assign name = "serial" + FEVAL("int2str",p1_val)
-
   %if !SLibCodeGenForSim()
+
+    %assign SerialPort_val  = LibBlockParameterValue(SerialPort,0)
+    %assign TXPortName_val  = LibBlockParameterValue(TXPortName, 0)
+    %assign TXPinNumber_val = LibBlockParameterValue(TXPinNumber, 0)
+    %assign RXPortName_val  = LibBlockParameterValue(RXPortName, 0)
+    %assign RXPinNumber_val = LibBlockParameterValue(RXPinNumber, 0)
+    %assign BaudRate_val    = LibBlockParameterValue(BaudRate,0)
+
+    %assign name = "serial" + FEVAL("int2str",SerialPort_val)
+    %if SerialPort_val
+      %assign pname1 = "P" + FEVAL("char",TXPortName_val+64) + "_" + FEVAL("int2str",TXPinNumber_val-1)
+      %assign pname2 = "P" + FEVAL("char",RXPortName_val+64) + "_" + FEVAL("int2str",RXPinNumber_val-1)
+    %else
+      %assign pname1 = "USBTX"
+      %assign pname2 = "USBRX"
+    %endif
+
+    %openfile declbuf
+
+    Serial %<name>(%<pname1>, %<pname2>);
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
     %%
-    %<name>.baud(%<p6_val>);
+    %<name>.baud(%<BaudRate_val>);
     %%
+
   %endif
-
-  %if !SLibCodeGenForSim()
-      %assign p1_val = LibBlockParameterValue(p1, 0)
-      %assign p2_val = LibBlockParameterValue(p2, 0)
-      %assign p3_val = LibBlockParameterValue(p3, 0)
-      %assign p4_val = LibBlockParameterValue(p4, 0)
-      %assign p5_val = LibBlockParameterValue(p5, 0)
-
-      %assign name = "serial" + FEVAL("int2str",p1_val)
-      %assign pname1 = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p3_val-1)
-      %assign pname2 = "P" + FEVAL("char",p4_val+64) + "_" + FEVAL("int2str",p5_val-1)
-      %openfile declbuf
-
-      Serial %<name>(%<pname1>, %<pname2>);
-
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-  %endif
-
 %endfunction

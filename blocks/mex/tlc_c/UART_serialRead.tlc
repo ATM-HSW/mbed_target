@@ -21,8 +21,8 @@
 
   %if !SLibCodeGenForSim()
     %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
-    %assign p1_val = LibBlockParameterValue(p1,0)
-    %assign name = "serial" + FEVAL("int2str",p1_val)
+    %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
+    %assign name = "serial" + FEVAL("int2str",SerialPort_val-1)
 
     if(%<name>.readable()) {
       %<y1_val> = %<name>.getc();
