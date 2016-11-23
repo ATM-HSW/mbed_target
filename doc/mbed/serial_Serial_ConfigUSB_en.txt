@@ -1,13 +1,16 @@
-Serial Read
-===========
+Serial Configuration USB
+========================
 
 Description
 -----------
 
-Writes the one dimensional vector of uint8 at input port d to the serial port on the mbed board. The length of the vector can be dynamically submitted at input port n or is statically read from input port d configuration.
+This blocks sets up a serial connection on the mbed board. You must put at least one of these blocks into any model that ues the Serial Write or Serial Read blocks.
 
+To use several UARTS at the mbed board, you can put several Serial Config blocks with different Serial Port numbers into the model. Each Serial Port number creates one instance of the mbed Serial class. The read and write blocks sending/receiving over the specific UART have to use the same Serial Port number.
 
-.. image:: ../images/block_UART_SerialReadByte.png
+Set the baud rate to match the device that you are communicating with. Standard rates include:300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, or 115200. 
+
+.. image:: ../images/block_UART_SerialConfigUSB.png
    :scale: 50 %
 
 Data Type Support
@@ -18,7 +21,7 @@ The input port expects an *uint8* data type.
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/mask_UART_SerialReadByte.png
+.. image:: ../images/mask_UART_SerialConfigUSB.png
 
 Port Name/Pin Number
 ....................
