@@ -47,8 +47,8 @@ master_doc = 'Index'
 
 # General information about the project.
 project = u'mbed_target_doc'
-copyright = u'2015-2016, Mathias Marquardt, Dr.O.Hagendorf'
-author = u'Mathias Marquardt'
+copyright = u'2015-2016, CEA/ATM RG, HS Wismar'
+author = u'CEA/ATM RG'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

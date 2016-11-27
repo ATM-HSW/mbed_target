@@ -1,44 +1,41 @@
-USB Serial Config
-=================
-
-short descr.
-
-
-Library
--------
-
-GPIO
+USB Serial Configuration
+========================
 
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
+This block sets up a virtual COM port via the native USB interface of the mcu.
+
+Please be aware that not every target supports the mbed USB library. Maybe the mcu does not support USB or the mbed USB library is not supported.
+
+.. image:: ../images/block_USB_SerialConfig.png
    :scale: 50 %
 
-description
+Parameters Dialog Box
+---------------------
 
-.. warning::
-	warning
+.. image:: ../images/mask_USB_SerialConfig.png
 
-.. attention::
-	attention
 
-Data Type Support
------------------
+Example
+-------
 
-input/output port expects a *uint8* data type ...
+In the example data read from USB CDC input are written back to the USB CDC output without modification.
 
-Parameters and Dialog Box
--------------------------
+.. image:: ../images/example_USB_CDC.png
+   :scale: 50 %
 
-.. image:: ../images/Counter_mask.png
 
-Param1
-......
+Code Generation
+---------------
 
-Param1 desc
+Global parts
+............
 
-Param2
-......
+creates a global instance
 
-Param2 desc
+.. code-block:: c++
+
+  USBSerial usbSerial;
+
+in \ **<Model Name>**\ .cpp.

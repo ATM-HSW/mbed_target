@@ -4,8 +4,9 @@ Serial Read
 Description
 -----------
 
-Writes the one dimensional vector of uint8 at input port d to the serial port on the mbed board. The length of the vector can be dynamically submitted at input port n or is statically read from input port d configuration.
+Reads one byte from the serial port on the mbed board.
 
+Outputs -1 if no data is available to be read.
 
 .. image:: ../images/block_UART_SerialReadByte.png
    :scale: 50 %
@@ -13,20 +14,16 @@ Writes the one dimensional vector of uint8 at input port d to the serial port on
 Data Type Support
 -----------------
 
-The input port expects an *uint8* data type.
+The output port writes values with *int32* data types.
 
 Parameters Dialog Box
 ---------------------
 
 .. image:: ../images/mask_UART_SerialReadByte.png
 
-Port Name/Pin Number
-....................
-specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
-
-Output Mode
+Serial Port
 ...........
-specifies the pin output mode. The possible values correspond to the values defined in the mbed DigitalInOut class: PullDefault, PullUp, PullDown, PullNone, Repeater, OpenDrain
+specifies an internal used serial port number. It is used to generate unique instance names when more UARTs are used in the same model and to tie config, read and write blocks together.
 
 Sample Time
 ...........
@@ -35,7 +32,7 @@ specifies the time interval between samples. To inherit the sample time, set thi
 Example
 -------
 
-In the example an input pin is read in by an Digital Input Block. This value is written to a pin by an Digital Output block.
+In the example data from UART input are written back to the output of the same UART. Because the Read Block writes in every step function call a byte to the output port, the value has to be checked. When no byte was transmitted a -1 is written. The switch block handles this, to avoid writing 0xff characters t the UART output.
 
 .. image:: ../images/example_UART_Serial.png
    :scale: 50 %
@@ -43,34 +40,17 @@ In the example an input pin is read in by an Digital Input Block. This value is 
 
 Code Generation
 ---------------
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
-
-Global parts
-............
-
-creates a global instance
-
-.. code-block:: c++
-
-  DigitalInOut <instance name>(P<Port Name>_<Pin Number>);
-
-Initialization Function
-.......................
-
-and two lines in void **<Model Name>**\ _initialize(void) function
-
-.. code-block:: c++
-
-  <instance name>.output();
-  <instance name>.mode(<Output Mode>);
-
-in \ **<Model Name>**\ .cpp.
+Instance names of mbed classes are created by concatenating model name (, submodelnames), block name and Serial Port number (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<Serial Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
 Step Function
 .............
 
-creates one line in void **<Model Name>**\ _step(void) function
+creates the following block in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  <instance name> = (uint8_T)rvalue;
+  if (<instance name>.readable()) {
+    lvalue = <instance name>.getc();
+  } else {
+    lvalue = -1;
+  }

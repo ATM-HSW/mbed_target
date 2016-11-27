@@ -9,7 +9,7 @@ Contents:
    serial_Serial_Config_en
    serial_Serial_ConfigUSB_en
    serial_Serial_Read_en
-   serial_Serial_Write_en
+   serial_Serial_Write_Block_en
    serial_USB_Serial_Config_en
    serial_USB_Serial_Read_en
-   serial_USB_Serial_Write_en
+   serial_USB_Serial_Write_Block_en

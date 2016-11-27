@@ -13,36 +13,34 @@
 
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
-    
+
 %endfunction
 
 %% Function: Outputs ======================================================
 %%
 %function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
 
-	%assign PortWidth_val = CAST("Number", LibBlockParameterValue(PortWidth,0))
-	%assign y1_addr = LibBlockOutputSignalAddr(0, "", "", 0)
-	%assign y2_val = LibBlockOutputSignal(1, "", "", 0)
-    
-    %if !SLibCodeGenForSim()
-	
-	  %<y2_val> = usbSerial.available();
-	  uint8_T *ptr = %<y1_addr>;
-	  if(%<y2_val> > 0 && %<y2_val> <= %<PortWidth_val>)
-	  {
-		for(uint_T ii=0; ii<%<y2_val>; ii++)
-		{
-		  *ptr++ = usbSerial._getc();
-		}
-	  }
-	  else if(%<y2_val> > %<PortWidth_val>)
-	  {
-		for(uint_T ii=0; ii<%<PortWidth_val>; ii++)
-		{
-		  *ptr++ = usbSerial._getc();
-		}
-	  }
-		
-		
-    %endif
+    %assign PortWidth_val = CAST("Number", LibBlockParameterValue(PortWidth,0))
+    %assign y1_addr = LibBlockOutputSignalAddr(0, "", "", 0)
+    %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+
+    %<y2_val> = usbSerial.available();
+    uint8_T *ptr = %<y1_addr>;
+    if(%<y2_val> > 0 && %<y2_val> <= %<PortWidth_val>)
+    {
+      for(uint_T ii=0; ii<%<y2_val>; ii++)
+      {
+        *ptr++ = usbSerial._getc();
+      }
+    }
+    else if(%<y2_val> > %<PortWidth_val>)
+    {
+      for(uint_T ii=0; ii<%<PortWidth_val>; ii++)
+      {
+        *ptr++ = usbSerial._getc();
+      }
+    }
+
+  %endif
 %endfunction

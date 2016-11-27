@@ -13,32 +13,25 @@ Set the baud rate to match the device that you are communicating with. Standard 
 .. image:: ../images/block_UART_SerialConfigUSB.png
    :scale: 50 %
 
-Data Type Support
------------------
-
-The input port expects an *uint8* data type.
+Serial Configuration and Serial Configuration USB blocks are identical. Where the non USB variant configures the RX/TX pins the USB variant uses the predefined RX and TX pins which are connected to STLink, DAP Link, JLink, ...
 
 Parameters Dialog Box
 ---------------------
 
 .. image:: ../images/mask_UART_SerialConfigUSB.png
 
-Port Name/Pin Number
-....................
-specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
-
-Output Mode
+Serial Port
 ...........
-specifies the pin output mode. The possible values correspond to the values defined in the mbed DigitalInOut class: PullDefault, PullUp, PullDown, PullNone, Repeater, OpenDrain
+specifies an internal used serial port number. It is used to generate unique instance names when more UARTs are used in the same model and to tie config, read and write blocks together.
 
-Sample Time
-...........
-specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+Baud Rate
+.........
+specifies the UART baud rate.
 
 Example
 -------
 
-In the example an input pin is read in by an Digital Input Block. This value is written to a pin by an Digital Output block.
+In the example data from UART input are written back to the output of the same UART. Because the Read Block writes in every step function call a byte to the output port, the value has to be checked. When no byte was transmitted a -1 is written. The switch block handles this, to avoid writing 0xff characters t the UART output.
 
 .. image:: ../images/example_UART_Serial.png
    :scale: 50 %
@@ -46,7 +39,7 @@ In the example an input pin is read in by an Digital Input Block. This value is 
 
 Code Generation
 ---------------
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance names of mbed classes are created by concatenating model name (, submodelnames), block name and Serial Port number (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<Serial Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
 Global parts
 ............
@@ -55,25 +48,15 @@ creates a global instance
 
 .. code-block:: c++
 
-  DigitalInOut <instance name>(P<Port Name>_<Pin Number>);
+  Serial <instance name>(USBTX, USBRX);
 
 Initialization Function
 .......................
 
-and two lines in void **<Model Name>**\ _initialize(void) function
+and a line in void **<Model Name>**\ _initialize(void) function
 
 .. code-block:: c++
 
-  <instance name>.output();
-  <instance name>.mode(<Output Mode>);
+  <instance name>.baud(<Baud Rate>);
 
 in \ **<Model Name>**\ .cpp.
-
-Step Function
-.............
-
-creates one line in void **<Model Name>**\ _step(void) function
-
-.. code-block:: c++
-
-  <instance name> = (uint8_T)rvalue;
