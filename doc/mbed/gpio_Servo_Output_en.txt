@@ -1,5 +1,5 @@
-Servo
-=====
+Servo Output
+============
 
 Description
 -----------

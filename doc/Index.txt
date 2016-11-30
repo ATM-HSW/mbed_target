@@ -9,13 +9,13 @@ Welcome to mbed_target_doc's documentation!
 Contents:
 
 .. toctree::
-   :numbered: 3
-   :maxdepth: 2
+   :numbered: 4
+   :maxdepth: 1
 
    installation/Installation__en
    getting_started
    mbed/gpio__en
-   mbed/serial_busses__en
+   mbed/serial_buses__en
    mbed/rtos__en
    mbed/utilities__en
    targets/_targets__en

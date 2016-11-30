@@ -11,8 +11,8 @@
 %% Function: BlockTypeSetup ===============================================
 %function BlockTypeSetup(block, system) void
 
-    %% Ensure required header files are included
-    %<MbedCommonBlockTypeSetup(block, system)>
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
 
 %endfunction
 
@@ -27,11 +27,11 @@
     %assign u1_val = LibBlockInputSignal(0, "", "", 0)
 
     %%
-	%if numData_val == 0
+    %if numData_val == 0
       usbSerial.writeBlock((uint8_T*)%<u1_ptr>, %<u1_dim1_val>);
-	%else
-      usbSerial.writeBlock((uint8_T*)%<u1_ptr>, %<LibBlockInputSignal(1, "", "", 0)>);	  
-	%endif
+    %else
+      usbSerial.writeBlock((uint8_T*)%<u1_ptr>, %<LibBlockInputSignal(1, "", "", 0)>);
+    %endif
     %%
   %endif
 %endfunction

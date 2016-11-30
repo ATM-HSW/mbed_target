@@ -1,4 +1,4 @@
-USB Serial Configuration
+USB CDC Configuration
 ========================
 
 Description
@@ -20,7 +20,7 @@ Parameters Dialog Box
 Example
 -------
 
-In the example data read from USB CDC input are written back to the USB CDC output without modification.
+In the example data read from USB CDC driver input are written back to the USB CDC driver output without modification.
 
 .. image:: ../images/example_USB_CDC.png
    :scale: 50 %

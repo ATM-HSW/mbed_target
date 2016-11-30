@@ -1,4 +1,4 @@
-Serial Busses
+Serial Buses
 =============
 
 Contents:
@@ -6,7 +6,8 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   serial__en
+   serial_UART__en
+   serial_USB__en
    i2c__en
    spi__en
    one_wire__en

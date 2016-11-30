@@ -1,0 +1,53 @@
+USB CDC Read
+===============
+
+Description
+-----------
+
+Reads an vector of *uint8* from USB CDC device driver and writes these data as an one dimensional vector to output port *d*. The length of the vector is *min(Buffer Size, available data)*\ . At output port *n* the written vector size is available.
+
+.. image:: ../images/block_USB_SerialReadBlock.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+
+The output port *d* writes a one dimensional vector with *uint8* data type and output port *n* with *uint32*.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_USB_SerialReadBlock.png
+
+Buffer Size
+...........
+Static allocated buffer for reading data from USB CDC driver.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+In the example data read from USB CDC driver input are written back to the USB CDC driver output without modification.
+
+.. image:: ../images/example_USB_CDC.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Global parts
+............
+
+creates somes lines in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  for(uint_T ii=0; ii<length_of_data; ii++) {  // length_of_data is initialised with the minimum of (Buffer Size, available data from the USB CDC driver)
+    *ptr++ = usbSerial._getc();                // ptr points to the output signal buffer
+  }
+
+in \ **<Model Name>**\ .cpp.

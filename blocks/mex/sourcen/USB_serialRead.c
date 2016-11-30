@@ -79,16 +79,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-  
-  /*
-   * Check the parameter 1 (PortWidth)
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 
@@ -101,7 +91,7 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-	int_T *portwidth;
+  int_T *buffersize;
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 2);
 
@@ -149,9 +139,10 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Configure the output port 1 (data)
    */
-  portwidth = (int_T*)mxGetData(ssGetSFcnParam(S,1)); 
+  buffersize = (int_T*)mxGetData(ssGetSFcnParam(S,1)); 
+
   ssSetOutputPortDataType(S, 0, SS_UINT8);
-  ssSetOutputPortWidth(S, 0, portwidth[0]);
+  ssSetOutputPortWidth(S, 0, buffersize[0]);
   ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 1);
@@ -240,7 +231,7 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "PortWidth", ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "BufferSize", ssGetDataTypeId(S, "uint32"));
 }
 
 #endif
