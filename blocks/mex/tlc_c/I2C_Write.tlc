@@ -1,0 +1,68 @@
+%% File : I2C_Write.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015-2016 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements I2C_Write "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%%
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign bAddressFlag   = LibBlockParameterValue(AddressFlag, 0)
+    %assign nSlaveAddress  = LibBlockParameterValue(SlaveAddress, 0)
+    %assign bByteCountFlag = LibBlockParameterValue(ByteCountFlag, 0)
+    %assign bRepeated      = LibBlockParameterValue(Repeated, 0)
+    %assign nI2CPort       = LibBlockParameterValue(I2CPort, 0)
+    %assign bAckOut        = LibBlockParameterValue(AckOut, 0)
+
+    %assign nNumBytes      = LibBlockInputSignalWidth(0)
+
+    %assign u1_val = LibBlockInputSignalAddr(0, "", "", 0)
+
+    %switch nI2CPort
+      %case 1
+        %assign i2c_instance = "i2c1"
+        %break
+      %case 2
+        %assign i2c_instance = "i2c2"
+        %break
+      %case 3
+        %assign i2c_instance = "i2c3"
+        %break
+      %default
+        %break
+    %endswitch
+
+    %if bAddressFlag == 1
+      %assign nSlaveAddress = LibBlockInputSignal(1, "", "", 0)
+    %endif
+
+    %if bByteCountFlag == 1 && bAddressFlag == 0
+      %assign nNumBytes = LibBlockInputSignal(1, "", "", 0)
+    %elseif bByteCountFlag == 1 && bAddressFlag == 1  
+      %assign nNumBytes = LibBlockInputSignal(2, "", "", 0)
+    %endif
+
+    %if bAckOut == 0
+      %<i2c_instance>.write(%<nSlaveAddress>, (char_T*)%<u1_val>, %<nNumBytes>, %<bRepeated>);
+    %else
+      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+      %<y1_val> = %<i2c_instance>.write(%<nSlaveAddress>, (char_T*)%<u1_val>, %<nNumBytes>, %<bRepeated>);
+    %endif
+
+  %endif
+%endfunction

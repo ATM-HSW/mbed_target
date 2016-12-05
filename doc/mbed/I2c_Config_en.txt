@@ -1,57 +1,78 @@
 I2C Configuration
 =================
 
-This block sets up the I2C connection on the mbed board. 
-
-
-Library
--------
-
-/I2C
-
 Description
 -----------
 
-.. image:: ../images/I2c_Config_block.png
+This block sets up the I2C connection on the mbed board. 
+
+You must have one of these blocks in any model that ues I2C blocks.
+
+.. image:: ../images/block_I2C_Config.png
    :scale: 50 %
 
-This block configures a I2C bus peripheral as master on a mbed target MCU depending on the selected data and clock pin. In addition the bus clock frequency can be configured.
-Since this block internally uses the mbed I2C class to configure the peripheral, the user must select matching SDA and SCL pins as described in the boards user manual.
-If the MCU acts as master for multiple I2C busses, each one must have it's own *I2C Config* block.
+This block configures a I2C bus peripheral as master using the selected data (SDA) and clock (SCL) pins. The bus clock frequency can be configured.
 
-.. attention::	
-	If pins are configured which cannot be mapped to the same I2C peripheral **NO** error will show up at compile time, but the I2C bus won't work.
-	
+When the model uses multiple I2C busses, for each one an own *I2C Config* block is necessary.
 
-Data Type Support
------------------
+Parameters Dialog Box
+---------------------
 
-###valid data types of input and output signals
-
-Parameters and Dialog Box
--------------------------
-
-.. image:: ../images/Encoder_input_mask.png
+.. image:: ../images/mask_I2C_Config.png
 
 I2C Port
 ........
 
-Selects an identifier for the bus that should correspond in the device's configuration which are connected to this particular bus.
+specifies an internal used I2C port number. It is used to generate unique instance names when more I2C busses are used in the same model and to tie config, read and write blocks together.
+
 
 Bus frequency
 .............
 
 Configures the I2C bus clock frequency. 
 
-SDA Port and Pin
-................
+Port Name/Pin Number (SDA)
+..........................
 
 Selects the data pin of the I2C peripheral.
 
-SCL Port and Pin
-................
+Port Name/Pin Number (SCL)
+..........................
 
 Selects the clock pin of the I2C peripheral.
 
-.. note::
-	All pins have to be of the same I2C peripheral otherwise the I2C bus won't work.
+Example
+-------
+
+In the example data read from a PCF8574 at address 0x40 is bitmasked. Bits 0 and 1 are written to LED1 and LED2. 
+
+The user button is written to bit 3. Unused bits and both input bits has to be set to 1 (please see the datasheet). The result is written back to the PCF8574.
+
+.. image:: ../images/example_I2C.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<I2C Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+creates a global instance
+
+.. code-block:: c++
+
+  I2C <instance name>(P<Port Name SDA>_<Pin Number SDA>, P<Port Name SCL>_<Pin Number SCL>);
+
+Initialization Function
+.......................
+
+and one line in void **<Model Name>**\ _initialize(void) function
+
+.. code-block:: c++
+
+  <instance name>.frequency(<Bus frequency>);
+
+in \ **<Model Name>**\ .cpp.

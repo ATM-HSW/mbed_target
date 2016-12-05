@@ -1,0 +1,61 @@
+%% File : I2C_Config.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
+%% I2C Modifications by Axel Utech 2014, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements I2C_Config "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nSDAPortName  = LibBlockParameterValue(SDAPortName,0)
+    %assign nSDAPinNumber = LibBlockParameterValue(SDAPinNumber,0)
+    %assign sda_name = "P" + FEVAL("char",nSDAPortName+64) + "_" + FEVAL("int2str",nSDAPinNumber-1)
+
+    %assign nSCLPortName  = LibBlockParameterValue(SCLPortName,0)
+    %assign nSCLPinNumber = LibBlockParameterValue(SCLPinNumber,0)
+    %assign scl_name = "P" + FEVAL("char",nSCLPortName+64) + "_" + FEVAL("int2str",nSCLPinNumber-1)
+
+    %assign nFreq = LibBlockParameterValue(Freq,0)
+
+    %assign nI2CPort = LibBlockParameterValue(I2CPort,0)
+
+    %switch nI2CPort
+      %case 1
+        %assign i2c_instance = "i2c1"
+        %break
+      %case 2
+        %assign i2c_instance = "i2c2"
+        %break
+      %case 3
+        %assign i2c_instance = "i2c3"
+        %break
+      %default
+        %break
+    %endswitch
+
+    %openfile declbuf
+    I2C %<i2c_instance>(%<sda_name>, %<scl_name>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %<i2c_instance>.frequency(%<nFreq>);
+    %%
+  %endif
+%endfunction

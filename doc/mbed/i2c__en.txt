@@ -6,6 +6,6 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   I2c_Config_en
-   I2c_Read_en
-   I2c_Write_en
+   I2C_Config_en
+   I2C_Read_en
+   I2C_Write_en

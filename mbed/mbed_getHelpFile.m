@@ -37,9 +37,9 @@ function createStruct()
   addStruct('SerialUSBCDCConfig', 'mbed/serial_USB_CDC_Config_en');
   addStruct('SerialUSBCDCWrite', 'mbed/serial_USB_CDC_Write_Block_en');
   addStruct('SerialUSBCDCRead', 'mbed/serial_USB_CDC_Read_en');
-%   addStruct('', '');
-%   addStruct('', '');
-%   addStruct('', '');
+  addStruct('I2CConfig', 'mbed/I2c_Config_en');
+  addStruct('I2CWrite', 'mbed/I2c_Write_en');
+  addStruct('I2CRead', 'mbed/I2c_Read_en');
 %   addStruct('', '');
 %   addStruct('', '');
 %   addStruct('', '');

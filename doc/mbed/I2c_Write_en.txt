@@ -1,71 +1,107 @@
 I2C Write
 =========
 
-Performs a write operation to the device at the given bus address.
-
-
-Library
--------
-
-/I2C
-
 Description
 -----------
 
-.. image:: ../images/I2c_Write_block.png
+This block writes one or multiple bytes to a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB (read/write bit). 
+
+The block interface can be configured by the Parameters Dialog Box:
+
+- The minimal variant has a static i2c address and writes a predefined number of bytes to the device. 
+
+.. image:: ../images/block_I2C_Write_min.png
    :scale: 50 %
 
+- The maximal variant allows a dynamic i2c address and a dynamic number of bytes to be written. The ack port outputs communication errors.
 
-This block writes one or multiple bytes to a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB. 
+.. image:: ../images/block_I2C_Write_max.png
+   :scale: 50 %
 
 Data Type Support
 -----------------
 
-The block supports only uint8 values at each port.
+All input ports expect an *uint8* data type.
+The output port writes values with an *uint8* data type.
 
-Parameters and Dialog Box
--------------------------
+Parameters Dialog Box
+---------------------
 
-.. image:: ../images/I2c_Write_mask.png
+.. image:: ../images/mask_I2C_Write.png
 
 
 I2C Port
 ........
 
-Selects the identifier of the I2C peripheral which is configured by an *I2C Config* block.
+specifies an internal used I2C port number. It is used to generate unique instance names when more I2C busses are used in the same model and to tie config, read and write blocks together.
 
-External address input
-......................
 
-Enables an input port that provides the device address to which the MCU should write data. 
-The address input port enables writing to different devices with the same write block by simply change the address input.
+Enable address input port
+.........................
+
+Enables an input port that provides the device address to which the mcu should write data.
+
+The address input port enables writing to different devices with the same write block by changing the value at the address input port.
 
 Slave address
 .............
 
-Right aligned address of the bus device which the MCU should write to. The status of the R/W bit is ignored an set to "1" automatically.
+8bit address of the i2c bus device.
 
 .. note::
-	If the external address input is active the value of this parameter field is ignored.
-	
-External byte count
-...................
+  If the Enable address input port is checked the value of this parameter field is ignored.
 
-If the number of data to be written changes during program execution the external byte count port can be activated to provide the amount of data to be written to the slave device.
+Enable byte count input port
+............................
+
+If the number of data to be written changes during program execution the Enable byte count input port can be checked to provide the amount of data to be written to the slave device.
 
 .. note::
-	The maximum number of bytes to write is defined by the input port width in simulink.
+  The maximum number of bytes to be writen is defined by the input port width in simulink.
 
 Repeated
 ........
 
-If enabled no STOP condition is send after completing the write operation.
+If enabled no I2C STOP condition is send after completing the write operation.
 
 
-Enable ACK Output
-.................
+Enable ack output port
+......................
 
-Enables a block output port where the success of the operation can be read.
+Enables a block output port where the success of the operation can be read. Please see the mbed documentation for further information.
 
-*	"0" output: no error during communication
-*	"1" output:	error during communication
+* "0" output: no error during communication
+* "1" output: error during communication
+
+Example
+-------
+
+In the example data read from a PCF8574 at address 0x40 is bitmasked. Bits 0 and 1 are written to LED1 and LED2. 
+
+The user button is written to bit 3. Unused bits and both input bits has to be set to 1 (please see the datasheet). The result is written back to the PCF8574.
+
+.. image:: ../images/example_I2C.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<I2C Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  lvalue = (uint8_T)<instance name>.write(<Slave address>, <Addr of Inputbuffer>, <Length of Inputbuffer>, <Repeated>);
+
+when Enable ack output port is checked or
+
+.. code-block:: c++
+
+  <instance name>.write(<Slave address>, <Addr of Inputbuffer>, <Length of Inputbuffer>, <Repeated>);
+
+when Enable ack output port is unchecked. <Slave address> and <Length of Inputbuffer> are defined by the block mask or can come from input ports.

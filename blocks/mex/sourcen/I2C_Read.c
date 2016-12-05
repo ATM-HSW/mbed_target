@@ -1,18 +1,13 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_digitalOutput.c Simple C-MEX S-function for function call.
+ *   I2C_Read.c Simple C-MEX S-function for function call.
  *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- *        sfunar_digitalOutput(uint8 u1, uint8 p1)
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_i2cWrite
+#define S_FUNCTION_NAME                I2C_Read
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -84,66 +79,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-  
-  /*
-   * Check the parameter 1 (AddressFlag)
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P2", SS_BOOLEAN, 2, dimsArray, 0);
-  }
-  
-  /*
-   * Check the parameter 2 (SlaveAddress)
-   */
-  if EDIT_OK(S, 2) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  
-  /*
-   * Check the parameter 3 (ByteCountFlag)
-   */
-  if EDIT_OK(S, 3) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 3, "P4", SS_BOOLEAN, 2, dimsArray, 0);
-  }
-  
-  /*
-   * Check the parameter 4 (Repeated)
-   */
-  if EDIT_OK(S, 4) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 4, "P5", SS_BOOLEAN, 2, dimsArray, 0);
-  }
-  
-  /*
-   * Check the parameter 5 (I2cPort)
-   */
-  if EDIT_OK(S, 5) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 5, "P6", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  
-  /*
-   * Check the parameter 6 (AckOut)
-   */
-  if EDIT_OK(S, 6) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 6, "P7", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 
@@ -156,11 +91,11 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int ports = 1;
+  int ports = 0;
+  int outports = 1;
   int i;
-  
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 7);
+  ssSetNumSFcnParams(S, 8);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -190,64 +125,64 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 4, 0);
   ssSetSFcnParamTunable(S, 5, 0);
   ssSetSFcnParamTunable(S, 6, 0);
+  ssSetSFcnParamTunable(S, 7, 0);
 
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
     return;
 
-	
   if(*mxGetPr(ssGetSFcnParam(S, 1)) > 0)
-	ports++;
-	
+    ports++;
+
   if(*mxGetPr(ssGetSFcnParam(S, 3)) > 0)
     ports++;
-	
+
   /*
    * Set the number of input ports.
    */
   if (!ssSetNumInputPorts(S, ports))
     return;
 
-	ssSetInputPortDataType(S, 0, SS_UINT8);
-	ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
-	ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
-	ssSetInputPortDirectFeedThrough(S, 0, 1);
-	ssSetInputPortAcceptExprInRTW(S, 0, 1);
-	ssSetInputPortOverWritable(S, 0, 1);
-	ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-	ssSetInputPortRequiredContiguous(S, 0, 1);
-	
-  for(i=1; i<ports; i++)
-  {
-	ssSetInputPortDataType(S, i, SS_UINT8);
-	ssSetInputPortWidth(S, i, 1);
-	ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
-	ssSetInputPortDirectFeedThrough(S, i, 1);
-	ssSetInputPortAcceptExprInRTW(S, i, 1);
-	ssSetInputPortOverWritable(S, i, 1);
-	ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
-	ssSetInputPortRequiredContiguous(S, i, 1);
+  for(i=0; i<ports; i++) {
+    ssSetInputPortDataType(S, i, SS_UINT8);
+    ssSetInputPortWidth(S, i, 1);
+    ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, i, 1);
+    ssSetInputPortAcceptExprInRTW(S, i, 1);
+    ssSetInputPortOverWritable(S, i, 1);
+    ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, i, 1);
   }
 
+
+  if(*mxGetPr(ssGetSFcnParam(S,7)) > 0)
+      outports++;
   /*
    * Set the number of output ports.
-   */ 
-  if(*mxGetPr(ssGetSFcnParam(S, 6)) > 0)
-  {
-    if (!ssSetNumOutputPorts(S, 1))
-        return;      
-      
-    ssSetOutputPortDataType(S, 0, SS_UINT8);
-    ssSetOutputPortWidth(S, 0, 1);	
-    ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-    ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-    ssSetOutputPortOutputExprInRTW(S, 0, 1);
-  }  
-  else
-  {      
-    if (!ssSetNumOutputPorts(S, 0))
-        return; 
+   */
+  if (!ssSetNumOutputPorts(S, outports))
+    return;
+
+  /*
+   * Configure the output port 1
+   */
+  ssSetOutputPortDataType(S, 0, SS_UINT8);
+  ssSetOutputPortWidth(S, 0, *(int_T*)mxGetData(ssGetSFcnParam(S, 4)));	
+  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 0, 1);
+
+  /*
+   * Configure the output port 2
+   */
+  if(*mxGetPr(ssGetSFcnParam(S,7)) > 0)
+  {  
+    ssSetOutputPortDataType(S, 1, SS_UINT8);
+    ssSetOutputPortWidth(S, 1, 1);
+    ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 1, 1);
   }
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -316,33 +251,19 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 6))
+  if (!ssSetNumRunTimeParams(S, 7))
     return;
 
   /*
-   * Register the run-time parameter 1
+   * Register the run-time parameters
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "p1", ssGetDataTypeId(S, "boolean"));
-  /*
-   * Register the run-time parameter 2
-   */
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "uint8"));
-  /*
-   * Register the run-time parameter 3
-   */
-  ssRegDlgParamAsRunTimeParam(S, 3, 2, "p3", ssGetDataTypeId(S, "boolean"));
-  /*
-   * Register the run-time parameter 4
-   */
-  ssRegDlgParamAsRunTimeParam(S, 4, 3, "p4", ssGetDataTypeId(S, "boolean"));
-  /*
-   * Register the run-time parameter 5
-   */
-  ssRegDlgParamAsRunTimeParam(S, 5, 4, "p5", ssGetDataTypeId(S, "uint8"));
-  /*
-   * Register the run-time parameter 6
-   */
-  ssRegDlgParamAsRunTimeParam(S, 6, 5, "p6", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "AddressFlag", ssGetDataTypeId(S, "boolean"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "SlaveAddress", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "ByteCountFlag", ssGetDataTypeId(S, "boolean"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 3, "NumBytes", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 4, "Repeated", ssGetDataTypeId(S, "boolean"));
+  ssRegDlgParamAsRunTimeParam(S, 6, 5, "I2CPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 7, 6, "AckOut", ssGetDataTypeId(S, "boolean"));
 }
 
 #endif

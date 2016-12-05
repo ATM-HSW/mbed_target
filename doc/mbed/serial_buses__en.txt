@@ -8,6 +8,6 @@ Contents:
 
    serial_UART__en
    serial_USB__en
-   i2c__en
+   I2C__en
    spi__en
    one_wire__en

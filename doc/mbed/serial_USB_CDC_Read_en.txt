@@ -21,7 +21,7 @@ Parameters Dialog Box
 
 Buffer Size
 ...........
-Static allocated buffer for reading data from USB CDC driver.
+Static allocated buffer for reading data from USB CDC driver. The USB CDC driver uses internally an 128 buffer (mbed v130).
 
 Sample Time
 ...........
