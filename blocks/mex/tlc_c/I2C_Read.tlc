@@ -55,11 +55,11 @@
     %endif
 
     %assign y1_val = LibBlockOutputSignalAddr(0, "", "", 0)
-    %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
 
     %if bAckOut == 0
       %<i2c_instance>.read(%<nSlaveAddress>, (char_T*)%<y1_val>, %<nNumBytes>, %<bRepeated>);
     %else
+      %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
       %<y2_val> = %<i2c_instance>.read(%<nSlaveAddress>, (char_T*)%<y1_val>, %<nNumBytes>, %<bRepeated>);
     %endif
 

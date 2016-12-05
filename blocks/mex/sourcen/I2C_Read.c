@@ -91,7 +91,7 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int ports = 0;
+  int inports = 0;
   int outports = 1;
   int i;
   /* Number of expected parameters */
@@ -133,18 +133,18 @@ static void mdlInitializeSizes(SimStruct *S)
     return;
 
   if(*mxGetPr(ssGetSFcnParam(S, 1)) > 0)
-    ports++;
+    inports++;
 
   if(*mxGetPr(ssGetSFcnParam(S, 3)) > 0)
-    ports++;
+    inports++;
 
   /*
    * Set the number of input ports.
    */
-  if (!ssSetNumInputPorts(S, ports))
+  if (!ssSetNumInputPorts(S, inports))
     return;
 
-  for(i=0; i<ports; i++) {
+  for(i=0; i<inports; i++) {
     ssSetInputPortDataType(S, i, SS_UINT8);
     ssSetInputPortWidth(S, i, 1);
     ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
@@ -154,7 +154,6 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
     ssSetInputPortRequiredContiguous(S, i, 1);
   }
-
 
   if(*mxGetPr(ssGetSFcnParam(S,7)) > 0)
       outports++;
@@ -176,7 +175,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Configure the output port 2
    */
-  if(*mxGetPr(ssGetSFcnParam(S,7)) > 0)
+  if(outports > 1)
   {  
     ssSetOutputPortDataType(S, 1, SS_UINT8);
     ssSetOutputPortWidth(S, 1, 1);

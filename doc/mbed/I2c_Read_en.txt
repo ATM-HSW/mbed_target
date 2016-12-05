@@ -79,9 +79,9 @@ Enables a block output port where the success of the operation can be read. Plea
 Example
 -------
 
-In the example data read from a PCF8574 at address 0x40 is bitmasked. Bits 0 and 1 are written to LED1 and LED2. 
+In the example data read from a PCF8574 at address 0x40 is bitmasked. Bits 0 and 1, used as inputs, are written to LED1 and LED2. 
 
-The user button is written to bit 3. Unused bits and both input bits has to be set to 1 (please see the datasheet). The result is written back to the PCF8574.
+The user button is written to bit 3 of the PCF8574. Unused bits and both input bits has to be set to 1 (please see the datasheet). The result is written back to the PCF8574.
 
 .. image:: ../images/example_I2C.png
    :scale: 50 %
