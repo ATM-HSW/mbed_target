@@ -1,0 +1,68 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements SPI_MasterReadWrite "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign nCSPortName  = LibBlockParameterValue(CSPortName, 0)
+    %assign nCSPinNumber = LibBlockParameterValue(CSPinNumber, 0)-1
+    %assign pname        = "P" + FEVAL("char", nCSPortName+64) + "_" + FEVAL("int2str", nCSPinNumber)
+    %assign instance     = FEVAL("char", nCSPortName+64) + FEVAL("int2str", nCSPinNumber)
+
+    %openfile declbuf
+    DigitalOut cs_%<instance>(%<pname>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    
+    cs_%<instance> = 1;
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nSPIPort     = CAST("Number",LibBlockParameterValue(SPIPort, 0))
+    %assign nCSPortName  = CAST("Number",LibBlockParameterValue(CSPortName, 0))
+    %assign nCSPinNumber = CAST("Number",LibBlockParameterValue(CSPinNumber, 0))-1
+    %assign instance     = FEVAL("char", nCSPortName+64) + FEVAL("int2str", nCSPinNumber)
+
+    cs_%<instance> = 0;
+    %if LibBlockInputSignalWidth(0) > 1
+      %assign u_val = LibBlockInputSignalAddr(0, "", "", 0)
+      %assign y_val = LibBlockOutputSignalAddr(0, "", "", 0)
+
+      uint8_T* u_ptr = %<u_val>;
+      uint8_T* y_ptr = %<y_val>;
+      for(int i=0; i < %<LibBlockInputSignalWidth(0)>; i++)
+      {
+        y_ptr[i] = spi%<nSPIPort>.write(u_ptr[i]);
+      }
+    %else
+      %assign u_val = LibBlockInputSignal(0, "", "", 0)
+      %assign y_val = LibBlockOutputSignal(0, "", "", 0)
+      
+      %<y_val> = spi%<nSPIPort>.write(%<u_val>);
+    %endif
+    cs_%<instance> = 1;
+
+  %endif
+%endfunction

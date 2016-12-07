@@ -1,0 +1,49 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
+%% I2C Modifications by Axel Utech 2014, HS Wismar
+
+%implements SPI_MasterConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nMOSIPortname  = LibBlockParameterValue(MOSIPortname,0)
+    %assign nMOSIPinNumber = LibBlockParameterValue(MOSIPinNumber,0)
+    %assign mosi_name      = "P" + FEVAL("char", nMOSIPortname+64) + "_" + FEVAL("int2str", nMOSIPinNumber-1)
+
+    %assign nMISOPortname  = LibBlockParameterValue(MISOPortname,0)
+    %assign nMISOPinNumber = LibBlockParameterValue(MISOPinNumber,0)
+    %assign miso_name      = "P" + FEVAL("char", nMISOPortname+64) + "_" + FEVAL("int2str", nMISOPinNumber-1)
+
+    %assign nSCKLPortname  = LibBlockParameterValue(SCKLPortname,0)
+    %assign nSCKLPinNumber = LibBlockParameterValue(SCKLPinNumber,0)
+    %assign sck_name       = "P" + FEVAL("char", nSCKLPortname+64) + "_" + FEVAL("int2str", nSCKLPinNumber-1)
+
+    %assign nSPIPort = CAST("Number",LibBlockParameterValue(SPIPort,0))
+
+    %assign nFreq = LibBlockParameterValue(Freq,0)
+
+    %openfile declbuf
+    SPI spi%<nSPIPort>(%<mosi_name>, %<miso_name>, %<sck_name>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    spi%<nSPIPort>.format(8,0);
+    spi%<nSPIPort>.frequency(%<nFreq>);
+
+  %endif
+%endfunction

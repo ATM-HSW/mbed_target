@@ -1,0 +1,59 @@
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements SPI_SlaveConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nMOSIPortname  = LibBlockParameterValue(MOSIPortname,0)
+    %assign nMOSIPinNumber = LibBlockParameterValue(MOSIPinNumber,0)
+    %assign mosi_name      = "P" + FEVAL("char",nMOSIPortname+64) + "_" + FEVAL("int2str",nMOSIPinNumber-1)
+  
+    %assign nMISOPortname  = LibBlockParameterValue(MISOPortname,0)
+    %assign nMISOPinNumber = LibBlockParameterValue(MISOPinNumber,0)
+    %assign miso_name      = "P" + FEVAL("char",nMISOPortname+64) + "_" + FEVAL("int2str",nMISOPinNumber-1)
+  
+    %assign nSCKLPortname  = LibBlockParameterValue(SCKLPortname,0)
+    %assign nSCKLPinNumber = LibBlockParameterValue(SCKLPinNumber,0)
+    %assign sckl_name      = "P" + FEVAL("char",nSCKLPortname+64) + "_" + FEVAL("int2str",nSCKLPinNumber-1)
+  
+    %assign nSSELPortname  = LibBlockParameterValue(SSELPortname,0)
+    %assign nSSELPinNumber = LibBlockParameterValue(SSELPinNumber,0)
+    %assign ssel_name      = "P" + FEVAL("char",nSSELPortname+64) + "_" + FEVAL("int2str",nSSELPinNumber-1)
+  
+    %assign nFreq = LibBlockParameterValue(Freq,0)
+
+    %openfile declbuf
+    %%
+    #if defined(SPI_INTERFACE_DEFINED)
+        #error "Two or more SPI Salve Interfaces defined!"
+    #endif
+    SPISlave spi_slave(%<mosi_name>, %<miso_name>, %<sckl_name>, %<ssel_name>);
+    #define SPI_INTERFACE_DEFINED
+    %%
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    
+    %%
+    spi_slave.frequency(%<nFreq>);
+	  spi_slave.format(8,0);
+    %%
+
+  %endif
+%endfunction
