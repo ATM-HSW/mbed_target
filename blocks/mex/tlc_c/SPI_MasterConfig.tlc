@@ -31,7 +31,9 @@
     %assign nSCKLPinNumber = LibBlockParameterValue(SCKLPinNumber,0)
     %assign sck_name       = "P" + FEVAL("char", nSCKLPortname+64) + "_" + FEVAL("int2str", nSCKLPinNumber-1)
 
-    %assign nSPIPort = CAST("Number",LibBlockParameterValue(SPIPort,0))
+    %assign nSPIPort = CAST("Number",LibBlockParameterValue(SPIPort, 0))
+    %assign nMode    = CAST("Number",LibBlockParameterValue(Mode, 0))
+    %assign nBits    = CAST("Number",LibBlockParameterValue(Bits, 0))
 
     %assign nFreq = LibBlockParameterValue(Freq,0)
 
@@ -42,7 +44,7 @@
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
-    spi%<nSPIPort>.format(8,0);
+    spi%<nSPIPort>.format(%<nMode>, %<nBits>);
     spi%<nSPIPort>.frequency(%<nFreq>);
 
   %endif

@@ -12,7 +12,7 @@ Library
 Description
 -----------
 
-.. image:: ../images/Spi_Master_Config_block.png
+.. image:: ../images/block_SPI_Master_Config.png
    :scale: 50 %
 
 This block configures an SPI peripheral depending on the data and clock pins selected. In addition the clock frequency of the bus can be configured. 
@@ -31,7 +31,7 @@ This block has no input or output ports.
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/Spi_Master_Config_mask.png
+.. image:: ../images/mask_SPI_Master_Config.png
 
 SPI Port
 ........

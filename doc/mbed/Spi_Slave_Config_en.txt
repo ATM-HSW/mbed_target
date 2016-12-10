@@ -12,7 +12,7 @@ Library
 Description
 -----------
 
-.. image:: ../images/Spi_Slave_Config_block.png
+.. image:: ../images/block_SPI_Slave_Config.png
    :scale: 50 %
 
 This block sets up an SPI peripheral of the MCU to act as a slave on the connected bus. 
@@ -32,7 +32,7 @@ This block has no input or output port.
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/Spi_Slave_Config_mask.png
+.. image:: ../images/mask_SPI_Slave_Config.png
 
 Bus frequency
 .............

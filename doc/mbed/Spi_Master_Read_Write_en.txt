@@ -12,7 +12,7 @@ Library
 Description
 -----------
 
-.. image:: ../images/Spi_Master_Read_Write_block.png
+.. image:: ../images/block_Spi_Master_Read_Write.png
    :scale: 50 %
 
 The block writes the byte value provided at the input port each time it is executed. At the output port the received byte is provided.
@@ -26,7 +26,7 @@ Port size can be a one-dimensional vector which must be the same for input and o
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/Spi_Master_Read_Write_mask.png
+.. image:: ../images/mask_SPI_Master_Read_Write.png
 
 
 SPI Port

@@ -35,7 +35,9 @@
     %assign nSSELPinNumber = LibBlockParameterValue(SSELPinNumber,0)
     %assign ssel_name      = "P" + FEVAL("char",nSSELPortname+64) + "_" + FEVAL("int2str",nSSELPinNumber-1)
   
-    %assign nFreq = LibBlockParameterValue(Freq,0)
+    %assign nFreq = CAST("Number", LibBlockParameterValue(Freq, 0))
+    %assign nMode = CAST("Number", LibBlockParameterValue(Mode, 0))
+    %assign nBits = CAST("Number", LibBlockParameterValue(Bits, 0))
 
     %openfile declbuf
     %%
@@ -52,7 +54,7 @@
     
     %%
     spi_slave.frequency(%<nFreq>);
-	  spi_slave.format(8,0);
+	  spi_slave.format(%<nMode>, %<nBits>);
     %%
 
   %endif
