@@ -47,7 +47,7 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-	int_T numElements = 0;
+  int_T numElements = 0;
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 4);
 
@@ -87,13 +87,11 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 1))
     return;
-  
+
   numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 2)));
 
   ssSetInputPortDataType(S, 0, (*(DTypeId*)(mxGetData(ssGetSFcnParam(S, 1))))-1);
   ssSetInputPortWidth(S, 0, numElements);
-//   ssSetInputPortDataType(S, 0, SS_UINT8);
-//   ssSetInputPortWidth(S, 0, 1);
   ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetInputPortDirectFeedThrough(S, 0, 1);
   ssSetInputPortAcceptExprInRTW(S, 0, 1);
@@ -101,12 +99,12 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetInputPortRequiredContiguous(S, 0, 1);
 
-	/*
+  /*
    * Set the number of output ports.
    */
   if (!ssSetNumOutputPorts(S, 0))
     return;
-		
+
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -142,7 +140,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 {
   ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
   ssSetOffsetTime(S, 0, FIXED_IN_MINOR_STEP_OFFSET);
-  
+
 #if defined(ssSetModelReferenceSampleTimeDefaultInheritance)
 
   ssSetModelReferenceSampleTimeDefaultInheritance(S);
@@ -171,20 +169,11 @@ static void mdlSetWorkWidths(SimStruct *S)
     return;
 
   /*
-   * Register the run-time parameter 1
+   * Register the run-time parameters
    */
   ssRegDlgParamAsRunTimeParam(S, 0, 0, "MailNumber", DYNAMICALLY_TYPED);
-  /*
-   * Register the run-time parameter 2
-   */
   ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", DYNAMICALLY_TYPED);
-  /*
-   * Register the run-time parameter 3
-   */
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "NumElements", SS_UINT32);
-  /*
-   * Register the run-time parameter 4
-   */
   ssRegDlgParamAsRunTimeParam(S, 3, 3, "Depth", SS_UINT32);
 }
 

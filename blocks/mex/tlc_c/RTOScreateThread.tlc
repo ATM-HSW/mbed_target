@@ -16,63 +16,66 @@
 
 %endfunction
 
+
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
-  %assign priority_val = LibBlockParameterValue(ThreadPriority, 0) %% Priority
-  %assign stackOption_val = LibBlockParameterValue(StackOption, 0) %% StackOption
-  %assign stackSize_val = CAST("Number",LibBlockParameterValue(StackSize, 0)) %% Stacksize
-  %assign timing_val = CAST("Number",LibBlockParameterValue(Timing, 0))  %% Timing
-
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-
-  %switch(priority_val)
-    %case(1)
-        %assign ThreadPriority = "osPriorityIdle"
-        %break
-    %case(2)
-        %assign ThreadPriority = "osPriorityLow"
-        %break
-    %case(3)
-        %assign ThreadPriority = "osPriorityBelowNormal"
-        %break
-    %case(4)
-        %assign ThreadPriority = "osPriorityNormal"
-        %break
-    %case(5)
-        %assign ThreadPriority = "osPriorityAboveNormal"
-        %break
-    %case(6)
-        %assign ThreadPriority = "osPriorityHigh"
-        %break
-    %case(7)
-        %assign ThreadPriority = "osPriorityRealtime"
-        %break
-    %default
-        %assign ThreadPriority = "osPriorityNormal"
-  %endswitch
-
-  %if stackOption_val == 1
-    %assign StackSize = "DEFAULT_STACK_SIZE"
-  %else
-    %assign StackSize = stackSize_val
-  %endif
-
   %if !SLibCodeGenForSim()
+
+    %assign valThreadPriority = LibBlockParameterValue(ThreadPriority, 0) %% Priority
+    %assign valStackOption = LibBlockParameterValue(StackOption, 0) %% StackOption
+    %assign valStackSize = CAST("Number",LibBlockParameterValue(StackSize, 0)) %% Stacksize
+    %assign valTiming = CAST("Number",LibBlockParameterValue(Timing, 0))  %% Timing
+  
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+  
+    %switch(valThreadPriority)
+      %case(1)
+          %assign nThreadPriority = "osPriorityIdle"
+          %break
+      %case(2)
+          %assign nThreadPriority = "osPriorityLow"
+          %break
+      %case(3)
+          %assign nThreadPriority = "osPriorityBelowNormal"
+          %break
+      %case(4)
+          %assign nThreadPriority = "osPriorityNormal"
+          %break
+      %case(5)
+          %assign nThreadPriority = "osPriorityAboveNormal"
+          %break
+      %case(6)
+          %assign nThreadPriority = "osPriorityHigh"
+          %break
+      %case(7)
+          %assign nThreadPriority = "osPriorityRealtime"
+          %break
+      %default
+          %assign nThreadPriority = "osPriorityNormal"
+    %endswitch
+  
+    %if valStackOption == 1
+      %assign nStackSize = "DEFAULT_STACK_SIZE"
+    %else
+      %assign nStackSize = valStackSize
+    %endif
+
     %assign ertMainFile = LibCreateSourceFile("Source", "Custom", "ert_main")
 
     %openfile declbuf
     /* %<Type> block: %<Name> */
     extern void %<name>_thread(void const *);
-    %if timing_val > 0
+    %if valTiming > 0
       extern osThreadId %<name>_id;
     %endif
     %closefile declbuf
+
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_glob_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_glob_decl",declbuf)>
 
-    %if timing_val > 0
+    %if valTiming > 0
       %openfile declbuf
       /* %<Type> block: %<Name> */
       void %<name>_callback(void const *param)
@@ -86,9 +89,9 @@
 
     %openfile declbuf
     /* %<Type> block: %<Name> */
-    Thread %<name>(%<name>_thread, NULL, %<ThreadPriority>, %<StackSize>);
+    Thread %<name>(%<name>_thread, NULL, %<nThreadPriority>, %<nStackSize>);
 
-    %if timing_val > 0
+    %if valTiming > 0
       RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
     %endif
     %closefile declbuf
@@ -96,10 +99,10 @@
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
 
-    %if timing_val > 0
+    %if valTiming > 0
       %openfile buff
       /* %<Type> block: %<Name> */    
-      %<name>_timer.start(%<timing_val>);
+      %<name>_timer.start(%<valTiming>);
       %closefile buff
 
       %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
@@ -110,12 +113,12 @@
     /* %<Type> block: %<Name> */
     void %<name>_thread(void const *argument) {
 
-    %if timing_val > 0
+    %if valTiming > 0
     %<name>_id = Thread::gettid();
     %endif
 
       while(1) {
-      %if timing_val > 0
+      %if valTiming > 0
         Thread::signal_wait(0x1,osWaitForever);
       %endif
         %<LibBlockExecuteFcnCall(block,0)>
@@ -126,7 +129,7 @@
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
 
-    %if timing_val > 0
+    %if valTiming > 0
       %openfile declbuf
       osThreadId %<name>_id;
       %closefile declbuf

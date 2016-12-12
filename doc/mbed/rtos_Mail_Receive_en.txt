@@ -1,27 +1,18 @@
 Mail Receive
 ============
 
-short descr.
-
-
-Library
--------
-
-GPIO
-
 Description
 -----------
 
-.. image:: ../images/Counter_block.png
+Uses a rtos mailbox with the instance number 1...9. This has to be created by RTOS Mail Send.
+
+A new mail is announced at the new output port.
+Reading one mail more then available will suspend the reading thread until the next mail is received.
+
+Each mail can contain the specified number of elements with the specified type.  
+
+.. image:: ../images/block_RTOSMailReceive.png
    :scale: 50 %
-
-description
-
-.. warning::
-	warning
-
-.. attention::
-	attention
 
 Data Type Support
 -----------------
@@ -31,14 +22,133 @@ input/output port expects a *uint8* data type ...
 Parameters and Dialog Box
 -------------------------
 
-.. image:: ../images/Counter_mask.png
+.. image:: ../images/mask_RTOSMailReceive.png
 
-Param1
-......
 
-Param1 desc
+Mail Instance Number
+....................
 
-Param2
-......
+specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie send and receive blocks together.
 
-Param2 desc
+Number of input elements
+........................
+specifies the number of elements in each mail.
+
+Data type
+.........
+specifies the 
+- double
+- single
+- int8
+- uint8
+- int16
+- uint16
+- int32
+- uint32
+
+Example
+-------
+
+In the example two LEDs are blinking. LED1 blinking is the same like the Blinky example. LED2 is controled by an RtosTimer which calls the Function-Call subsystem every 500ms.
+
+.. image:: ../images/example_RTOS_Mail_Blinky.png
+   :scale: 50 %
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Thread variant
+..............
+
+In \ **ert_main**\ .cpp
+
+- an external reference
+
+.. code-block:: c++
+
+  extern void <instance name>_RTOS_Thread_thread(void const *);
+
+- and a Thread instance in the main function
+
+.. code-block:: c++
+
+  Thread <instance name>_blinky_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
+
+are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
+
+In \ **<Model Name>**\ .cpp an own function for the complete function-call subblock, the Thread callback function with an enclosing *while(1)* ,
+
+.. code-block:: c++
+
+  void <instance name>_RTOS_Thread_thread(void const *argument)
+  {
+    while (1) {
+      Thread::signal_wait(0x1,osWaitForever);
+      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
+      {
+      ...
+      }
+    }
+  }
+
+is created.
+
+.. warning::
+  The while loop runs with the maximal speed - no waits!
+
+RtosTimer+Thread variant
+........................
+
+In \ **ert_main**\ .cpp
+
+- two external references
+
+.. code-block:: c++
+
+  extern void <instance name>_RTOS_Thread_thread(void const *);
+  extern osThreadId <instance name>_Thread_id;
+
+- a functions
+
+.. code-block:: c++
+
+  void <instance name>_RTOS_Thread_callback(void const *param)
+  {
+    osSignalSet(<instance name>_RTOS_Thread_id, 0x1);
+  }
+
+- and Thread + RtosTimer instances in the main function
+
+.. code-block:: c++
+
+  RtosTimer <instance name>_RTOS_Thread_timer(<instance name>_RTOS_Thread_callback, <Timing>, NULL);
+  Thread <instance name>_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
+
+are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
+
+In \ **<Model Name>**\ .cpp
+
+a global instance
+
+.. code-block:: c++
+
+  osThreadId <instance name>_Thread_id;
+
+and an own function for the function-call subblock
+
+.. code-block:: c++
+
+  void <instance name>_RTOS_Thread_thread(void const *argument)
+  {
+    <instance name>_RTOS_Thread_id = Thread::gettid();
+    while (1) {
+      Thread::signal_wait(0x1,osWaitForever);
+      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
+      {
+      ...
+      }
+    }
+  }
+
+are created.

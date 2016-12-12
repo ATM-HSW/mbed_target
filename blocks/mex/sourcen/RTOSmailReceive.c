@@ -48,8 +48,8 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-	int_T numElements = 0;
-	DTypeId DataType = 0;
+  int_T numElements = 0;
+  DTypeId DataType = 0;
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 3);
 
@@ -88,27 +88,23 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 0))
     return;
-  
-	/*
+
+  /*
    * Set the number of output ports.
    */
   if (!ssSetNumOutputPorts(S, 2))
     return;
-		  
+
   numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 2)));
 
-  //printf("numElements: %d\n",numElements);
   DataType = (*(DTypeId*)(mxGetData(ssGetSFcnParam(S, 1))))-1;
-  //printf("DataType: %d\n",DataType);
 
   ssSetOutputPortDataType(S, 0, DataType);
   ssSetOutputPortWidth(S, 0, numElements);
-//   ssSetOutputPortDataType(S, 0, SS_UINT8);
-//   ssSetOutputPortWidth(S, 0, 1);
   ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 1);
-    
+
   ssSetOutputPortDataType(S, 1, SS_UINT8);
   ssSetOutputPortWidth(S, 1, 1);
   ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
@@ -150,7 +146,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 {
   ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
   ssSetOffsetTime(S, 0, FIXED_IN_MINOR_STEP_OFFSET);
-  
+
 
 #if defined(ssSetModelReferenceSampleTimeDefaultInheritance)
 
@@ -180,16 +176,10 @@ static void mdlSetWorkWidths(SimStruct *S)
     return;
 
   /*
-   * Register the run-time parameter 1
+   * Register the run-time parameters
    */
   ssRegDlgParamAsRunTimeParam(S, 0, 0, "MailNumber", DYNAMICALLY_TYPED);
-  /*
-   * Register the run-time parameter 2
-   */
   ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", DYNAMICALLY_TYPED);
-  /*
-   * Register the run-time parameter 3
-   */
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "NumElements", SS_UINT32);
 }
 

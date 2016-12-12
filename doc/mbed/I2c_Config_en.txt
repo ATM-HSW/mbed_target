@@ -23,7 +23,7 @@ Parameters Dialog Box
 I2C Port
 ........
 
-specifies an internal used I2C port number. It is used to generate unique instance names when more I2C busses are used in the same model and to tie config, read and write blocks together.
+specifies an internal I2C port number. It is used to generate unique instance names when more I2C busses are included in the same model and to tie config, read and write blocks together.
 
 
 Bus frequency

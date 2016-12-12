@@ -87,7 +87,7 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumInputPorts(S, 0))
     return;
 
-	/*
+  /*
    * Set the number of output ports.
    */
   if (!ssSetNumOutputPorts(S, 1))
@@ -110,7 +110,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of sample time.
    */
-  ssSetNumSampleTimes(S, 1);
+  ssSetNumSampleTimes(S, 0);
 
   /*
    * All options have the form SS_OPTION_<name> and are documented in
@@ -135,9 +135,9 @@ static void mdlInitializeSizes(SimStruct *S)
  */
 static void mdlInitializeSampleTimes(SimStruct *S)
 {
-  ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
+  ssSetSampleTime(S, 0, 0);
   ssSetOffsetTime(S, 0, FIXED_IN_MINOR_STEP_OFFSET);
-  
+
   ssSetCallSystemOutput(S,0);
 
 #if defined(ssSetModelReferenceSampleTimeDefaultInheritance)
@@ -168,20 +168,11 @@ static void mdlSetWorkWidths(SimStruct *S)
     return;
 
   /*
-   * Register the run-time parameter 1
+   * Register the run-time parameters
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "ThreadPriority", DYNAMICALLY_TYPED);
-  /*
-   * Register the run-time parameter 2
-   */
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "StackOption", DYNAMICALLY_TYPED);
-  /*
-   * Register the run-time parameter 3
-   */
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "ThreadPriority", SS_UINT8);
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "StackOption", SS_UINT8);
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "StackSize", SS_UINT32);
-  /*
-   * Register the run-time parameter 4
-   */
   ssRegDlgParamAsRunTimeParam(S, 3, 3, "Timing", SS_UINT32);
 }
 
