@@ -171,8 +171,8 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameters
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "MailNumber", DYNAMICALLY_TYPED);
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", DYNAMICALLY_TYPED);
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "MailNumber", SS_UINT8);
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", SS_UINT8);
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "NumElements", SS_UINT32);
   ssRegDlgParamAsRunTimeParam(S, 3, 3, "Depth", SS_UINT32);
 }

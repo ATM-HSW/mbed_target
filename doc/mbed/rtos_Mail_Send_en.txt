@@ -26,18 +26,20 @@ Parameters and Dialog Box
 
 Mail Instance Number
 ....................
-
-specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie send and receive blocks together.
-
+specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie Mail Send and mail Receive blocks together.
 
 Number of mails in queue
 ........................
+specifies the maximal numer of mails in the mail queue. Writing one more mail than this numer blocks the writing thread until at least one mail is read by the connected Mail Receive block.
 
 Number of input elements
 ........................
+specifies the number of data elements in each mail.
 
 Data type
 .........
+specifies the data type of each element in a mail. All data elements have the same type. The following types are possible:
+
 - double
 - single
 - int8
@@ -50,106 +52,50 @@ Data type
 Example
 -------
 
-In the example two LEDs are blinking. LED1 blinking is the same like the Blinky example. LED2 is controled by an RtosTimer which calls the Function-Call subsystem every 500ms.
+The example realises again a LED blinking. This time the generator creates periodically mails. The function call subblock runs in a Thread in an endless loop without wait. 
+But reading from an empty Mail queue blocks the thread until a message is received. When it received one, the contents, a single *uint8* value, is written to LED1. Then following Mail Receive blocks again until the next mail is generated.
 
 .. image:: ../images/example_RTOS_Mail_Blinky.png
    :scale: 50 %
 
 Code Generation
 ---------------
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance name of mbed class Mail is created by concatenating mail_box and the Mail Instance Number: mail_box<Mail Instance Number>
 
-Thread variant
-..............
+Global parts
+............
 
-In \ **ert_main**\ .cpp
-
-- an external reference
+creates a data type
 
 .. code-block:: c++
 
-  extern void <instance name>_RTOS_Thread_thread(void const *);
+  typedef <Data type> mail<Mail Instance Number>_T[<Number of input elements>];
 
-- and a Thread instance in the main function
-
-.. code-block:: c++
-
-  Thread <instance name>_blinky_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
-
-are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
-
-In \ **<Model Name>**\ .cpp an own function for the complete function-call subblock, the Thread callback function with an enclosing *while(1)* ,
+and globaly a variable and an instance
 
 .. code-block:: c++
 
-  void <instance name>_RTOS_Thread_thread(void const *argument)
-  {
-    while (1) {
-      Thread::signal_wait(0x1,osWaitForever);
-      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
-      {
-      ...
-      }
-    }
-  }
+  const int mail<Mail Instance Number>_len = sizeof(<Data type>)*<Number of input elements>;
+  Mail<mail<Mail Instance Number>_T,<Number of input elements>> mail_box<Mail Instance Number>;
 
-is created.
 
-.. warning::
-  The while loop runs with the maximal speed - no waits!
+in \ **<Model Name>**\ .cpp.
 
-RtosTimer+Thread variant
-........................
+Step Function
+.............
 
-In \ **ert_main**\ .cpp
-
-- two external references
+creates three lines in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  extern void <instance name>_RTOS_Thread_thread(void const *);
-  extern osThreadId <instance name>_Thread_id;
+  mail<Mail Instance Number>_T *mail = mail_box<Mail Instance Number>.alloc();
+  memcpy(mail, <pointer to input port data vector>, mail<Mail Instance Number>_len);
+  mail_box<Mail Instance Number>.put(mail);
 
-- a functions
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_callback(void const *param)
-  {
-    osSignalSet(<instance name>_RTOS_Thread_id, 0x1);
-  }
-
-- and Thread + RtosTimer instances in the main function
+Here is a concrete example with Mail Instance Number = 1
 
 .. code-block:: c++
 
-  RtosTimer <instance name>_RTOS_Thread_timer(<instance name>_RTOS_Thread_callback, <Timing>, NULL);
-  Thread <instance name>_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
-
-are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
-
-In \ **<Model Name>**\ .cpp
-
-a global instance
-
-.. code-block:: c++
-
-  osThreadId <instance name>_Thread_id;
-
-and an own function for the function-call subblock
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_thread(void const *argument)
-  {
-    <instance name>_RTOS_Thread_id = Thread::gettid();
-    while (1) {
-      Thread::signal_wait(0x1,osWaitForever);
-      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
-      {
-      ...
-      }
-    }
-  }
-
-are created.
+  mail1_T *mail = mail_box1.alloc();
+  memcpy(mail, &rtb_DataTypeConversion, mail1_len);
+  mail_box1.put(mail);

@@ -21,60 +21,28 @@
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
 
-    %assign MailNumber_val = CAST("Number",LibBlockParameterValue(MailNumber, 0))
-    %assign DataType_val = LibBlockParameterValue(DataType, 0)
-    %assign NumElements_val = CAST("Number",LibBlockParameterValue(NumElements, 0))
+    %assign valMailNumber = CAST("Number",LibBlockParameterValue(MailNumber, 0))
+    %assign valTimeout = LibBlockParameterValue(Timeout, 0)
 
-    %switch DataType_val
-      %case 1
-        %assign type = "real_T"
-        %assign len = 8*NumElements_val
-        %break
-      %case 2
-        %assign type = "real32_T"
-        %assign len = 4*NumElements_val
-        %break
-      %case 3
-        %assign type = "int8_T"
-        %assign len = 1*NumElements_val
-        %break
-      %case 4
-        %assign type = "uint8_T"
-        %assign len = 1*NumElements_val
-        %break
-      %case 5
-        %assign type = "int16_T"
-        %assign len = 2*NumElements_val
-        %break
-      %case 6
-        %assign type = "uint16_T"
-        %assign len = 2*NumElements_val
-        %break
-      %case 7
-        %assign type = "int32_T"
-        %assign len = 4*NumElements_val
-        %break
-      %case 8
-        %assign type = "uint32_T"
-        %assign len = 4*NumElements_val
-        %break
-    %endswitch
-  
     %assign y1_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
     %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
 
-    osEvent evt%<MailNumber_val> = mail_box%<MailNumber_val>.get(0);
-    if(evt%<MailNumber_val>.status == osEventMail)
+    %if valTimeout == 4294967295
+      osEvent evt%<valMailNumber> = mail_box%<valMailNumber>.get(osWaitForever);
+    %else
+      osEvent evt%<valMailNumber> = mail_box%<valMailNumber>.get(%<valTimeout>);
+    %endif
+    if(evt%<valMailNumber>.status == osEventMail)
     {
-      mail%<MailNumber_val>_T *mail%<MailNumber_val>_ptr = (mail%<MailNumber_val>_T*)evt%<MailNumber_val>.value.p;
-      memcpy(%<y1_ptr>, mail%<MailNumber_val>_ptr, %<len>);
-      mail_box%<MailNumber_val>.free(mail%<MailNumber_val>_ptr);
+      mail%<valMailNumber>_T *mail%<valMailNumber>_ptr = (mail%<valMailNumber>_T*)evt%<valMailNumber>.value.p;
+      memcpy(%<y1_ptr>, mail%<valMailNumber>_ptr, mail%<valMailNumber>_len);
+      mail_box%<valMailNumber>.free(mail%<valMailNumber>_ptr);
       %<y2_val> = 1;
     }
     else
     {
       %<y2_val> = 0;
     }
-  %endif
 
+  %endif
 %endfunction

@@ -51,7 +51,7 @@ static void mdlInitializeSizes(SimStruct *S)
   int_T numElements = 0;
   DTypeId DataType = 0;
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 4);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -77,6 +77,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -172,15 +173,16 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 3))
+  if (!ssSetNumRunTimeParams(S, 4))
     return;
 
   /*
    * Register the run-time parameters
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "MailNumber", DYNAMICALLY_TYPED);
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", DYNAMICALLY_TYPED);
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "MailNumber", SS_UINT8);
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", SS_UINT8);
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "NumElements", SS_UINT32);
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "Timeout", SS_UINT32);
 }
 
 #endif

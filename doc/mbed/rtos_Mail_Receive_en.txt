@@ -7,9 +7,12 @@ Description
 Uses a rtos mailbox with the instance number 1...9. This has to be created by RTOS Mail Send.
 
 A new mail is announced at the new output port.
-Reading one mail more then available will suspend the reading thread until the next mail is received.
+Reading one mail more then available will suspend the reading thread until the next mail is received or a timeout after the specified time is generated.
 
-Each mail can contain the specified number of elements with the specified type.  
+A timeout value of 4294967295 (osWaitForever) means waiting forever.
+With a timeout smaller than 4294967295 the specified number of milliseconds is waited.
+
+Each mail can contain the specified number of elements with the specified data type.
 
 .. image:: ../images/block_RTOSMailReceive.png
    :scale: 50 %
@@ -17,7 +20,12 @@ Each mail can contain the specified number of elements with the specified type.
 Data Type Support
 -----------------
 
-input/output port expects a *uint8* data type ...
+The output port *d* writes values with configured data type. Single or vector values are written, depending on the configured Number of output elements parameter.
+
+The output port *new* writes an *uint8* value of 1 when a new mail is received. Otherwise a 0 is written.
+
+.. warning::
+  You must use the same number of elements per mail and data type as configured in the connected Mail Send block.
 
 Parameters and Dialog Box
 -------------------------
@@ -27,16 +35,20 @@ Parameters and Dialog Box
 
 Mail Instance Number
 ....................
+specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie Mail Send and mail Receive blocks together.
 
-specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie send and receive blocks together.
+Timeout
+.......
+specifies the timeout in milliseconds. A value of 4294967295 (osWaitForever) means waiting forever.
 
 Number of input elements
 ........................
-specifies the number of elements in each mail.
+pecifies the number of data elements in each mail.
 
 Data type
 .........
-specifies the 
+specifies the data type of each element in a mail. All data elements have the same type. The following types are possible:
+
 - double
 - single
 - int8
@@ -49,106 +61,47 @@ specifies the
 Example
 -------
 
-In the example two LEDs are blinking. LED1 blinking is the same like the Blinky example. LED2 is controled by an RtosTimer which calls the Function-Call subsystem every 500ms.
+The example realises again a LED blinking. This time the generator creates periodically mails. The function call subblock runs in a Thread in an endless loop without wait. 
+But reading from an empty Mail queue blocks the thread until a message is received. When it received one, the contents, a single *uint8* value, is written to LED1. The following mail.get() in Mail Receive block blocks again until the next mail is generated.
 
 .. image:: ../images/example_RTOS_Mail_Blinky.png
    :scale: 50 %
 
 Code Generation
 ---------------
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance name of mbed class Mail is created by concatenating mail_box and the Mail Instance Number: mail_box<Mail Instance Number>
 
-Thread variant
-..............
 
-In \ **ert_main**\ .cpp
+Step Function
+.............
 
-- an external reference
-
-.. code-block:: c++
-
-  extern void <instance name>_RTOS_Thread_thread(void const *);
-
-- and a Thread instance in the main function
+creates this block in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  Thread <instance name>_blinky_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
-
-are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
-
-In \ **<Model Name>**\ .cpp an own function for the complete function-call subblock, the Thread callback function with an enclosing *while(1)* ,
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_thread(void const *argument)
+  osEvent evt<Mail Instance Number> = mail_box<Mail Instance Number>.get(<Timeout>);
+  if(evt<Mail Instance Number>.status == osEventMail)
   {
-    while (1) {
-      Thread::signal_wait(0x1,osWaitForever);
-      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
-      {
-      ...
-      }
-    }
+    mail<Mail Instance Number>_T *mail<Mail Instance Number>_ptr = (mail<Mail Instance Number>_T*)evt<Mail Instance Number>.value.p;
+    memcpy(<pointer to output port d data vector>, mail<Mail Instance Number>_ptr, mail<Mail Instance Number>_len);
+    mail_box<Mail Instance Number>.free(mail<Mail Instance Number>_ptr);
+    <output port new> = 1;
+  }
+  else
+  {
+    <output port new> = 0;
   }
 
-is created.
-
-.. warning::
-  The while loop runs with the maximal speed - no waits!
-
-RtosTimer+Thread variant
-........................
-
-In \ **ert_main**\ .cpp
-
-- two external references
+Here is a concrete example with Mail Instance Number = 1 and Timeout = 4294967295 (osWaitForever)
 
 .. code-block:: c++
 
-  extern void <instance name>_RTOS_Thread_thread(void const *);
-  extern osThreadId <instance name>_Thread_id;
-
-- a functions
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_callback(void const *param)
-  {
-    osSignalSet(<instance name>_RTOS_Thread_id, 0x1);
+  osEvent evt1 = mail_box1.get(osWaitForever);
+  if (evt1.status == osEventMail) {
+    mail1_T *mail1_ptr = (mail1_T*)evt1.value.p;
+    memcpy(&rtb_RTOSMailReceive_o1, mail1_ptr, mail1_len);
+    mail_box1.free(mail1_ptr);
+    rtb_RTOSMailReceive_o2 = 1;
+  } else {
+    rtb_RTOSMailReceive_o2 = 0;
   }
-
-- and Thread + RtosTimer instances in the main function
-
-.. code-block:: c++
-
-  RtosTimer <instance name>_RTOS_Thread_timer(<instance name>_RTOS_Thread_callback, <Timing>, NULL);
-  Thread <instance name>_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
-
-are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
-
-In \ **<Model Name>**\ .cpp
-
-a global instance
-
-.. code-block:: c++
-
-  osThreadId <instance name>_Thread_id;
-
-and an own function for the function-call subblock
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_thread(void const *argument)
-  {
-    <instance name>_RTOS_Thread_id = Thread::gettid();
-    while (1) {
-      Thread::signal_wait(0x1,osWaitForever);
-      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
-      {
-      ...
-      }
-    }
-  }
-
-are created.

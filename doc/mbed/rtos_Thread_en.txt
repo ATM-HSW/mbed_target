@@ -22,8 +22,6 @@ When Timing is greater then 0:
 .. image:: ../images/block_RTOSThread.png
    :scale: 50 %
 
- 
-
 .. image:: ../images/block_RTOSTimer.png
    :scale: 50 %
 
@@ -113,7 +111,7 @@ In \ **<Model Name>**\ .cpp an own function for the complete function-call subbl
 is created.
 
 .. warning::
-  The while loop runs with the maximal speed - no waits!
+  The while loop runs with the maximal speed - no waits! Please uses mechanism like blocking read or write from Mail queue class.
 
 
 
