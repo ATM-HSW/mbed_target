@@ -23,7 +23,7 @@
     %assign valMailNumber = CAST("Number",LibBlockParameterValue(MailNumber, 0))
     %assign valDataType = LibBlockParameterValue(DataType, 0)
     %assign valNumElements = CAST("Number",LibBlockParameterValue(NumElements, 0))
-    %assign Depth_val = CAST("Number",LibBlockParameterValue(Depth, 0))
+    %assign valDepth = CAST("Number",LibBlockParameterValue(Depth, 0))
 
     %switch valDataType
       %case 1
@@ -68,16 +68,14 @@
 
     %<LibSetSourceFileSection(srcFile, "IntrinsicTypes", declbuf)>
 
-
     %openfile declbuf
     const int mail%<valMailNumber>_len = %<len>;
-    Mail<mail%<valMailNumber>_T,%<Depth_val>> mail_box%<valMailNumber>;
+    Mail<mail%<valMailNumber>_T,%<valDepth>> mail_box%<valMailNumber>;
     %closefile declbuf
 
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
   %endif
-
-
 %endfunction
 
 
@@ -86,12 +84,26 @@
   %if !SLibCodeGenForSim()
 
     %assign valMailNumber = CAST("Number",LibBlockParameterValue(MailNumber, 0))
+    %assign valTimeout = LibBlockParameterValue(Timeout, 0)
+    %assign valEnableError = LibBlockParameterValue(EnableError, 0)
 
     %assign u_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+    %if valEnableError == 1
+      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+    %endif
 
-    mail%<valMailNumber>_T *mail = mail_box%<valMailNumber>.alloc();
-    memcpy(mail, %<u_ptr>, mail%<valMailNumber>_len);
-    mail_box%<valMailNumber>.put(mail);
+    mail%<valMailNumber>_T *mail = mail_box%<valMailNumber>.alloc(%<valTimeout>);
+    if (mail != NULL) {
+      memcpy(mail, %<u_ptr>, mail%<valMailNumber>_len);
+      mail_box%<valMailNumber>.put(mail);
+      %if valEnableError == 1
+      %<y1_val> = 0;
+      %endif
+    }
+    %if valEnableError == 1
+    else
+      %<y1_val> = 1;
+    %endif
+
   %endif
-
 %endfunction

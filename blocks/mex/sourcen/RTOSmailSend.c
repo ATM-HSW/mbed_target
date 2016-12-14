@@ -48,8 +48,10 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   int_T numElements = 0;
+  int errorOutputEnable = 0;
+
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 6);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -76,6 +78,8 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
   ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -99,11 +103,24 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetInputPortRequiredContiguous(S, 0, 1);
 
+  errorOutputEnable = mxGetScalar(ssGetSFcnParam(S,5));
+
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 0))
-    return;
+  if(errorOutputEnable) {
+    if (!ssSetNumOutputPorts(S, 1))
+      return;
+    ssSetOutputPortDataType(S, 0, SS_BOOLEAN);
+    ssSetOutputPortWidth(S, 0, 1);
+    ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 0, 1);
+  }
+  else {
+    if (!ssSetNumOutputPorts(S, 0))
+      return;
+  }
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -165,7 +182,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 4))
+  if (!ssSetNumRunTimeParams(S, 6))
     return;
 
   /*
@@ -175,6 +192,8 @@ static void mdlSetWorkWidths(SimStruct *S)
   ssRegDlgParamAsRunTimeParam(S, 1, 1, "DataType", SS_UINT8);
   ssRegDlgParamAsRunTimeParam(S, 2, 2, "NumElements", SS_UINT32);
   ssRegDlgParamAsRunTimeParam(S, 3, 3, "Depth", SS_UINT32);
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "Timeout", SS_UINT32);
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "EnableError", SS_UINT8);
 }
 
 #endif

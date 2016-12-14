@@ -4,7 +4,7 @@ Mail Receive
 Description
 -----------
 
-Uses a rtos mailbox with the instance number 1...9. This has to be created by RTOS Mail Send.
+Uses a mailbox with the instance number 1...9. The mailbox has to be created by RTOS Mail Send.
 
 A new mail is announced at the new output port.
 Reading one mail more then available will suspend the reading thread until the next mail is received or a timeout after the specified time is generated.
@@ -33,17 +33,17 @@ Parameters and Dialog Box
 .. image:: ../images/mask_RTOSMailReceive.png
 
 
-Mail Instance Number
-....................
+Mailbox number
+..............
 specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie Mail Send and mail Receive blocks together.
 
 Timeout
 .......
 specifies the timeout in milliseconds. A value of 4294967295 (osWaitForever) means waiting forever.
 
-Number of input elements
-........................
-pecifies the number of data elements in each mail.
+Mail size
+.........
+specifies the number of data elements in each mail.
 
 Data type
 .........
@@ -58,19 +58,30 @@ specifies the data type of each element in a mail. All data elements have the sa
 - int32
 - uint32
 
-Example
--------
+Example 1
+---------
 
-The example realises again a LED blinking. This time the generator creates periodically mails. The function call subblock runs in a Thread in an endless loop without wait. 
+The example realises again a LED blinking. This time the generator creates periodically mails. The function-call subsystem runs in a Thread in an endless loop without wait. 
 But reading from an empty Mail queue blocks the thread until a message is received. When it received one, the contents, a single *uint8* value, is written to LED1. The following mail.get() in Mail Receive block blocks again until the next mail is generated.
 
 .. image:: ../images/example_RTOS_Mail_Blinky.png
    :scale: 50 %
 
+Example 2
+---------
+
+The example realises again a LED blinking. The generator creates again periodically mails.
+The function-call subsystem runs in a Thread in an endless loop without wait.
+The UserButton enables/disables the enabled subsystem in the function-call subsystem.
+The content of the enabled subsystem is identical to the function-call subsystem in example 1.
+In this example the reading from the mail queue can be stoped. Resulting in a full mail queue after a short moment, resulting in an enabled error led (LED2).
+
+.. image:: ../images/example_RTOS_Mail_blocking_Blinky.png
+   :scale: 50 %
+
 Code Generation
 ---------------
-Instance name of mbed class Mail is created by concatenating mail_box and the Mail Instance Number: mail_box<Mail Instance Number>
-
+Instance name of mbed class Mail is created by concatenating mail_box and the Mailbox number: mail_box<Mailbox number>
 
 Step Function
 .............
@@ -79,12 +90,12 @@ creates this block in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  osEvent evt<Mail Instance Number> = mail_box<Mail Instance Number>.get(<Timeout>);
-  if(evt<Mail Instance Number>.status == osEventMail)
+  osEvent evt<Mailbox number> = mail_box<Mailbox number>.get(<Timeout>);
+  if(evt<Mailbox number>.status == osEventMail)
   {
-    mail<Mail Instance Number>_T *mail<Mail Instance Number>_ptr = (mail<Mail Instance Number>_T*)evt<Mail Instance Number>.value.p;
-    memcpy(<pointer to output port d data vector>, mail<Mail Instance Number>_ptr, mail<Mail Instance Number>_len);
-    mail_box<Mail Instance Number>.free(mail<Mail Instance Number>_ptr);
+    mail<Mailbox number>_T *mail<Mailbox number>_ptr = (mail<Mailbox number>_T*)evt<Mailbox number>.value.p;
+    memcpy(<pointer to output port d data vector>, mail<Mailbox number>_ptr, mail<Mailbox number>_len);
+    mail_box<Mailbox number>.free(mail<Mailbox number>_ptr);
     <output port new> = 1;
   }
   else
@@ -92,7 +103,7 @@ creates this block in void **<Model Name>**\ _step(void) function
     <output port new> = 0;
   }
 
-Here is a concrete example with Mail Instance Number = 1 and Timeout = 4294967295 (osWaitForever)
+Here is a concrete example with Mailbox number = 1 and Timeout = 4294967295 (osWaitForever)
 
 .. code-block:: c++
 
