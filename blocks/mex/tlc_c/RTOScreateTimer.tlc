@@ -1,10 +1,10 @@
-%% File : RTOScreateThread.tlc
+%% File : RTOScreateTimer.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2015-16 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements RTOScreateThread "C"
+%implements RTOScreateTimer "C"
 
 %include "block_common_includes.tlc"
 
@@ -67,7 +67,7 @@
     %openfile declbuf
     /* %<Type> block: %<Name> */
     extern void %<name>_thread(void const *);
-    
+    extern osThreadId %<name>_id;
     %closefile declbuf
 
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_glob_decl")>
@@ -75,24 +75,51 @@
 
     %openfile declbuf
     /* %<Type> block: %<Name> */
+    void %<name>_callback(void const *param)
+    {
+      osSignalSet(%<name>_id, 0x1);
+    }
+    %closefile declbuf
+    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_fcn_decl")>
+    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_fcn_decl",declbuf)>
+
+    %openfile declbuf
+    /* %<Type> block: %<Name> */
     Thread %<name>(%<name>_thread, NULL, %<nThreadPriority>, %<nStackSize>);
+    RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
     %closefile declbuf
 
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
 
+    %openfile buff
+    /* %<Type> block: %<Name> */    
+    %<name>_timer.start(%<valTiming>);
+    %closefile buff
+
+    %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
+    %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
+
     %openfile declbuf
     /* %<Type> block: %<Name> */
     void %<name>_thread(void const *argument) {
+      %<name>_id = Thread::gettid();
+
       while(1) {
+        Thread::signal_wait(0x1,osWaitForever);
         %<LibBlockExecuteFcnCall(block,0)>
-        Thread::wait(%<valTiming>);
       }
     }
     %closefile declbuf
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+    %openfile declbuf
+    osThreadId %<name>_id;
+    %closefile declbuf
+
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
   %endif
 %endfunction

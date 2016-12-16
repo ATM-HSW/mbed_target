@@ -19,7 +19,7 @@ When the allocation of a mail is unsuccessful, e.g. because of a timeout, the er
 Data Type Support
 -----------------
 
-The input port expects values with configured data type. Single or vector values are expected, depending on the configured Number of input elements parameter.
+The input port expects values with configured data type. Single or vector values are expected, depending on the configured Mail size.
 
 Parameters and Dialog Box
 -------------------------
@@ -28,7 +28,7 @@ Parameters and Dialog Box
 
 Mailbox number
 ..............
-specifies an internal mail box number. It is used to generate unique instance names when more mail boxes are included in the same model and to tie Mail Send and mail Receive blocks together.
+specifies an internal mail box number. It is used to generate a unique instance name to allow several mail boxes in a model and to tie Mail Send and Mail Receive blocks together.
 
 Timeout
 .......
@@ -36,7 +36,7 @@ specifies the timeout in milliseconds. A value of 0 means no waiting.
 
 Queue length
 ............
-specifies the maximal number of mails in the mail queue. Writing one mail more than this numer blocks the writing thread until at least one mail is read by the connected Mail Receive block or a timeout occurs.
+specifies the maximal number of mails in the mail queue. Writing one mail more than this number blocks the writing thread until at least one mail is read by the connected Mail Receive block or a timeout occurs.
 
 Mail size
 .........
@@ -44,7 +44,7 @@ specifies the number of data elements in each mail.
 
 Data type
 .........
-specifies the data type of each element in a mail. All data elements have the same type. The following types are possible:
+specifies the data type of the elements in a mail. All data elements have the same type. The following types are possible:
 
 - double
 - single
@@ -58,7 +58,7 @@ specifies the data type of each element in a mail. All data elements have the sa
 Example 1
 ---------
 
-The example realises again a LED blinking. This time the generator creates periodically mails. The function-call subsystem runs in a Thread in an endless loop without wait. 
+The example realises a LED blinking with sending the on/off information over mails. The generator creates periodically these mails. The function-call subsystem runs in a Thread in an endless loop without wait. 
 But reading from an empty Mail queue blocks the thread until a message is received. When it received one, the contents, a single *uint8* value, is written to LED1. The following mail.get() in Mail Receive block blocks again until the next mail is generated.
 
 .. image:: ../images/example_RTOS_Mail_Blinky.png
@@ -67,11 +67,12 @@ But reading from an empty Mail queue blocks the thread until a message is receiv
 Example 2
 ---------
 
-The example realises again a LED blinking. The generator creates again periodically mails.
+The example realises again a LED blinking. The generator creates again periodically mails with the on/off information.
 The function-call subsystem runs in a Thread in an endless loop without wait.
 The UserButton enables/disables the enabled subsystem in the function-call subsystem.
 The content of the enabled subsystem is identical to the function-call subsystem in example 1.
 In this example the reading from the mail queue can be stoped. Resulting in a full mail queue after a short moment, resulting in an enabled error led (LED2).
+When releasing the UserButton the mail queue is emptied - blinking starts again - and the error led is disabled.
 
 .. image:: ../images/example_RTOS_Mail_blocking_Blinky.png
    :scale: 50 %
@@ -89,7 +90,7 @@ creates a data type
 
   typedef <Data type> mail<Mailbox number>_T[<Mail size>];
 
-and globaly a variable and an instance
+and globaly a variable and a Mail instance
 
 .. code-block:: c++
 

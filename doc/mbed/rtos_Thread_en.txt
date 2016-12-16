@@ -4,25 +4,13 @@ Thread
 Description
 -----------
 
-Creates a RTOS thread or a combination of a thread and a RTOS timer with the specified priority. 
+Creates a RTOS thread with the specified priority. 
 
 Stack size can be DEFAULT_STACK_SIZE or have an individual value. DEFAULT_STACK_SIZE is compiler and target specific.
 
-When Timing is equal 0:
-
-- a Thread is created
-- the function call subsystem is called in an endless loop without wait calls.
-
-When Timing is greater then 0:
-
-- a Thread and RtosTimer are created
-- the function call subsystem is called in the endless loop of the Thread but stops after each call because of an Thread::signal_wait
-- the periodicity is realised by the RtosTimer callback with an osSignalSet resulting in an equidistant behaviour
+The function call subsystem is called in an endless loop without wait calls when Timing == 0 or a Thread:wait as last method call at the end of the endless loop.
 
 .. image:: ../images/block_RTOSThread.png
-   :scale: 50 %
-
-.. image:: ../images/block_RTOSTimer.png
    :scale: 50 %
 
 Data Type Support
@@ -57,25 +45,22 @@ specifies the value of the user defined stack size of this thread.
 
 Timing (ms):
 ............
-When Timing is equal 0 a Thread is created. The behaviour is non-equidistant.
-
-When Timing is greater then 0 a Thread and a RtosTimer are created. Through the rtos event system the behaviour is equidistant.
+a Thread::Wait with the specified waiting time in ms is called as the last method in the endless while. Please be aware that the behaviour is non-equidistant.
 
 Example
 -------
 
-In the example two LEDs are blinking. LED1 blinking is the same like the Blinky example. LED2 is controled by an RtosTimer which calls the Function-Call subsystem every 500ms.
+In the example two LEDs are blinking. LED1 is blinking in the same way like in the Blinky example. LED2 is controled by a Thread which executions the function-call subsystem in an endless loop with a Thread::wait call at the loop end.
 
-.. image:: ../images/example_RTOS_Blinky.png
+The periode is 500ms+execution time of the subsystem.
+
+.. image:: ../images/example_RTOS_Thread_Blinky.png
    :scale: 50 %
 
 
 Code Generation
 ---------------
 Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
-
-Thread variant
-..............
 
 In \ **ert_main**\ .cpp
 
@@ -85,25 +70,25 @@ In \ **ert_main**\ .cpp
 
   extern void <instance name>_RTOS_Thread_thread(void const *);
 
-- and a Thread instance in the main function
+- and a Thread instance creation in the main function
 
 .. code-block:: c++
 
   Thread <instance name>_blinky_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
 
-are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
+are created. The callback function <instance name>_RTOS_Thread_thread is generated in \ **<Model Name>**\ .cpp.
 
-In \ **<Model Name>**\ .cpp an own function for the complete function-call subblock, the Thread callback function with an enclosing *while(1)* ,
+In \ **<Model Name>**\ .cpp a separate function for the whole function-call subblock, the Thread callback function with an enclosing *while(1)*,
 
 .. code-block:: c++
 
   void <instance name>_RTOS_Thread_thread(void const *argument)
   {
     while (1) {
-      Thread::signal_wait(0x1,osWaitForever);
       // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
       {
       ...
+      Thread::wait(<Timing>);
       }
     }
   }
@@ -111,62 +96,4 @@ In \ **<Model Name>**\ .cpp an own function for the complete function-call subbl
 is created.
 
 .. warning::
-  The while loop runs with the maximal speed - no waits! Please uses mechanism like blocking read or write from Mail queue class.
-
-
-
-RtosTimer+Thread variant
-........................
-
-In \ **ert_main**\ .cpp
-
-- two external references
-
-.. code-block:: c++
-
-  extern void <instance name>_RTOS_Thread_thread(void const *);
-  extern osThreadId <instance name>_Thread_id;
-
-- a functions
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_callback(void const *param)
-  {
-    osSignalSet(<instance name>_RTOS_Thread_id, 0x1);
-  }
-
-- and Thread + RtosTimer instances in the main function
-
-.. code-block:: c++
-
-  RtosTimer <instance name>_RTOS_Thread_timer(<instance name>_RTOS_Thread_callback, <Timing>, NULL);
-  Thread <instance name>_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
-
-are created. The callback function <instance name>_RTOS_Thread_thread can be found in \ **<Model Name>**\ .cpp.
-
-In \ **<Model Name>**\ .cpp
-
-a global instance
-
-.. code-block:: c++
-
-  osThreadId <instance name>_Thread_id;
-
-and an own function for the function-call subblock
-
-.. code-block:: c++
-
-  void <instance name>_RTOS_Thread_thread(void const *argument)
-  {
-    <instance name>_RTOS_Thread_id = Thread::gettid();
-    while (1) {
-      Thread::signal_wait(0x1,osWaitForever);
-      // Output and update for function-call system: '<Root>/FunctionCall Subsystem' 
-      {
-      ...
-      }
-    }
-  }
-
-are created.
+  With Timing = 0 the while loop runs with the maximal speed - no waits! Please use mechanisms like blocking read or write from Mail queue class or a wait block.

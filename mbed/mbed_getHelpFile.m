@@ -28,8 +28,10 @@ function createStruct()
   addStruct('PWMOutput', 'mbed/gpio_PWM_Output_en');
   addStruct('Servo', 'mbed/gpio_Servo_Output_en');
   addStruct('RTOScreateThread', 'mbed/rtos_Thread_en');
+  addStruct('RTOScreateTimer', 'mbed/rtos_Timer_en');
   addStruct('RTOSmailSend', 'mbed/rtos_Mail_Send_en');
   addStruct('RTOSmailReceive', 'mbed/rtos_Mail_Receive_en');
+  addStruct('RTOSThreadwait', 'mbed/rtos_Threadwait_en');
   addStruct('SerialUARTConfig', 'mbed/serial_UART_Config_en');
   addStruct('SerialUARTConfigUSB', 'mbed/serial_UART_ConfigUSB_en');
   addStruct('SerialUARTWriteBlock', 'mbed/serial_UART_Write_Block_en');
@@ -40,7 +42,6 @@ function createStruct()
   addStruct('I2CConfig', 'mbed/I2c_Config_en');
   addStruct('I2CWrite', 'mbed/I2c_Write_en');
   addStruct('I2CRead', 'mbed/I2c_Read_en');
-%   addStruct('', '');
 %   addStruct('', '');
 %   addStruct('', '');
 %   addStruct('', '');

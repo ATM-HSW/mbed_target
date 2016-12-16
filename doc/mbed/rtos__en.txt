@@ -7,5 +7,7 @@ Contents:
    :maxdepth: 1
 
    rtos_Thread_en
+   rtos_Threadwait_en
+   rtos_Timer_en
    rtos_Mail_Send_en
    rtos_Mail_Receive_en

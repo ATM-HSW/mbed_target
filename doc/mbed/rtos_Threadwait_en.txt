@@ -1,0 +1,41 @@
+Thread::wait
+============
+
+Description
+-----------
+
+Calls RTOS Thread::wait method with the specified timeout. 
+
+.. image:: ../images/block_RTOSThreadwait.png
+   :scale: 50 %
+
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/mask_RTOSThreadwait.png
+
+Timing (ms):
+""""""""""""
+a Thread::Wait with the specified waiting time in ms is called. The position of the method within the loop depends on the block priority. Please see the Mathworks documentation how to adjust it.
+
+Example
+-------
+
+In the example another LED blinking is shown. LED1 is enabled/disabled within the thread endless loop. In variant 1 of the function-call subsystem, the Thread:wait is executed as the first method within the endless loop because of highest priority (0). In variant 2 the Thread:wait ist executed as the last method within the loop (priority 3, execution order 4).
+
+.. image:: ../images/example_RTOS_Threadwait_Blinky.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Thread specific Function
+""""""""""""""""""""""""
+
+creates a line in <thread instance name>_RTOS_Thread_thread(void const \*argument) function
+
+.. code-block:: c++
+
+  Thread::wait(<Timing>);

@@ -1,0 +1,35 @@
+%% File : RTOSThreadwait.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
+
+%implements RTOSThreadwait "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ========================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign valWaittime = LibBlockParameterValue(Waittime, 0)
+
+    Thread::wait(%<valWaittime>);
+
+  %endif
+%endfunction
