@@ -4,7 +4,7 @@ I2C Configuration
 Description
 -----------
 
-This block sets up the I2C connection on the mbed board. 
+This block sets up a I2C connection on the mbed board. 
 
 You must have one of these blocks in any model that ues I2C blocks.
 
@@ -23,8 +23,7 @@ Parameters Dialog Box
 I2C Port
 ........
 
-specifies an internal I2C port number. It is used to generate unique instance names when more I2C busses are included in the same model and to tie config, read and write blocks together.
-
+Specifies an internal I2C port number. It is used to generate unique instance names when more I2C busses are included in the same model and to tie config, read and write blocks together.
 
 Bus frequency
 .............
@@ -55,7 +54,7 @@ The user button is written to bit 3 of the PCF8574. Unused bits and both input b
 Code Generation
 ---------------
 
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<I2C Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance names of mbed I2C classes are created by concatenating spi and \ **<I2C Port>**\ .
 
 Global parts
 ............
@@ -64,7 +63,7 @@ creates a global instance
 
 .. code-block:: c++
 
-  I2C <instance name>(P<Port Name SDA>_<Pin Number SDA>, P<Port Name SCL>_<Pin Number SCL>);
+  I2C i2c<I2C Port>(P<Port Name SDA>_<Pin Number SDA>, P<Port Name SCL>_<Pin Number SCL>);
 
 Initialization Function
 .......................
@@ -73,6 +72,6 @@ and one line in void **<Model Name>**\ _initialize(void) function
 
 .. code-block:: c++
 
-  <instance name>.frequency(<Bus frequency>);
+  i2c<I2C Port>.frequency(<Bus frequency>);
 
 in \ **<Model Name>**\ .cpp.

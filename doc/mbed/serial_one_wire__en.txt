@@ -6,5 +6,5 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   one_wire_config_en
-   one_wire_search_rom_en
+   serial_one_wire_config_en
+   serial_one_wire_search_rom_en

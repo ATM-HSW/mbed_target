@@ -19,25 +19,34 @@
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
 
-    %assign nMOSIPortname  = LibBlockParameterValue(MOSIPortname,0)
+    %assign nMOSIPortName  = LibBlockParameterValue(MOSIPortName,0)
     %assign nMOSIPinNumber = LibBlockParameterValue(MOSIPinNumber,0)
-    %assign mosi_name      = "P" + FEVAL("char", nMOSIPortname+64) + "_" + FEVAL("int2str", nMOSIPinNumber-1)
+    %if nMOSIPortName == -1
+      %assign mosi_name    = "NC"
+    %else
+      %assign mosi_name    = "P" + FEVAL("char", nMOSIPortName+65) + "_" + FEVAL("int2str", nMOSIPinNumber-1)
+    %endif
 
-    %assign nMISOPortname  = LibBlockParameterValue(MISOPortname,0)
+    %assign nMISOPortName  = LibBlockParameterValue(MISOPortName,0)
     %assign nMISOPinNumber = LibBlockParameterValue(MISOPinNumber,0)
-    %assign miso_name      = "P" + FEVAL("char", nMISOPortname+64) + "_" + FEVAL("int2str", nMISOPinNumber-1)
+    %if nMISOPortName == -1
+      %assign miso_name    = "NC"
+    %else
+      %assign miso_name    = "P" + FEVAL("char", nMISOPortName+65) + "_" + FEVAL("int2str", nMISOPinNumber-1)
+    %endif
 
-    %assign nSCKLPortname  = LibBlockParameterValue(SCKLPortname,0)
+    %assign nSCKLPortName  = LibBlockParameterValue(SCKLPortName,0)
     %assign nSCKLPinNumber = LibBlockParameterValue(SCKLPinNumber,0)
-    %assign sck_name       = "P" + FEVAL("char", nSCKLPortname+64) + "_" + FEVAL("int2str", nSCKLPinNumber-1)
+    %assign sck_name       = "P" + FEVAL("char", nSCKLPortName+64) + "_" + FEVAL("int2str", nSCKLPinNumber-1)
 
     %assign nSPIPort = CAST("Number",LibBlockParameterValue(SPIPort, 0))
-    %assign nMode    = CAST("Number",LibBlockParameterValue(Mode, 0))
+    %assign nMode    = CAST("Number",LibBlockParameterValue(Mode, 0))-1
     %assign nBits    = CAST("Number",LibBlockParameterValue(Bits, 0))
 
     %assign nFreq = LibBlockParameterValue(Freq,0)
 
     %openfile declbuf
+    // %<Type> (SPI_MasterConfig): '%<Name>'
     SPI spi%<nSPIPort>(%<mosi_name>, %<miso_name>, %<sck_name>);
     %closefile declbuf
 

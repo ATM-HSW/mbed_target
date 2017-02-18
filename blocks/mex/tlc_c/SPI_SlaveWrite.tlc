@@ -17,14 +17,13 @@
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
-	%if !SLibCodeGenForSim()
+  %if !SLibCodeGenForSim()
 
-		%assign u_val = LibBlockInputSignal(0, "", "", 0)
-		
-		if(spi_slave.receive())
-		{
-			spi_slave.reply(%<u_val>);
-		}
+    %assign u_val = LibBlockInputSignal(0, "", "", 0)
+
+    if(spi_slave.receive()) {
+      spi_slave.reply(%<u_val>);
+    }
 
   %endif
 %endfunction

@@ -158,9 +158,9 @@ static void mdlSetWorkWidths(SimStruct *S)
   /*
    * Register the run-time parameters
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "MOSIPortName", SS_UINT8);
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "MOSIPortName", SS_INT8);
   ssRegDlgParamAsRunTimeParam(S, 1, 1, "MOSIPinNumber", SS_UINT8);
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "MISOPortName", SS_UINT8);
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "MISOPortName", SS_INT8);
   ssRegDlgParamAsRunTimeParam(S, 3, 3, "MISOPinNumber", SS_UINT8);
   ssRegDlgParamAsRunTimeParam(S, 4, 4, "SCKLPortName", SS_UINT8);
   ssRegDlgParamAsRunTimeParam(S, 5, 5, "SCKLPinNumber", SS_UINT8);

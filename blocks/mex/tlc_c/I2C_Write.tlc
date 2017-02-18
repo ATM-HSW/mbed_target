@@ -43,6 +43,9 @@
       %case 3
         %assign i2c_instance = "i2c3"
         %break
+      %case 4
+        %assign i2c_instance = "i2c4"
+        %break
       %default
         %break
     %endswitch

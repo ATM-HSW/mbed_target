@@ -44,11 +44,15 @@
       %case 3
         %assign i2c_instance = "i2c3"
         %break
+      %case 4
+        %assign i2c_instance = "i2c4"
+        %break
       %default
         %break
     %endswitch
 
     %openfile declbuf
+    // %<Type> (I2C_Config): '%<Name>'
     I2C %<i2c_instance>(%<sda_name>, %<scl_name>);
     %closefile declbuf
 

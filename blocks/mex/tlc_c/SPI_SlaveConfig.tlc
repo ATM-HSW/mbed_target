@@ -40,6 +40,7 @@
     %assign nBits = CAST("Number", LibBlockParameterValue(Bits, 0))
 
     %openfile declbuf
+    // %<Type> (SPI_SlaveConfig): '%<Name>'
     %%
     #if defined(SPI_INTERFACE_DEFINED)
         #error "Two or more SPI Salve Interfaces defined!"

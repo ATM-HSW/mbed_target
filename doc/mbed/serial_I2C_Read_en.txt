@@ -1,21 +1,21 @@
-I2C Write
-=========
+I2C Read
+========
 
 Description
 -----------
 
-This block writes one or multiple bytes to a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB (read/write bit). 
+This block reads one or multiple bytes from a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB (read/write bit). 
 
 The block interface can be configured by the Parameters Dialog Box:
 
-- The minimal variant has a static i2c address and writes a predefined number of bytes to the device. 
+- The minimal variant has a static i2c address and reads a predefined number of bytes from the device. 
 
-.. image:: ../images/block_I2C_Write_min.png
+.. image:: ../images/block_I2C_Read_min.png
    :scale: 50 %
 
-- The maximal variant allows a dynamic i2c address and a dynamic number of bytes to be written. The ack port outputs communication errors.
+- The maximal variant allows a dynamic i2c address and a dynamic number of bytes to be read. The ack port outputs communication errors.
 
-.. image:: ../images/block_I2C_Write_max.png
+.. image:: ../images/block_I2C_Read_max.png
    :scale: 50 %
 
 Data Type Support
@@ -27,8 +27,7 @@ The output port writes values with an *uint8* data type.
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/mask_I2C_Write.png
-
+.. image:: ../images/mask_I2C_Read.png
 
 I2C Port
 ........
@@ -39,9 +38,9 @@ specifies an internal used I2C port number. It is used to generate unique instan
 Enable address input port
 .........................
 
-Enables an input port that provides the device address to which the mcu should write data.
+Enables an input port that provides the device address from which the mcu should read data.
 
-The address input port enables writing to different devices with the same write block by changing the value at the address input port.
+The address input port allows reading from different devices with the same read block by changing the value at the address input port.
 
 Slave address
 .............
@@ -49,21 +48,25 @@ Slave address
 8bit address of the i2c bus device.
 
 .. note::
-  If the Enable address input port is checked the value of this parameter field is ignored.
+  If the Enable address input port checkbox is checked the Slave address field is ignored.
 
 Enable byte count input port
 ............................
 
-If the number of data to be written changes during program execution the Enable byte count input port can be checked to provide the amount of data to be written to the slave device.
+If the number of data to be read changes during program execution the external byte count port can be activated to provide the amount of data to be read from the device.
 
-.. note::
-  The maximum number of bytes to be writen is defined by the input port width in simulink.
+Number of bytes to read
+.......................
+
+This parameter serves two purposes.
+
+1.  If external byte count is disabled, the block reads the configured amount of bytes every time it is executed.
+2.  If external byte count is enabled, the parameter sets the maximum number of bytes (i.e. the data port width in simulink) which can be read.
 
 Repeated
 ........
 
-If enabled no I2C STOP condition is send after completing the write operation.
-
+If enabled no I2C STOP condition is send after completing the read operation.
 
 Enable ack output port
 ......................
@@ -96,12 +99,12 @@ creates one line in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  lvalue = (uint8_T)<instance name>.write(<Slave address>, <Addr of Inputbuffer>, <Length of Inputbuffer>, <Repeated>);
+  lvalue = (uint8_T)i2c<I2C Port>.read(<Slave address>, <Addr of Outputbuffer>, <Length of Outputbuffer>, <Repeated>);
 
 when Enable ack output port is checked or
 
 .. code-block:: c++
 
-  <instance name>.write(<Slave address>, <Addr of Inputbuffer>, <Length of Inputbuffer>, <Repeated>);
+  i2c<I2C Port>.read(<Slave address>, <Addr of Outputbuffer>, <Length of Outputbuffer>, <Repeated>);
 
-when Enable ack output port is unchecked. <Slave address> and <Length of Inputbuffer> are defined by the block mask or can come from input ports.
+when Enable ack output port is unchecked. <Slave address> and <Length of Outputbuffer> are defined by the block mask or can come from input ports.

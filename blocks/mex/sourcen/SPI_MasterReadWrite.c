@@ -1,5 +1,5 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
 /* Copyright 2015 M. Marquardt, HS Wismar  */
 
 /*
@@ -65,9 +65,9 @@ static void mdlInitializeSizes(SimStruct *S)
 
   
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 0);	// SpiPort
-  ssSetSFcnParamTunable(S, 1, 0);	// CsPort
-  ssSetSFcnParamTunable(S, 2, 0);	// CsPin
+  ssSetSFcnParamTunable(S, 0, 0);
+  ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -80,7 +80,7 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumInputPorts(S, 1))
     return;
     
-	ssSetInputPortDataType(S, 0, SS_UINT8);
+	ssSetInputPortDataType(S, 0, SS_UINT32);
 	ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
 	ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
 	ssSetInputPortDirectFeedThrough(S, 0, 1);
@@ -95,7 +95,7 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumOutputPorts(S, 1))
     return;   
 	  
-	ssSetOutputPortDataType(S, 0, SS_UINT8);
+	ssSetOutputPortDataType(S, 0, SS_UINT32);
 	ssSetOutputPortWidth(S, 0, DYNAMICALLY_SIZED);
 	ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
 	ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
