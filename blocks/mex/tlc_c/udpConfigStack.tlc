@@ -25,16 +25,20 @@
 
     %%Add Ethernet things to the includes
     %openfile declbuf
+    // %<Type> (udpConfigStack): '%<Name>'
     #define LWIP_TIMEVAL_PRIVATE 0
     %closefile declbuf
+
     %assign srcFile = LibGetModelDotHFile()
     %<LibSetSourceFileSection(srcFile, "Includes", declbuf)>
     %<LibAddToCommonIncludes("EthernetInterface.h")>
 
     %%Add Ethernet things to the variable declarations
     %openfile declbuf
+    // %<Type> (udpConfigStack): '%<Name>'
     EthernetInterface %<name>;
     %closefile declbuf 
+
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 

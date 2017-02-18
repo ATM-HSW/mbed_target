@@ -28,6 +28,7 @@
     %assign name = FEVAL("strrep",name,"-","_")
 
     %openfile declbuf
+    // %<Type> (PWMOutput): '%<Name>'
     PwmOut %<name>(%<pname>);
     %closefile declbuf
 

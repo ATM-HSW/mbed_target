@@ -36,6 +36,7 @@
     %assign name = FEVAL("strrep",name,"-","_")
 
     %openfile declbuf
+    // %<Type> (digitalOutput): '%<Name>'
     DigitalInOut %<name>(%<pname>);
     %closefile declbuf
 

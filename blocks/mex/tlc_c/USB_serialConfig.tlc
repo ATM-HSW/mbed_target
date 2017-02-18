@@ -19,6 +19,7 @@
   %assign srcFile = LibGetModelDotCFile()
   
   %openfile declbuf
+    // %<Type> (USB_serialConfig): '%<Name>'
 	USBSerial usbSerial;
   %closefile declbuf
   %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>

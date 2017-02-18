@@ -63,12 +63,14 @@
     %assign srcFile = LibGetModelDotCFile()
 
     %openfile declbuf
+    // %<Type> (RTOSmailSend): '%<Name>'
     typedef %<type> mail%<valMailNumber>_T[%<valNumElements>];
     %closefile declbuf
 
     %<LibSetSourceFileSection(srcFile, "IntrinsicTypes", declbuf)>
 
     %openfile declbuf
+    // %<Type> (RTOSmailSend): '%<Name>'
     const int mail%<valMailNumber>_len = %<len>;
     Mail<mail%<valMailNumber>_T,%<valDepth>> mail_box%<valMailNumber>;
     %closefile declbuf

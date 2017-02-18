@@ -39,6 +39,7 @@
     %assign name = FEVAL("strrep",name,"-","_")
 
     %openfile declbuf
+    // %<Type> (Interrupt): '%<Name>'
     InterruptIn %<name>(%<pname>);
     %closefile declbuf
 

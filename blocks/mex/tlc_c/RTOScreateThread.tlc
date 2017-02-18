@@ -65,7 +65,7 @@
     %assign ertMainFile = LibCreateSourceFile("Source", "Custom", "ert_main")
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateThread): '%<Name>'
     extern void %<name>_thread(void const *);
     
     %closefile declbuf
@@ -74,7 +74,7 @@
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_glob_decl",declbuf)>
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateThread): '%<Name>'
     Thread %<name>(%<name>_thread, NULL, %<nThreadPriority>, %<nStackSize>);
     %closefile declbuf
 
@@ -82,7 +82,7 @@
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateThread): '%<Name>'
     void %<name>_thread(void const *argument) {
       while(1) {
         %<LibBlockExecuteFcnCall(block,0)>

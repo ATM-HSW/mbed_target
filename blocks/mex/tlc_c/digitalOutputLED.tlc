@@ -50,6 +50,7 @@
     %endswitch
 
     %openfile declbuf
+    // %<Type> (digitalOutputLED): '%<Name>'
     DigitalOut %<name>(%<pname>);
     %closefile declbuf
 

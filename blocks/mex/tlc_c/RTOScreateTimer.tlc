@@ -65,7 +65,7 @@
     %assign ertMainFile = LibCreateSourceFile("Source", "Custom", "ert_main")
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateTimer): '%<Name>'
     extern void %<name>_thread(void const *);
     extern osThreadId %<name>_id;
     %closefile declbuf
@@ -74,7 +74,7 @@
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_glob_decl",declbuf)>
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateTimer): '%<Name>'
     void %<name>_callback(void const *param)
     {
       osSignalSet(%<name>_id, 0x1);
@@ -84,7 +84,7 @@
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_fcn_decl",declbuf)>
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateTimer): '%<Name>'
     Thread %<name>(%<name>_thread, NULL, %<nThreadPriority>, %<nStackSize>);
     RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
     %closefile declbuf
@@ -93,7 +93,7 @@
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_loc_decl",declbuf)>
 
     %openfile buff
-    /* %<Type> block: %<Name> */    
+    // %<Type> (RTOScreateTimer): '%<Name>'
     %<name>_timer.start(%<valTiming>);
     %closefile buff
 
@@ -101,7 +101,7 @@
     %<LibSetSourceFileCustomSection(ertMainFile,"Ert_main_after_init",buff)>
 
     %openfile declbuf
-    /* %<Type> block: %<Name> */
+    // %<Type> (RTOScreateTimer): '%<Name>'
     void %<name>_thread(void const *argument) {
       %<name>_id = Thread::gettid();
 
@@ -116,6 +116,7 @@
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
 
     %openfile declbuf
+    // %<Type> (RTOScreateTimer): '%<Name>'
     osThreadId %<name>_id;
     %closefile declbuf
 
