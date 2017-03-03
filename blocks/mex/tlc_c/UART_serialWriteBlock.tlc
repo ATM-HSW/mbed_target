@@ -19,7 +19,7 @@
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
     %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
-    %assign name = "serial" + FEVAL("int2str",SerialPort_val-1)
+    %assign nameSerial = "serial" + FEVAL("int2str",SerialPort_val-1)
 
     %assign enNumberOfBytes_val = LibBlockParameterValue(enNumberOfBytes,0)
 
@@ -31,17 +31,19 @@
 
     %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
 
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
     %%
     #if DEVICE_SERIAL_ASYNCH
-    const uint8_t* ptr = (const char*)%<u1_ptr>;
-    int len = %<number_of_bytes>;
-    %<name>.write(ptr, len, 0, 0);
+    %<name>.write((const char*)%<u1_ptr>, %<number_of_bytes>, 0, 0);
 
     #else
-    const char* ptr = (const char*)%<u1_ptr>;
-    const char* end = ptr + %<number_of_bytes>;
-    while (ptr != end) {
-        if (%<name>.putc(*ptr++) == EOF) {
+    const char* ptr%<name> = (const char*)%<u1_ptr>;
+    const char* end%<name> = ptr%<name> + %<number_of_bytes>;
+    while (ptr%<name> != end%<name>) {
+        if (%<nameSerial>.putc(*ptr%<name>++) == EOF) {
             break;
         }
     }
