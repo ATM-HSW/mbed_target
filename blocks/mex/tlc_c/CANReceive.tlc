@@ -1,0 +1,89 @@
+%% File : CANReceive.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2017 E.Warnicke, HS Wismar
+%% Copyright 2017 Dr.O.Hagendorf, HS Wismar
+
+%implements CANReceive "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
+
+    %openfile declbuf
+    // %<Type> (CANReceive): '%<Name>'
+    char rec_buffer%<CAN_num>[]={0x30,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    uint16_T  id_init%<CAN_num>=0;
+    int r_index%<CAN_num>=1;
+    int RecvFlag%<CAN_num>=-1;
+    CANMessage msg%<CAN_num>;
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (CANReceive): '%<Name>'
+    void receive_MSG%<CAN_num>(){
+      can%<CAN_num>.read(msg%<CAN_num>);
+      RecvFlag%<CAN_num>=1;
+    }
+    %closefile declbuf
+
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+    // %<Type> (CANReceive): '%<Name>'
+    can%<CAN_num>.attach(&receive_MSG%<CAN_num>);
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %if !LibBlockOutputSignalIsExpr(0)
+      %assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
+      %assign msg_new = LibBlockOutputSignal(0, "", "",0) %% new message flag
+      %assign msg_id = LibBlockOutputSignal(1, "", "",0) %% message id
+      %assign y_ptr = LibBlockOutputSignalAddr(2, "", "", 0) %% message data
+      %assign msg_len = LibBlockOutputSignal(3, "", "", 0) %% message length
+
+      if(RecvFlag%<CAN_num> > 0) {
+        r_index%<CAN_num> = msg%<CAN_num>.len;
+        id_init%<CAN_num> = msg%<CAN_num>.id;
+        memcpy(rec_buffer%<CAN_num>, msg%<CAN_num>.data, msg%<CAN_num>.len);
+        %%kopieren des Empfangsbuffers an Outputport
+        memcpy(%<y_ptr>, msg%<CAN_num>.data, msg%<CAN_num>.len);
+        %<msg_len> = msg%<CAN_num>.len;
+        %<msg_id>  = msg%<CAN_num>.id;
+        %<msg_new> = 1;
+        RecvFlag%<CAN_num> = 0;
+      } else if(RecvFlag%<CAN_num> < 0) {
+        %%kopieren des des Empfangsbuffers an Outputport
+        memcpy(%<y_ptr>, rec_buffer%<CAN_num>, 1);
+        %<msg_len> = r_index%<CAN_num>;
+        %<msg_id>  = id_init%<CAN_num>;
+        %<msg_new> = 0;
+        RecvFlag%<CAN_num> = 0;
+      } else {
+        memcpy(%<y_ptr>, rec_buffer%<CAN_num>, r_index%<CAN_num>);
+        %<msg_len> = r_index%<CAN_num>;
+        %<msg_id>  = id_init%<CAN_num>;
+        %<msg_new> = 0;
+      }
+    %endif
+  %endif
+%endfunction

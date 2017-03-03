@@ -1,0 +1,48 @@
+%% File : CANConfig.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2017 E.Warnicke, HS Wismar
+%% Copyright 2017 Dr.O.Hagendorf, HS Wismar
+
+%implements CANConfig "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+  
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
+
+    %assign p2_val = LibBlockParameterValue(RdPortName, 0)
+    %assign p3_val = LibBlockParameterValue(RdPinNumber, 0)
+
+    %assign p4_val = LibBlockParameterValue(TdPortName, 0)
+    %assign p5_val = LibBlockParameterValue(TdPinNumber, 0)
+
+    %assign can_frequency = CAST("Number",LibBlockParameterValue(Freq,0))
+
+    %assign Rd = "P" + FEVAL("char",p4_val+64) + "_" + FEVAL("int2str",p5_val-1)
+    %assign Td = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p3_val-1)
+
+    %openfile declbuf
+    // %<Type> (CANConfig): '%<Name>'
+    CAN can%<CAN_num>(%<Rd>,%<Td>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    // %<Type> (CANConfig): '%<Name>'
+    can%<CAN_num>.frequency(%<can_frequency>);
+%endif
+
+%endfunction

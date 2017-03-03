@@ -1,0 +1,96 @@
+CAN Configuration
+=================
+
+Description
+-----------
+
+This block sets up a CAN connection on the mbed board. 
+
+You must have one of these blocks in any model that ues CAN blocks.
+
+.. image:: ../images/block_CAN_Config.png
+   :scale: 50 %
+
+This block configures a CAN bus instnance using the selected Tx and Rx pins. The bus clock frequency can be configured.
+
+When the model uses multiple CAN connections, for each one an own *CAN Config* block is necessary.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_CAN_Config.png
+
+CAN Number
+..........
+
+Specifies an internal CAN number. 
+
+It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, receive and send blocks together.
+
+
+CAN Tx Port Name/Pin Number
+...........................
+
+Selects the transmitting pin of the CAN connection.
+
+CAN Rx Port Name/Pin Number
+...........................
+
+Selects the receiving pin of the CAN connection.
+
+CAN Frequency
+.............
+
+Configures the CAN bus clock frequency. 
+
+
+Example
+-------
+
+In the example a CAN instance named CAN1 is established. 
+
+A CAN message with the id:10 is written to the CAN1 instance, it sends an increasing value with every time step.
+
+CAN messages are received and written to the serial port whenever a new message with the id:20 is read.
+
+.. image:: ../images/example_CAN.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<CAN Number>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+creates a global instance
+
+.. code-block:: c++
+
+  CAN <instance name><CAN Number>(P<Rx Port Name>_<Rx Pin Number>, P<Tx Port Name>_<Tx Pin Number>);
+
+e.g.:
+
+.. code-block:: c++
+ 
+  CAN can1(PA_11,PA_12);
+
+
+Initialization Function
+.......................
+
+and one line in void **<Model Name>**\ _initialize(void) function
+
+.. code-block:: c++
+
+  <instance name><CAN Number>.frequency(<CAN Frequency>);
+
+e.g.:
+
+.. code-block:: c++
+ 
+  can1.frequency(1000000);
+
+in \ **<Model Name>**\ .cpp.

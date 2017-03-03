@@ -1,0 +1,39 @@
+%% File : CANSend.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2017 E.Warnicke, HS Wismar
+%% Copyright 2017 Dr.O.Hagendorf, HS Wismar
+
+%implements CANSend "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
+    %assign message_id = CAST("Number",LibBlockParameterValue(CANMsgID,0))
+
+    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+    %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+
+    can%<CAN_num>.write(CANMessage(%<message_id>, (const char*)%<u1_ptr>, %<number_of_bytes>));
+  %endif
+%endfunction

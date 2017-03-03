@@ -47,9 +47,9 @@ function createStruct()
   addStruct('SPIMasterReadWriteConfig', 'mbed/serial_Spi_Master_Read_Write_en');
   addStruct('SPISlaveReadConfig', 'mbed/serial_Spi_Slave_Read_en');
   addStruct('SPISlaveWriteConfig', 'mbed/serial_Spi_Slave_Write_en');
-%   addStruct('', '');
-%   addStruct('', '');
-%   addStruct('', '');
+  addStruct('SerialCANConfig', 'mbed/serial_CAN_Config_en');
+  addStruct('SerialCANReceive', 'mbed/serial_CAN_Receive_en');
+  addStruct('SerialCANSend', 'mbed/serial_CAN_Send_en');
 %   addStruct('', '');
 %   addStruct('', '');
 %   addStruct('', '');

@@ -1,0 +1,69 @@
+%% File : CANSend.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements CANSend "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+   
+     %openfile declbuf
+
+      #define BUF_SIZE 9
+      char send_buffer[BUF_SIZE];
+        %%uint8_T send_buffer[BUF_SIZE];
+      int s_index=0;
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+      
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %%Inhalt d. Blockparameter px_val zuweisen 
+     %assign can_num = CAST("Number",LibBlockParameterValue(p1,0))
+     %%assign protocol_val = CAST("Number",LibBlockParameterValue(p2,0))
+     %assign message_id = CAST("Number",LibBlockParameterValue(p2,0))
+    s_index=0;
+    %%Inputport Dimension in Inputportwidth
+        %assign inputportwidth = LibBlockInputSignalWidth(0)
+        %%assign u_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+        pc.printf(" portwidth:%d\n\r",%<inputportwidth>);
+
+    %%für jedes Element des Inputports wiederholen
+        %foreach signal = inputportwidth
+    %%Element des Inputports in u 
+            %assign u = LibBlockInputSignal(0, "", "", signal)
+            %%assign u = LibBlockInputSignal(0, "", "", 1)
+
+    %%schreiben von u in SendeBuffer
+             s_index+=snprintf(send_buffer+s_index, BUF_SIZE, "%hu", %<u>);
+             %%s_index+=snprintf(send_buffer, BUF_SIZE, "%hu", %<u>);
+             %%s_index+=snprintf(send_buffer+s_index, BUF_SIZE, "%hu", %<u>);
+
+        %endforeach
+        pc.printf(" msg_len:%d\n\r",s_index);
+
+pc.printf(" msgData:%s\n\r",send_buffer);
+    %%senden der CAN Nachricht
+    can%<can_num>.write(CANMessage(%<message_id>,send_buffer,s_index));
+  %endif
+%endfunction

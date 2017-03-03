@@ -1,0 +1,71 @@
+CAN Send
+========
+
+Description
+-----------
+
+This block sends a CAN message with the length specified at the n port of the data connected to the d port. 
+The message id must be provided through the ID parameter in the block mask. 
+The CAN-Number parameter must be the same as the one choosen in the CAN config block so it utilizes the same CAN instance.
+
+
+.. image:: ../images/block_CAN_Send.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+
+The d port expects an *uint8*  data type.
+
+The n port expects an *uint32* data type.
+
+A CAN message can only utilize up to 16 Byte per message.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_CAN_Send.png
+
+
+CAN Number
+..........
+
+Specifies an internal CAN number. 
+
+It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, receive and send blocks together.
+
+
+ID
+..
+
+Sets the message id the CAN message is send with and can be identified with by its receivers.
+
+
+Example
+-------
+
+In the example a CAN instance named CAN1 is established. 
+
+A CAN message with the id:10 is written to the CAN1 instance, it sends an increasing value with every time step.
+
+CAN messages are received and written to the serial port whenever a new message with the id:20 is read.
+
+.. image:: ../images/example_CAN.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<CAN Number>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Step Function
+.............
+
+creates one line in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  <instance name><CAN Number>.write(CANMessage(<message id>,*<message data>,<message length>));
+
+

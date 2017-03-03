@@ -1,0 +1,74 @@
+CAN Receive
+===========
+
+Description
+-----------
+
+This block reads CAN messages from a CAN instance specified with the CAN Number. 
+
+.. image:: ../images/block_CAN_Receive.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+Msg.data 	port writes values with *uint8* data type.
+
+Msg.len 	port writes values with *uint32* data type.
+
+Msg.id 		port writes values with *unit16* data type.
+
+Msg.Flag 	port writes values with *boolean* data type.
+
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_CAN_Receive.png
+
+CAN Number
+........
+
+Specifies an internal CAN number. 
+
+It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, receive and send blocks together.
+
+Example
+-------
+
+In the example a CAN instance named CAN1 is established. 
+
+A CAN message with the id:10 is written to the CAN1 instance, it sends an increasing value with every time step.
+
+CAN messages are received and written to the serial port whenever a new message with the id:20 is read.
+
+.. image:: ../images/example_CAN.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<CAN Number>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+Creates a global function that reads a CAN message whenever a new message arrived and then sets a flag.
+
+.. code-block:: c++
+
+  void <receive function>()
+  {
+    <instance name><CAN Number>.read(<CAN message>);
+    <receive flag>= 1;
+  }
+
+
+Initialize Function
+...................
+
+Creates a line that calls the receive function whenever a CAN frame received interrupt is generated. 
+
+.. code-block:: c++ 
+
+  <instance name><CAN Number>.attach(&<receive function>);
