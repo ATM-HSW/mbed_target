@@ -3,21 +3,25 @@ CAN Receive
 
 Description
 -----------
+This block reads CAN messages from a CAN instance specified with CAN Port.
 
-This block reads CAN messages from a CAN instance specified with the CAN Number. 
+At Msg.new output port a rising edge is generated when a new message was received by an ISR. The message ID is output at Msg.id. 
+Message data and length are output at d and n output ports.
 
 .. image:: ../images/block_CAN_Receive.png
    :scale: 50 %
 
 Data Type Support
 -----------------
-Msg.data 	port writes values with *uint8* data type.
 
-Msg.len 	port writes values with *uint32* data type.
+Msg.new port writes values with *boolean* data type.
 
-Msg.id 		port writes values with *unit16* data type.
+Msg.id port writes values with *unit16* data type.
 
-Msg.Flag 	port writes values with *boolean* data type.
+d port writes values with *uint8* data type.
+
+n port writes values with *uint32* data type.
+
 
 
 Parameters Dialog Box
@@ -25,50 +29,85 @@ Parameters Dialog Box
 
 .. image:: ../images/mask_CAN_Receive.png
 
-CAN Number
+CAN Port
 ........
+Specifies an internally used CAN bus number. It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, read and write blocks together.
 
-Specifies an internal CAN number. 
-
-It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, receive and send blocks together.
 
 Example
 -------
-
-In the example a CAN instance named CAN1 is established. 
-
-A CAN message with the id:10 is written to the CAN1 instance, it sends an increasing value with every time step.
-
-CAN messages are received and written to the serial port whenever a new message with the id:20 is read.
-
-.. image:: ../images/example_CAN.png
-   :scale: 50 %
+Please see the :ref:`serial_CAN_Config_en_Example-label` shown in CAN Config documentation.
 
 
 Code Generation
 ---------------
-
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<CAN Number>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance names of mbed CAN classes are created by concatenating \ **can**\  and \ **<CAN Port>**\  and \ **variable name**\  and \ **<CAN Port>**\  respectively.
 
 Global parts
 ............
 
-Creates a global function that reads a CAN message whenever a new message arrived and then sets a flag.
+Declares several variables globally:
 
 .. code-block:: c++
 
-  void <receive function>()
+  char can_buffer1<CAN Port>[]= { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  uint16_T can_id<CAN Port>= 0;
+  int can_len<CAN Port>= 1;
+  int can_new<CAN Port>= -1;
+  CANMessage can_rcv_msg<CAN Port>;
+
+and creates additionally a global function that reads a CAN message whenever a new message arrived and sets the received flag:
+
+.. code-block:: c++
+
+  void can_rcv_handler<CAN Port>()
   {
-    <instance name><CAN Number>.read(<CAN message>);
-    <receive flag>= 1;
+    can<CAN Port>.read(<CAN message>);
+    can_new<CAN Port>= 1;
   }
 
 
 Initialize Function
 ...................
 
-Creates a line that calls the receive function whenever a CAN frame received interrupt is generated. 
+Creates a line that registers the above receive function as an ISR which is called whenever a CAN frame received. 
 
 .. code-block:: c++ 
 
-  <instance name><CAN Number>.attach(&<receive function>);
+  can<CAN Port>.attach(&can_rcv_handler<CAN Port>);
+
+
+Step Function
+.............
+creates several lines in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  // this part is executed when a new CAN message was received after the last call of the step function
+  if (can_new<CAN Port> > 0) {
+    can_len<CAN Port> = can_rcv_msg<CAN Port>.len;
+    can_id<CAN Port>  = can_rcv_msg<CAN Port>.id;
+    memcpy(can_buffer<CAN Port>, can_rcv_msg<CAN Port>.data, can_rcv_msg<CAN Port>.len);
+    memcpy(<Addr of Outputbuffer>, can_rcv_msg<CAN Port>.data, can_rcv_msg<CAN Port>.len);
+    <output port n>       = can_rcv_msg<CAN Port>.len;
+    <output port Msg.id>  = can_rcv_msg<CAN Port>.id;
+    <output port Msg.new> = 1;
+    can_new<CAN Port> = 0;
+
+  // this part is executed when a CAN message was never received
+  } else if (can_new<CAN Port> < 0) {
+    memcpy(<Addr of Outputbuffer>, can_buffer<CAN Port>, 1);
+    <output port n>       = 0;
+    <output port Msg.id>  = 0;
+    <output port Msg.new> = 0;
+    can_new1 = 0;
+
+  // this part is executed when a new CAN message was not received after the last call of the step function
+  // the last received CAN message is output but without a rising edge at Msg.new output port
+  } else {
+    memcpy(<Addr of Outputbuffer>, can_buffer<CAN Port>, can_len<CAN Port>);
+    <output port n>       = can_len<CAN Port>;
+    <output port Msg.id>  = can_id<CAN Port>;
+    <output port Msg.new> = 0;
+  }
+

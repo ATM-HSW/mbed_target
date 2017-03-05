@@ -25,11 +25,11 @@
 
     %openfile declbuf
     // %<Type> (CANReceive): '%<Name>'
-    char rec_buffer%<CAN_num>[]={0x30,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-    uint16_T  id_init%<CAN_num>=0;
-    int r_index%<CAN_num>=1;
-    int RecvFlag%<CAN_num>=-1;
-    CANMessage msg%<CAN_num>;
+    char can_buffer%<CAN_num>[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    uint16_T  can_id%<CAN_num>=0;
+    int can_len%<CAN_num>=1;
+    int can_new%<CAN_num>=-1;
+    CANMessage can_rcv_msg%<CAN_num>;
     %closefile declbuf
 
     %assign srcFile = LibGetModelDotCFile()
@@ -37,16 +37,16 @@
 
     %openfile declbuf
     // %<Type> (CANReceive): '%<Name>'
-    void receive_MSG%<CAN_num>(){
-      can%<CAN_num>.read(msg%<CAN_num>);
-      RecvFlag%<CAN_num>=1;
+    void can_rcv_handler%<CAN_num>(){
+      can%<CAN_num>.read(can_rcv_msg%<CAN_num>);
+      can_new%<CAN_num>=1;
     }
     %closefile declbuf
 
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
 
     // %<Type> (CANReceive): '%<Name>'
-    can%<CAN_num>.attach(&receive_MSG%<CAN_num>);
+    can%<CAN_num>.attach(&can_rcv_handler%<CAN_num>);
   %endif
 %endfunction
 
@@ -61,27 +61,25 @@
       %assign y_ptr = LibBlockOutputSignalAddr(2, "", "", 0) %% message data
       %assign msg_len = LibBlockOutputSignal(3, "", "", 0) %% message length
 
-      if(RecvFlag%<CAN_num> > 0) {
-        r_index%<CAN_num> = msg%<CAN_num>.len;
-        id_init%<CAN_num> = msg%<CAN_num>.id;
-        memcpy(rec_buffer%<CAN_num>, msg%<CAN_num>.data, msg%<CAN_num>.len);
-        %%kopieren des Empfangsbuffers an Outputport
-        memcpy(%<y_ptr>, msg%<CAN_num>.data, msg%<CAN_num>.len);
-        %<msg_len> = msg%<CAN_num>.len;
-        %<msg_id>  = msg%<CAN_num>.id;
+      if(can_new%<CAN_num> > 0) {
+        can_len%<CAN_num> = can_rcv_msg%<CAN_num>.len;
+        can_id%<CAN_num> = can_rcv_msg%<CAN_num>.id;
+        memcpy(can_buffer%<CAN_num>, can_rcv_msg%<CAN_num>.data, can_rcv_msg%<CAN_num>.len);
+        memcpy(%<y_ptr>, can_rcv_msg%<CAN_num>.data, can_rcv_msg%<CAN_num>.len);
+        %<msg_len> = can_rcv_msg%<CAN_num>.len;
+        %<msg_id>  = can_rcv_msg%<CAN_num>.id;
         %<msg_new> = 1;
-        RecvFlag%<CAN_num> = 0;
-      } else if(RecvFlag%<CAN_num> < 0) {
-        %%kopieren des des Empfangsbuffers an Outputport
-        memcpy(%<y_ptr>, rec_buffer%<CAN_num>, 1);
-        %<msg_len> = r_index%<CAN_num>;
-        %<msg_id>  = id_init%<CAN_num>;
+        can_new%<CAN_num> = 0;
+      } else if(can_new%<CAN_num> < 0) {
+        memcpy(%<y_ptr>, can_buffer%<CAN_num>, 1);
+        %<msg_len> = 0;
+        %<msg_id>  = 0;
         %<msg_new> = 0;
-        RecvFlag%<CAN_num> = 0;
+        can_new%<CAN_num> = 0;
       } else {
-        memcpy(%<y_ptr>, rec_buffer%<CAN_num>, r_index%<CAN_num>);
-        %<msg_len> = r_index%<CAN_num>;
-        %<msg_id>  = id_init%<CAN_num>;
+        memcpy(%<y_ptr>, can_buffer%<CAN_num>, can_len%<CAN_num>);
+        %<msg_len> = can_len%<CAN_num>;
+        %<msg_id>  = can_id%<CAN_num>;
         %<msg_new> = 0;
       }
     %endif

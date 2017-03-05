@@ -20,47 +20,70 @@ Parameters Dialog Box
 
 .. image:: ../images/mask_CAN_Config.png
 
-CAN Number
-..........
+CAN Port
+........
+Specifies an internally used CAN bus number. It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, read and write blocks together.
 
-Specifies an internal CAN number. 
-
-It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, receive and send blocks together.
-
-
-CAN Tx Port Name/Pin Number
-...........................
-
-Selects the transmitting pin of the CAN connection.
-
-CAN Rx Port Name/Pin Number
-...........................
-
-Selects the receiving pin of the CAN connection.
 
 CAN Frequency
 .............
-
 Configures the CAN bus clock frequency. 
 
 
-Example
--------
+Port Name/Pin Number (Td)
+.........................
+Selects the transmitting pin of the CAN peripheral.
 
-In the example a CAN instance named CAN1 is established. 
 
-A CAN message with the id:10 is written to the CAN1 instance, it sends an increasing value with every time step.
+Port Name/Pin Number (Rd)
+.........................
+Selects the receiving pin of the CAN peripheral.
 
-CAN messages are received and written to the serial port whenever a new message with the id:20 is read.
+.. _serial_CAN_Config_en_Example-label:
 
-.. image:: ../images/example_CAN.png
+Examples
+--------
+
+Example 1
+.........
+
+In the 1st example two mbed targets are connected over a CAN bus. 
+
+In each model a mbed CAN instance with CAN Port number 1 is created.
+
+The sending model sends a positiv incrementing number converted to ASCII characters with CAN message ID 10 
+and the same but inverted number with CAN message ID 20. 
+The positiv number is converted to ASCII characters and send over USB-CDC.
+
+The receiving model triggers the submodel each time a CAN message is received. 
+The submodel sends at first the message ID converted to ASCII characters and after that the message data over USB-CDC.
+To show the sending order the execution order in the subblock is enabled.
+
+In each model LED1 blinks to indicate the running model.
+
+Simulink model of sending target:
+
+.. image:: ../images/example_CANSend.png
    :scale: 50 %
 
+Simulink model of receiving model:
+
+.. image:: ../images/example_CANReceive.png
+   :scale: 50 %
+
+Example 2
+.........
+
+The 2nd example shows an alternative receiving model. Only when a CAN messages with ID 20 is received the subblock is triggered. 
+And the message data are send over USB-CDC.
+
+.. image:: ../images/example_CANReceive2.png
+   :scale: 50 %
 
 Code Generation
 ---------------
 
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<CAN Number>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance names of mbed CAN classes are created by concatenating \ **can**\  and \ **<CAN Port>**\ .
 
 Global parts
 ............
@@ -69,7 +92,7 @@ creates a global instance
 
 .. code-block:: c++
 
-  CAN <instance name><CAN Number>(P<Rx Port Name>_<Rx Pin Number>, P<Tx Port Name>_<Tx Pin Number>);
+  CAN can<CAN Port>(P<Rd Port Name>_<Rd Pin Number>, P<Td Port Name>_<Td Pin Number>);
 
 e.g.:
 
@@ -85,7 +108,7 @@ and one line in void **<Model Name>**\ _initialize(void) function
 
 .. code-block:: c++
 
-  <instance name><CAN Number>.frequency(<CAN Frequency>);
+  can<CAN Port>.frequency(<CAN Frequency>);
 
 e.g.:
 
