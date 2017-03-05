@@ -54,7 +54,7 @@ The user button is written to bit 3 of the PCF8574. Unused bits and both input b
 Code Generation
 ---------------
 
-Instance names of mbed I2C classes are created by concatenating spi and \ **<I2C Port>**\ .
+Instance names of mbed I2C classes are created by concatenating \ **i2c**\  and \ **<I2C Port>**\ .
 
 Global parts
 ............

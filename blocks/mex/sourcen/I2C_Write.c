@@ -131,38 +131,38 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumDWork(S, 0))
     return;
 
-	
+
   if(*mxGetPr(ssGetSFcnParam(S, 1)) > 0)
-	ports++;
-	
+    ports++;
+
   if(*mxGetPr(ssGetSFcnParam(S, 3)) > 0)
     ports++;
-	
+
   /*
    * Set the number of input ports.
    */
   if (!ssSetNumInputPorts(S, ports))
     return;
 
-	ssSetInputPortDataType(S, 0, SS_UINT8);
-	ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
-	ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
-	ssSetInputPortDirectFeedThrough(S, 0, 1);
-	ssSetInputPortAcceptExprInRTW(S, 0, 1);
-	ssSetInputPortOverWritable(S, 0, 1);
-	ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-	ssSetInputPortRequiredContiguous(S, 0, 1);
-	
+    ssSetInputPortDataType(S, 0, SS_UINT8);
+    ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
+    ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 0, 1);
+    ssSetInputPortAcceptExprInRTW(S, 0, 1);
+    ssSetInputPortOverWritable(S, 0, 1);
+    ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 0, 1);
+
   for(i=1; i<ports; i++)
   {
-	ssSetInputPortDataType(S, i, SS_UINT8);
-	ssSetInputPortWidth(S, i, 1);
-	ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
-	ssSetInputPortDirectFeedThrough(S, i, 1);
-	ssSetInputPortAcceptExprInRTW(S, i, 1);
-	ssSetInputPortOverWritable(S, i, 1);
-	ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
-	ssSetInputPortRequiredContiguous(S, i, 1);
+    ssSetInputPortDataType(S, i, SS_UINT8);
+    ssSetInputPortWidth(S, i, 1);
+    ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, i, 1);
+    ssSetInputPortAcceptExprInRTW(S, i, 1);
+    ssSetInputPortOverWritable(S, i, 1);
+    ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, i, 1);
   }
 
   /*
