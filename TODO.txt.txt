@@ -1,0 +1,4 @@
+feature request
+- CAN filter
+- CAN rderror
+- CAN tderror
