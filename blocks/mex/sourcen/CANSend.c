@@ -92,7 +92,7 @@ static void mdlInitializeSizes(SimStruct *S)
 {
 	//int numInput;
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 4);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -118,6 +118,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -127,35 +128,75 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  //numInput = mxGetScalar(ssGetSFcnParam(S, 2));
-  //if (!ssSetNumInputPorts(S, numInput?2:1))
-  if (!ssSetNumInputPorts(S,2))
-    return;
+  if(*mxGetPr(ssGetSFcnParam(S, 3)) > 0) {
 
-  /*
-   * Configure the input port 0 (message data - byte vector)
-   */
-  ssSetInputPortDataType(S, 0, SS_UINT8);
-  ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
-  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetInputPortDirectFeedThrough(S, 0, 1);
-  ssSetInputPortAcceptExprInRTW(S, 0, 0);
-  ssSetInputPortOverWritable(S, 0, 0);
-  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-  ssSetInputPortRequiredContiguous(S, 0, 1);
+    if (!ssSetNumInputPorts(S,3))
+      return;
 
-  /*
-   * Configure the input port 1 (message length)
-   */
-  ssSetInputPortDataType(S, 1, SS_UINT32);
-  ssSetInputPortWidth(S, 1, 1);
-  ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
-  ssSetInputPortDirectFeedThrough(S, 1, 1);
-  ssSetInputPortAcceptExprInRTW(S, 1, 0);
-  ssSetInputPortOverWritable(S, 1, 0);
-  ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-  ssSetInputPortRequiredContiguous(S, 1, 1);
+    /*
+     * Configure the input port 0 (message id - uint16)
+     */
+    ssSetInputPortDataType(S, 0, SS_UINT16);
+    ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
+    ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 0, 1);
+    ssSetInputPortAcceptExprInRTW(S, 0, 0);
+    ssSetInputPortOverWritable(S, 0, 0);
+    ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 0, 1);
 
+    /*
+     * Configure the input port 1 (message data - byte vector)
+     */
+    ssSetInputPortDataType(S, 1, SS_UINT8);
+    ssSetInputPortWidth(S, 1, DYNAMICALLY_SIZED);
+    ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 1, 1);
+    ssSetInputPortAcceptExprInRTW(S, 1, 0);
+    ssSetInputPortOverWritable(S, 1, 0);
+    ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 1, 1);
+
+    /*
+     * Configure the input port 2 (message length)
+     */
+    ssSetInputPortDataType(S, 2, SS_UINT32);
+    ssSetInputPortWidth(S, 2, 1);
+    ssSetInputPortComplexSignal(S, 2, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 2, 1);
+    ssSetInputPortAcceptExprInRTW(S, 2, 0);
+    ssSetInputPortOverWritable(S, 2, 0);
+    ssSetInputPortOptimOpts(S, 2, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 2, 1);
+  } else {
+
+    if (!ssSetNumInputPorts(S,2))
+      return;
+
+    /*
+     * Configure the input port 0 (message data - byte vector)
+     */
+    ssSetInputPortDataType(S, 0, SS_UINT8);
+    ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
+    ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 0, 1);
+    ssSetInputPortAcceptExprInRTW(S, 0, 0);
+    ssSetInputPortOverWritable(S, 0, 0);
+    ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 0, 1);
+  
+    /*
+     * Configure the input port 1 (message length)
+     */
+    ssSetInputPortDataType(S, 1, SS_UINT32);
+    ssSetInputPortWidth(S, 1, 1);
+    ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 1, 1);
+    ssSetInputPortAcceptExprInRTW(S, 1, 0);
+    ssSetInputPortOverWritable(S, 1, 0);
+    ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 1, 1);
+  }
   /*
    * Set the number of output ports.
    */
@@ -229,11 +270,12 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "CANInstanceID", ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 2, 1, "CANMsgID", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "enableMsgID", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif

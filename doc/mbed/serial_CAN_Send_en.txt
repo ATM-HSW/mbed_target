@@ -5,20 +5,34 @@ Description
 -----------
 This block writes one or multiple bytes to the CAN instance specified with CAN Port with the given message ID.
 
-A vector of values at input port d and the data length taken from input port n is used to send a CAN message. The message ID is a block parameter.
+A vector of values at input port d and the data length taken from input port n is used to send a CAN message. 
+The message ID can be a block parameter or is read from an input port.
 
-.. image:: ../images/block_CAN_Send.png
+minimal variant
+...............
+The minimal variant uses a static CAN message id.
+
+.. image:: ../images/block_CAN_Send.min.png
+   :scale: 50 %
+
+maximal variant
+...............
+The maximal variant uses an individual CAN message id.
+
+.. image:: ../images/block_CAN_Send.max.png
    :scale: 50 %
 
 
 Data Type Support
 -----------------
+The msg.id port expects an *uint16*  data type.
+
 The d port expects an *uint8*  data type.
 
 The n port expects an *uint32* data type.
 
 .. warning::
-  A CAN message can only utilize up to 16 bytes per message.
+  A CAN message can only utilize up to 8 bytes per message.
 
 
 Parameters Dialog Box
@@ -39,7 +53,13 @@ Sets the message ID the CAN message is send with.
 
 Example
 -------
-Please see the :ref:`serial_CAN_Config_en_Example-label` shown in CAN Config documentation.
+
+In the example in each step a CAN message is send using alternating message IDs 10 and 20. The CAN message content is the message id as a one byte message.
+
+.. image:: ../images/example_CANSend2.png
+   :scale: 50 %
+
+Please see more :ref:`serial_CAN_Config_en_Example-label` shown in CAN Config documentation.
 
 Code Generation
 ---------------
@@ -53,3 +73,5 @@ creates one line in void **<Model Name>**\ _step(void) function
 .. code-block:: c++
 
   can<CAN Port>.write(CANMessage(<msg id>,*<message data >,<message length n>));
+
+The <msg id> comes statically from a block parameter or is message individual from an block input port

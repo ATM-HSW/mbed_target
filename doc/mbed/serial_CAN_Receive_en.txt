@@ -56,7 +56,7 @@ Declares several variables globally:
   int can_new<CAN Port>= -1;
   CANMessage can_rcv_msg<CAN Port>;
 
-and creates additionally a global function that reads a CAN message whenever a new message arrived and sets the received flag:
+and creates additionally a global (ISR) function that reads a CAN message whenever a new message arrived and sets the received flag:
 
 .. code-block:: c++
 
@@ -83,7 +83,7 @@ creates several lines in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  // this part is executed when a new CAN message was received after the last call of the step function
+  // this part is executed when a new CAN message was received after the subsequent call of the step function
   if (can_new<CAN Port> > 0) {
     can_len<CAN Port> = can_rcv_msg<CAN Port>.len;
     can_id<CAN Port>  = can_rcv_msg<CAN Port>.id;

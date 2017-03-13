@@ -29,11 +29,22 @@
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
     %assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
-    %assign message_id = CAST("Number",LibBlockParameterValue(CANMsgID,0))
+    %assign bEnableMsgIDInput = CAST("Number",LibBlockParameterValue(enableMsgID,0))
 
-    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
-    %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+    %if bEnableMsgIDInput == 0
+      %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+      %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+      %assign message_id = CAST("Number",LibBlockParameterValue(CANMsgID,0))
 
-    can%<CAN_num>.write(CANMessage(%<message_id>, (const char*)%<u1_ptr>, %<number_of_bytes>));
+      can%<CAN_num>.write(CANMessage(%<message_id>, (const char*)%<u1_ptr>, %<number_of_bytes>));
+
+    %else
+      %assign message_id = LibBlockInputSignal(0, "", "", 0)
+      %assign u1_ptr = LibBlockInputSignalAddr(1, "", "", 0)
+      %assign number_of_bytes = LibBlockInputSignal(2, "", "", 0)
+
+      can%<CAN_num>.write(CANMessage(%<message_id>, (const char*)%<u1_ptr>, %<number_of_bytes>));
+
+    %endif
   %endif
 %endfunction
