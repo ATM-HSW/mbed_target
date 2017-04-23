@@ -1,4 +1,5 @@
-/* Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2010 The MathWorks, Inc. */
+/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
 /* Copyright 2015 M. Marquardt, HS Wismar */
 
 /*
@@ -76,13 +77,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-  
-  // if EDIT_OK(S, 1) {
-    // int_T dimsArray[2] = { 1, 1 };
-
-    // /* Check the parameter attributes */
-    // ssCheckSFcnParamValueAttribs(S, 2, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  // }
 }
 
 #endif
@@ -121,8 +115,6 @@ static void mdlInitializeSizes(SimStruct *S)
 
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
-  // ssSetSFcnParamTunable(S, 1, 1);
-  // ssSetSFcnParamTunable(S, 2, 1);
 
   ssSetNumPWork(S, 0);
 
@@ -141,27 +133,19 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   ssSetInputPortDataType(S, 0, SS_UINT8);
   ssSetInputPortWidth(S, 0, 1);
-  // ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
   ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetInputPortDirectFeedThrough(S, 0, 1);
   ssSetInputPortAcceptExprInRTW(S, 0, 1);
   ssSetInputPortOverWritable(S, 0, 1);
   ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetInputPortRequiredContiguous(S, 0, 1);
-  
+
   /*
    * Set the number of output ports.
    */
   if (!ssSetNumOutputPorts(S, 0))
     return;
 
-  // if(errorOutputEnable){
-      // ssSetOutputPortDataType(S, 0, SS_BOOLEAN);
-      // ssSetOutputPortWidth(S, 0, 1);
-      // ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-      // ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-      // ssSetOutputPortOutputExprInRTW(S, 0, 1);
-  // }
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -231,13 +215,6 @@ static void mdlSetWorkWidths(SimStruct *S)
   /* Set number of run-time parameters */
   if (!ssSetNumRunTimeParams(S, 0))
     return;
-
-  /*
-   * Register the run-time parameter 1
-   */
-  // ssRegDlgParamAsRunTimeParam(S, 0, 0, "p1", ssGetDataTypeId(S, "boolean"));
-  // ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "boolean"));
-
 }
 
 #endif

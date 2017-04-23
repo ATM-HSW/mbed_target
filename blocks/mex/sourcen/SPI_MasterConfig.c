@@ -1,6 +1,5 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar  */
-/* I2C Modifications by Axel Utech 2014, HS Wismar */
+/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
 /* Copyright 2015 M. Marquardt, HS Wismar */
 
 /*

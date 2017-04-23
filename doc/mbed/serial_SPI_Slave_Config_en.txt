@@ -1,33 +1,25 @@
 SPI Slave Config
 ================
 
-This block sets up the SPI connection on the mbed board to act as a slave device to an external bus master.
-
-
-Library
--------
-
-/SPI
-
 Description
 -----------
+
+This block sets up the SPI connection on the mbed board to act as a slave device to an external bus master.
 
 .. image:: ../images/block_SPI_Slave_Config.png
    :scale: 50 %
 
-This block sets up an SPI peripheral of the MCU to act as a slave on the connected bus. 
-Internally the mbed *SPISlave* class is used to set up the SPI peripheral, so the user must get the matching pins off of the boards user manual. 
+This block sets up an SPI peripheral of the MCU to act as a slave. 
+
+Possible SPI portpins, frequencies and bit lengths depend on the mbed target. Please have a look at the specific board documentation.
+
+Internally the mbed *SPISlave* class is used to set up the SPI peripheral. 
 
 .. note:: 
-	Only one SPI bus slave is allowed in a model.
+  Only one SPI bus slave is allowed in a model.
 
 .. attention::
-	If pins are configured which cannot be mapped to the same SPI peripheral **NO** error will show up at compile time, but the SPI bus won't work.
-
-Data Type Support
------------------
-
-This block has no input or output port.
+  If pins are configured which cannot be mapped to the same SPI peripheral **NO** error will show up at compile time, but the SPI bus won't work.
 
 Parameters and Dialog Box
 -------------------------

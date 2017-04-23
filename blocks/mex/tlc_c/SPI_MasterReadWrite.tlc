@@ -31,7 +31,7 @@
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-    
+
     cs_spi%<nSPIPort>_%<instance> = 1;
 
   %endif

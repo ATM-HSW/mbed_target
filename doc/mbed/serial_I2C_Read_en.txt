@@ -90,7 +90,7 @@ The user button is written to bit 3 of the PCF8574. Unused bits and both input b
 Code Generation
 ---------------
 
-Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<I2C Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+Instance names of mbed I2C classes are created by concatenating \ **i2c**\  and \ **<I2C Port>**\ .
 
 Step Function
 .............

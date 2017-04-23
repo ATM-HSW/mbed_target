@@ -38,11 +38,11 @@ static void mdlCheckParameters(SimStruct *S)
  *    block's characteristics (number of inputs, outputs, states, etc.).
  */
 static void mdlInitializeSizes(SimStruct *S)
-{    
+{
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 3);
 
-  
+
 #if defined(MATLAB_MEX_FILE)
 
   if (ssGetNumSFcnParams(S) == ssGetSFcnParamsCount(S)) {
@@ -63,7 +63,7 @@ static void mdlInitializeSizes(SimStruct *S)
 
 #endif
 
-  
+
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
@@ -79,27 +79,27 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 1))
     return;
-    
-	ssSetInputPortDataType(S, 0, SS_UINT32);
-	ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
-	ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
-	ssSetInputPortDirectFeedThrough(S, 0, 1);
-	ssSetInputPortAcceptExprInRTW(S, 0, 1);
-	ssSetInputPortOverWritable(S, 0, 1);
-	ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-	ssSetInputPortRequiredContiguous(S, 0, 1);
-	 
+
+  ssSetInputPortDataType(S, 0, SS_UINT32);
+  ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
+  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetInputPortDirectFeedThrough(S, 0, 1);
+  ssSetInputPortAcceptExprInRTW(S, 0, 1);
+  ssSetInputPortOverWritable(S, 0, 1);
+  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetInputPortRequiredContiguous(S, 0, 1);
+
   /*
    * Set the number of output ports.
    */
   if (!ssSetNumOutputPorts(S, 1))
-    return;   
-	  
-	ssSetOutputPortDataType(S, 0, SS_UINT32);
-	ssSetOutputPortWidth(S, 0, DYNAMICALLY_SIZED);
-	ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-	ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-	ssSetOutputPortOutputExprInRTW(S, 0, 1);
+    return;
+
+  ssSetOutputPortDataType(S, 0, SS_UINT32);
+  ssSetOutputPortWidth(S, 0, DYNAMICALLY_SIZED);
+  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 0, 1);
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.

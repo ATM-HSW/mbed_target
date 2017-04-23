@@ -1,16 +1,10 @@
 SPI Master Read Write
 =====================
 
-Performs a one byte write operation to the SPI bus and returns the received byte.
-
-
-Library
--------
-
-/SPI
-
 Description
 -----------
+
+Performs a one byte write operation to the SPI bus and returns the response byte.
 
 .. image:: ../images/block_Spi_Master_Read_Write.png
    :scale: 50 %
@@ -20,21 +14,83 @@ The block writes the byte value provided at the input port each time it is execu
 Data Type Support
 -----------------
 
-The block's data types are uint8 for input and output port.
-Port size can be a one-dimensional vector which must be the same for input and output.
+The input port expects an *uint8* data type.
+The output port writes values with an *uint8* data type.
+
+Port sizes can be a one-dimensional vector which must be the same for input and output.
 
 Parameters and Dialog Box
 -------------------------
 
 .. image:: ../images/mask_SPI_Master_Read_Write.png
 
-
 SPI Port
 ........
-
 Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
 
-Chip Select Port and Pin
-........................
-
+Port Name/Pin Number (CS)
+.........................
 Configuration of the MCU Pin the device's chip select input is connected to.
+
+
+Example
+-------
+Please see the :ref:`serial_SPI_Master_Config_en_Example-label` shown in SPI Master Config documentation.
+
+
+Code Generation
+---------------
+Instance names of mbed SPI classes are created by concatenating \ **spi**\  and \ **<SPI Port>**\ .
+
+Global parts
+............
+creates a global instance
+
+.. code-block:: c++
+
+  // creates a DigitalOut instance for the specific chip select with an unique name
+  DigitalOut cs_spi<SPI Port>_<Port Name CS>_<Pin Number CS>(P<Port Name CS>_<Pin Number CS>);
+
+Initialization Function
+.......................
+and one line in void **<Model Name>**\ _initialize(void) function
+
+.. code-block:: c++
+
+  // deselects the device
+  cs_spi<SPI Port>_<Port Name CS>_<Pin Number CS> = 1;
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates several lines in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  // selects the device
+  cs_spi<SPI Port>_<Port Name CS>_<Pin Number CS> = 0;
+
+  // writes synchronously the input vector byte for byte to the spi device and writes the received bytes to the block output port
+  // number of written and received bytes has to be indentically
+  for(int i=0; i < <Length of Inputbuffer>; i++)
+    <Addr of Outputbuffer>[i] = spi<nSPI Port>.write(<Addr of Inputbuffer>[i]);
+
+  // deselects the device
+  cs_spi<SPI Port>_<Port Name CS>_<Pin Number CS> = 1;
+
+when size of input vector is larger than 1 or
+
+.. code-block:: c++
+
+  // selects the device
+  cs_spi<SPI Port>_<Port Name CS>_<Pin Number CS> = 0;
+
+  // writes synchronously the block input byte to the spi device and writes the received byte to the block output port
+  <output port value> = spi<nSPI Port>.write(<input port value>);
+
+  // deselects the device
+  cs_spi<SPI Port>_<Port Name CS>_<Pin Number CS> = 1;
+
+when size of input vector equals 1
