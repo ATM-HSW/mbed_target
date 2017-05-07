@@ -96,12 +96,7 @@ classdef Prefs
         function setMbedProgrammer(programmer)
             mbed.Prefs.setPref('Programmer', programmer);
         end
-        
-        %%
-        function setMbedAutodetect(programmer)
-            mbed.Prefs.setPref('MbedAutodetect', programmer);
-        end
-        
+
         %%
         function programmer = getMbedProgrammer
             programmer =  mbed.Prefs.getPref('Programmer');
@@ -255,9 +250,9 @@ classdef Prefs
         end
         
         %%
-        function setMbedAutoDetect(port)
-            mbed.Prefs.setPref('MbedAutoDetect', port);
-        end
+       function setMbedAutodetect(port)
+           mbed.Prefs.setPref('MbedAutoDetect', port);
+       end
     end
     
     %%

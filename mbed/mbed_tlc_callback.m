@@ -38,7 +38,7 @@ if isequal(paramName, 'MbedTarget5')
     mbed.Prefs.setMbedTarget5(slConfigUIGetVal(hDlg, hSrc, paramName));
 end
 
-if isequal(paramName, 'mbedlsAutodetect')
+if isequal(paramName, 'MbedlsAutodetect')
     mbed.Prefs.setMbedAutodetect(slConfigUIGetVal(hDlg, hSrc, paramName));
 end
 

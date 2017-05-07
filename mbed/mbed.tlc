@@ -98,7 +98,7 @@
   rtwoptions(oIdx).tlcvariable    = 'MbedlsAutodetect';
   rtwoptions(oIdx).makevariable   = '';
   rtwoptions(oIdx).tooltip        = ['use mbedls to detect mbed Virtual Drive and Virtual COM Port before flashing'];
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedlsAutodetect'')';
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedlsAutodetect'')';
 
 
   oIdx = oIdx + 1;
