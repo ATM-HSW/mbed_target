@@ -1,6 +1,6 @@
 function setup_customtarget_mbed
 
-addpath(fullfile(pwd,'mbed'),fullfile(pwd,'blocks'),fullfile(pwd,'blocks','mex'),fullfile(pwd,'blocks','slx'));
+addpath(fullfile(pwd,'mbed'),fullfile(pwd,'blocks'),fullfile(pwd,'blocks','mex'),fullfile(pwd,'blocks','slx'),fullfile(pwd,'mbed','jsonlab-1.5'));
 
 result = savepath;
 if result==1
@@ -70,29 +70,29 @@ else
     warning('Can not find python.exe. When you want to use mbed5 targets, please install Python 2.7.9 or newer');
 end
 
-[ok, where, version] = getMbed();
-if ok
-    disp(' ');
-    disp('found mbed-cli version');
-    disp(version);
-    disp('in folder:');
-    disp(where); 
-    disp('All versions newer than 0.9.10 are OK for mbed_target and mbed5 compatibility');
-else
-    disp(' ');
-    disp('Can not find mbed-cli.');
-    if okPython
-        choice = txtmenu('Do you want to install mbed-cli?','yes','no');
-        if choice==0
-            disp('Please check the output of the installation. Or rerun this setup.');
-            system('pip install mbed-cli');
-        else
-            warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
-        end
-    else
-        warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
-    end
-end
+% [ok, where, version] = getMbed();
+% if ok
+%     disp(' ');
+%     disp('found mbed-cli version');
+%     disp(version);
+%     disp('in folder:');
+%     disp(where); 
+%     disp('All versions newer than 0.9.10 are OK for mbed_target and mbed5 compatibility');
+% else
+%     disp(' ');
+%     disp('Can not find mbed-cli.');
+%     if okPython
+%         choice = txtmenu('Do you want to install mbed-cli?','yes','no');
+%         if choice==0
+%             disp('Please check the output of the installation. Or rerun this setup.');
+%             system('pip install mbed-cli');
+%         else
+%             warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
+%         end
+%     else
+%         warning('When you want to use mbed5 targets, please install mbed with "pip install mbed-cli"');
+%     end
+% end
 
 [okMbedls, where, version] = getMbedls();
 if okMbedls

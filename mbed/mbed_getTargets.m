@@ -1,12 +1,15 @@
 function ret = mbed_getTargets(mbedversion)
 
-  if isequal(mbedversion, 'mbed-os 5')
-    [a,b]=system('mbed export -T 2>:null');
-    b=regexprep(b,'\n\n','');
-    ret=regexprep(b,'\n','|');
+if isequal(mbedversion, 'mbed-os 5')
+    pathstr = mbed_getTargetRootPath();
+    newpath = fullfile(pathstr,'targets','mbed-os','tools');
+    oldpath=cd(newpath);
+    [~,cmdout]=system('python project.py -S targets');
+    cmdout=regexprep(cmdout,'\n\n','');
+    ret=regexprep(cmdout,'\n','|');
     ret=ret(1:end-1);
-  else
-
+    cd(oldpath);
+else
     pathstr = mbed_getTargetRootPath();
     targetsfiles = ls(fullfile(pathstr,'targets','*.zip'));
     ret=[];
@@ -15,6 +18,6 @@ function ret = mbed_getTargets(mbedversion)
         ret = [ret '|' name]; %#ok<AGROW>
     end
     ret = ret(2:end);
-  end
-  disp(ret);
+end
+
 end

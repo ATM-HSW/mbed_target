@@ -1,0 +1,3 @@
+[submodule "targets/mbed-os"]
+	path = targets/mbed-os
+	url = git://github.com/ohagendorf/mbed.git

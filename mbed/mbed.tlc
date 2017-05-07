@@ -4,11 +4,8 @@
 %selectfile NULL_FILE
 
 %% Copyright 2013-2014 The MathWorks, Inc.
-%%           2014 Dr. Olaf Hagendorf, HS Wismar
+%%           2017 Dr. Olaf Hagendorf, HS Wismar
 %%
-%%
-%%
-
 %assign CodeFormat = "Embedded-C"
 %assign TargetType = "RT"
 %assign Language   = "C"
@@ -38,7 +35,7 @@
   rtwoptions(oIdx).prompt        = 'Mbed options';
   rtwoptions(oIdx).type          = 'Category';
   rtwoptions(oIdx).enable        = 'on';
-  rtwoptions(oIdx).default       = 10;  % number of items under this category excluding this one.
+  rtwoptions(oIdx).default       = 11;  % number of items under this category excluding this one.
   rtwoptions(oIdx).popupstrings  = '';
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
@@ -49,14 +46,36 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Target: ';
+  rtwoptions(oIdx).prompt         = 'mbed Version: ';
   rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets();mbed_tlc_opencallback();
+  rtwoptions(oIdx).popupstrings   = 'mbed 2|mbed-os 5';
+  rtwoptions(oIdx).tlcvariable    = 'MbedVersion';
+  rtwoptions(oIdx).makevariable   = 'MBEDVERSION';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed version']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedVersion'')';
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'mbed 2 Target: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets('');
   rtwoptions(oIdx).tlcvariable    = 'MbedTarget';
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET';
   rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG']);
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'mbed os 5 Target: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets('mbed-os 5');
+  rtwoptions(oIdx).tlcvariable    = 'MbedTarget5';
+  rtwoptions(oIdx).makevariable   = 'MBEDTARGET5';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget5'')';
 
 
   oIdx = oIdx + 1;
@@ -76,8 +95,8 @@
   rtwoptions(oIdx).prompt         = 'use mbedls autodetect';
   rtwoptions(oIdx).type           = 'Checkbox';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedAutoDetect();
-  rtwoptions(oIdx).tlcvariable    = 'mbedlsAutodetect';
-  rtwoptions(oIdx).makevariable   = 'MBEDLSAUTODETECT';
+  rtwoptions(oIdx).tlcvariable    = 'MbedlsAutodetect';
+  rtwoptions(oIdx).makevariable   = '';
   rtwoptions(oIdx).tooltip        = ['use mbedls to detect mbed Virtual Drive and Virtual COM Port before flashing'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedlsAutodetect'')';
 
@@ -152,5 +171,5 @@
   rtwgensettings.SelectCallback = 'mbed_select_callback_handler(hDlg, hSrc)';
 
   END_RTW_OPTIONS
- %/
- 
+
+%/

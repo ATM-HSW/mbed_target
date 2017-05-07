@@ -12,8 +12,21 @@
 #
 # Copyright 2009-2014 The MathWorks, Inc.
 
+# SHELL = C:/Program Files (x86)/Git/bin/sh.exe
+# cross-platform directory manipulation
+ifeq ($(shell echo $$OS),$$OS)
+    MAKEDIR = if not exist "$(1)" mkdir "$(1)"
+    RM = rmdir /S /Q "$(1)"
+else
+    MAKEDIR = '$(SHELL)' -c "mkdir -p \"$(1)\""
+    RM = '$(SHELL)' -c "rm -rf \"$(1)\""
+endif
+# trick rules into thinking we are in the root, when we are in the bulid dir
+VPATH = ..
+# Boiler-plate
+###############################################################################
 #------------------------ Macros read by make_rtw ------------------------------
-SHELL=C:/Windows/System32/cmd.exe
+# SHELL=C:/Windows/System32/cmd.exe
 MAKECMD         = "|>MATLAB_BIN<|/|>ARCH<|/gmake"
 HOST                = ANY
 BUILD               = yes
@@ -137,6 +150,8 @@ EXE_FILE_EXT = .exe
 
 include target_tools.mk
 
+# OBJCOPY=$(ELF2BIN)
+
 #------------------------------ Includes -------------------------------------
 # Place -I options here
 MATLAB_INCLUDES = \
@@ -242,6 +257,7 @@ endif
 USER_SRCS = $(MBED_SOURCEN)
 
 USER_OBJS       = $(addsuffix $(OBJ_EXT), $(basename $(USER_SRCS)))
+USER_OBJS       += $(MBED_OBJECTS)
 LOCAL_USER_OBJS = $(notdir $(USER_OBJS))
 
 OBJS      = $(addsuffix $(OBJ_EXT), $(basename $(SRCS))) $(USER_OBJS)
@@ -260,14 +276,14 @@ all: $(TARGETS)
 # Need a rule to generate the build success string if product was already up to date
 .PHONY : all
 all : $(PRODUCT)
-	@echo ### Created $(PRODUCT) successfully (or it was already up to date)
+	@echo "### Created $(PRODUCT) successfully (or it was already up to date)"
 
 clean:
-	@echo ### Cleaning $(MODEL)
+	@echo "### Cleaning $(MODEL)"
 	@rm -f $(MODEL).bin $(MODEL).elf $(MODEL).hex $(MODEL).map $(MODEL).lst $(MODEL).d ert_main.d $(OBJS) $(DEPS) core.a $(addsuffix .d, $(basename $(MODULES)))
 
 flash:
-	@echo ### Flashing $(MODEL)
+	@echo "### Flashing $(MODEL)"
 	@cp $(MODEL).bin $(MBED_DRIVE)
 
 #----------------------------- Dependencies ------------------------------------
@@ -275,22 +291,22 @@ flash:
 #--$(OBJS) : $(MAKEFILE) rtw_proj.tmw
 
 $(SHARED_LIB) : $(SHARED_OBJS)
-	@echo ### Creating $@
+	@echo "### Creating $@"
 	@$(AR) $(ARFLAGS) $@ $(SHARED_OBJS)
-	@echo ### $@ Created
+	@echo "### $@ Created"
 
 ##-------------------------- Support for building modules ----------------------
 ifeq ($(BUILD_MODE), pil_prebuild)
 $(PRODUCT) : $(OBJS) $(SHARED_LIB)
-	@echo ### BUILD_MODE $(BUILD_MODE)
-	@echo ### Created $(PRODUCT)
+	@echo "### BUILD_MODE $(BUILD_MODE)"
+	@echo "### Created $(PRODUCT)"
 endif
 
 ifeq ($(BUILD_MODE), real_time)
 $(PRODUCT) : $(MODEL)$(PROGRAM_FILE_EXT)
 	@$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
-	@echo ### Generated $(PRODUCT)
-	@echo ### Project size
+	@echo "### Generated $(PRODUCT)"
+	@echo "### Project size"
 	@$(SIZE) $<
 	@$(SIZE) $< >code_size_$(TARGET_LANG_EXT).txt
 	@$(OBJDUMP) $(OBJDUMPFLAGS) $< > disassembly.txt
@@ -299,75 +315,88 @@ endif
 
 ifeq ($(BUILD_MODE), pil_application)
 $(PRODUCT) : $(MODEL)$(PROGRAM_FILE_EXT)
-	@echo ### BUILD_MODE $(BUILD_MODE)
+	@echo "### BUILD_MODE $(BUILD_MODE)"
 	@$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
-	@echo ### Generated $(PRODUCT)
-	@echo ### Project size
+	@echo "### Generated $(PRODUCT)"
+	@echo "### Project size"
 	@$(SIZE) $<
-	@$(OBJDUMP) $(OBJDUMPFLAGS) $< > disassembly.txt
+#	@$(OBJDUMP) $(OBJDUMPFLAGS) $< > disassembly.txt
 endif
 
 ifeq ($(BUILD_MODE), model_reference)
 $(PRODUCT) : $(OBJS) $(SHARED_LIB) $(LIBS)
-	@echo ### BUILD_MODE $(BUILD_MODE)
-	@echo ### Creating library ...
+	@echo "### BUILD_MODE $(BUILD_MODE)"
+	@echo "### Creating library ..."
 	@$(AR) $(ARFLAGS) $@ $(OBJS)
-	@echo ### Generated $@
+	@echo "### Generated $@"
 endif
 
 ifeq ($(BUILD_MODE), pil_application)
 $(MODEL)$(PROGRAM_FILE_EXT): $(PREBUILT_OBJS) $(OBJS) $(MODELLIB) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS)
-	@echo ### BUILD_MODE $(BUILD_MODE)
+	@echo "### BUILD_MODE $(BUILD_MODE)"
 	@$(AR) $(ARFLAGS) core.a $(filter-out pil_main.o,$^)
 	@$(LD) pil_main.o core.a $(filter-out %.o,$^) $(LDFLAGS) $(LDOUTPUTFLAG) $@
-	@echo ### Generated $@
+	@echo "### Generated $@"
 endif
 
 ifeq ($(BUILD_MODE), real_time)
 $(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS)
-	@echo ### BUILD_MODE $(BUILD_MODE)
+	@echo "### BUILD_MODE $(BUILD_MODE)"
 	@$(LD) $(MBED_LD_FLAGS) -T$(MBED_LINKER_SCRIPT) $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ $^ $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
-	@echo ### Generated $@
+	@echo "### Generated $@"
 endif
 
 %$(OBJ_EXT): %.s
-	@echo Assembling: $<
+	@echo "Assembling: $<"
+	+@$(call MAKEDIR,$(dir $@))
+	@$(AS) $(MBED_ASM_FLAGS) -o $@ $<
+%$(OBJ_EXT): %.S
+	@echo "Assembling: $<"
+	+@$(call MAKEDIR,$(dir $@))
 	@$(AS) $(MBED_ASM_FLAGS) -o $@ $<
 	
 %$(OBJ_EXT) : $(RELATIVE_PATH_TO_ANCHOR)/%.c
-	@echo Compiling: $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
 	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): %.c
-	@echo Compiling: $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
 	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): $(TARGET_SRC_DIR)/%.c
-	@echo Compiling: $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
 	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): $(RELATIVE_PATH_TO_ANCHOR)/%.cpp
-	@echo Compiling: $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
 	@$(CPP) $(MBED_CPPC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): %.cpp
-	@echo Compiling: $<
+	@echo "Compiling: $<"
+	@$(call MAKEDIR,$(dir $@))
 	@$(CPP) $(MBED_CPPC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
 
 %$(OBJ_EXT): $(TARGET_SRC_DIR)/%.cpp
-	@echo Compiling: $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
 	@$(CPP) $(MBED_CPPC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
 
 
 
 |>START_EXPAND_RULES<|%$(OBJ_EXT) : |>EXPAND_DIR_NAME<|/%.cpp
-	@echo Compiling: $<
-	@$(CPP) -c $(MBED_CPPC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
+	@$(CPP) -c $(MBED_CPPC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
 
 |>END_EXPAND_RULES<|
 
 |>START_EXPAND_RULES<|%$(OBJ_EXT) : |>EXPAND_DIR_NAME<|/%.c
-	@echo Compiling: $<
-	@$(CC) -c $(CFLAGS) $<
+	@echo "Compiling: $<"
+	+@$(call MAKEDIR,$(dir $@))
+	@$(CC) $(CFLAGS) $(MBED_CC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $< $(CCOUTPUTFLAG) $@
 
 |>END_EXPAND_RULES<|
