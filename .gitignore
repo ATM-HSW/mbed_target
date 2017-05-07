@@ -20,6 +20,7 @@
 **/*_slprj/*
 **/Debug/*
 doc/_build/**/*
+htmlhelp/**/*
 
 *~
 *.autosave

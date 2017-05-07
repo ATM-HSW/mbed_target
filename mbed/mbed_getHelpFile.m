@@ -9,7 +9,7 @@ function path = mbed_getHelpFile(blockname)
   if isempty(idx)
       path  = fullfile(mbed_getTargetRootPath(), 'doc/Error404.html');
   else
-      path = fullfile(mbed_getTargetRootPath(), 'doc/_build/htmlhelp', [cellFiles{idx}, '.html']); 
+      path = fullfile(mbed_getTargetRootPath(), 'htmlhelp', [cellFiles{idx}, '.html']); 
   end
 end
 
