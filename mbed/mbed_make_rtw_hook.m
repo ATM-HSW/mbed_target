@@ -226,7 +226,7 @@ if isequal(mbedversion, 'mbed-os 5')
     
     % generate make file with mbed tools
     oldpath=cd(buildAreaDstFolder);
-    [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i simulink --source . --source ..\mbed-os']);
+    [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i simulink --source . --source ..\mbed-os --source ..\libraries']);
     cd(oldpath);
     disp(cmdout);
     

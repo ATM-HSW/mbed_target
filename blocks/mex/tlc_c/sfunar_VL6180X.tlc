@@ -9,7 +9,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
 
   %<LibAddToCommonIncludes("vl6180x_class.h")>
-  %<LibAddToModelSources("vl6180x_class")>
   %<LibAddToCommonIncludes("vl6180x_def.h")>
 
 %endfunction
