@@ -3,7 +3,9 @@ feature request
 - CAN rderror
 - CAN tderror
 - SPI asynch
+- im Setup pip install -r requirements.txt aufrufen/testen
 
 bugfix
 - instance name in serial doc
 - UART write block - Angabe der Parameter bei step function
+- mbedls ohne board, mit 2 boards
