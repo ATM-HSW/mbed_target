@@ -17,7 +17,6 @@
 %assign InlineSetEventsForThisBaseRateFcn  = TLC_TRUE
 %assign SuppressMultiTaskScheduler = TLC_TRUE
 %assign UseRTOS = TLC_FALSE
-%include "commontargetlib.tlc"
 %include "codegenentry.tlc"
 
 %% The contents between 'BEGIN_RTW_OPTIONS' and 'END_RTW_OPTIONS' in this file
