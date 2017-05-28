@@ -15,7 +15,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
 
   %<LibAddToCommonIncludes("max11300.h")>
-  %<LibAddToModelSources("max11300")>
 
   %% global variable containing the CS Port and Pin Values used by any MSP3204 block
   %% lower 16 Bit contain pin number 

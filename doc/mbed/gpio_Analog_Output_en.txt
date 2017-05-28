@@ -26,7 +26,7 @@ Port Name/Pin Number
 specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
 
 Input data format
-...........
+.................
 specifies the data type of the input port. It can be choose between *real32* and *uint16*.
 
 Sample Time
