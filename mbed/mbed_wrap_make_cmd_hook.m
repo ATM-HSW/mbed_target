@@ -18,8 +18,13 @@ if isequal(mbedversion, 'mbed-os 5')
         buildAreaSrcFolder = fullfile(lCodeGenFolder, [modelName '_slprj']);
 %        pathstr = mbed_getTargetRootPath();
 %        buildAreaDstFolder = fullfile(pathstr,'targets',[modelName '_slprj']);
+        makeexepath = fullfile(mbed_getTargetRootPath(), 'buildtools', 'bin', 'make.exe');
         buildAreaDstFolder = mbed_getTargetDestFolder( mbedversion );
-        args.makeCmd = ['@echo off & copy "' fullfile(buildAreaSrcFolder, [args.modelName '.mk']) '" "' fullfile(buildAreaDstFolder, 'BUILD', 'Makefile') '" & copy "' fullfile(buildAreaDstFolder, 'target_tools.mk') '" "' fullfile(buildAreaDstFolder, 'BUILD', 'target_tools.mk') '" & cd ' buildAreaDstFolder ' & make.exe -C BUILD'];
+%        args.makeCmd = ['@echo off & copy "' fullfile(buildAreaSrcFolder, [args.modelName '.mk']) '" "' fullfile(buildAreaDstFolder, 'BUILD', 'Makefile') '" & copy "' fullfile(buildAreaDstFolder, 'target_tools.mk') '" "' fullfile(buildAreaDstFolder, 'BUILD', 'target_tools.mk') '" & cd ' buildAreaDstFolder ' & make.exe -C BUILD'];
+        copy1 = ['copy "' fullfile(buildAreaSrcFolder, [args.modelName '.mk']) '" "' fullfile(buildAreaDstFolder, 'BUILD', 'Makefile') '"'];
+        copy2 = ['copy "' fullfile(buildAreaDstFolder, 'target_tools.mk') '" "' fullfile(buildAreaDstFolder, 'BUILD', 'target_tools.mk') '"'];
+        copy3 = ['copy "' fullfile(buildAreaSrcFolder, [args.modelName '.bat']) '" "' buildAreaDstFolder '"'];
+        args.makeCmd = ['@echo off & ' copy1 ' & ' copy2  ' & ' copy3 ' & cd ' buildAreaDstFolder ' & ' makeexepath ' -C BUILD'];
         args.verbose = 1;
         makeCmd = setup_for_default(args);
     else

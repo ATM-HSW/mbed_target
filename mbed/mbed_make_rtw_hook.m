@@ -120,6 +120,8 @@ if isequal(mbedversion, 'mbed-os 5')
             set_param(bdroot,'MbedDrive', MbedDrive);
             set_param(bdroot,'ComPort', ComPort);
             set_param(bdroot,'MbedTarget5', MbedTarget5);
+        else
+            error('mbedls did not detect a target or more than one target is connected');
         end
     end
 end

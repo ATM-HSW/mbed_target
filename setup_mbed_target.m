@@ -6,8 +6,8 @@ result = savepath;
 if result==1
     nl = char(10);
     msg = [' Unable to save updated MATLAB path (<a href="http://www.mathworks.com/support/solutions/en/data/1-9574H9/index.html?solution=1-9574H9">why?</a>)' nl ...
-           ' Exit MATLAB, right-click on the MATLAB icon, select "Run as administrator", and re-run setup_customtarget_mbed.m' nl ...
-           ];
+        ' Exit MATLAB, right-click on the MATLAB icon, select "Run as administrator", and re-run setup_customtarget_mbed.m' nl ...
+        ];
     error(msg);
 else
     disp(' Saved updated MATLAB path');
@@ -34,29 +34,42 @@ if exist('setup_userprefs.m','file')>0
     setup_userprefs;
 end
 
+ret=dir('blocks\mex');
+ret1=dir('blocks\mex\sourcen');
+if(size(ret,1)<=4 && size(ret1,1)>2)
+    disp('did not found mexw64 files: start compiling');
+    choice = txtmenu('Do you want to compile the the missing S-Function? C/C++ compiler has to be setup for this.','yes','no');
+    if choice==0
+        cd blocks
+        mex_compile_all
+        cd ..
+    end
+end
+
+
 [ok, where, version] = getGCC();
 if ok
     disp(' ');
     disp('found gcc version:');
     disp(version);
     disp('in folder:');
-    disp(where); 
+    disp(where);
     disp('All versions newer than 4.8 are OK for mbed_target');
 else
     error('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain 4.8-2014-q3-update or better and add the bin folder to System or User Path');
 end
 
-[ok, where, version] = getMake();
-if ok
-    disp(' ');
-    disp('found make version:');
-    disp(version);
-    disp('in folder:');
-    disp(where); 
-    disp('All versions newer than 3.81 are OK for mbed_target');
-else
-    error('Can not find make.exe. Please install GNU make 3.81vfor Windows or better and add the bin folder to System or User Path');
-end
+% [ok, where, version] = getMake();
+% if ok
+%     disp(' ');
+%     disp('found make version:');
+%     disp(version);
+%     disp('in folder:');
+%     disp(where);
+%     disp('All versions newer than 3.81 are OK for mbed_target');
+% else
+%     error('Can not find make.exe. Please install GNU make 3.81vfor Windows or better and add the bin folder to System or User Path');
+% end
 
 [okPython, where, version] = getPython();
 if okPython
@@ -64,19 +77,39 @@ if okPython
     disp('found Python version');
     disp(version);
     disp('in folder:');
-    disp(where); 
+    disp(where);
     disp('All versions newer than 2.7.9 are OK for mbed_target and mbed5 compatibility');
 else
     warning('Can not find python.exe. When you want to use mbed5 targets, please install Python 2.7.9 or newer');
 end
-
+if okPython
+    choice = txtmenu('Do you want to install the mbed os requirements with "pip install -r requirements.txt"?','yes','no');
+    if choice==0
+        disp('Please check the output of the installation.');
+        pathstr = mbed_getTargetRootPath();
+        newpath = fullfile(pathstr,'targets','mbed-os');
+        oldpath=cd(newpath);
+        system('pip install -r requirements.txt');
+        cd(oldpath);
+    end
+end
+if okPython
+    %[status,out]=system('targets\mbed-os\tools\project.py -S targets');
+    [a,b,c]=mbed_getTargets('mbed-os 5');
+    if(c>0)
+        disp(' ');
+        disp('supported mbed os 5 boards:')
+        disp(b);
+        disp(['found ' int2str(c) ' boards with "project.py -S targets"']);
+    end
+end
 % [ok, where, version] = getMbed();
 % if ok
 %     disp(' ');
 %     disp('found mbed-cli version');
 %     disp(version);
 %     disp('in folder:');
-%     disp(where); 
+%     disp(where);
 %     disp('All versions newer than 0.9.10 are OK for mbed_target and mbed5 compatibility');
 % else
 %     disp(' ');
@@ -100,8 +133,9 @@ if okMbedls
     disp('found mbed-ls version');
     disp(version);
     disp('in folder:');
-    disp(where); 
+    disp(where);
     disp('All versions newer than 1.2.9 are OK for mbed_target and mbed5 compatibility');
+    disp('When it is to old please call: "pip install mbed-ls --upgrade" at a Windows commandline')
 else
     disp(' ');
     disp('Can not find mbed-ls.');
@@ -126,7 +160,7 @@ if okMbedls
     end
 end
 
-try 
+try
     mbed_getTargetRootPath();
 catch
     disp(' ');

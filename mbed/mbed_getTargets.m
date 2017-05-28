@@ -1,13 +1,14 @@
-function ret = mbed_getTargets(mbedversion)
+function [ret1, ret2, count]= mbed_getTargets(mbedversion)
 
 if isequal(mbedversion, 'mbed-os 5')
     pathstr = mbed_getTargetRootPath();
     newpath = fullfile(pathstr,'targets','mbed-os','tools');
     oldpath=cd(newpath);
     [~,cmdout]=system('python project.py -S targets');
-    cmdout=regexprep(cmdout,'\n\n','');
-    ret=regexprep(cmdout,'\n','|');
-    ret=ret(1:end-1);
+    ret2=regexprep(cmdout,'\n\n','');
+    ret1=regexprep(ret2,'\n','|');
+    ret1=ret1(1:end-1);
+    count=size(strfind(ret1,'|'),2)+1;
     cd(oldpath);
 else
     pathstr = mbed_getTargetRootPath();
@@ -17,7 +18,9 @@ else
         [~,name,~] = fileparts(targetsfiles(i,:));
         ret = [ret '|' name]; %#ok<AGROW>
     end
-    ret = ret(2:end);
+    ret1 = ret(2:end);
+    ret2='';
+    count=0;
 end
 
 end
