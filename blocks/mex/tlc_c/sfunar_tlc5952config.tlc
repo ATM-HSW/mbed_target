@@ -14,7 +14,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
   
   %<LibAddToCommonIncludes("TLC5952.h")>
-  %<LibAddToModelSources("TLC5952")>
 
 %endfunction
 
