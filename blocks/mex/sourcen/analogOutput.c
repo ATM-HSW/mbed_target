@@ -199,8 +199,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
   const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {
-    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME?
-      FIXED_IN_MINOR_STEP_OFFSET: 0.0));
+    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME ? FIXED_IN_MINOR_STEP_OFFSET : 0.0));
   } else {
     ssSetOffsetTime(S, 0, sampleTime[1]);
   }
@@ -232,19 +231,8 @@ static void mdlSetWorkWidths(SimStruct *S)
   if (!ssSetNumRunTimeParams(S, 3))
     return;
 
-  /*
-   * Register the run-time parameter 1
-   */
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "PortName", ssGetDataTypeId(S, "uint8"));
-
-  /*
-   * Register the run-time parameter 3
-   */
   ssRegDlgParamAsRunTimeParam(S, 2, 1, "PinNumber", ssGetDataTypeId(S, "uint8"));
-
-  /*
-   * Register the run-time parameter 4
-   */
   ssRegDlgParamAsRunTimeParam(S, 3, 2, "Mode", ssGetDataTypeId(S, "uint8"));
 }
 

@@ -1,10 +1,10 @@
 %% File : sfunar_max11300Config.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2015 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015-2017 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements sfunar_max11300Config "C"
+%implements max11300_Config "C"
 
 %include "block_common_includes.tlc"
 

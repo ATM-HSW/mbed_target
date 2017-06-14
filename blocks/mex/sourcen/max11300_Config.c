@@ -1,12 +1,12 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
 /* MAX11300 Modifications by Axel Utech 2014, HS Wismar */
 /* Copyright 2015 M. Marquardt, HS Wismar */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_temperature_max11300
+#define S_FUNCTION_NAME                max11300_Config
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -30,7 +30,7 @@
 static void mdlCheckParameters(SimStruct *S)
 {
   /*
-   * Check the parameter 1 (CsPort)
+   * Check the parameter 1 (SpiPort)
    */
   if EDIT_OK(S, 0) {
     int_T dimsArray[2] = { 1, 1 };
@@ -39,8 +39,8 @@ static void mdlCheckParameters(SimStruct *S)
     ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
   /*
-   * Check the parameter 2 (CsPin)
-   */    
+   * Check the parameter 2 (CsPort
+   */
   if EDIT_OK(S, 1) {
     int_T dimsArray[2] = { 1, 1 };
 
@@ -48,14 +48,59 @@ static void mdlCheckParameters(SimStruct *S)
     ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
   }
   /*
-   * Check the parameter 3 (Channel)
+   * Check the parameter 3 (CsPin)
    */
   if EDIT_OK(S, 2) {
     int_T dimsArray[2] = { 1, 1 };
 
     /* Check the parameter attributes */
     ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }  
+  }
+  /*
+   * Check the parameter 4 (AdcRate)
+   */
+  if EDIT_OK(S, 3) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 3, "P4", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 5 (DacRef)
+   */
+  if EDIT_OK(S, 4) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 4, "P5", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 6 (TempCh0)
+   */
+  if EDIT_OK(S, 5) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 5, "P6", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 7 (TempCh1)
+   */
+  if EDIT_OK(S, 6) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 6, "P7", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
+  /*
+   * Check the parameter 8 (TempCh2)
+   */
+  if EDIT_OK(S, 7) {
+    int_T dimsArray[2] = { 1, 1 };
+
+    /* Check the parameter attributes */
+    ssCheckSFcnParamValueAttribs(S, 7, "P8", DYNAMICALLY_TYPED, 2, dimsArray, 0);
+  }
 }
 
 #endif
@@ -66,9 +111,9 @@ static void mdlCheckParameters(SimStruct *S)
  *    block's characteristics (number of inputs, outputs, states, etc.).
  */
 static void mdlInitializeSizes(SimStruct *S)
-{    
+{
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 8);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -91,9 +136,14 @@ static void mdlInitializeSizes(SimStruct *S)
 #endif
 
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 0);	// CsPort
-  ssSetSFcnParamTunable(S, 1, 0);   // CsPin
-  ssSetSFcnParamTunable(S, 2, 0);   // Channel
+  ssSetSFcnParamTunable(S, 0, 0);    // SpiPort
+  ssSetSFcnParamTunable(S, 1, 0);   // CsPort
+  ssSetSFcnParamTunable(S, 2, 0);   // CsPin
+  ssSetSFcnParamTunable(S, 3, 0);   // AdcRate
+  ssSetSFcnParamTunable(S, 4, 0);   // DacRef
+  ssSetSFcnParamTunable(S, 5, 0);   // TempCh0
+  ssSetSFcnParamTunable(S, 6, 0);   // TempCh1
+  ssSetSFcnParamTunable(S, 7, 0);   // TempCh2
 
   ssSetNumPWork(S, 0);
 
@@ -109,18 +159,9 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S,1))
+  if (!ssSetNumOutputPorts(S, 0))
     return;
 
-  /*
-   * Configure the output port 1
-   */
-  ssSetOutputPortDataType(S, 0, SS_SINGLE);
-  ssSetOutputPortWidth(S, 0, 1);
-  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-  ssSetOutputPortOutputExprInRTW(S, 0, 1);
-  
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -181,16 +222,17 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 3))
+  if (!ssSetNumRunTimeParams(S, 8))
     return;
 
-  /*
-   * Register the run-time parameter 1
-   */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "CsPort", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "CsPin", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "Channel", ssGetDataTypeId(S, "uint8"));
-
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SpiPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "CsPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "CsPin", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "AdcRate", ssGetDataTypeId(S, "uint8"));  
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "DacRef", SS_UINT8); 
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "TempCh0", SS_UINT8); 
+  ssRegDlgParamAsRunTimeParam(S, 6, 6, "TempCh1", SS_UINT8); 
+  ssRegDlgParamAsRunTimeParam(S, 7, 7, "TempCh2", SS_UINT8);
 }
 
 #endif

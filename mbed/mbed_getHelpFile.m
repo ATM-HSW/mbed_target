@@ -50,6 +50,13 @@ function createStruct()
   addStruct('SerialCANConfig', 'mbed/serial_CAN_Config_en');
   addStruct('SerialCANReceive', 'mbed/serial_CAN_Receive_en');
   addStruct('SerialCANSend', 'mbed/serial_CAN_Send_en');
+  addStruct('Max11300_Config',        'converter_extender/Max11300_Config_en');
+  addStruct('Max11300_digitalInput',  'converter_extender/Max11300_Digital_Input_en');
+  addStruct('Max11300_digitalOutput', 'converter_extender/Max11300_Digital_Output_en');
+  addStruct('Max11300_analogInput',   'converter_extender/Max11300_Analog_Input_en');
+  addStruct('Max11300_analogOutput',  'converter_extender/Max11300_Analog_Output_en');
+  addStruct('Max11300_temperature',   'converter_extender/Max11300_Temperature_en');
+
 %   addStruct('', '');
 %   addStruct('', '');
 %   addStruct('', '');
