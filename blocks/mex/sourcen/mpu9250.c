@@ -1,7 +1,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_mpu9250
+#define S_FUNCTION_NAME                mpu9250
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -11,7 +11,7 @@
 #include "simstruc.h"
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-#define SAMPLE_TIME                    (ssGetSFcnParam(S, 1))
+#define SAMPLE_TIME                    (ssGetSFcnParam(S, 0))
 
 /*
  * Utility function prototypes.
@@ -31,19 +31,9 @@ static bool IsRealMatrix(const mxArray * const m);
 static void mdlCheckParameters(SimStruct *S)
 {
   /*
-   * Check the parameter 1
-   */
-  if EDIT_OK(S, 0) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 0, "i2cbus", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-
-  /*
    * Check the parameter 2 (sample time)
    */
-  if EDIT_OK(S, 1) {
+  if EDIT_OK(S, 0) {
     const double * sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
 
@@ -83,17 +73,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-  
-    /*
-   * Check the parameter 3
-   */
-  if EDIT_OK(S, 2) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "i2cbus", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-
 }
 
 #endif
@@ -143,13 +122,13 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  if (!ssSetNumInputPorts(S, 0))            
+  if (!ssSetNumInputPorts(S, 0))
     return;
 
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 7))          
+  if (!ssSetNumOutputPorts(S, 7))
     return;
 
   /*
@@ -161,37 +140,37 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 0);
 
-    ssSetOutputPortDataType(S, 1, SS_SINGLE);               
+  ssSetOutputPortDataType(S, 1, SS_SINGLE);               
   ssSetOutputPortWidth(S, 1, 1);
   ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 1, 0);
   
-    ssSetOutputPortDataType(S, 2, SS_SINGLE);
+  ssSetOutputPortDataType(S, 2, SS_SINGLE);
   ssSetOutputPortWidth(S, 2, 1);
   ssSetOutputPortComplexSignal(S, 2, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 2, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 2, 0);
 
-    ssSetOutputPortDataType(S, 3, SS_SINGLE);              
+  ssSetOutputPortDataType(S, 3, SS_SINGLE);              
   ssSetOutputPortWidth(S, 3, 1);
   ssSetOutputPortComplexSignal(S, 3, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 3, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 3, 0);
   
-    ssSetOutputPortDataType(S, 4, SS_SINGLE);
+  ssSetOutputPortDataType(S, 4, SS_SINGLE);
   ssSetOutputPortWidth(S, 4, 1);
   ssSetOutputPortComplexSignal(S, 4, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 4, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 4, 0);
 
-    ssSetOutputPortDataType(S, 5, SS_SINGLE);            
+  ssSetOutputPortDataType(S, 5, SS_SINGLE);            
   ssSetOutputPortWidth(S, 5, 1);
   ssSetOutputPortComplexSignal(S, 5, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 5, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 5, 0);
-  
-    ssSetOutputPortDataType(S, 6, SS_SINGLE);
+
+  ssSetOutputPortDataType(S, 6, SS_SINGLE);
   ssSetOutputPortWidth(S, 6, 1);
   ssSetOutputPortComplexSignal(S, 6, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 6, SS_REUSABLE_AND_LOCAL);
@@ -264,15 +243,14 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 3))
+  if (!ssSetNumRunTimeParams(S, 2))
     return;
 
   /*
    * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "i2cbus", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SampleTime", ssGetDataTypeId(S, "int32"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "SubAddress", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "i2cbus", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "SubAddress", ssGetDataTypeId(S, "uint8"));
 
 }
 

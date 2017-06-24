@@ -1,0 +1,120 @@
+%% File : l3gd20_gyro.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 M. Marquardt, HS Wismar
+
+%implements lsm303dlhc_acc_mag "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("lsm303dlhc.h")>
+
+  %assign ::LSM303DLHC_instances  = CAST("Number",0)
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+
+    %assign accsamplerate_val = CAST("Number",LibBlockParameterValue(AccSampleRate, 0))-1
+    %assign accscale_val = CAST("Number",LibBlockParameterValue(AccScale, 0))-1
+    %assign hpfilter_val = CAST("Number",LibBlockParameterValue(HpFilter, 0))-2
+
+    %assign magsamplerate_val = CAST("Number",LibBlockParameterValue(MagSampleRate, 0))-1
+    %assign magscale_val = CAST("Number",LibBlockParameterValue(MagScale, 0))
+    %assign enabletemp_val = CAST("Number",LibBlockParameterValue(EnableTemp, 0))
+
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+
+    %if !(::LSM303DLHC_instances)
+      %openfile declbuf
+
+      LSM303DLHC lsm303dlhc(&%<i2c_name>);
+
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+      %assign ::LSM303DLHC_instances = 1
+
+      %if accsamplerate_val > 0
+        %if hpfilter_val < 0
+          %assign hpfilter_val = 0
+        %else
+          %assign hpfilter_val = ((hpfilter_val << 4) | 8)
+        %endif
+        lsm303dlhc.init_acc(%<accsamplerate_val << 4>, %<accscale_val << 4>, %<hpfilter_val>, true);            
+      %endif
+
+      %if magsamplerate_val > 0
+        %assign magsamplerate_val = magsamplerate_val - 1
+        lsm303dlhc.init_mag(%<magsamplerate_val << 2>, %<magscale_val << 5>, %<enabletemp_val << 7>);
+      %endif
+    %endif
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign accsamplerate_val = CAST("Number",LibBlockParameterValue(AccSampleRate, 0))-1
+    %assign magsamplerate_val = CAST("Number",LibBlockParameterValue(MagSampleRate, 0))-1
+    %assign enabletemp_val = CAST("Number",LibBlockParameterValue(EnableTemp, 0))
+
+    %if accsamplerate_val > 0
+      %assign x_acc = LibBlockOutputSignalAddr(0, "", "", 0)
+      %assign y_acc = LibBlockOutputSignalAddr(1, "", "", 0)
+      %assign z_acc = LibBlockOutputSignalAddr(2, "", "", 0)
+
+      lsm303dlhc.get_xyz_acc(%<x_acc>, %<y_acc>, %<z_acc>);
+
+      %if (magsamplerate_val > 0)
+
+          %assign x_mag = LibBlockOutputSignalAddr(3, "", "", 0)
+          %assign y_mag = LibBlockOutputSignalAddr(4, "", "", 0)
+          %assign z_mag = LibBlockOutputSignalAddr(5, "", "", 0)
+
+          lsm303dlhc.get_xyz_mag(%<x_mag>, %<y_mag>, %<z_mag>);
+
+        %if enabletemp_val > 0
+          %assign temp = LibBlockOutputSignal(6, "", "", 0)
+          %<temp> = lsm303dlhc.get_temp();
+        %endif
+      %endif
+    %else
+      %if (magsamplerate_val > 0)
+        %assign x_mag = LibBlockOutputSignalAddr(0, "", "", 0)
+        %assign y_mag = LibBlockOutputSignalAddr(1, "", "", 0)
+        %assign z_mag = LibBlockOutputSignalAddr(2, "", "", 0)
+
+        lsm303dlhc.get_xyz_mag(%<x_mag>, %<y_mag>, %<z_mag>);
+
+        %if enabletemp_val > 0
+          %assign temp = LibBlockOutputSignal(3, "", "", 0)
+          %<temp> = lsm303dlhc.get_temp();
+        %endif
+      %endif
+    %endif
+  %endif
+%endfunction

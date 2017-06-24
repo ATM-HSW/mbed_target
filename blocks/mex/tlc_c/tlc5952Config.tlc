@@ -1,0 +1,52 @@
+%% File : tlc5952config.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 S.Lack, HS Wismar
+
+%implements tlc5952Config "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("TLC5952.h")>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign ChipNumber_val = LibBlockParameterValue(ChipNumber,0)
+    %assign name = "TLC5952_" + FEVAL("int2str",ChipNumber_val-1)
+
+    %assign CLKPortName_val = LibBlockParameterValue(CLKPortName, 0)
+    %assign CLKPinNumber_val = LibBlockParameterValue(CLKPinNumber, 0)
+    %assign DataPortName_val = LibBlockParameterValue(DataPortName, 0)
+    %assign DataPinNumber_val = LibBlockParameterValue(DataPinNumber, 0)
+    %assign LatchPortName_val = LibBlockParameterValue(LatchPortName, 0)
+    %assign LatchPinNumber_val = LibBlockParameterValue(LatchPinNumber, 0)
+    %assign BlankPortName_val = LibBlockParameterValue(BlankPortName, 0)
+    %assign BlankPinNumber_val = LibBlockParameterValue(BlankPinNumber, 0)
+    %assign LEDCurrent_val = LibBlockParameterValue(LEDCurrent, 0)
+
+    %assign clock = "P" + FEVAL("char",CLKPortName_val+64) + "_" + FEVAL("int2str",CLKPinNumber_val-1)
+    %assign data = "P" + FEVAL("char",DataPortName_val+64) + "_" + FEVAL("int2str",DataPinNumber_val-1)
+    %assign latch = "P" + FEVAL("char",LatchPortName_val+64) + "_" + FEVAL("int2str",LatchPinNumber_val-1)
+    %assign blank = "P" + FEVAL("char",BlankPortName_val+64) + "_" + FEVAL("int2str",BlankPinNumber_val-1)
+    %assign current = FEVAL("int2str",%<LEDCurrent_val>)
+
+    %openfile declbuf
+    TLC5952 %<name>(%<clock>, %<data>,%<latch>,%<blank>,%<current>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+
+%endfunction

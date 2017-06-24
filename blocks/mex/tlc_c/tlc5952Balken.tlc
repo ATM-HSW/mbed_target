@@ -1,9 +1,10 @@
-%% File : sfunar_tlc5952config.tlc
+%% File : tlc5952Balken.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 S.Lack, HS Wismar
 
-%implements sfunar_tlc5952_balken"C"
+%implements tlc5952Balken "C"
 
 %include "block_common_includes.tlc"
 
@@ -25,21 +26,21 @@
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
-
-  %assign p1_val = LibBlockParameterValue(p1,0)
-  %assign checkbox = CAST("Number",LibBlockParameterValue(up_down,0))
-  
-  %assign com = "TLC5952_" + FEVAL("int2str",p1_val-1) +".LED_bar_down" 
-  %assign com1 = "TLC5952_" + FEVAL("int2str",p1_val-1) +".LED_bar_up"
-  
   %if !SLibCodeGenForSim()
-	  %assign u1_val = LibBlockInputSignal(0, "", "", 0)
 
-	  %if checkbox==1
-      %<com>(%<u1_val>);
-	  %else
-	  %<com1>(%<u1_val>);
-	  %endif
+    %assign ChipNumber_val = LibBlockParameterValue(ChipNumber,0)
+    %assign up_down_val = CAST("Number",LibBlockParameterValue(up_down,0))
+
+    %assign name0 = "TLC5952_" + FEVAL("int2str",ChipNumber_val-1) +".LED_bar_down" 
+    %assign name1 = "TLC5952_" + FEVAL("int2str",ChipNumber_val-1) +".LED_bar_up"
+
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+
+    %if up_down_val==1
+      %<name0>(%<u1_val>);
+    %else
+      %<name1>(%<u1_val>);
+    %endif
 
   %endif
 %endfunction

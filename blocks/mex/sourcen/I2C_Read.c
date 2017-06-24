@@ -92,7 +92,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   int inports = 0;
-  int outports = 1;
+  int outports = 0;
   int i;
   /* Number of expected parameters */
   ssSetNumSFcnParams(S, 8);
@@ -155,6 +155,7 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetInputPortRequiredContiguous(S, i, 1);
   }
 
+  outports = 1;
   if(*mxGetPr(ssGetSFcnParam(S,7)) > 0)
       outports++;
   /*

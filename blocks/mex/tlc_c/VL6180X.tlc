@@ -1,0 +1,94 @@
+%% File : VL6180X.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 S.Siemsen, HS Wismar
+%% Copyright 2016 M. Marquardt, HS Wismar
+
+%implements VL6180X "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("vl6180x_class.h")>
+  %<LibAddToCommonIncludes("vl6180x_def.h")>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign i2cport_val = CAST("Number",LibBlockParameterValue(i2cbus, 0))
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+    %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))
+
+    %assign lowtresh_val = CAST("Number",LibBlockParameterValue(lowtreshhold, 0))
+    %assign hightresh_val = CAST("Number",LibBlockParameterValue(hightreshhold, 0))
+
+    %assign Port = CAST("Number",LibBlockParameterValue(PortName, 0))
+    %assign Pin  = CAST("Number",LibBlockParameterValue(PinNumber, 0))
+    %assign pname = "P" + FEVAL("char",Port+64) + "_" + FEVAL("int2str",Pin-1)
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %openfile declbuf
+
+    DigitalInOut %<name>_pin(%<pname>, PIN_OUTPUT, OpenDrain, 0);
+
+    VL6180X %<name>(%<i2c_name>, %<name>_pin, NC);  
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    uint8_t newaddress = %<subaddress_val>;
+
+    %<name>.Init(&newaddress);
+
+    %<name>.StartMeasurement(range_continuous_polling, NULL, %<lowtresh_val>, %<hightresh_val>);
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    MeasureData_t VL6180X_data;
+
+    %assign enableerror = CAST("Number",LibBlockParameterValue(EnableError, 0))
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %assign mess_name = "mess" + name
+
+    %if !LibBlockOutputSignalIsExpr(0)
+      %%assign rangedata = LibBlockOutputSignalAddr(0, "", "", 0)
+      %%assign VL6180X_data = LibBlockOutputSignalAddr(0, "", "", 0)
+
+      %if enableerror
+        %<LibBlockOutputSignal(1, "", "", 0)>=%<name>.GetMeasurement(range_continuous_polling, &VL6180X_data);
+      %else
+        %<name>.GetMeasurement(range_continuous_polling, &VL6180X_data);
+      %endif
+
+      %<LibBlockOutputSignal(0,"","",0)> = (real_T)VL6180X_data.range_mm;
+    %endif
+
+  %endif
+%endfunction

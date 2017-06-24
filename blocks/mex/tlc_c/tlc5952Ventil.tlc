@@ -1,0 +1,61 @@
+%% File : tlc5952Ventil.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016 S.Lack, HS Wismar
+
+%implements tlc5952Ventil "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %assign counter = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign counter = FEVAL("strrep",counter," ","_")
+  %assign counter = FEVAL("strrep",counter,"-","_")
+  %assign counter = counter + "_counter"
+
+  %openfile declbuf
+  uint16_t %<counter>=0;
+  %closefile declbuf
+
+  %assign srcFile = LibGetModelDotCFile()
+  %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %assign counter = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+  %assign counter = FEVAL("strrep",counter," ","_")
+  %assign counter = FEVAL("strrep",counter,"-","_")
+  %assign counter = counter + "_counter"
+  
+  %assign ChipNumber_val = LibBlockParameterValue(ChipNumber,0)
+  %assign VentilNumber_val = LibBlockParameterValue(VentilNumber,0)
+  
+  %assign name = "TLC5952_" + FEVAL("int2str",ChipNumber_val-1) +".ventil_" + FEVAL("int2str",VentilNumber_val) + "_mov"
+
+  %if !SLibCodeGenForSim()
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+    %assign time = LibBlockInputSignal(1, "", "", 0)
+
+    if( %<counter> > %<time>)
+    {
+      %<name>(%<u1_val>);
+      %<counter>=0;
+    }
+
+    %<counter>=%<counter>+1;
+
+  %endif
+%endfunction

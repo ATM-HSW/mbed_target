@@ -1,8 +1,8 @@
-%% File : sfunar_BM180.tlc
+%% File : BM180.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
 
-%implements sfunar_bmp180 "C"
+%implements bmp180 "C"
 
 %include "block_common_includes.tlc"
 
@@ -13,7 +13,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
 
   %<LibAddToCommonIncludes("BMP180.h")>
-  %<LibAddToModelSources("BMP180")>
 
 %endfunction
 
@@ -29,21 +28,20 @@
 %% Function: Start ========================================================
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
-      %assign i2cbus_val = LibBlockParameterValue(i2cbus, 0)
-      %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cbus_val>)
+    %assign i2cbus_val = LibBlockParameterValue(i2cbus, 0)
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cbus_val>)
 
-	  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-      %assign name = FEVAL("strrep",name," ","_")
-      %assign name = FEVAL("strrep",name,"-","_")
-      %openfile declbuf
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %openfile declbuf
 
-      BMP180 %<name>(&%<i2c_name>);  %% initialize BMP-180 altimeter
-     
+    BMP180 %<name>(&%<i2c_name>);  %% initialize BMP-180 altimeter
 
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-	   %<name>.BMP180Calibration();
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %<name>.BMP180Calibration();
   %endif
 %endfunction
 
@@ -55,14 +53,14 @@
     %if !LibBlockOutputSignalIsExpr(0)
       %assign press_val = LibBlockOutputSignal(0, "", "", 0)   
       %assign temp_val = LibBlockOutputSignal(1, "", "", 0)
-	  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+      %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
       %assign name = FEVAL("strrep",name,"-","_")
       %%
       %<press_val> = (int32_t)%<name>.BMP180GetPressure();
       %<temp_val> = ((double)%<name>.BMP180GetTemperature()/10);
       %%
-    %endif 
+    %endif
   %endif
 %endfunction
 

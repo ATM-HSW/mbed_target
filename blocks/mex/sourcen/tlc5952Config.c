@@ -1,12 +1,11 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014 Dr.O.Hagendorf, HS Wismar  */
-/* Copyright 2015 M. Marquardt, HS Wismar  */
-
+/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2016 S.Lack, HS Wismar */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_temperature_tmp102
+#define S_FUNCTION_NAME                tlc5952Config
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -29,42 +28,6 @@
  */
 static void mdlCheckParameters(SimStruct *S)
 {
-  /*
-   * Check the parameter 1 I2cPort
-   */
-  if EDIT_OK(S, 0) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 0, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 2 SubAddress
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 3 EnableError
-   */
-  if EDIT_OK(S, 2) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "P3", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  /*
-   * Check the parameter 4 SampleRate
-   */
-  if EDIT_OK(S, 3) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 3, "P4", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 #endif
@@ -76,13 +39,9 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int errorOutputEnable;
-  int numoutputs = 1;
-    
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 10);
 
-  
 #if defined(MATLAB_MEX_FILE)
 
   if (ssGetNumSFcnParams(S) == ssGetSFcnParamsCount(S)) {
@@ -103,12 +62,17 @@ static void mdlInitializeSizes(SimStruct *S)
 
 #endif
 
-  
   /* Set the parameter's tunable status */
-  ssSetSFcnParamTunable(S, 0, 0);	// I2cPort
-  ssSetSFcnParamTunable(S, 1, 0);	// SubAddress
-  ssSetSFcnParamTunable(S, 2, 0);	// EnableError
-  ssSetSFcnParamTunable(S, 3, 0);	// SampleRate
+  ssSetSFcnParamTunable(S, 0, 0);
+  ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
+  ssSetSFcnParamTunable(S, 6, 0);
+  ssSetSFcnParamTunable(S, 7, 0);
+  ssSetSFcnParamTunable(S, 8, 0);
+  ssSetSFcnParamTunable(S, 9, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -120,39 +84,13 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 0))
     return;
-    
- 
-  errorOutputEnable = mxGetScalar(ssGetSFcnParam(S,2));
 
   /*
    * Set the number of output ports.
    */
-  if(errorOutputEnable)
-  {
-	  if (!ssSetNumOutputPorts(S, 2))
-		return;
-  }
-  else
-  {
-	  if (!ssSetNumOutputPorts(S, 1))
-		return;
-  }    
-		  
-	ssSetOutputPortDataType(S, 0, SS_SINGLE);
-	ssSetOutputPortWidth(S, 0, 1);
-	ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-	ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-	ssSetOutputPortOutputExprInRTW(S, 0, 1);
-  
-  if(errorOutputEnable)
-  {
-      ssSetOutputPortDataType(S, 1, SS_BOOLEAN);
-      ssSetOutputPortWidth(S, 1, 1);
-      ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
-      ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-      ssSetOutputPortOutputExprInRTW(S, 1, 1);
-  }
-  
+  if (!ssSetNumOutputPorts(S, 0))
+    return;
+
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -213,17 +151,19 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 4))
+  if (!ssSetNumRunTimeParams(S, 10))
     return;
 
-  /*
-   * Register the run-time parameter 1
-   */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "I2cPort", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SubAddress", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 2, "EnableError", ssGetDataTypeId(S, "boolean"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 3, "SampleRate", ssGetDataTypeId(S, "uint8"));
-
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "CLKPortName", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "CLKPinNumber", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "DataPortName", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "DataPinNumber", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "LatchPortName", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 5, "LatchPinNumber", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 6, 6, "BlankPortName", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 7, 7, "BlankPinNumber", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 8, 8, "LEDCurrent", ssGetDataTypeId(S, "int8"));
+  ssRegDlgParamAsRunTimeParam(S, 9, 9, "ChipNumber", ssGetDataTypeId(S, "int8"));
 }
 
 #endif
@@ -264,49 +204,6 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 static void mdlTerminate(SimStruct *S)
 {
     UNUSED_PARAMETER(S);
-}
-
-#define MDL_RTW
-#if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
-
-/* Function: mdlRTW =======================================================
- * Abstract:
- *    This function is called when the Real-Time Workshop is generating
- *    the model.rtw file.
- */
-static void mdlRTW(SimStruct *S)
-{
-    UNUSED_PARAMETER(S);
-}
-
-#endif
-
-/* Function: IsRealMatrix =================================================
- * Abstract:
- *      Verify that the mxArray is a real (double) finite matrix
- */
-static bool IsRealMatrix(const mxArray * const m)
-{
-  if (mxIsNumeric(m) &&
-      mxIsDouble(m) &&
-      !mxIsLogical(m) &&
-      !mxIsComplex(m) &&
-      !mxIsSparse(m) &&
-      !mxIsEmpty(m) &&
-      mxGetNumberOfDimensions(m) == 2) {
-    const real_T * const data = mxGetPr(m);
-    const size_t numEl = mxGetNumberOfElements(m);
-    size_t i;
-    for (i = 0; i < numEl; i++) {
-      if (!mxIsFinite(data[i])) {
-        return(false);
-      }
-    }
-
-    return(true);
-  } else {
-    return(false);
-  }
 }
 
 /*

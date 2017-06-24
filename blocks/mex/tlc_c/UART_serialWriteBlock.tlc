@@ -36,8 +36,8 @@
     %assign name = FEVAL("strrep",name,"-","_")
 
     %%
-    #if DEVICE_SERIAL_ASYNCH
-    %<name>.write((const char*)%<u1_ptr>, %<number_of_bytes>, 0, 0);
+    #if DEVICE_SERIAL_ASYNCH1
+    %<nameSerial>.write((const uint8_t*)%<u1_ptr>, %<number_of_bytes>, 0, 0);
 
     #else
     const char* ptr%<name> = (const char*)%<u1_ptr>;

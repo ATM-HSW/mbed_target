@@ -1,21 +1,11 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/*
- *   sfunar_serialConfig.c Simple C-MEX S-function for function call.
- *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- *        serialConfigOutput()
- *
- *   Simulink version           : 7.3 (R2009a) 15-Jan-2009
- *   C source code generated on : 30-Jun-2009 18:46:58
- */
+/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2016 S.Lack, HS Wismar */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                sfunar_tlc5952_ventil
+#define S_FUNCTION_NAME                tlc5952Balken
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -26,7 +16,7 @@
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
 #define SAMPLE_TIME                    (ssGetSFcnParam(S, 0))
-
+ 
  /*
  * Utility function prototypes.
  */
@@ -34,7 +24,7 @@ static bool IsRealMatrix(const mxArray * const m);
 
 #define MDL_CHECK_PARAMETERS
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
- 
+
 /* Function: mdlCheckParameters ===========================================
  * Abstract:
  *    mdlCheckParameters verifies new parameter settings whenever parameter
@@ -87,26 +77,6 @@ static void mdlCheckParameters(SimStruct *S)
       return;
     }
   }
-  
-   /*
-   * Check the parameter 1 TLC5952 Nummer
-   */
-  if EDIT_OK(S, 1) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 1, "P1", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
-  
-  /*
-   * Check the parameter 2 Ventil Nummer
-   */
-  if EDIT_OK(S, 2) {
-    int_T dimsArray[2] = { 1, 1 };
-
-    /* Check the parameter attributes */
-    ssCheckSFcnParamValueAttribs(S, 2, "P2", DYNAMICALLY_TYPED, 2, dimsArray, 0);
-  }
 }
 
 #endif
@@ -155,7 +125,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  if (!ssSetNumInputPorts(S, 2))
+  if (!ssSetNumInputPorts(S, 1))
     return;
 
   /*
@@ -169,19 +139,6 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortOverWritable(S, 0, 1);
   ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetInputPortRequiredContiguous(S, 0, 1);
- 
-  /*
-   * Configure the input port 2
-   */
-  ssSetInputPortDataType(S, 1, SS_UINT16);
-  ssSetInputPortWidth(S, 1, 1);
-  ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
-  ssSetInputPortDirectFeedThrough(S, 1, 1);
-  ssSetInputPortAcceptExprInRTW(S, 1, 1);
-  ssSetInputPortOverWritable(S, 1, 1);
-  ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-  ssSetInputPortRequiredContiguous(S, 1, 1);
-
 
   /*
    * Set the number of output ports.
@@ -260,12 +217,8 @@ static void mdlSetWorkWidths(SimStruct *S)
   if (!ssSetNumRunTimeParams(S, 2))
     return;
 
-  /*
-   * Register the run-time parameter 1
-   */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "p1", ssGetDataTypeId(S, "int8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "p2", ssGetDataTypeId(S, "int8"));
-
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "ChipNumber", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "up_down", ssGetDataTypeId(S, "boolean"));
 
 }
 

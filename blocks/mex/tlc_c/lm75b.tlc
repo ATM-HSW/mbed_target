@@ -1,10 +1,10 @@
 %% File : sfunar_temperature_lm75_.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2016-2017 Dr.O.Hagendorf, HS Wismar
 
 
-%implements sfunar_temperature_lm75b "C"
+%implements lm75b "C"
 
 %include "block_common_includes.tlc"
 
@@ -30,11 +30,11 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
   %if !SLibCodeGenForSim()
-      %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
-      %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
-      %assign subaddress_val = 144
+
+    %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+    %assign subaddress_val = 144
 
     %openfile declbuf
 
@@ -50,11 +50,12 @@
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
-
-  %assign subaddress_val = 144
-  %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
-
   %if !SLibCodeGenForSim()
+
+    %assign subaddress_val = 144
+    %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+
     %<y1_val> = lm75b_%<subaddress_val>.read();
+
   %endif
 %endfunction

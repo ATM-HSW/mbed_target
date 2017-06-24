@@ -1,4 +1,4 @@
-%implements sfunar_mpu9250 "C"
+%implements mpu9250_ak8963 "C"
 
 %include "block_common_includes.tlc"
 
@@ -9,7 +9,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
 
   %<LibAddToCommonIncludes("MPU9250.h")>
-  %<LibAddToModelSources("MPU9250")>
 
 %endfunction
 
@@ -27,24 +26,22 @@
   %if !SLibCodeGenForSim()
       %assign i2cbus_val = LibBlockParameterValue(i2cbus, 0)
       %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cbus_val>)
-	
 	  %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1
 	  
 	  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
       %assign name = FEVAL("strrep",name,"-","_")
-	  
       %openfile declbuf
 
-      MPU9250 %<name>(&%<i2c_name>,%<subaddress_val> );  %% initialize BMP-180 altimeter
+      MPU9250 %<name>(&%<i2c_name>,%<subaddress_val>);  
 
       %closefile declbuf
       %assign srcFile = LibGetModelDotCFile()
       %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 	  
 	  %<name>.resetMPU9250();
-	  %<name>.initMPU9250();
 	  %<name>.initAK8963();
+	  %<name>.initMPU9250();
   %endif
 %endfunction
 
@@ -54,28 +51,21 @@
 
   %if !SLibCodeGenForSim()
     %if !LibBlockOutputSignalIsExpr(0)
-      %assign x_accel_val = LibBlockOutputSignal(0, "", "", 0)   
-      %assign y_accel_val = LibBlockOutputSignal(1, "", "", 0)
-	  %assign z_accel_val = LibBlockOutputSignal(2, "", "", 0)   
-      %assign x_gyro_val = LibBlockOutputSignal(3, "", "", 0)
-	  %assign y_gyro_val = LibBlockOutputSignal(4, "", "", 0)   
-      %assign z_gyro_val = LibBlockOutputSignal(5, "", "", 0)
-	  %assign temp_val = LibBlockOutputSignal(6, "", "", 0)   
+      %assign x_mag_val = LibBlockOutputSignal(0, "", "", 0)   
+      %assign y_mag_val = LibBlockOutputSignal(1, "", "", 0)
+	  %assign z_mag_val = LibBlockOutputSignal(2, "", "", 0)   
+
 	  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
       %assign name = FEVAL("strrep",name,"-","_")
 	  %assign mess_name = "mess" + name
 	  float %<mess_name>[3];
       %%
-	  %<name>.readAccelData(%<mess_name>);  
-	  %<x_accel_val> = %<mess_name>[0];
-	  %<y_accel_val> = %<mess_name>[1];
-	  %<z_accel_val> = %<mess_name>[2];
-	  %<name>.readGyroData(%<mess_name>);  
-	  %<x_gyro_val> = %<mess_name>[0];
-	  %<y_gyro_val> = %<mess_name>[1];
-	  %<z_gyro_val> = %<mess_name>[2];
-	  %<temp_val> = (%<name>.readTempData());
+	  %<name>.readMagData(%<mess_name>); 
+	  %<x_mag_val> = (double)%<mess_name>[0];
+	  %<y_mag_val> = (double)%<mess_name>[1];
+	  %<z_mag_val> = (double)%<mess_name>[2];
+
       %%
     %endif 
   %endif
