@@ -1,0 +1,83 @@
+%% File : sfunar_ds3231.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+
+%implements sfunar_ds3231 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("ds3231.h")>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign i2cbus_val = LibBlockParameterValue(i2cbus, 0)
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cbus_val>)
+
+    %openfile declbuf
+
+    Ds3231 rtc(&%<i2c_name>);
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %if !LibBlockOutputSignalIsExpr(0)
+      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+      %<y1_val> = (uint32_t)rtc.get_epoch();
+    %endif
+
+  %endif
+%endfunction
+
+%% Function: BlockOutputSignal =================================================
+%% Abstract:
+%%      Return an output expression.  This function *may*
+%%      be used by Simulink when optimizing the Block IO data structure.
+%%
+%function BlockOutputSignal(block,system,portIdx,ucv,lcv,idx,retType) void
+
+  %assign retVal = "0U"
+
+  %if !SLibCodeGenForSim()
+    %switch retType
+      %case "Signal"
+        %assign retVal = "(uint32_t)rtc.get_epoch();"
+        %break
+      %default
+        %assign errTxt = "Unsupported return type: %<retType>"
+        %<LibBlockReportError(block,errTxt)>
+        %break
+    %endswitch
+  %endif
+
+  %return retVal
+
+%endfunction

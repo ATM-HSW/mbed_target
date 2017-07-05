@@ -1,0 +1,94 @@
+%% File : sfunar_l3gd20_gyro.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements l3gd20_gyro "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("l3gd20.h")>
+
+  %% global variable containing the CS Port and Pin Values used by any L3GD20 block
+  %% lower 16 Bit contain pin number
+  %% upper 16 Bit contain port number
+  %% example: 0b 00000000 00000001 00000000 00000001 = PA_0
+  %%          0b 00000000 00001000 01000000 00000000 = PD_14
+  %assign ::L3GD20_CS = CAST("Number",0)
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign spiport_val = CAST("Number",LibBlockParameterValue(SpiPort, 0))
+    %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+    %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+
+    %assign samplerate_val = CAST("Number",LibBlockParameterValue(SampleRate, 0))-1
+    %assign scale_val = CAST("Number",LibBlockParameterValue(Scale, 0))-1
+    %assign hpfilter_val = CAST("Number",LibBlockParameterValue(HpFilter, 0))-2
+    %assign interrupt_val = CAST("Number",LibBlockParameterValue(Int, 0))
+    %assign bandwidth_val = CAST("Number",LibBlockParameterValue(Bandwidth, 0))-1
+
+    %assign pname = "P" + FEVAL("char",csport_val+64) + "_" + FEVAL("int2str",cspin_val)
+    %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+
+    %if !((::L3GD20_CS & ((1<<(csport_val+15)) | (1<<cspin_val))) == ((1<<(csport_val+15)) | (1<<cspin_val)))
+      %openfile declbuf
+      L3GD20 l3gd20_%<instance>(&spi%<spiport_val>,%<pname>);
+      %closefile declbuf
+
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+      %assign ::L3GD20_CS = ::L3GD20_CS | ((1<<(csport_val+15)) | (1<<cspin_val))
+
+      %if hpfilter_val < 0
+        %assign hpfilter_val = 0
+      %else
+        %assign hpfilter_val = (hpfilter_val | 16)
+      %endif
+
+      l3gd20_%<instance>.init(%<SPRINTF("0x%02X",(samplerate_val << 6))>, %<SPRINTF("0x%02X",(bandwidth_val << 4))>, %<SPRINTF("0x%02X",(scale_val << 4))>, %<SPRINTF("0x%02X",hpfilter_val)>, %<interrupt_val>);
+
+    %endif
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign csport_val = CAST("Number",LibBlockParameterValue(CsPort, 0))
+    %assign cspin_val = CAST("Number",LibBlockParameterValue(CsPin, 0))-1
+
+    %assign instance = FEVAL("char",csport_val+64) + FEVAL("int2str",cspin_val)
+
+    %assign x_addr = LibBlockOutputSignalAddr(0, "", "", 0)
+    %assign y_addr = LibBlockOutputSignalAddr(1, "", "", 0)
+    %assign z_addr = LibBlockOutputSignalAddr(2, "", "", 0)
+
+    l3gd20_%<instance>.get_xyz(%<x_addr>, %<y_addr>, %<z_addr>);
+
+  %endif
+%endfunction

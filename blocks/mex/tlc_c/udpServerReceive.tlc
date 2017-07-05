@@ -1,0 +1,100 @@
+%implements udpServerReceive "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+
+      %assign sock_id       = SFcnParamSettings.SOCK_ID
+      %assign des_ip        = SFcnParamSettings.DES_IP
+      %assign srv_port      = CAST("Number",SFcnParamSettings.SRV_PORT)
+      %assign nBufferBytes  = CAST("Number",SFcnParamSettings.NBUFFERBYTES)
+      %assign nInputs       = LibBlockNumInputPorts(block)
+
+      %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+      %assign name = FEVAL("strrep",name," ","_")
+      %assign name = FEVAL("strrep",name,"-","_")
+      %%assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val-1)
+
+      %openfile declbuf
+       %%nBufferBytes wird als Flieﬂkomma interpretiert!!!!!!
+      char Recv_Buffer_%<sock_id>[%<nBufferBytes>] = {'\0'};
+    UDPSocket %<name>_%<sock_id>;
+      Endpoint Endpoint_%<sock_id>;
+      %closefile declbuf 
+
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+      
+  %endif
+
+  %if !SLibCodeGenForSim()
+     %<name>_%<sock_id>.bind(%<srv_port>);
+  %endif
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+%assign rollVars = ["U", "Y"]
+%assign nBuffer =  CAST("Number",SFcnParamSettings.NBUFFERBYTES)
+%assign nOutputs       = LibBlockNumOutputPorts(block)-1
+%assign Buffidx = 0
+%assign rolling = [0: %<nOutputs>]
+
+%assign sock_id = SFcnParamSettings.SOCK_ID
+
+%assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+%assign name = FEVAL("strrep",name," ","_")
+%assign name = FEVAL("strrep",name,"-","_")
+
+%% receive data and distribute them to the outputs
+%<name>_%<sock_id>.receiveFrom(Endpoint_%<sock_id>,Recv_Buffer_%<sock_id>,%<nBuffer>);
+
+%%distribute data
+%roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
+    %switch LibBlockOutputSignalDataTypeId(sigIdx)
+      %% uint8
+      %case 3
+        %assign u = LibBlockOutputSignal(0, "", lcv,sigIdx)
+         %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
+        %assign Buffidx = Buffidx + 1
+      %break
+      %%uint16
+      %case 5
+        %assign u = LibBlockOutputSignal(0, "", lcv,sigIdx)
+         %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
+        %assign Buffidx = Buffidx + 1
+        (%<y>&0xff00) = Recv_Buffer_%<sock_id>[%<Buffidx>] << 8;
+        %assign Buffidx = Buffidx + 1
+      %break
+      %%uint32
+      %case 7
+        %assign u = LibBlockOutputSignal(0, "", lcv,sigIdx)
+        %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
+        %assign Buffidx = Buffidx + 1
+        (%<y>&0xff00) = Recv_Buffer_%<sock_id>[%<Buffidx>] << 8;
+        %assign Buffidx = Buffidx + 1
+        (%<y> & 0xff0000) = Recv_Buffer_%<sock_id>[%<Buffidx>] << 16;
+        %assign Buffidx = Buffidx + 1
+        (%<u> & 0xff000000) = Recv_Buffer_%<sock_id>[%<Buffidx>] << 32;
+        %assign Buffidx = Buffidx + 1
+      %break
+      %default
+      %break
+    %endswitch
+    
+%endroll
+%endfunction

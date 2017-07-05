@@ -1,0 +1,52 @@
+%% File : randomNumber.tlc
+%%
+%% Copyright 2010-2011 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements randomNumber "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  %if !SLibCodeGenForSim()
+
+    %% Ensure required header files are included
+    %<MbedCommonBlockTypeSetup(block, system)>
+
+    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget,"DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget,"NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget,"NUCLEO_F401RE") || ISEQUAL(MbedTarget,"NUCLEO_F411RE") || ISEQUAL(MbedTarget,"DISCO_F746NG")
+
+      %openfile declbuf
+      RNG_HandleTypeDef hrng;
+      %closefile declbuf
+
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+      %openfile initbuf
+      __RNG_CLK_ENABLE();
+      hrng.Instance = RNG;
+      HAL_RNG_Init(&hrng);
+      %closefile initbuf
+
+      %<LibSystemInitializeCustomCode(system, initbuf, "execution")>
+
+    %else
+      %<LibReportFatalError("Random Number Generator Block not supported by this target")>
+    %endif
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign y1_addr = LibBlockOutputSignalAddr(0, "", "", 0)
+
+    HAL_RNG_GenerateRandomNumber(&hrng, (uint32_t*)%<y1_addr>);
+
+  %endif
+%endfunction

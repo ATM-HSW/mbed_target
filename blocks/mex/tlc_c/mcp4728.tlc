@@ -1,0 +1,94 @@
+%% File : mcp4728.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015 M. Marquardt, HS Wismar
+
+%implements sfunar_analogOut_mcp4728 "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("mcp4728.h")>
+  
+  %assign ::MCP4728_instances  = CAST("Number",0)
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign i2cport_val = CAST("Number",LibBlockParameterValue(I2cPort, 0))
+    %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2cport_val>)
+
+    %if !(::MCP4728_instances & (1<<subaddress_val))
+      %openfile declbuf
+
+      MCP4728 mcp4728_%<subaddress_val>(&%<i2c_name>, %<subaddress_val>);
+
+      %closefile declbuf
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+      %assign ::MCP4728_instances = ::MCP4728_instances | (1<<subaddress_val)
+    %endif
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+  %assign channel_val = CAST("Number",LibBlockParameterValue(Channel, 0)) - 1
+  %assign mode_val = CAST("Number",LibBlockParameterValue(Mode, 0))   
+  %assign vref_val = CAST("Number",LibBlockParameterValue(RefVoltage, 0))-1  
+  %assign gain_val = CAST("Number",LibBlockParameterValue(Gain, 0))-1  
+  %assign enableerror_val = CAST("Number",LibBlockParameterValue(EnableError, 0))
+  %assign subaddress_val = CAST("Number",LibBlockParameterValue(SubAddress, 0))-1  
+  
+  %if !SLibCodeGenForSim()
+    %switch mode_val
+    %case 1
+      %if enableerror_val == 1
+        %<LibBlockOutputSignal(0, "", "", 0)> = mcp4728_%<subaddress_val>.write_raw(%<channel_val>, %<vref_val>, MCP4728_PDM_Normal, %<gain_val>, %<LibBlockInputSignal(0, "", "", 0)>);
+      %else
+        mcp4728_%<subaddress_val>.write_raw(%<channel_val>, %<vref_val>, MCP4728_PDM_Normal, %<gain_val>, %<LibBlockInputSignal(0, "", "", 0)>);
+      %endif
+      %break
+
+    %case 2
+      %if enableerror_val == 1
+        %<LibBlockOutputSignal(0, "", "", 0)> = mcp4728_%<subaddress_val>.write_voltage(%<channel_val>, %<vref_val>, MCP4728_PDM_Normal, %<gain_val>, %<LibBlockInputSignal(0, "", "", 0)>);
+      %else
+        mcp4728_%<subaddress_val>.write_voltage(%<channel_val>, %<vref_val>, MCP4728_PDM_Normal, %<gain_val>, %<LibBlockInputSignal(0, "", "", 0)>);
+      %endif
+      %break
+
+    %case 3
+      %if enableerror_val == 1
+        %<LibBlockOutputSignal(0, "", "", 0)> = mcp4728_%<subaddress_val>.write_relative(%<channel_val>, %<vref_val>, MCP4728_PDM_Normal, %<gain_val>, %<LibBlockInputSignal(0, "", "", 0)>);
+      %else
+        mcp4728_%<subaddress_val>.write_relative(%<channel_val>, %<vref_val>, MCP4728_PDM_Normal, %<gain_val>, %<LibBlockInputSignal(0, "", "", 0)>);
+      %endif
+      %break
+  %endswitch
+
+  %endif
+%endfunction
