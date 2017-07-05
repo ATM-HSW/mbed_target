@@ -47,7 +47,7 @@ master_doc = 'Index'
 
 # General information about the project.
 project = u'mbed_target_doc'
-copyright = u'2015-2016, CEA/ATM RG, HS Wismar'
+copyright = u'2015-2017, CEA/ATM RG, HS Wismar'
 author = u'CEA/ATM RG'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -74,7 +74,7 @@ language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build','block_template.txt']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.

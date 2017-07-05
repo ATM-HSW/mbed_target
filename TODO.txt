@@ -7,3 +7,4 @@ feature request
 bugfix
 - instance name in serial doc
 - UART write block - Angabe der Parameter bei step function
+- RTOS Funktionnen an mbed 5 anpassen - depricated Warnungen

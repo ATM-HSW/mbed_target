@@ -12,24 +12,17 @@ Contents:
    :numbered: 4
    :maxdepth: 1
 
-   installation/Installation__en
+   installation/_index_en
    getting_started
-   mbed/gpio__en
-   mbed/serial_buses__en
-   mbed/rtos__en
-   mbed/utilities__en
-   targets/_targets__en
-   target_specific/_target_specific_en
-   sensor_actuator/_sensor_actuator_en
-   converter_extender/_converter_extender_en
-   memory/_memory_en
-   mbed/ethernet__en
-   power/power__en
+   gpio/_index_en
+   serial/_index_en
+   rtos/_index_en
+   ethernet/_index_en
+   several/_index_en
+   sensor/_index_en
+   converter_extender/_index_en
+   motordriver/_index_en
+   memory/_index_en
+   targets/_index_en
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

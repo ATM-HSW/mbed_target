@@ -56,7 +56,7 @@ if ok
     disp(where);
     disp('All versions newer than 4.8 are OK for mbed_target');
 else
-    error('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain 4.8-2014-q3-update or better and add the bin folder to System or User Path');
+    error('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain: gcc version 6.3.1 20170215 (release) [ARM/embedded-6-branch revision 245512] (GNU Tools for ARM Embedded Processors 6-2017-q1-update) and add the bin folder to System or User Path');
 end
 
 % [ok, where, version] = getMake();
@@ -134,7 +134,7 @@ if okMbedls
     disp(version);
     disp('in folder:');
     disp(where);
-    disp('All versions newer than 1.2.9 are OK for mbed_target and mbed5 compatibility');
+    disp('All versions newer than 1.2.13 are OK for mbed_target and mbed5 compatibility');
     disp('When it is to old please call: "pip install mbed-ls --upgrade" at a Windows commandline')
 else
     disp(' ');

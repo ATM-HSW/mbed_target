@@ -1,9 +1,0 @@
-Power
-======
-
-Contents:
-
-.. toctree::
-   :maxdepth: 1
-
-   power_PowerSTEP01__en

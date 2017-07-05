@@ -1,9 +1,0 @@
-Targets
-=======
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   STM__en

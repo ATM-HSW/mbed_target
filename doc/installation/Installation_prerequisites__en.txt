@@ -1,8 +1,0 @@
-Installation prerequisites
-=====================
-
-This section shows ..
-
-https://mcuoneclipse.com/2015/03/29/solving-the-8192-character-command-line-limit-on-windows/
-
-http://www.equation.com/servlet/equation.cmd?fa=make
