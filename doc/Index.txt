@@ -13,7 +13,7 @@ Contents:
    :maxdepth: 1
 
    installation/_index_en
-   getting_started
+   getting_started/getting_started
    gpio/_index_en
    serial/_index_en
    rtos/_index_en
@@ -25,4 +25,4 @@ Contents:
    memory/_index_en
    targets/_index_en
 
-
+mbed_target is an addation to the Embedded coder toolbox, an extension of MATLAB/Simulink. MATLAB versions 2016b or newer are supported.

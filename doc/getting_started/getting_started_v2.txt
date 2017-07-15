@@ -1,0 +1,79 @@
+Variant 2
+---------
+
+Create an empty Simulink model:
+
+.. code-block:: shell
+
+  >> open_system(new_system('untitled'))
+
+or out of the Simulink start page:
+
+.. image:: ../images/gettingstarted10.png
+   :scale: 50 %
+
+Open the model properties:
+
+.. image:: ../images/gettingstarted11.png
+   :scale: 50 %
+
+As solver options \ **Fixed-step**\  and \ **discrete**\  must to be chosen. The \ **fixed-step**\  size can be configured to 1ms. Other values are possible. The minimal value depends on the mbed target capabilities.
+
+.. image:: ../images/gettingstarted21.png
+   :scale: 50 %
+
+Under \ **Code Generation**\  the mbed.tlc has to be chosen:
+
+.. image:: ../images/gettingstarted12.png
+   :scale: 50 %
+
+
+.. image:: ../images/gettingstarted13.png
+   :scale: 50 %
+
+To compile the generated C++ code, the check box \ **Generate code only**\  has to be switched of. Under the menu \ **Mbed options**\  the mbed_target specific options are available.
+
+.. image:: ../images/gettingstarted14.png
+   :scale: 50 %
+
+Please chose mbed-sos 5:
+
+.. image:: ../images/gettingstarted15.png
+   :scale: 50 %
+
+and check if the mbed board is correctly connected:
+
+.. image:: ../images/gettingstarted4.png
+   :scale: 50 %
+
+The result is identically to the step in the 1st Variant.
+
+To construct the model, one possibility is the usage of the library browser:
+
+
+.. image:: ../images/gettingstarted17.png
+   :scale: 50 %
+
+Simulink allows the usage of a huge amount of blocks for the code generation. But not every block can be used.
+
+mbed_target delivers an own subtree in the Simulink library browser with the mbed_target specific blocks:
+
+.. image:: ../images/gettingstarted18.png
+   :scale: 50 %
+
+These blocks are described in this documentation. Alternatively the Simulink block help function can be used.
+
+Please add the marked LED, Pulse Generator (with amplitude 1) and Data Type Conversion blocks:
+
+
+.. image:: ../images/gettingstarted19.png
+   :scale: 50 %
+
+.. image:: ../images/gettingstarted20.png
+   :scale: 50 %
+
+After connecting the three blocks the model is identic to the model under Variant 1. 
+
+The model \ **must**\  be saved before the next step.
+
+The code generation can be executed as already described there.
