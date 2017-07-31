@@ -4,7 +4,7 @@
 %%   Custom file processing to generate a "main" file.
 %%
 %% Copyright 1994-2014 The MathWorks, Inc.
-%%           2014 Dr. Olaf Hagendorf, HS Wismar
+%%           2014-2017 Dr. Olaf Hagendorf, HS Wismar
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %selectfile NULL_FILE
@@ -43,20 +43,14 @@
   %endif
   %assign SampleRate_us  = %<SAMPLETIME> * 1000000
   %assign SampleRate_ms  = %<SAMPLETIME> * 1000
-  
+
   #define STEP_SIZE_US %<SampleRate_us>F /* Sample Time in microseconds */
   #define STEP_SIZE_MS %<SampleRate_ms>F /* and in milliseconds */
 
-  #if (defined(TARGET_STM32L053R8) || defined(TARGET_STM32L053C8)) && defined(TOOLCHAIN_GCC)
-    #define STACK_SIZE DEFAULT_STACK_SIZE/2
-  #elif (defined(TARGET_STM32F030R8) || defined(TARGET_STM32F070RB) || defined(TARGET_STM32F042K6)) && defined(TOOLCHAIN_GCC)
-    #define STACK_SIZE DEFAULT_STACK_SIZE/2
-  #else
-    #define STACK_SIZE DEFAULT_STACK_SIZE
-  #endif
-  
   %if UseMbedRTOS
     osThreadId step_id;
+    Thread step_1_thread;
+    Ticker step_1_ticker;
   %else
     Ticker timer;
   %endif
@@ -65,90 +59,84 @@
   %<LibSetSourceFileSection(cFile, "Declarations", tmpBuf)>
 
   %if UseMbedRTOS
-  
-    %openfile declbuf	
-    void step_thread(void const *param) {
-	  step_id = Thread::gettid();
-	  while(1){
-	    Thread::signal_wait(0x1,osWaitForever);
+
+    %openfile declbuf
+    void step_thread() {
+      step_id = Thread::gettid();
+      while(1){
+        Thread::signal_wait(0x1,osWaitForever);
         %<LibCallModelStep(0)>
-	  }
-    } 
-	
-	void step_callback(void const *param){
-	  osSignalSet(step_id, 0x1);
-	}
-	%closefile declbuf
+      }
+    }
+
+    void step_callback(){
+      osSignalSet(step_id, 0x1);
+    }
+    %closefile declbuf
+
     %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_fcn_decl")>
     %<LibSetSourceFileCustomSection(cFile,"Ert_main_fcn_decl",declbuf)>
-	
+
     %openfile tmpBuf
-	
     %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_glob_decl")>
     %<LibGetSourceFileCustomSection(cFile,"Ert_main_glob_decl")>
-	   
-  
+
     %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_fcn_decl")>
     %<LibGetSourceFileCustomSection(cFile,"Ert_main_fcn_decl")>
-	
+
     /* with RTOS */
     int main(void) {
-      
-      Thread step_1_thread(step_thread, NULL, osPriorityNormal, STACK_SIZE);
-      RtosTimer step_1_timer(step_callback, osTimerPeriodic, (void *)0);
+      step_1_thread.start(callback(step_thread));
+      step_1_ticker.attach_us(callback(step_callback), (timestamp_t)STEP_SIZE_US);
       %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_loc_decl")>
       %<LibGetSourceFileCustomSection(cFile,"Ert_main_loc_decl")>
-  
+
       /* initialize model */
       %<LibCallModelInitialize()>\
-  
+
       %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_after_init")>
       %<LibGetSourceFileCustomSection(cFile,"Ert_main_after_init")>
 
       %if ExtMode
           %<SLibGenERTExtModeInit()>
       %endif
-  
-  
-      /* start Timer for main step function */
-      step_1_timer.start(STEP_SIZE_MS);
-  
+
       /* main task waits forever */
       Thread::wait(osWaitForever);
-  
+
       /* deinitialize model */
       %<LibCallModelTerminate()>\
-  	
-  	return 0;
+
+      return 0;
     }
     %closefile tmpBuf
 
   %else
 
-    %openfile tmpBuf   
-  
+    %openfile tmpBuf
+
     // without RTOS
     int main(void)
-    {      
+    {
       /* initialize model */
       %<LibCallModelInitialize()>\
-  
+
       %if ExtMode
           %<SLibGenERTExtModeInit()>
       %endif
-  
+
       timer.attach_us(&%<LibGetModelName()>_step, STEP_SIZE_US);
       while (true);
-  
+
       /* deinitialize model */
       %<LibCallModelTerminate()>\
-  	
-  	return 0;
+
+      return 0;
     }
     %closefile tmpBuf
-  
+
   %endif
-  
+
   %<LibSetSourceFileSection(cFile, "Functions", tmpBuf)>
 
 %endfunction
