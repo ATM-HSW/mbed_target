@@ -146,12 +146,13 @@ end
 disp('###')
 disp('### mbed environment settings:')
 disp('###')
-fprintf('###     Name:           %s\n', mbedtarget);
-fprintf('###     Version:        %s\n', mbedversion);
-fprintf('###     RTOS:           %s\n', get_param(bdroot,'UseMbedRTOS'));
-fprintf('###     mbed Drive:     %s\n', get_param(bdroot,'MbedDrive'));
-fprintf('###     Com Port:       %s\n', get_param(bdroot,'ComPort'));
-fprintf('###     Programmer:     %s\n', mbed.Prefs.getMbedProgrammer()); %get_param(bdroot,'MbedProgrammer'))
+fprintf('###     Name:            %s\n', mbedtarget);
+fprintf('###     Version:         %s\n', mbedversion);
+fprintf('###     RTOS:            %s\n', get_param(bdroot,'UseMbedRTOS'));
+fprintf('###     Fixed step size: %ss\n', get_param(bdroot,'FixedStep'));
+fprintf('###     mbed Drive:      %s\n', get_param(bdroot,'MbedDrive'));
+fprintf('###     Com Port:        %s\n', get_param(bdroot,'ComPort'));
+fprintf('###     Programmer:      %s\n', mbed.Prefs.getMbedProgrammer()); %get_param(bdroot,'MbedProgrammer'))
 disp('###')
 end
 
@@ -184,11 +185,31 @@ if isequal(mbedversion, 'mbed-os 5')
     buildAreaDstFolder = mbed_getTargetDestFolder( mbedversion );
     if exist(buildAreaDstFolder, 'dir')
         try
-            delete(fullfile(buildAreaDstFolder,'*.*'));
+            delete(fullfile(buildAreaDstFolder,'BUILD','*.*'));
         catch
         end
         try
             rmdir(fullfile(buildAreaDstFolder,'BUILD'), 's');
+        catch
+        end
+        try
+            delete(fullfile(buildAreaDstFolder,'*.c'));
+        catch
+        end
+        try
+            delete(fullfile(buildAreaDstFolder,'*.cpp'));
+        catch
+        end
+        try
+            delete(fullfile(buildAreaDstFolder,'*.h'));
+        catch
+        end
+        try
+            delete(fullfile(buildAreaDstFolder,'*.mk'));
+        catch
+        end
+        try
+            delete(fullfile(buildAreaDstFolder,'*.bat'));
         catch
         end
     else
