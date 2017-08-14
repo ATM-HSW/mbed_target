@@ -31,7 +31,7 @@
 C12832::C12832(SPI *spi, PinName reset, PinName a0, PinName ncs, const char* name)
     : _reset(reset),_A0(a0),_CS(ncs),GraphicsDisplay(name)
 {
-	  _spi = spi;
+    _spi = spi;
     orientation = 1;
     draw_mode = NORMAL;
     char_x = 0;
@@ -473,7 +473,7 @@ int C12832::_putc(int value)
     if (value == '\n') {    // new line
         char_x = 0;
         char_y = char_y + font[2];
-        if (char_y >= height() - font[2]) {
+        if (char_y >= (unsigned int)height() - font[2]) {
             char_y = 0;
         }
     } else {
@@ -497,10 +497,10 @@ void C12832::character(int x, int y, int c)
     vert = font[2];                      // get vert size of font
     bpl = font[3];                       // bytes per line
 
-    if (char_x + hor > width()) {
+    if (char_x + hor > (unsigned int)width()) {
         char_x = 0;
         char_y = char_y + vert;
-        if (char_y >= height() - font[2]) {
+        if (char_y >= (unsigned int)height() - font[2]) {
             char_y = 0;
         }
     }
