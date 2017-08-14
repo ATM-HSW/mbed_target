@@ -3,7 +3,7 @@
 %% Copyright 2010 The MathWorks, Inc.
 %% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
 
-%implements sfunar_ds3231 "C"
+%implements ds3231 "C"
 
 %include "block_common_includes.tlc"
 

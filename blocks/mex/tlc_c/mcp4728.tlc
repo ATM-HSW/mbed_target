@@ -4,7 +4,7 @@
 %% Copyright 2015-2017 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements sfunar_analogOut_mcp4728 "C"
+%implements mcp4728 "C"
 
 %include "block_common_includes.tlc"
 

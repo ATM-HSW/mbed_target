@@ -16,7 +16,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
 
   %<LibAddToCommonIncludes("tmp102.h")>
-  %<LibAddToModelSources("tmp102")>
 
 %endfunction
 

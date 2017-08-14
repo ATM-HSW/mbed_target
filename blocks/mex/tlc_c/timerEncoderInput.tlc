@@ -4,7 +4,7 @@
 %% Copyright 2015 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
-%implements sfunar_encoderInput "C"
+%implements timerEncoderInput "C"
 
 %include "block_common_includes.tlc"
 
