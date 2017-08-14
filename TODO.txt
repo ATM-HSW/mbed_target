@@ -3,8 +3,75 @@ feature request
 - CAN rderror
 - CAN tderror
 - SPI asynch
+- mbed 2 mit project.py integrieren wie MbedOS 5
+- PIL/external/.. mode
+- CSVread block impl.
+- UDP testen
+- TCP impl.
+- LCDScope.slx - redesign
 
 bugfix
 - instance name in serial doc
 - UART write block - Angabe der Parameter bei step function
-- RTOS Funktionnen an mbed 5 anpassen - depricated Warnungen
+- RTOSTimer Block: RTOS Funktionnen an mbed 5 anpassen - depricated Warnungen
+
+documentation
+ rework
+   8.1. GPIO Runtime
+   8.2. DAC Runtime
+   9.1. MPU9250 6 DoF Motion Sensor
+   9.2. MPU9250_AK8963 3 DoF Motion Sensor
+   9.5. Digital Pressure Sensor
+   9.6. LIS302DL Accelerometer
+   9.7. L3GD20 Gyroscope
+   9.9. TMP102 Temperature
+   9.10. TMP123 Temperature
+   9.11. DS1820 Temperature
+   9.12. MAX6675 Thermocouple
+   10.1. PCF8574 Digital Input
+   10.2. PCF8574 Digital Output
+   10.3. MCP3204 Analog Input
+   10.4. MCP4822 Analog Output
+   10.5. MCP3428 Analog Input
+   10.6. MCP4728 Analog Output
+   10.7.1. MAX11300 Config
+   10.7.2. MAX11300 Digital Input
+   10.7.3. MAX11300 Digital Output
+   10.7.4. MAX11300 Analog Input
+   10.7.5. MAX11300 Analog Output
+   10.7.6. MAX11300 Temperature
+   12.1. FM25L16B FRAM Read
+   12.2. FM25L16B FRAM Write
+   12.3. FM24CL16B FRAM Read
+   12.4. FM24CL16B FRAM Write
+   13.2.1. Encoder Input
+   13.2.3. Counter
+   13.2.4. Random Number Generator
+
+ unknown
+   11.1. PowerSTEP01
+   13.1. STM
+
+ unfinished
+   5.6.2. One Wire Search ROM
+   5.7.1. TLC5952Config
+   5.7.2. TLC5962Ventil
+   5.7.3. TLC5952Balken
+   7.1.1. UDPConfigStack
+   7.1.2. UDPConfigSocket
+   7.1.3. UDPServerWrite
+   7.1.4. UDPServerWriteCSV
+   7.1.5. UDPServerRead
+   7.1.6. UDPServerReadCSV
+   7.1.7. UDPClientWrite
+   7.1.8. UDPClientWriteCSV
+   7.1.9. UDPClientRead
+   7.1.10. UDPClientReadCSV
+   8.3. CSVWrite
+   8.4. CSVRead
+   8.5. DisplayCR12832
+   9.3. LSM303DLHC
+   9.4. VL6180X
+   9.8. LM75B
+   13.2.2. InputCapture_en
+
