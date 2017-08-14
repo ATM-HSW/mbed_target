@@ -1,7 +1,7 @@
 %% File : RTOScreateThread.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2015-16 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015-17 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements RTOScreateThread "C"
@@ -66,7 +66,7 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateThread): '%<Name>'
-    extern void %<name>_thread(void const *);
+    extern void %<name>_thread();
     
     %closefile declbuf
 
@@ -75,7 +75,8 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateThread): '%<Name>'
-    Thread %<name>(%<name>_thread, NULL, %<nThreadPriority>, %<nStackSize>);
+    Thread %<name>(%<nThreadPriority>, %<nStackSize>);
+    %<name>.start(callback(%<name>_thread));
     %closefile declbuf
 
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
@@ -83,7 +84,7 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateThread): '%<Name>'
-    void %<name>_thread(void const *argument) {
+    void %<name>_thread() {
       while(1) {
         %<LibBlockExecuteFcnCall(block,0)>
         Thread::wait(%<valTiming>);

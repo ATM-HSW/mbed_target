@@ -37,9 +37,12 @@
 
   %% Get fundamental step time
   %assign SAMPLETIME = CompiledModel.FundamentalStepSize
-  %if SAMPLETIME < 0.00005
-      %% Even 50 microseconds is too quick for Arduino
-      %<LibReportError("The minimum supported sample time is 50 microseconds. Change the Sample time parameter in blocks that use incorrect sample times.")>
+  %if SAMPLETIME < 0.000001
+      %% Because micro second ticker function are used, this is the shortest periode, nevertheless the target supports it.
+      %<LibReportError("The minimum supported sample time is 1 microseconds. Change the Step size parameter under Solver in the model Configuration Parameters dialog.")>
+  %endif
+  %if SAMPLETIME < 0.0001
+      %<LibReportWarning("Please check if the target can support this step size, e.g. NUCLEO_F767ZI supports 1µs without RTOS. But it needs 10µs with RTOS. A NUCLEO_F411RE needs 10µs or more without RTOS.")>
   %endif
   %assign SampleRate_us  = %<SAMPLETIME> * 1000000
   %assign SampleRate_ms  = %<SAMPLETIME> * 1000

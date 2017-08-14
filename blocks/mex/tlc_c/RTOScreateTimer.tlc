@@ -66,7 +66,7 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateTimer): '%<Name>'
-    extern void %<name>_thread(void const *);
+    extern void %<name>_thread();
     extern osThreadId %<name>_id;
     %closefile declbuf
 
@@ -75,7 +75,7 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateTimer): '%<Name>'
-    void %<name>_callback(void const *param)
+    void %<name>_callback()
     {
       osSignalSet(%<name>_id, 0x1);
     }
@@ -85,8 +85,9 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateTimer): '%<Name>'
-    Thread %<name>(%<name>_thread, NULL, %<nThreadPriority>, %<nStackSize>);
-    RtosTimer %<name>_timer(%<name>_callback, osTimerPeriodic, NULL);
+    Thread %<name>(%<nThreadPriority>, %<nStackSize>);
+    %<name>.start(callback(%<name>_thread));
+    RtosTimer %<name>_timer(callback(%<name>_callback), osTimerPeriodic);
     %closefile declbuf
 
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
@@ -102,7 +103,7 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateTimer): '%<Name>'
-    void %<name>_thread(void const *argument) {
+    void %<name>_thread() {
       %<name>_id = Thread::gettid();
 
       while(1) {
