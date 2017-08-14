@@ -1,5 +1,5 @@
 Variant 1
----------
+=========
 
 Create a new blinky model with all necessary option already set from the template list:
 
@@ -18,6 +18,8 @@ resulting in a new model:
    :scale: 50 %
 
 This model \ **must**\  be saved before starting the code generation.
+
+.. _getting_started_label_v1-label:
 
 The correct mbed target installation can be checked with the integrated target detection. Please open the model configuration and go to \ **Mbed options**\ . After pressing the button \ **detect mbed target (mbedls)**\  the connected board should be shown in the line above the detect button:
 

@@ -69,14 +69,14 @@ In \ **ert_main**\ .cpp
 
 .. code-block:: c++
 
-  extern void <instance name>_RTOS_Thread_thread(void const *);
+  extern void <instance name>_RTOS_Thread_thread();
   extern osThreadId <instance name>_Thread_id;
 
 - a functions
 
 .. code-block:: c++
 
-  void <instance name>_RTOS_Thread_callback(void const *param)
+  void <instance name>_RTOS_Thread_callback()
   {
     osSignalSet(<instance name>_RTOS_Thread_id, 0x1);
   }
@@ -85,8 +85,9 @@ In \ **ert_main**\ .cpp
 
 .. code-block:: c++
 
-  RtosTimer <instance name>_RTOS_Thread_timer(<instance name>_RTOS_Thread_callback, osTimerPeriodic, NULL);
-  Thread <instance name>_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
+  RtosTimer <instance name>_RTOS_Thread_timer(callback(<instance name>_RTOS_Thread_callback), osTimerPeriodic);
+  Thread <instance name>_RTOS_Thread(<Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
+  <instance name>_RTOS_Thread.start(callback(<instance name>_RTOS_Thread_thread));
 
 are created. The timer has to be started explicitly, the Thread is started implicitly by the constructor.
 
@@ -108,7 +109,7 @@ and an own function for the function-call subblock
 
 .. code-block:: c++
 
-  void <instance name>_RTOS_Thread_thread(void const *argument)
+  void <instance name>_RTOS_Thread_thread()
   {
     <instance name>_RTOS_Thread_id = Thread::gettid();
     while (1) {

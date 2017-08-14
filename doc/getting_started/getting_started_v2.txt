@@ -1,5 +1,5 @@
 Variant 2
----------
+=========
 
 Create an empty Simulink model:
 
@@ -46,7 +46,7 @@ and check if the mbed board is correctly connected:
 .. image:: ../images/gettingstarted4.png
    :scale: 50 %
 
-The result is identically to the step in the 1st Variant.
+The result is identically to the step in the :ref:`Variant 1 <getting_started_label_v1-label>`.
 
 To construct the model, one possibility is the usage of the library browser:
 

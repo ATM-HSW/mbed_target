@@ -68,13 +68,14 @@ In \ **ert_main**\ .cpp
 
 .. code-block:: c++
 
-  extern void <instance name>_RTOS_Thread_thread(void const *);
+  extern void <instance name>_RTOS_Thread_thread();
 
-- and a Thread instance creation in the main function
+- and a Thread instance creation+start in the main function
 
 .. code-block:: c++
 
-  Thread <instance name>_blinky_RTOS_Thread(<instance name>_RTOS_Thread_thread, NULL, <Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
+  Thread <instance name>_blinky_RTOS_Thread(<Thread Priority>, <Size (bytes)> or DEFAULT_STACK_SIZE);
+  <instance name>.start(callback(<instance name>_RTOS_Thread_thread));
 
 are created. The callback function <instance name>_RTOS_Thread_thread is generated in \ **<Model Name>**\ .cpp.
 

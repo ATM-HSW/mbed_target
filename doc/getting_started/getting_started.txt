@@ -6,7 +6,6 @@ This chapter describes step by step the build procedure of a Simulink blinky mod
 The first variant uses a Simulink template and the second variant build a model from scratch.
 
 .. toctree::
-   :numbered: 4
    :maxdepth: 1
 
    getting_started_v1

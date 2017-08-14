@@ -1,10 +1,16 @@
-.. mbed_target_doc documentation master file, created by
-   sphinx-quickstart on Tue Aug 18 21:58:19 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. mbed_target_doc documentation master file
 
 Welcome to mbed_target documentation!
 ===========================================
+
+Simulink and Embedded Coder generates and executes C and C++ from Simulink diagrams, Stateflow charts and MATLAB functions. With MbedTarget the generated code is built on top of MbedOS and executed as a real time application on Mbed compatible microcontroller boards. MbedTarget is an addition to Simulink and Embedded coder. It needs MATLAB versions 2016b. Newer versions may work but are not fully tested.
+
+Introduction gives an overview about MbedTarget other other similar targets. The different behaviour is show with short examples. In a raw overview the internal working of MbedTarget is given.
+
+Installation describes the installation of MbedTarget and Getting Started gives two complete examples how to create, build and run a model.
+
+The following chapters document the blocks of MbedTarget.
+
 
 Contents:
 
@@ -12,6 +18,7 @@ Contents:
    :numbered: 4
    :maxdepth: 1
 
+   introduction/_index_en
    installation/_index_en
    getting_started/getting_started
    gpio/_index_en
@@ -24,5 +31,3 @@ Contents:
    motordriver/_index_en
    memory/_index_en
    targets/_index_en
-
-mbed_target is an addation to the Embedded coder toolbox, an extension of MATLAB/Simulink. MATLAB versions 2016b or newer are supported.

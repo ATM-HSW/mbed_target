@@ -1,0 +1,63 @@
+TLC5952Balken
+=============
+
+Description
+-----------
+
+description
+
+.. image:: ../images/emptyblock.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+
+The output port writes values with *real32* and *uint16* data types.
+The input port expects values with *real32* or *uint16* data types.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/emptymask.png
+
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+In the example an analog input pin is read in by an Analog Input Block. This value is written to an analog output pin by an Analog Output block.
+
+.. image:: ../images/emptyexample.png
+   :scale: 50 %
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+creates a global instance
+
+.. code-block:: c++
+
+  xx <instance name>(P<Port Name>_<Pin Number>);
+
+in \ **<Model Name>**\ .cpp.
+
+Step Function
+.............
+
+creates two lines in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  lvalue1  = (uint16_T)<instance name>.read_u16());
+  lvalue2  = (real32_T)<instance name>.read();

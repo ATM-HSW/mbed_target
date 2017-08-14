@@ -12,3 +12,4 @@ Contents:
    _SPI_en
    _CAN_en
    _OneWire_en
+   _Other_en

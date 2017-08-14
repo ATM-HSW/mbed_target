@@ -9,3 +9,5 @@ Contents:
    RuntimeGpio_en
    RuntimeDac_en
    CsvWrite_en
+   CsvRead_en
+   DisplayCR12832_en
