@@ -9,6 +9,9 @@ feature request
 - UDP testen
 - TCP impl.
 - LCDScope.slx - redesign
+- rework Servo Output (sourcen, missing sample time, example)
+- check exampls - every block somewhere used?
+- check examples from docs - create, when necessary and link docs with examples
 
 bugfix
 - instance name in serial doc
@@ -17,6 +20,7 @@ bugfix
 
 documentation
  rework
+   4.8. Servo Output
    8.1. GPIO Runtime
    8.2. DAC Runtime
    9.1. MPU9250 6 DoF Motion Sensor

@@ -1,0 +1,62 @@
+%% File : timerServoOutput.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2017 M. Marquardt, HS Wismar
+
+%implements timerServoOutput "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nPortName = LibBlockParameterValue(PortName, 0)
+    %assign nPinNumber = LibBlockParameterValue(PinNumber, 0)
+    %assign pname = "P" + FEVAL("char",nPortName+64) + "_" + FEVAL("int2str",nPinNumber-1)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+    // %<Type> (ServoOutput): '%<Name>'
+    PwmOut %<name>(%<pname>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %%
+    %<name>.period_us(20000);
+    %%
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%%
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign nPW_min = LibBlockParameterValue(PW_min, 0)/20
+    %assign nPW_max = LibBlockParameterValue(PW_max, 0)/20
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+
+    %assign slope = nPW_max-nPW_min
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %%
+    %<name>.write(%<slope>*%<u1_val>+%<nPW_min>);
+
+  %endif
+%endfunction

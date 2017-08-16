@@ -26,7 +26,7 @@ function createStruct()
   addStruct('analogOutput',             'gpio/Analog_Output_en');
   addStruct('analogInput',              'gpio/Analog_Input_en');
   addStruct('PWMOutput',                'gpio/PWM_Output_en');
-  addStruct('Servo',                    'gpio/Servo_Output_en');
+  addStruct('timerServoOutput',         'gpio/Servo_Output_en');
   addStruct('RTOScreateThread',         'rtos/Thread_en');
   addStruct('RTOScreateTimer',          'rtos/Timer_en');
   addStruct('RTOSmailSend',             'rtos/Mail_Send_en');
