@@ -1,0 +1,129 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>10.6. MCP4728 Analog Output</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="10.7. MAX11300" href="MAX11300_en.html" />
+    <link rel="prev" title="10.5. MCP3428 Analog Input" href="Mcp3428_Analog_Input_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="MAX11300_en.html" title="10.7. MAX11300"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Mcp3428_Analog_Input_en.html" title="10.5. MCP3428 Analog Input"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">10. Converter and I/O Extender</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mcp4728-analog-output">
+<h1>10.6. MCP4728 Analog Output</h1>
+<p>Outputs a variable analog voltage on the specified channel of MCP4728 digital to analog converter.</p>
+<div class="section" id="library">
+<h2>10.6.1. Library</h2>
+<p>/I2C</p>
+</div>
+<div class="section" id="description">
+<h2>10.6.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Mcp4728_Analog_Output_block.png"><img alt="../_images/Mcp4728_Analog_Output_block.png" src="../_images/Mcp4728_Analog_Output_block.png" style="width: 326.0px; height: 166.0px;" /></a>
+<p>This block configures an MCP4728 digital to analog converter to output a variable analog voltage on a specified pin. The MCP4728 provides internal reference voltage
+of 2.048V which can be boosted to 4.096V by selecting internal gain to 2. In addition external reference voltage can be selected and so output range is 0 to Vdd.</p>
+</div>
+<div class="section" id="data-type-support">
+<h2>10.6.3. Data Type Support</h2>
+<p>The block’s input port data type depends on the selected mode parameter:</p>
+<ul class="simple">
+<li>raw &#8594; uint16</li>
+<li>voltage &#8594; single</li>
+<li>relative &#8594; single</li>
+</ul>
+<p>The error output port data type is boolean.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>10.6.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Mcp4728_Analog_Output_mask.png" src="../_images/Mcp4728_Analog_Output_mask.png" />
+<div class="section" id="i2c-port">
+<h3>10.6.4.1. I2C Port</h3>
+<p>Selects the identifier of the I2C peripheral which is configured by an <em>I2C Config</em> block.</p>
+</div>
+<div class="section" id="device-address">
+<h3>10.6.4.2. Device Address</h3>
+<p>Bus address of the used MCP4728 device.</p>
+</div>
+<div class="section" id="enable-error-output-port">
+<h3>10.6.4.3. Enable error output port</h3>
+<p>Enables an error output port with return values:</p>
+<ul class="simple">
+<li>“0” if no error occurred</li>
+<li>“1” if there was an error during communication</li>
+</ul>
+</div>
+<div class="section" id="channel-number">
+<h3>10.6.4.4. Channel Number</h3>
+<p>Selects the output channel of the MCP4728.</p>
+</div>
+<div class="section" id="mode">
+<h3>10.6.4.5. Mode</h3>
+<p>Selects the input data type and range</p>
+<ul class="simple">
+<li>raw &#8594; 0 … 4095</li>
+<li>voltage &#8594; 0 … Vref</li>
+<li>relative &#8594; 0 … 1</li>
+</ul>
+</div>
+<div class="section" id="reference-voltage">
+<h3>10.6.4.6. Reference Voltage</h3>
+<p>Selects the reference voltage for the selected channel to internal or external.</p>
+</div>
+<div class="section" id="gain">
+<h3>10.6.4.7. Gain</h3>
+<p>If internal reference voltage is selected the output voltage can be boosted to 4.096V with gain of 2.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="MAX11300_en.html" title="10.7. MAX11300"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Mcp3428_Analog_Input_en.html" title="10.5. MCP3428 Analog Input"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

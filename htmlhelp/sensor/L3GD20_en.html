@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>9.7. L3GD20 Gyroscope</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="9.8. LM75B" href="LM75B_en.html" />
+    <link rel="prev" title="9.6. LIS302DL Accelerometer" href="LIS302DL_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="LM75B_en.html" title="9.8. LM75B"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="LIS302DL_en.html" title="9.6. LIS302DL Accelerometer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">9. Sensor</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="l3gd20-gyroscope">
+<h1>9.7. L3GD20 Gyroscope</h1>
+<p>Reads the roll, pitch and yaw angular velocities measured by an L3GD20 3-axis gyroscope.</p>
+<div class="section" id="library">
+<h2>9.7.1. Library</h2>
+<p>/SPI</p>
+</div>
+<div class="section" id="description">
+<h2>9.7.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/L3gd20_Gyroscope_block.png"><img alt="../_images/L3gd20_Gyroscope_block.png" src="../_images/L3gd20_Gyroscope_block.png" style="width: 328.0px; height: 168.0px;" /></a>
+<p>This block reads the angular velocity measurement of an LS3GD20 3-axis gyroscope. The L3GD20 device provides different sample rates for the internal ADC and three different measurement ranges.
+In addition the user can select the bandwidth of the measurement and also select different high pass filter cut-off frequencies as shown in the following two tables.</p>
+<div class="section" id="cut-off-frequency-hz-depending-on-bandwidth-and-sample-rate-selection">
+<h3>9.7.2.1. Cut-off frequency [Hz] depending on bandwidth and sample rate selection</h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="19%" />
+<col width="19%" />
+<col width="21%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" rowspan="2">Bandwidth</th>
+<th class="head" colspan="4">Sample rate</th>
+</tr>
+<tr class="row-even"><th class="head">&#64; 95 Hz</th>
+<th class="head">&#64; 190 Hz</th>
+<th class="head">&#64; 380 Hz</th>
+<th class="head">&#64; 760 Hz</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>level 1</td>
+<td>12.5</td>
+<td>12.5</td>
+<td>20</td>
+<td>30</td>
+</tr>
+<tr class="row-even"><td>level 2</td>
+<td>25</td>
+<td>25</td>
+<td>25</td>
+<td>35</td>
+</tr>
+<tr class="row-odd"><td>level 3</td>
+<td>25</td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr class="row-even"><td>level 4</td>
+<td>25</td>
+<td>70</td>
+<td>100</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="high-pass-filter-cut-off-frequency-hz">
+<h3>9.7.2.2. High pass filter cut-off frequency [Hz]</h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="19%" />
+<col width="19%" />
+<col width="21%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" rowspan="2">HP filter level</th>
+<th class="head" colspan="4">Sample rate</th>
+</tr>
+<tr class="row-even"><th class="head">&#64; 95 Hz</th>
+<th class="head">&#64; 190 Hz</th>
+<th class="head">&#64; 380 Hz</th>
+<th class="head">&#64; 760 Hz</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>level 0</td>
+<td>7.2</td>
+<td>13.5</td>
+<td>27</td>
+<td>51.4</td>
+</tr>
+<tr class="row-even"><td>level 1</td>
+<td>3.5</td>
+<td>7.2</td>
+<td>13.5</td>
+<td>27</td>
+</tr>
+<tr class="row-odd"><td>level 2</td>
+<td>1.8</td>
+<td>3.5</td>
+<td>7.2</td>
+<td>13.5</td>
+</tr>
+<tr class="row-even"><td>level 3</td>
+<td>0.9</td>
+<td>1.8</td>
+<td>3.5</td>
+<td>7.2</td>
+</tr>
+<tr class="row-odd"><td>level 4</td>
+<td>0.45</td>
+<td>0.9</td>
+<td>1.8</td>
+<td>3.5</td>
+</tr>
+<tr class="row-even"><td>level 5</td>
+<td>0.18</td>
+<td>0.45</td>
+<td>0.9</td>
+<td>1.8</td>
+</tr>
+<tr class="row-odd"><td>level 6</td>
+<td>0.09</td>
+<td>0.18</td>
+<td>0.45</td>
+<td>0.9</td>
+</tr>
+<tr class="row-even"><td>level 7</td>
+<td>0.045</td>
+<td>0.09</td>
+<td>0.18</td>
+<td>0.45</td>
+</tr>
+<tr class="row-odd"><td>level 8</td>
+<td>0.018</td>
+<td>0.045</td>
+<td>0.09</td>
+<td>0.18</td>
+</tr>
+<tr class="row-even"><td>level 9</td>
+<td>0.009</td>
+<td>0.018</td>
+<td>0.045</td>
+<td>0.09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="data-type-support">
+<h2>9.7.3. Data Type Support</h2>
+<p>The block’s output data type is single.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>9.7.4. Parameters and Dialog Box</h2>
+<img alt="../_images/L3gd20_Gyroscope_mask.png" src="../_images/L3gd20_Gyroscope_mask.png" />
+<div class="section" id="spi-port">
+<h3>9.7.4.1. SPI Port</h3>
+<p>Selects the SPI peripheral wich is configured by an <em>SPI Master Config</em> block.</p>
+</div>
+<div class="section" id="chip-select-port-and-pin">
+<h3>9.7.4.2. Chip Select Port and Pin</h3>
+<p>Configuration of the MCU Pin the device’s chip select input is connected to.</p>
+</div>
+<div class="section" id="sample-rate">
+<h3>9.7.4.3. Sample rate</h3>
+<p>Selects the output data rate of the L3GD20 device.</p>
+<ul class="simple">
+<li>95 Hz</li>
+<li>190 Hz</li>
+<li>380 Hz</li>
+<li>760 Hz</li>
+</ul>
+</div>
+<div class="section" id="full-scale">
+<h3>9.7.4.4. Full scale</h3>
+<p>Selects the input measurement range</p>
+<ul class="simple">
+<li>250 dps</li>
+<li>500 dps</li>
+<li>2000 dps</li>
+</ul>
+</div>
+<div class="section" id="bandwidth">
+<h3>9.7.4.5. Bandwidth</h3>
+<p>Selects the input bandwidth. (see bandwidth table above)</p>
+</div>
+<div class="section" id="hp-filter">
+<h3>9.7.4.6. HP filter</h3>
+<p>Enables the internal high pass filter and configures the cut-off frequency. (see high pass filter table above)</p>
+</div>
+<div class="section" id="enable-data-ready-interrupt-in-int2-output">
+<h3>9.7.4.7. Enable data ready interrupt in INT2 output</h3>
+<p>Enables the data ready output signal to the INT2 pin of the L3GD20 device.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To use the data ready interrupt in the model a <em>Digital Input</em> or <em>Interrupt</em> block of the <em>GPIO</em> library must be configured to get the value of the INT2 pin at the connected MCU pin.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="LM75B_en.html" title="9.8. LM75B"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="LIS302DL_en.html" title="9.6. LIS302DL Accelerometer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >9. Sensor</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

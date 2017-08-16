@@ -1,0 +1,94 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>8.1. GPIO Runtime</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="8.2. DAC Runtime" href="RuntimeDac_en.html" />
+    <link rel="prev" title="8. Several" href="_index_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="RuntimeDac_en.html" title="8.2. DAC Runtime"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="8. Several"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">8. Several</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gpio-runtime">
+<h1>8.1. GPIO Runtime</h1>
+<p>This block toggels a GPIO pin for purpose of runtime measurements.</p>
+<div class="section" id="library">
+<h2>8.1.1. Library</h2>
+<p>utilities</p>
+</div>
+<div class="section" id="description">
+<h2>8.1.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Gpio_Runtime_block.png"><img alt="../_images/Gpio_Runtime_block.png" src="../_images/Gpio_Runtime_block.png" style="width: 228.4px; height: 127.6px;" /></a>
+<p>This block generates square wave signal at a GPIO pin to measure computational time of a model or subsystem. Therefor the block sets an output pin to high value at the very beging of the susystem’s/model’s
+code an resets the pin to low at the very end. So the duration of the high pulse is a measurement of the time needed to execute the code of the system the block is placed in.</p>
+</div>
+<div class="section" id="data-type-support">
+<h2>8.1.3. Data Type Support</h2>
+<p>This block has no input or output ports.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>8.1.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Gpio_Runtime_mask.png" src="../_images/Gpio_Runtime_mask.png" />
+<div class="section" id="port-name">
+<h3>8.1.4.1. Port Name</h3>
+<p>Select the port name of the GPIO pin to use.</p>
+</div>
+<div class="section" id="pin-number">
+<h3>8.1.4.2. Pin Number</h3>
+<p>Select the pin number of the GPIO pin to use.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="RuntimeDac_en.html" title="8.2. DAC Runtime"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="8. Several"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >8. Several</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

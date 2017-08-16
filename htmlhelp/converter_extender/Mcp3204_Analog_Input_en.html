@@ -1,0 +1,149 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>10.3. MCP3204 Analog Input</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="10.4. MCP4822 Analog Output" href="Mcp4822_Analog_Output_en.html" />
+    <link rel="prev" title="10.2. PCF8574 Digital Output" href="Pcf8574_Digital_Output_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Mcp4822_Analog_Output_en.html" title="10.4. MCP4822 Analog Output"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Pcf8574_Digital_Output_en.html" title="10.2. PCF8574 Digital Output"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">10. Converter and I/O Extender</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mcp3204-analog-input">
+<h1>10.3. MCP3204 Analog Input</h1>
+<p>Reads the analog voltage of one channel of the MCP3204 analog to digital converter.</p>
+<div class="section" id="library">
+<h2>10.3.1. Library</h2>
+<p>/SPI</p>
+</div>
+<div class="section" id="description">
+<h2>10.3.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Mcp3204_Analog_Input_block.png"><img alt="../_images/Mcp3204_Analog_Input_block.png" src="../_images/Mcp3204_Analog_Input_block.png" style="width: 352.5px; height: 165.5px;" /></a>
+<p>This block return the conversion result of one specified analog input channel of the MCP3204 analog to digital converter. The ADC can be configured in single ended or (pseudo)differential mode.
+The following table shows the channel configuration in differential mode.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Channel
+Selection</th>
+<th class="head">resulting
+configuration</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Channel 1</td>
+<td>CH1 = IN+
+CH2 = IN-</td>
+</tr>
+<tr class="row-odd"><td>Channel 2</td>
+<td>CH1 = IN-
+CH2 = IN+</td>
+</tr>
+<tr class="row-even"><td>Channel 3</td>
+<td>CH3 = IN+
+CH4 = IN-</td>
+</tr>
+<tr class="row-odd"><td>Channel 4</td>
+<td>CH3 = IN-
+CH4 = IN+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">In pseudo differential input mode the IN+ input can range from IN- to (Vref+IN-). The IN- input is limited to +/- 100mV from the Vss rail.</p>
+</div>
+</div>
+<div class="section" id="data-type-support">
+<h2>10.3.3. Data Type Support</h2>
+<p>The block’s output data type is either int16 or single depending on the <em>Mode</em> parameter.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>10.3.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Mcp3204_Analog_Input_mask.png" src="../_images/Mcp3204_Analog_Input_mask.png" />
+<div class="section" id="spi-port">
+<h3>10.3.4.1. SPI Port</h3>
+<p>Selects the SPI peripheral wich is configured by an <em>SPI Master Config</em> block.</p>
+</div>
+<div class="section" id="chip-select-port-and-pin">
+<h3>10.3.4.2. Chip Select Port and Pin</h3>
+<p>Configuration of the MCU Pin the device’s chip select input is connected to.</p>
+</div>
+<div class="section" id="channel">
+<h3>10.3.4.3. Channel</h3>
+<p>Selects the analog input channel.</p>
+</div>
+<div class="section" id="mode">
+<h3>10.3.4.4. Mode</h3>
+<p>Selects the block’s output data type and range.</p>
+<ul class="simple">
+<li>raw &#8594; int16 data type output, range 0 to 4095</li>
+<li>relative &#8594; single data type, range 0 to 1</li>
+</ul>
+</div>
+<div class="section" id="input-type">
+<h3>10.3.4.5. Input type</h3>
+<p>Configures the analog input channel to single ended or pseudo differential mode.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">If a channel is configured as differential input the corresponding negative input channel must not be configured in another <em>MCP3204 Analog Input</em> block.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Mcp4822_Analog_Output_en.html" title="10.4. MCP4822 Analog Output"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Pcf8574_Digital_Output_en.html" title="10.2. PCF8574 Digital Output"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

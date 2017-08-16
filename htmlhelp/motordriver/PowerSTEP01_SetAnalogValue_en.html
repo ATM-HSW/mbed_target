@@ -1,0 +1,166 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>11.1.24. PowerSTEP01_SetAnalogValue</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="11.1.25. PowerSTEP01_SetDeceleration" href="PowerSTEP01_SetDeceleration_en.html" />
+    <link rel="prev" title="11.1.23. PowerSTEP01_SetAcceleration" href="PowerSTEP01_SetAcceleration_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="PowerSTEP01_SetDeceleration_en.html" title="11.1.25. PowerSTEP01_SetDeceleration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PowerSTEP01_SetAcceleration_en.html" title="11.1.23. PowerSTEP01_SetAcceleration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >11. Motor Driver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_PowerSTEP01_en.html" accesskey="U">11.1. PowerSTEP01</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="powerstep01-setanalogvalue">
+<h1>11.1.24. PowerSTEP01_SetAnalogValue</h1>
+<div class="section" id="description">
+<h2>11.1.24.1. Description</h2>
+<p>This block writes a value to the selected motor driver.
+Issues the SetParam command to the PowerStep01.
+The input value [float value] will convert and set into the register.</p>
+<a class="reference internal image-reference" href="../_images/powerSTEP01_SetAnalogValue_block.png"><img alt="../_images/powerSTEP01_SetAnalogValue_block.png" src="../_images/powerSTEP01_SetAnalogValue_block.png" style="width: 250px;" /></a>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>11.1.24.2. Parameters and Dialog Box</h2>
+<img alt="../_images/powerSTEP01_SetAnalogValue_Mask.png" src="../_images/powerSTEP01_SetAnalogValue_Mask.png" />
+<div class="section" id="spi-port">
+<h3>SPI Port</h3>
+<p>specify the SPI port number that should be used by the block.</p>
+</div>
+<div class="section" id="motor-number">
+<h3>Motor Number</h3>
+<p>specifies the motor in the daisychain.</p>
+</div>
+<div class="section" id="ssel-port-pin">
+<h3>SSEL Port/Pin</h3>
+<p>specify the mcu pin which is connected to the chip select pin from the driver. This block supports the naming schema: ‘P’ + letter ‘A’, ‘B’, ‘C’, … + ‘_’ + number ‘0’, ‘1’, … ‘15’, e.g. PA_0.</p>
+</div>
+<div class="section" id="sample-time">
+<h3>Sample Time</h3>
+<p>specifies the time interval between samples. To inherit the sample time, set this parameter to -1.</p>
+</div>
+<div class="section" id="parameter">
+<h3>Parameter</h3>
+<p>specify the parameter that should be write by this block. The possible values correspond to the values defined in the POWERSTEP01 class:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>POWERSTEP01_ABS_POS</td>
+<td>Current Position</td>
+</tr>
+<tr class="row-even"><td>POWERSTEP01_MARK</td>
+<td>Marked Position</td>
+</tr>
+<tr class="row-odd"><td>POWERSTEP01_ACC</td>
+<td>Acceleration</td>
+</tr>
+<tr class="row-even"><td>POWERSTEP01_DEC</td>
+<td>Deceleration</td>
+</tr>
+<tr class="row-odd"><td>POWERSTEP01_SPEED</td>
+<td>Current Speed</td>
+</tr>
+<tr class="row-even"><td>POWERSTEP01_MAX_SPEED</td>
+<td>Maximum Speed</td>
+</tr>
+<tr class="row-odd"><td>POWERSTEP01_MIN_SPEED</td>
+<td>Minimum Speed</td>
+</tr>
+<tr class="row-even"><td>POWERSTEP01_FS_SPD</td>
+<td>Full Step Speed</td>
+</tr>
+<tr class="row-odd"><td>POWERSTEP01_OCD_TH</td>
+<td>Overcurrent</td>
+</tr>
+<tr class="row-even"><td>POWERSTEP01_TVAL_HOLD</td>
+<td>Hold Torque</td>
+</tr>
+<tr class="row-odd"><td>POWERSTEP01_TVAL_RUN</td>
+<td>Run Torque</td>
+</tr>
+<tr class="row-even"><td>POWERSTEP01_TVAL_ACC</td>
+<td>Acceleration Torque</td>
+</tr>
+<tr class="row-odd"><td>POWERSTEP01_TVAL_DEC</td>
+<td>Deceleration Torque</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="example">
+<h2>11.1.24.3. Example</h2>
+<img alt="../_images/powerSTEP01_SetAnalogValue_example.png" src="../_images/powerSTEP01_SetAnalogValue_example.png" />
+</div>
+<div class="section" id="code-generation">
+<h2>11.1.24.4. Code Generation</h2>
+<div class="section" id="initialization-function">
+<h3>Initialization Function</h3>
+<p>–</p>
+</div>
+<div class="section" id="step-function">
+<h3>Step Function</h3>
+<p>creates one line in void <strong>&lt;Model Name&gt;</strong>_step(void) function</p>
+<blockquote>
+<div>motor_<strong>&lt;Motor Number&gt;</strong>_spi <strong>&lt;SPI Port&gt;</strong>P<strong>&lt;SSEL Port Name&gt;</strong>_<strong>&lt;SSEL Pin Number&gt;</strong>-&gt;  SetAnalogValue( <strong>&lt;Parameter&gt;</strong>, <strong>&lt;SET&gt;</strong>);</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="PowerSTEP01_SetDeceleration_en.html" title="11.1.25. PowerSTEP01_SetDeceleration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PowerSTEP01_SetAcceleration_en.html" title="11.1.23. PowerSTEP01_SetAcceleration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >11. Motor Driver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_PowerSTEP01_en.html" >11.1. PowerSTEP01</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,165 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>9.1. MPU9250 6 DoF Motion Sensor</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="9.2. MPU9250_AK8963 3 DoF Motion Sensor" href="MPU9250_AK8963_en.html" />
+    <link rel="prev" title="9. Sensor" href="_index_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="MPU9250_AK8963_en.html" title="9.2. MPU9250_AK8963 3 DoF Motion Sensor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="9. Sensor"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">9. Sensor</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mpu9250-6-dof-motion-sensor">
+<h1>9.1. MPU9250 6 DoF Motion Sensor</h1>
+<p>Block enables the use of the MPU9250 with the STM32 boards.</p>
+<div class="section" id="library">
+<h2>9.1.1. Library</h2>
+<p>I2C</p>
+</div>
+<div class="section" id="description">
+<h2>9.1.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/MPU9250.png"><img alt="../_images/MPU9250.png" src="../_images/MPU9250.png" style="width: 226.8px; height: 168.0px;" /></a>
+<p>This block configured a digital MotionTracking device (MPU9250) on the selected
+I2C bus. MPU-9250 is a multi-chip module (MCM) consisting of two dies
+integrated into a single package. One die houses the 3-Axis gyroscope and
+the 3-Axis accelerometer. The other die houses the AK8963 3-Axis magnetometer
+from Asahi Kasei Microdevices Corporation. The two dies supported different
+output data rates. The 3-Axis gyroscope and the 3-Axis accelerometer supported
+output data rates up to 1kHz but the AK8963 3-Axis magnetometer supported only
+output data rates up to 100Hz. Because of that this block gets only the data
+from the 3-Axis gyroscope and the 3-Axis accelerometer. The block ‘’AK8963 3
+DoF Motion Sensor’’ gets the data from the AK8963 3-Axis magnetometer.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td colspan="2">special settings for MPU9250:</td>
+</tr>
+<tr class="row-even"><td>AFS_SEL = 1</td>
+<td>Accelerometer Full-Scale Range = -4g/+4g</td>
+</tr>
+<tr class="row-odd"><td>FS_SEL = 1</td>
+<td>Gyroscope Full-Scale Range = -500 (degree/s) / +500 (degree/s)</td>
+</tr>
+<tr class="row-even"><td colspan="2">Low-pass filter Gyroscope:</td>
+</tr>
+<tr class="row-odd"><td>Sample rate</td>
+<td>1kHz</td>
+</tr>
+<tr class="row-even"><td>Bandwidth</td>
+<td>41Hz</td>
+</tr>
+<tr class="row-odd"><td colspan="2">Low-pass filter temperature:</td>
+</tr>
+<tr class="row-even"><td>Sample rate</td>
+<td>1kHz</td>
+</tr>
+<tr class="row-odd"><td>Bandwidth</td>
+<td>42Hz</td>
+</tr>
+<tr class="row-even"><td colspan="2">Low-pass filter Accelerometer:</td>
+</tr>
+<tr class="row-odd"><td>Sample rate</td>
+<td>1kHz</td>
+</tr>
+<tr class="row-even"><td>Bandwidth</td>
+<td>41Hz</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-type-support">
+<h2>9.1.3. Data Type Support</h2>
+<div class="line-block">
+<div class="line">The first output port provides the actual acceleration on the X axis as a double value in g.</div>
+<div class="line">The second output port provides the actual acceleration on the Y axis as an double value in g.</div>
+<div class="line">The third output port provides the actual acceleration on the Z axis as a double value in g.</div>
+<div class="line">The fourth output port provides the actual angular velocity on the X axis as a double value in degree/s.</div>
+<div class="line">The fifth output port provides the actual angular velocity on the Y axis as an double value in degree/s.</div>
+<div class="line">The sixth output port provides the actual angular velocity on the Z axis as a double value in degree/s.</div>
+<div class="line">The seventh output port provides the actual temperature as a double value in degree Celsius.</div>
+</div>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>9.1.4. Parameters and Dialog Box</h2>
+<img alt="../_images/MPU9250_Mask.png" src="../_images/MPU9250_Mask.png" />
+<div class="section" id="sample-time">
+<h3>9.1.4.1. Sample time</h3>
+<p>Set the sample time for this block.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">The MPU9250 needs at least 1 ms for one conversation (Sample time &gt; 0.001).
+If the sample time for this block is faster than this time the sensor may not produce valid values.</p>
+</div>
+</div>
+<div class="section" id="i2c-bus">
+<h3>9.1.4.2. I2C Bus</h3>
+<p>Selects the I2C bus of the used STM32 MCU. Before you can use a I2C bus with this block you need a configuration block (I2C Config) for the I2c bus. The port number is related to the actual I2C number referred to the datasheet of the MCU.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">Not all MCUs provide all of the selectable I2c ports.</p>
+</div>
+</div>
+<div class="section" id="sub-address">
+<h3>9.1.4.3. Sub Address</h3>
+<p>You can connected max. two MPU9250 devices on one I2C bus by using different I2C addresses by using the AD0 pin.
+To selected the device with the AD0 pin connected to ground use sub address 0.
+To selected the device with the AD0 pin connected to VCC use sub address 1.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="MPU9250_AK8963_en.html" title="9.2. MPU9250_AK8963 3 DoF Motion Sensor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="9. Sensor"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >9. Sensor</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

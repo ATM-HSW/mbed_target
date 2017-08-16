@@ -1,0 +1,125 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>5.5.3. CAN Send</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="5.6. One Wire Bus" href="_OneWire_en.html" />
+    <link rel="prev" title="5.5.2. CAN Receive" href="CAN_Receive_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="_OneWire_en.html" title="5.6. One Wire Bus"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CAN_Receive_en.html" title="5.5.2. CAN Receive"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_CAN_en.html" accesskey="U">5.5. CAN</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="can-send">
+<h1>5.5.3. CAN Send</h1>
+<div class="section" id="description">
+<h2>5.5.3.1. Description</h2>
+<p>This block writes one or multiple bytes to the CAN instance specified with CAN Port with the given message ID.</p>
+<p>A vector of values at input port d and the data length taken from input port n is used to send a CAN message.
+The message ID can be a block parameter or is read from an input port.</p>
+<div class="section" id="minimal-variant">
+<h3>minimal variant</h3>
+<p>The minimal variant uses a static CAN message id.</p>
+<a class="reference internal image-reference" href="../_images/block_CAN_Send.min.png"><img alt="../_images/block_CAN_Send.min.png" src="../_images/block_CAN_Send.min.png" style="width: 630.0px; height: 275.5px;" /></a>
+</div>
+<div class="section" id="maximal-variant">
+<h3>maximal variant</h3>
+<p>The maximal variant uses an individual CAN message id.</p>
+<a class="reference internal image-reference" href="../_images/block_CAN_Send.max.png"><img alt="../_images/block_CAN_Send.max.png" src="../_images/block_CAN_Send.max.png" style="width: 630.0px; height: 297.0px;" /></a>
+</div>
+</div>
+<div class="section" id="data-type-support">
+<h2>5.5.3.2. Data Type Support</h2>
+<p>The msg.id port expects an <em>uint16</em>  data type.</p>
+<p>The d port expects an <em>uint8</em>  data type.</p>
+<p>The n port expects an <em>uint32</em> data type.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">A CAN message can only utilize up to 8 bytes per message.</p>
+</div>
+</div>
+<div class="section" id="parameters-dialog-box">
+<h2>5.5.3.3. Parameters Dialog Box</h2>
+<img alt="../_images/mask_CAN_Send.png" src="../_images/mask_CAN_Send.png" />
+<div class="section" id="can-port">
+<h3>CAN Port</h3>
+<p>Specifies an internally used CAN bus number. It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, read and write blocks together.</p>
+</div>
+<div class="section" id="msg-id">
+<h3>Msg ID</h3>
+<p>Sets the message ID the CAN message is send with.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h2>5.5.3.4. Example</h2>
+<p>In the example in each step a CAN message is send using alternating message IDs 10 and 20. The CAN message content is the message id as a one byte message.</p>
+<a class="reference internal image-reference" href="../_images/example_CANSend2.png"><img alt="../_images/example_CANSend2.png" src="../_images/example_CANSend2.png" style="width: 1399.5px; height: 583.5px;" /></a>
+<p>Please see more <a class="reference internal" href="CAN_Config_en.html#serial-can-config-en-example-label"><span class="std std-ref">Examples</span></a> shown in CAN Config documentation.</p>
+</div>
+<div class="section" id="code-generation">
+<h2>5.5.3.5. Code Generation</h2>
+<p>Instance names of mbed CAN classes are created by concatenating <strong>can</strong> and <strong>&lt;CAN Port&gt;</strong>.</p>
+<div class="section" id="step-function">
+<h3>Step Function</h3>
+<p>creates one line in void <strong>&lt;Model Name&gt;</strong>_step(void) function</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">can</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">CANMessage</span><span class="p">(</span><span class="o">&lt;</span><span class="n">msg</span> <span class="n">id</span><span class="o">&gt;</span><span class="p">,</span><span class="o">*&lt;</span><span class="n">message</span> <span class="n">data</span> <span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">message</span> <span class="n">length</span> <span class="n">n</span><span class="o">&gt;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>The &lt;msg id&gt; comes statically from a block parameter or is message individual from an block input port</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="_OneWire_en.html" title="5.6. One Wire Bus"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CAN_Receive_en.html" title="5.5.2. CAN Receive"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_CAN_en.html" >5.5. CAN</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

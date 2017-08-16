@@ -1,0 +1,95 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>6.2. Thread::wait</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="6.3. RTOSTimer" href="Timer_en.html" />
+    <link rel="prev" title="6.1. Thread" href="Thread_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Timer_en.html" title="6.3. RTOSTimer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Thread_en.html" title="6.1. Thread"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">6. RTOS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="thread-wait">
+<h1>6.2. Thread::wait</h1>
+<div class="section" id="description">
+<h2>6.2.1. Description</h2>
+<p>Calls RTOS Thread::wait method with the specified timeout.</p>
+<a class="reference internal image-reference" href="../_images/block_RTOSThreadwait.png"><img alt="../_images/block_RTOSThreadwait.png" src="../_images/block_RTOSThreadwait.png" style="width: 605.0px; height: 325.0px;" /></a>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>6.2.2. Parameters and Dialog Box</h2>
+<img alt="../_images/mask_RTOSThreadwait.png" src="../_images/mask_RTOSThreadwait.png" />
+<div class="section" id="timing-ms">
+<h3>6.2.2.1. Timing (ms):</h3>
+<p>a Thread::Wait with the specified waiting time in ms is called. The position of the method within the loop depends on the block priority. Please see the Mathworks documentation how to adjust it.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h2>6.2.3. Example</h2>
+<p>In the example another LED blinking is shown. LED1 is enabled/disabled within the thread endless loop. In variant 1 of the function-call subsystem, the Thread:wait is executed as the first method within the endless loop because of highest priority (0). In variant 2 the Thread:wait ist executed as the last method within the loop (priority 3, execution order 4).</p>
+<a class="reference internal image-reference" href="../_images/example_RTOS_Threadwait_Blinky.png"><img alt="../_images/example_RTOS_Threadwait_Blinky.png" src="../_images/example_RTOS_Threadwait_Blinky.png" style="width: 1271.0px; height: 574.5px;" /></a>
+</div>
+<div class="section" id="code-generation">
+<h2>6.2.4. Code Generation</h2>
+<div class="section" id="thread-specific-function">
+<h3>6.2.4.1. Thread specific Function</h3>
+<p>creates a line in &lt;thread instance name&gt;_RTOS_Thread_thread(void const *argument) function</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">Thread</span><span class="o">::</span><span class="n">wait</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Timing</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Timer_en.html" title="6.3. RTOSTimer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Thread_en.html" title="6.1. Thread"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >6. RTOS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

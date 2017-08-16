@@ -1,0 +1,107 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>10.7.6. MAX11300 Temperature</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="11. Motor Driver" href="../motordriver/_index_en.html" />
+    <link rel="prev" title="10.7.5. MAX11300 Analog Output" href="Max11300_Analog_Output_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../motordriver/_index_en.html" title="11. Motor Driver"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Max11300_Analog_Output_en.html" title="10.7.5. MAX11300 Analog Output"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="MAX11300_en.html" accesskey="U">10.7. MAX11300</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="max11300-temperature">
+<h1>10.7.6. MAX11300 Temperature</h1>
+<p>Measures the temperature of the specified temperature channel of the MAX11300.</p>
+<div class="section" id="library">
+<h2>10.7.6.1. Library</h2>
+<p>/SPI</p>
+</div>
+<div class="section" id="description">
+<h2>10.7.6.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Max11300_Temperature_block.png"><img alt="../_images/Max11300_Temperature_block.png" src="../_images/Max11300_Temperature_block.png" style="width: 277.0px; height: 165.5px;" /></a>
+<p>This block returns the last temperature reading of the specified temperature channel.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To use this block the specified temperature channel must be enabled in the corresponding <em>MAX11300 Config</em> block</p>
+</div>
+</div>
+<div class="section" id="data-type-support">
+<h2>10.7.6.3. Data Type Support</h2>
+<p>The block’s output port returns the temperature reading in °C as data type single.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>10.7.6.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Max11300_Temperature_mask.png" src="../_images/Max11300_Temperature_mask.png" />
+<div class="section" id="chip-select-port-and-pin">
+<h3>Chip Select Port and Pin</h3>
+<p>Configuration of the MCU Pin the device’s chip select input is connected to.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The chip select pin must be the same as in the corresponding <em>MAX11300 Config</em> block</p>
+</div>
+</div>
+<div class="section" id="channel">
+<h3>Channel</h3>
+<p>Selects one of the three provided temperature channels of the MAX11300.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The selected channel must be enabled in the corresponding <em>MAX11300 Config</em> block</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../motordriver/_index_en.html" title="11. Motor Driver"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Max11300_Analog_Output_en.html" title="10.7.5. MAX11300 Analog Output"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="MAX11300_en.html" >10.7. MAX11300</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

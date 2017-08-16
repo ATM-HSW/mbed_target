@@ -1,0 +1,156 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>9.6. LIS302DL Accelerometer</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="9.7. L3GD20 Gyroscope" href="L3GD20_en.html" />
+    <link rel="prev" title="9.5. Digital Pressure Sensor" href="BMP180_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="L3GD20_en.html" title="9.7. L3GD20 Gyroscope"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="BMP180_en.html" title="9.5. Digital Pressure Sensor"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">9. Sensor</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="lis302dl-accelerometer">
+<h1>9.6. LIS302DL Accelerometer</h1>
+<p>Reads the x, y and z force measured by an LIS302DL 3-axis accelerometer in mg</p>
+<div class="section" id="library">
+<h2>9.6.1. Library</h2>
+<p>/SPI</p>
+</div>
+<div class="section" id="description">
+<h2>9.6.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Lis302dl_Accelerometer_block.png"><img alt="../_images/Lis302dl_Accelerometer_block.png" src="../_images/Lis302dl_Accelerometer_block.png" style="width: 328.0px; height: 164.0px;" /></a>
+<p>This block provides acceleration measurement by an LIS302DL 3-axis accelerometer. Depending on the application two different measurement ranges can be configured, +/- 2g and +/- 8g. In addition a high pass
+filter inside the accelerometer can be activated an configured with different cut-off frequencies depending on the selected sample rate. The following table shows the cut-off frequencies to be selected.
+The measured force is provided in mg.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" rowspan="2">filter level</th>
+<th class="head" colspan="2">cut-off frequency [Hz]</th>
+</tr>
+<tr class="row-even"><th class="head">&#64;rate 100Hz</th>
+<th class="head">&#64;rate 400Hz</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td>level 1</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr class="row-even"><td>level 2</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr class="row-odd"><td>level 3</td>
+<td>0.5</td>
+<td>2</td>
+</tr>
+<tr class="row-even"><td>level 4</td>
+<td>0.25</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-type-support">
+<h2>9.6.3. Data Type Support</h2>
+<p>The block’s output data type is single.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>9.6.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Lis302dl_Accelerometer_mask.png" src="../_images/Lis302dl_Accelerometer_mask.png" />
+<div class="section" id="spi-port">
+<h3>9.6.4.1. SPI Port</h3>
+<p>Selects the SPI peripheral wich is configured by an <em>SPI Master Config</em> block.</p>
+</div>
+<div class="section" id="chip-select-port-and-pin">
+<h3>9.6.4.2. Chip Select Port and Pin</h3>
+<p>Configuration of the MCU Pin the device’s chip select input is connected to.</p>
+</div>
+<div class="section" id="sample-rate">
+<h3>9.6.4.3. Sample rate</h3>
+<p>Selects the sample rate of the internal ADC.</p>
+<ul class="simple">
+<li>100 Hz &#8594; new value every .01 seconds</li>
+<li>400 Hz &#8594; new value every .0025 seconds</li>
+</ul>
+</div>
+<div class="section" id="full-scale">
+<h3>9.6.4.4. Full scale</h3>
+<p>Selects the measurement range</p>
+<ul class="simple">
+<li>+/- 2g</li>
+<li>+/- 8g</li>
+</ul>
+</div>
+<div class="section" id="hp-filter">
+<h3>9.6.4.5. HP filter</h3>
+<p>Enables the internal high pass filter and selects the cut-off frequency (referred to the table above)</p>
+</div>
+<div class="section" id="data-ready-interrupt">
+<h3>9.6.4.6. Data ready Interrupt</h3>
+<p>Enables the data ready interrupt of the LIS302DL device. The interrupt can be at INT1 or INT2 pin of the chip and configured to be open drain or push-pull output driver.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To use the data ready interrupt in the model a <em>Digital Input</em> or <em>Interrupt</em> block of the <em>GPIO</em> library must be configured to get the value of the INTx pin at the connected MCU pin.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="L3GD20_en.html" title="9.7. L3GD20 Gyroscope"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="BMP180_en.html" title="9.5. Digital Pressure Sensor"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >9. Sensor</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

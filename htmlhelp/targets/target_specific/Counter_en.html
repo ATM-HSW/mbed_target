@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>13.2.3. Counter</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="next" title="13.2.4. Random Number Generator" href="Random_Number_Generator_en.html" />
+    <link rel="prev" title="13.2.2. InputCapture_en" href="InputCapture_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Random_Number_Generator_en.html" title="13.2.4. Random Number Generator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="InputCapture_en.html" title="13.2.2. InputCapture_en"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../_index_en.html" >13. Targets</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_index_en.html" accesskey="U">13.2. Target specific</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="counter">
+<h1>13.2.3. Counter</h1>
+<p>This block configures a timer peripheral to be clocked by an external input signal.</p>
+<div class="section" id="library">
+<h2>13.2.3.1. Library</h2>
+<p>Targets/STM/DISCO_F407VG</p>
+</div>
+<div class="section" id="description">
+<h2>13.2.3.2. Description</h2>
+<a class="reference internal image-reference" href="../../_images/Counter_block.png"><img alt="../../_images/Counter_block.png" src="../../_images/Counter_block.png" style="width: 364.0px; height: 159.5px;" /></a>
+<p>This block configures a hardware timer peripheral of an STM32 MCU to be clocked by an external input signal. For clock input each timer has two trigger input (TIx)
+sources which are mapped to the timers input channels <em>TIMx_CH1</em> and <em>TIMx_CH2</em>. So to use this block for counting external events the correct GPIO Port and Pin has to be chosen
+and also the matching TIx of the selected <em>TIMERx</em> peripheral according to the data sheet of the used MCU.</p>
+<p>It is possible to count on rising, falling and both edges of the signal at the input pin.</p>
+<p>The timer’s counter register is automatically reset at the configured <em>Max counter value</em> parameter or at a nonzero input value at the reset input.
+The block can be configured to generate a hardware interrupt at counter overflow to execute a function call subsystem.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The timer can only be clocked by one input and the can not be used for any other purpose even if there are unused channels provided (e.g. CH3/4).
+Configuring another block using the same timer peripheral could override some or all of the timer’s control registers and lead to unexpected behavior.</p>
+</div>
+</div>
+<div class="section" id="data-type-support">
+<h2>13.2.3.3. Data Type Support</h2>
+<p>The block’s <em>reset</em> input port expects a <em>uint8</em> data type which is either zero for normal upcounting or none zero for a reset of the counter register.</p>
+<p>The <em>cnt</em> output port outputs the actual counter value as an <em>uint32</em> data type.</p>
+<p>The <em>int</em> output port is a simulink function call output which can be connected to a function call subsystem.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>13.2.3.4. Parameters and Dialog Box</h2>
+<img alt="../../_images/Counter_mask.png" src="../../_images/Counter_mask.png" />
+<div class="section" id="timer">
+<h3>Timer</h3>
+<p>Number of the actual timer peripheral of the STM32 MCU, e.g. chosing <em>1</em> configures <em>TIMER1</em> in external counter mode.</p>
+</div>
+<div class="section" id="input-channel">
+<h3>Input channel</h3>
+<p>Choses either trigger input <em>TI1</em> or <em>TI2</em> as the clock source and configures the edge on which the timer is counting.</p>
+</div>
+<div class="section" id="input-port">
+<h3>Input Port</h3>
+<p>Selection of the GPIO port where the configured trigger input is mapped to.</p>
+</div>
+<div class="section" id="input-pin">
+<h3>Input Pin</h3>
+<p>Selection of the GPIO pin number where the configured trigger input is mapped to.</p>
+</div>
+<div class="section" id="input-pull-type">
+<h3>Input Pull type</h3>
+<p>Configures the input mode for the selected MCU pin, possible values are:</p>
+<ul class="simple">
+<li>PullNone:             no pull up or pull down resistors are configured for the input pins</li>
+<li>PullUp:               internal pull up resistors are configured for both input pins</li>
+<li>PullDown:             internal pull down resistors are configured for both input pins</li>
+</ul>
+</div>
+<div class="section" id="max-counter-value">
+<h3>Max counter value</h3>
+<p>Sets the maximum value the counter register can hold before an overflow occours.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The maximum possible value is 2^16-1 since the timers have a 16bit counter register, except <em>Timer2</em> it is a 32 bit type.</p>
+</div>
+</div>
+<div class="section" id="interrupt-setting">
+<h3>Interrupt setting</h3>
+<p>Configures the output ports of the counter block as follows:
+* no interrupt generation:      no hardware interrupt is generated at counter overflow, the actual counter value can be read at the <em>cnt</em> output
+* interrupt + cnt output:       a hardware interrupt is generated at counter overflow and executes the code of the connected function call subsystem in it’s ISR, the actual counter value can be read at the <em>cnt</em> output
+* only interrupt:               a hardware interrupt is generated at counter overflow and executes the code of the connected function call subsystem in it’s ISR, the counter value is not provided</p>
+</div>
+<div class="section" id="enable-reset-input">
+<h3>Enable reset input</h3>
+<p>Enables the reset input port of the block to reset the counter register at any time</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Random_Number_Generator_en.html" title="13.2.4. Random Number Generator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="InputCapture_en.html" title="13.2.2. InputCapture_en"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../_index_en.html" >13. Targets</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_index_en.html" >13.2. Target specific</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

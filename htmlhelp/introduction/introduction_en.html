@@ -1,0 +1,437 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>1.1. MATLAB/Simulink targets for Cortex-M controller</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="2. Installation" href="../installation/_index_en.html" />
+    <link rel="prev" title="1. Introduction" href="_index_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../installation/_index_en.html" title="2. Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="1. Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">1. Introduction</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <p>Simulink and Embedded Coder generates and executes C and C++ from Simulink diagrams, Stateflow charts and MATLAB functions. With MbedTarget the generated code is built on top of MbedOS and executed as a real time application on Mbed compatible microcontroller boards. MbedTarget is an addition to Simulink and Embedded coder. It needs MATLAB versions 2016b. Newer versions may work but are not fully tested.</p>
+<div class="section" id="matlab-simulink-targets-for-cortex-m-controller">
+<h1>1.1. MATLAB/Simulink targets for Cortex-M controller</h1>
+<p>Beside MbedTarget other, similar targets exists:</p>
+<ul>
+<li><p class="first">Embedded Coder Support Package for STMicroelectronics Discovery Boards (Version 2016b)</p>
+<p><a class="reference external" href="https://de.mathworks.com/help/supportpkg/stmicroelectronicsstm32f4discovery/index.html?s_tid=srchtitle" target="_blank">https://de.mathworks.com/help/supportpkg/stmicroelectronicsstm32f4discovery/index.html?s_tid=srchtitle</a></p>
+<p><a class="reference external" href="https://de.mathworks.com/matlabcentral/fileexchange/43093-embedded-coder-support-package-for-stmicroelectronics-discovery-boards?s_tid=srchtitle" target="_blank">https://de.mathworks.com/matlabcentral/fileexchange/43093-embedded-coder-support-package-for-stmicroelectronics-discovery-boards?s_tid=srchtitle</a></p>
+</li>
+<li><p class="first">Simulink Coder Support Package for STMicroelectronics Nucleo Boards (Version 2016b)</p>
+<p><a class="reference external" href="https://de.mathworks.com/help/supportpkg/nucleo/index.html?s_tid=srchtitle" target="_blank">https://de.mathworks.com/help/supportpkg/nucleo/index.html?s_tid=srchtitle</a></p>
+<p><a class="reference external" href="https://de.mathworks.com/matlabcentral/fileexchange/58942-simulink-coder-support-package-for-stmicroelectronics-nucleo-boards?s_tid=srchtitle" target="_blank">https://de.mathworks.com/matlabcentral/fileexchange/58942-simulink-coder-support-package-for-stmicroelectronics-nucleo-boards?s_tid=srchtitle</a></p>
+</li>
+<li><p class="first">STM32-MAT/TARGET (Version 4.4.1 and STM32CubeMX 4.22)</p>
+<p><a class="reference external" href="http://www.st.com/en/development-tools/stm32-mat-target.html" target="_blank">http://www.st.com/en/development-tools/stm32-mat-target.html</a></p>
+</li>
+<li><p class="first">Waijung Blockset (Version 17_03a)</p>
+<p><a class="reference external" href="http://waijung.aimagin.com/" target="_blank">http://waijung.aimagin.com/</a></p>
+</li>
+</ul>
+<p>All targets implementing necessary information to use Simulink and Embedded Coder with mostly STM32 microcontroller. Each target has its advantage and disadvantage:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Support Package for STMicroelectronics Boards</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Partial based on the old, no longer supported standard peripheral library, partly based on Mbed&amp;STM32Cube libraries</li>
+<li>Integrated gcc support</li>
+<li>F4Discovery:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Included blocks: ADC, GPIO, Audio out/in, Interrupt Handler</li>
+<li>All pins are usable</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>other boards:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Included blocks: ADC, GPIO, SPI, I2C, PWM, Audio out/in</li>
+<li>Pins restricted to Arduino pins</li>
+<li>Only one Discovery board and a few Nucleo boards are supported</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>running a model is a single step process: generating code in Simulink incorporates compiling, linking and flashing</li>
+<li>Simple model:</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/intro0.png"><img alt="../_images/intro0.png" src="../_images/intro0.png" style="width: 418.25px; height: 143.15px;" /></a>
+</div></blockquote>
+<ul class="simple">
+<li>STM32-MAT/TARGET</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>STM32CubeMX is integrated – each supported STM32 MCU can be used</li>
+<li>all IDEs/compiler supported by STM32CubeMX: EWARM, Keil MDK V4 and V5, TrueSTUDIO, SW4STM32 and Makefile (GCC)</li>
+<li>included blocks: ADC, DAC, GPIO, CAN, I2C, SPI, UART, (High Res)Timers, Watchdog</li>
+<li>a deep support of the hardware block functionality</li>
+<li>running a model is a twostep process: generating code in Simulink and afterwards compiling/linking the code in an IDE</li>
+<li>Simple model:</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/intro1.png"><img alt="../_images/intro1.png" src="../_images/intro1.png" style="width: 615.6px; height: 209.7px;" /></a>
+</div></blockquote>
+<ul class="simple">
+<li>Waijung Blockset</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Support STM32F0, STM32F4 and NRF51422/822</li>
+<li>Supports EWARM, Keil MDK, Makefile (GCC)</li>
+<li>Commercial product</li>
+<li>included blocks (STM32F4): ADC, DAC, GPIO, CAN, I2C, SPI, UART, SDIO, TIMER, CRC, DCMI, FLASH, FSMC, RCC, RESET, RTC and additional blocks for several Waijung hardware extensions</li>
+<li>a deep support of the hardware block functionality</li>
+<li>Simple model:</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/intro2.png"><img alt="../_images/intro2.png" src="../_images/intro2.png" style="width: 918.0px; height: 234.9px;" /></a>
+</div></blockquote>
+</div></blockquote>
+<p>The main disadvantage of all targets: They are closed source. Own extensions are difficult to realize or even not possible. The supported MCUs depends on the manufacturer, mainly STM32 products are supported.</p>
+<p>Mathworks offers some more targets like NXP KL25Z and K64F, Infineon XMC and BBC micro:bit. Although the selection of Cortex-M controllers is huge, the selection of targets is quite restricted.</p>
+<p>MbedTarget is completely open from both sides: MATLAB code, templates, configurations etc. as well as the MCU libraries. It is based on MbedOS 5, therefore theoretical all MbedOS 5 compatible microcontroller boards can be used to run Simulink models. It must be said theoretically, since (i) it is tested mostly with STM32 based boards and (ii) it is supporting the port pin naming scheme as used by STM (PA_0, PB_12, …). Wiznet, Realtek and Nuvoton are using the same scheme, MCUs of other vendors use a different scheme. A universal pin naming scheme is planned for the near future.</p>
+<p>Because of the Mbed library, the support of the controller hardware is much more general. Mbed offers a generalised view of the controller hardware blocks, please see the documentation there (<a class="reference external" href="https://mbed.com" target="_blank">https://mbed.com</a>)</p>
+</div>
+<div class="section" id="principle-of-matlab-simulink-code-generation">
+<h1>1.2. Principle of MATLAB/Simulink code generation</h1>
+<p>The principle workflow when processing a Simulink model to an executable binary is shown in the following figure.</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration1.png"><img alt="../_images/SimulinkCodeGeneration1.png" class="align-center" src="../_images/SimulinkCodeGeneration1.png" style="width: 557.5px; height: 728.0px;" /></a>
+<p>Simulink or Embedded Coder are generating an rtw file from the model. That is a specific textual representation of the model. Together with tlc files which are part of MATLAB and of the specific Simulink target, the target language compiler generates several c/cpp/h files and a Makefile. The following steps depends on the specific target.</p>
+<p>The standard way to use a Simulink target is the model configuration. Under Code Generation a System target file can be chosen. But other ways exist.</p>
+</div>
+<div class="section" id="code-generation-in-mbedtarget">
+<h1>1.3. Code generation in MbedTarget</h1>
+<p>MbedTarget uses the standard way based on selecting a tlc file: mbed.tlc is the option that has to be chosen for the Embedded Coder. A Simulink Coder based System target file is in preparation. The following figure depicts some more MbedTarget specific details of the above depicted procedure:</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration2.png"><img alt="../_images/SimulinkCodeGeneration2.png" class="align-center" src="../_images/SimulinkCodeGeneration2.png" style="width: 761.5px; height: 589.5px;" /></a>
+<p>The target language compiler offers several hooks to customise the code generation process. Mainly two hooks are used: <em>before calling make</em> and <em>after calling make</em>. The whole procedure can be described with the following steps:</p>
+<ol class="arabic simple">
+<li>The TLC uses the current MATLAB working path. All generated files are stored in a folder with a name constructed by the Simulink model name and slprj, e.g. blinky_slprj. During this process MATLAB/Simulink tlc files where used for each standard Simulink block. For all Simulink blocks from the MbedTarget Simulink library one tlc file exits. They can be found under mbed_targetblocksmextlc_c. Beside the c/cpp/h files also a makefile is created based on the template makefile mbed.tmf. This makefile needs an additional include file, generated within the next step.</li>
+<li>During the hook call <em>before calling make</em> a target specific folder is created under mbed_taget/targets, e.g. blinky_NUCLEO_F767ZI_slprj. The name is constructed by Simulink model name, target name and slprj. Into this folder all generated files are copied from the original folder under the current MATLAB working path. During the hook an MbedOS 5 specific include file is generated by the Mbed offline tools with the following call:</li>
+</ol>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">python</span> <span class="pre">..\mbed-os\tools\project.py</span> <span class="pre">-m</span>&#160; <span class="pre">target</span>&#160; <span class="pre">-i</span> <span class="pre">simulink</span> <span class="pre">--source</span> <span class="pre">.</span> <span class="pre">--source</span> <span class="pre">..\mbed-os</span> <span class="pre">--source</span> <span class="pre">..\libraries</span></code></p>
+<p>This include file is very similar to a standard gcc makefile generated by the gcc_arm exporter, but is adapted to the needs of the Simulink build process. This Simulink exporter is not part of the official MbedOS library but can be incorporated into it by applying a patch.</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>After the hook before calling make make.exe is called and a bin file is created.</li>
+<li>During the hook <em>after calling make</em> depending on the chosen flash method, the bin file is flash to the target MCU. The standard Mbed flash method just copies the bin to the target USB drive.</li>
+</ol>
+<p>The following figures depict this process. The Simulink model <em>board_unspecific_blinky</em> is built by pressing the Build Model button. MATLAB creates a folder <em>board_unspecific_blinky_slprj</em> in the current working path. In this folder all generated files are stored. When this is finished, the first hook is called by MATLAB.</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration3.png"><img alt="../_images/SimulinkCodeGeneration3.png" src="../_images/SimulinkCodeGeneration3.png" style="width: 939.6px; height: 403.6px;" /></a>
+<p>During this call a new target specific folder is created under mbed_target/target. The original folder name is extended by the target name, e.g. <em>board_unspecific_blinky_NUCLEO_F446RE_slprj</em> and <em>board_unspecific_blinky_NUCLEO_L476RGslprj</em> for the above model and two different targets NUCLEO_F446RE and NUCLEO_L476RG. All generated files are copied to this folder and a make include file is generated by the Mbed offline tools (target_tools.mk). The first used hook method ends here.</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration4.png"><img alt="../_images/SimulinkCodeGeneration4.png" src="../_images/SimulinkCodeGeneration4.png" style="width: 1047.0px; height: 563.0px;" /></a>
+<p>MATLAB calls make.exe itself. Makefile and make file include (target_tools.mk) can be found under BUILD. Target-specific object files are created into this folder, MbedOS and libraries object files lies in the folder with the same name. This structure is defined by MbedOS export system. The final bin file, e.g. <em>board_unspecific_blinky.bin</em> can be found under <em>BUILD</em>.</p>
+<p>During the second hook, this file is flashed to the target board. When it is an Mbed compatible board, it has a mass storage programming method. That means the bin file can be copied to its USB drive. Other programming methods exits as batch files under mbed_target/targets_flash. The method can be chosen under the Mbed specific options under Code Generation in the model configuration.</p>
+</div>
+<div class="section" id="mbedtarget-simulink-block-usage">
+<h1>1.4. MbedTarget Simulink block usage</h1>
+<p>This chapter describes shortly the components of an MbedTarget Simulink block. The Digital Output block is one of the simplest blocks:</p>
+<img alt="../_images/SimulinkCodeGeneration6.png" src="../_images/SimulinkCodeGeneration6.png" />
+<p>With a double click a configuration dialog opens:</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration7.png"><img alt="../_images/SimulinkCodeGeneration7.png" src="../_images/SimulinkCodeGeneration7.png" style="width: 315.5px; height: 289.5px;" /></a>
+<p>The block has 4 parameters:</p>
+<ul class="simple">
+<li>Port Name and Pin Number to choose a GPIO, e.g. PA0</li>
+<li>Output Mode for pull up, pull down, open drain, … - options corresponds to Mbed options of the DigitalInOut class.</li>
+<li>Sample time defines the time period, the GPIO is written. A -1 inherits from the block which writes a value to this one. When every block uses a -1 the global value is chosen, i.e. default value of 1ms. This value can be configured in the model configuration under Solver. A positive value &gt;0 defines the time period for this block. The value has to be multiple of the global step size.</li>
+</ul>
+<p>These two parts are everything which is necessary to create Simulink models.</p>
+</div>
+<div class="section" id="mbedtarget-simulink-block-creation">
+<h1>1.5. MbedTarget Simulink block creation</h1>
+<p>To implement custom Simulink blocks, 4 elements are necessary in the minimum:</p>
+<ol class="arabic simple">
+<li>Block with mask</li>
+<li>and parameter - both are part of the target Simulink library</li>
+<li>S-function - C functions</li>
+<li>TLC file - mixture of target language code and C7C++ code</li>
+</ol>
+<ol class="arabic simple">
+<li>Block mask</li>
+</ol>
+<blockquote>
+<div><p>The following figure shows three register cards of the mask editor:</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration8.png"><img alt="../_images/SimulinkCodeGeneration8.png" src="../_images/SimulinkCodeGeneration8.png" style="width: 728.5px; height: 626.5px;" /></a>
+<p>The first defines the outlook of the block as shown in the model editor. Normal MATLAB function can be used within the editor textfield to plot and/or write graphics and text or write input and output labels.</p>
+<p>The second card defines the input fields available in the Block Parameters dialog.</p>
+<p>The last card defines the block title, a short help text and a command that is called when the help menu item in the context menu of the block is chosen.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Block parameter</li>
+</ol>
+<blockquote>
+<div><p>The following figure depicts the Block Parameter (S-Function) dialog:</p>
+<a class="reference internal image-reference" href="../_images/SimulinkCodeGeneration9.png"><img alt="../_images/SimulinkCodeGeneration9.png" src="../_images/SimulinkCodeGeneration9.png" style="width: 436.5px; height: 306.0px;" /></a>
+<p>It can be found in the context menu of the block.</p>
+<p>The S-function name is the name of the corresponding mexw64 and tlc file, e.g. digitalOutput.mexw64 and digitalOutput.tlc. The mexw64 is a binary, namely a special DLL, compiled from a corresponding c file. These files can be found under mbed_targetblocks, mbed_targetblocksmexsourcen and mbed_targetblocksmextlc_c</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>S-function</li>
+</ol>
+<blockquote>
+<div>In MbedTarget the s-function mainly describes the behaviour of the block: number and type of input and output ports, checks parameter and prepares the transfer of these to the TLC and the tlc file.</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>TLC file</li>
+</ol>
+<blockquote>
+<div><p>The tlc file is a mixture of tlc code, a script like language, and cpp code, i.e. Mbed cpp code in a form like snippets. The tlc script code controls the usage of the cpp snippets and how and where they appear in the final generated code. The tlc file consist mainly of three part: Setup, Start and Output. Setup controls the inclusion of additional header and c files. Start is executed once to generate initialization code and Outputs is called in every simulation loop. Even if the name is Outputs, the function has to handle also input values.</p>
+<p>In the following Start and Output function are described in detail:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="o">%%</span> <span class="nl">Function</span><span class="p">:</span> <span class="n">Start</span> <span class="o">========================================================</span>
+<span class="o">%</span><span class="n">function</span> <span class="n">Start</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span> <span class="n">Output</span>
+  <span class="o">%</span><span class="k">if</span> <span class="o">!</span><span class="n">SLibCodeGenForSim</span><span class="p">()</span>
+    <span class="o">%</span><span class="n">assign</span> <span class="n">nPortName</span> <span class="o">=</span> <span class="n">LibBlockParameterValue</span><span class="p">(</span><span class="n">PortName</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="o">%</span><span class="n">assign</span> <span class="n">nPinNumber</span> <span class="o">=</span> <span class="n">LibBlockParameterValue</span><span class="p">(</span><span class="n">PinNumber</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="o">%</span><span class="n">assign</span> <span class="n">pname</span> <span class="o">=</span> <span class="s">&quot;P&quot;</span> <span class="o">+</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;char&quot;</span><span class="p">,</span><span class="n">nPortName</span><span class="o">+</span><span class="mi">64</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;int2str&quot;</span><span class="p">,</span><span class="n">nPinNumber</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The first two line fetches the variables from the block mask dialog and creates the pin name as used for STM32 microcontroller, e.g. PA_0, and assigns it to the third variable.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span>    <span class="o">%</span><span class="n">assign</span> <span class="n">name</span> <span class="o">=</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;strrep&quot;</span><span class="p">,</span><span class="n">LibGetFormattedBlockPath</span><span class="p">(</span><span class="n">block</span><span class="p">),</span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+    <span class="o">%</span><span class="n">assign</span> <span class="n">name</span> <span class="o">=</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;strrep&quot;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+    <span class="o">%</span><span class="n">assign</span> <span class="n">name</span> <span class="o">=</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;strrep&quot;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;-&quot;</span><span class="p">,</span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+<span class="o">%%</span>
+</pre></div>
+</div>
+<p>These three lines create a unique name based on the complete block path, e.g. <em>board_unspecific_blinky_LED</em> for a block LED in a Simulink model <em>board_unspecific_blinky</em>. The Simulink path contains ‘/’ for its components (model name, submodel names, block name). This character and spaces and minus characters are replaced by underscore. So all other characters in model name, submodel names and block names has to be compliant to c/c++ naming scheme.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span>    <span class="o">%</span><span class="n">openfile</span> <span class="n">declbuf</span>
+    <span class="c1">// %&lt;Type&gt; (digitalOutput): &#39;%&lt;Name&gt;&#39;</span>
+    <span class="n">DigitalInOut</span> <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="o">%&lt;</span><span class="n">pname</span><span class="o">&gt;</span><span class="p">);</span>
+    <span class="o">%</span><span class="n">closefile</span> <span class="n">declbuf</span>
+
+    <span class="o">%</span><span class="n">assign</span> <span class="n">srcFile</span> <span class="o">=</span> <span class="n">LibGetModelDotCFile</span><span class="p">()</span>
+    <span class="o">%&lt;</span><span class="n">LibSetSourceFileSection</span><span class="p">(</span><span class="n">srcFile</span><span class="p">,</span> <span class="s">&quot;Declarations&quot;</span><span class="p">,</span> <span class="n">declbuf</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">%%</span>
+</pre></div>
+</div>
+<p>These lines creates one line in the declaration section. Based on this template:</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">DigitalInOut</span> <span class="pre">%&lt;name&gt;(%&lt;pname&gt;);</span></code></div></blockquote>
+<p>and by substituting the variables <em>name</em> and <em>pname</em> with the above created values, a code line like:</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">DigitalOut</span> <span class="pre">board_unspecific_blinky_Digital_Output(PA_0);</span></code></div></blockquote>
+<p>is created.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span>    <span class="o">%</span><span class="n">assign</span> <span class="n">nOutputMode</span> <span class="o">=</span> <span class="n">LibBlockParameterValue</span><span class="p">(</span><span class="n">OutputMode</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">output</span><span class="p">();</span>
+    <span class="o">%%</span> <span class="n">PullDefault</span><span class="p">,</span> <span class="n">PullUp</span><span class="p">,</span> <span class="n">PullDown</span><span class="p">,</span> <span class="n">PullNone</span><span class="p">,</span> <span class="n">Repeater</span><span class="p">,</span> <span class="nl">OpenDrain</span><span class="p">:</span> <span class="n">not</span> <span class="n">every</span> <span class="n">variant</span> <span class="n">is</span> <span class="n">defined</span> <span class="n">in</span> <span class="n">every</span> <span class="n">MbedTarget</span>
+    <span class="o">%</span><span class="k">switch</span><span class="p">(</span><span class="n">nOutputMode</span><span class="p">)</span>
+      <span class="o">%</span><span class="k">case</span> <span class="mi">1</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PullDefault</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+      <span class="o">%</span><span class="k">case</span> <span class="mi">2</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PullUp</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+      <span class="o">%</span><span class="k">case</span> <span class="mi">3</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PullDown</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+      <span class="o">%</span><span class="k">case</span> <span class="mi">4</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PullNone</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+      <span class="o">%</span><span class="k">case</span> <span class="mi">5</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">Repeater</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+      <span class="o">%</span><span class="k">case</span> <span class="mi">6</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">OpenDrain</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+      <span class="o">%</span><span class="k">default</span>
+        <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PullDefault</span><span class="p">);</span>
+        <span class="o">%</span><span class="k">break</span>
+    <span class="o">%</span><span class="n">endswitch</span>
+  <span class="o">%</span><span class="n">endif</span>
+<span class="o">%</span><span class="n">endfunction</span>
+</pre></div>
+</div>
+<p>These lines put two lines into the initialize method to configure the output port mode.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">board_unspecific_blinky_Digital_Output</span><span class="p">.</span><span class="n">output</span><span class="p">();</span>
+<span class="n">board_unspecific_blinky_Digital_Output</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PullDefault</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The switch-case, implemented in TLC script code, is interpreted by the TLC but did not appear in the generated c/cpp code.</p>
+<p>This block is not enclosed by the openfile - closefile construct as the previous block. Everything in Start without this enclosure is put into the initialize method. With this enclosure other positions can be chosen, e.g. “Declarations” for global variables. Please have a look into the appropriate MATLAB documentation for all possibilities.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="o">%%</span> <span class="nl">Function</span><span class="p">:</span> <span class="n">Outputs</span> <span class="o">======================================================</span>
+<span class="o">%</span><span class="n">function</span> <span class="n">Outputs</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span> <span class="n">Output</span>
+ <span class="o">%</span><span class="k">if</span> <span class="o">!</span><span class="n">SLibCodeGenForSim</span><span class="p">()</span>
+   <span class="o">%</span><span class="n">assign</span> <span class="n">u1_val</span> <span class="o">=</span> <span class="n">LibBlockInputSignal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The code generated by the Outputs function of each block is called once in the step function. So it is called with the period step size as configured in the Solver section of the model configuration or less often when the Sample Time option is used.</p>
+<p>The above line assigns the value at the block input port to the variable <em>u1_val</em>.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">assign</span> <span class="n">name</span> <span class="o">=</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;strrep&quot;</span><span class="p">,</span><span class="n">LibGetFormattedBlockPath</span><span class="p">(</span><span class="n">block</span><span class="p">),</span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="n">assign</span> <span class="n">name</span> <span class="o">=</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;strrep&quot;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="n">assign</span> <span class="n">name</span> <span class="o">=</span> <span class="n">FEVAL</span><span class="p">(</span><span class="s">&quot;strrep&quot;</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;-&quot;</span><span class="p">,</span><span class="s">&quot;_&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To be able to write the value to the instance of DigitalInOut, the instance name is necessary. It is generated identical to the Start method.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span>   <span class="o">%%</span>
+   <span class="o">%&lt;</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">%&lt;</span><span class="n">u1_val</span><span class="o">&gt;</span><span class="p">;</span>
+   <span class="o">%%</span>
+ <span class="o">%</span><span class="n">endif</span>
+<span class="o">%</span><span class="n">endfunction</span>
+</pre></div>
+</div>
+<p>These lines put a single line into the step function: the value <em>u1_val</em> is written to the instance <em>name</em> of DigitalInOut.</p>
+<p>All other blocks are working similar, more or less. For the complete documentation, please have a look into the Matlab documentation and into the source code of the other blocks. The block documentation contains a detailed descriptions of the block, its interface, usage and the code generated by the corresponding tlc files.</p>
+</div></blockquote>
+</div>
+<div class="section" id="mbedtarget-main-function">
+<h1>1.6. MbedTarget main function</h1>
+<p>To create the main function, MbedTarget contains a template file: mbed_srmain.tlc. The target supports the single task model of Simulink. For this and the other models please have a look into the appropriate MATLAB documentation.</p>
+<p>The cpp file name with the main function is always <em>ert_main.cpp</em>.</p>
+<p>In MbedOS 5, the real time kernel is always enabled. That’s why when choosing MbedOS 5 in the model configuration, RTOS supports is always enabled. When choosing Mbed 2, it is possible to create the main function without using RTOS functions.</p>
+<p>Depending on the <em>UseMbedRTOS</em> flag, two different main variants are created:</p>
+<ol class="arabic simple">
+<li>with RTOS</li>
+</ol>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;board_unspecific_blinky.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;rtos.h&quot;</span><span class="cp"></span>
+<span class="cp">#define STEP_SIZE_US  1000.0F    </span><span class="c1">// Sample Time in microseconds</span>
+<span class="cp">#define STEP_SIZE_MS  1.0F       </span><span class="c1">// and in milliseconds</span>
+</pre></div>
+</div>
+<p>The step sizes are calculated based on the globally configured model step size.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">osThreadId</span> <span class="n">step_id</span><span class="p">;</span>
+<span class="n">Thread</span> <span class="n">step_1_thread</span><span class="p">;</span>
+<span class="n">Ticker</span> <span class="n">step_1_ticker</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">step_thread</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">step_id</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">::</span><span class="n">gettid</span><span class="p">();</span>
+  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Thread</span><span class="o">::</span><span class="n">signal_wait</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="n">osWaitForever</span><span class="p">);</span>
+    <span class="n">board_unspecific_blinky_step</span><span class="p">();</span>
+
+    <span class="c1">// Get model outputs here</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">step_callback</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">osSignalSet</span><span class="p">(</span><span class="n">step_id</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The main loop of the thread calls the Simulink step function. The Ticker instance creates the correct timing. Both are communicating using an RTOS signal.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// with RTOS</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">step_1_thread</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="n">step_thread</span><span class="p">));</span>
+  <span class="n">step_1_ticker</span><span class="p">.</span><span class="n">attach_us</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="n">step_callback</span><span class="p">),</span> <span class="p">(</span><span class="n">timestamp_t</span><span class="p">)</span> <span class="n">STEP_SIZE_US</span><span class="p">);</span>
+
+  <span class="c1">// initialize model</span>
+  <span class="n">board_unspecific_blinky_initialize</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The initialization function initializes the application.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// main task waits forever</span>
+<span class="n">Thread</span><span class="o">::</span><span class="n">wait</span><span class="p">(</span><span class="n">osWaitForever</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Nothing more to do for the main function.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// deinitialize model</span>
+<span class="n">board_unspecific_blinky_terminate</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The terminate function is not used and never called in MbedTarget.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>without RTOS</li>
+</ol>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;board_unspecific_blinky.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+<span class="cp">#define STEP_SIZE_US  1000.0F    </span><span class="c1">// Sample Time in microseconds</span>
+<span class="cp">#define STEP_SIZE_MS  1.0F       </span><span class="c1">// and in milliseconds</span>
+
+
+<span class="n">Ticker</span> <span class="n">timer</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The correct timing is realized by a Ticker instance.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// without RTOS</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">// initialize model</span>
+  <span class="n">board_unspecific_blinky_initialize</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The initialization function initializes the application.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">timer</span><span class="p">.</span><span class="n">attach_us</span><span class="p">(</span><span class="o">&amp;</span><span class="n">board_unspecific_blinky_step</span><span class="p">,</span> <span class="n">STEP_SIZE_US</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The Ticker instance creates the correct timing.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p>Nothing more to do for the main function.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// deinitialize model</span>
+<span class="n">board_unspecific_blinky_terminate</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The terminate function is not used and never called in MbedTarget.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../installation/_index_en.html" title="2. Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="1. Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >1. Introduction</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

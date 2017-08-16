@@ -1,0 +1,115 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>3.1. Variant 1</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="3.2. Variant 2" href="getting_started_v2.html" />
+    <link rel="prev" title="3. Getting Started" href="getting_started.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="getting_started_v2.html" title="3.2. Variant 2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="3. Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="getting_started.html" accesskey="U">3. Getting Started</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="variant-1">
+<h1>3.1. Variant 1</h1>
+<p>Create a new blinky model with all necessary option already set from the template list:</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>&gt;&gt; open_system<span class="o">(</span>new_system<span class="o">(</span><span class="s1">&#39;untitled&#39;</span>,<span class="s1">&#39;FromTemplate&#39;</span>,<span class="s1">&#39;mbed_target_template_blinky&#39;</span><span class="o">))</span>
+</pre></div>
+</div>
+<p>or out of the Simulink start page:</p>
+<a class="reference internal image-reference" href="../_images/gettingstarted1.png"><img alt="../_images/gettingstarted1.png" src="../_images/gettingstarted1.png" style="width: 961.0px; height: 623.0px;" /></a>
+<p>resulting in a new model:</p>
+<a class="reference internal image-reference" href="../_images/gettingstarted2.png"><img alt="../_images/gettingstarted2.png" src="../_images/gettingstarted2.png" style="width: 590.0px; height: 286.0px;" /></a>
+<p>This model <strong>must</strong> be saved before starting the code generation.</p>
+<p id="getting-started-label-v1-label">The correct mbed target installation can be checked with the integrated target detection. Please open the model configuration and go to <strong>Mbed options</strong>. After pressing the button <strong>detect mbed target (mbedls)</strong> the connected board should be shown in the line above the detect button:</p>
+<a class="reference internal image-reference" href="../_images/gettingstarted4.png"><img alt="../_images/gettingstarted4.png" src="../_images/gettingstarted4.png" style="width: 669.0px; height: 390.0px;" /></a>
+<p>When the connected board does not appear, please check the output of mbedls at the windows commandline. It should look like:</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>E:<span class="se">\g</span>it<span class="se">\m</span>bed_target<span class="se">\d</span>oc&gt;mbedls
++---------------+----------------------+-------------+-------------+--------------------------+-----------------+
+<span class="p">|</span> platform_name <span class="p">|</span> platform_name_unique <span class="p">|</span> mount_point <span class="p">|</span> serial_port <span class="p">|</span> target_id                <span class="p">|</span> daplink_version <span class="p">|</span>
++---------------+----------------------+-------------+-------------+--------------------------+-----------------+
+<span class="p">|</span> NUCLEO_F767ZI <span class="p">|</span> NUCLEO_F767ZI<span class="o">[</span><span class="m">0</span><span class="o">]</span>     <span class="p">|</span> D:          <span class="p">|</span> COM4        <span class="p">|</span> 08180221053160053A75F920 <span class="p">|</span> <span class="m">0221</span>            <span class="p">|</span>
++---------------+----------------------+-------------+-------------+--------------------------+-----------------+
+</pre></div>
+</div>
+<p>When it does not look like the above example please check your mbed target documentation.</p>
+<p>When the board could be detected, the code generation can be started by</p>
+<ul class="simple">
+<li>pressing the button <strong>Build model</strong>,</li>
+<li>using the keyboard shortcut <strong>Ctrl+B</strong> or</li>
+<li>choosing the menu item <strong>Code / C/C++ Code / Build Model</strong>.</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/gettingstarted3.png"><img alt="../_images/gettingstarted3.png" src="../_images/gettingstarted3.png" style="width: 590.0px; height: 286.0px;" /></a>
+<p>After a short processing time, the diagnostic viewer can be opened:</p>
+<a class="reference internal image-reference" href="../_images/gettingstarted5.png"><img alt="../_images/gettingstarted5.png" src="../_images/gettingstarted5.png" style="width: 590.0px; height: 286.0px;" /></a>
+<p>The diagnostic viewer shows the complete code generation process in detail.</p>
+<ol class="arabic simple">
+<li>The first section shows the mbed target details</li>
+</ol>
+<a class="reference internal image-reference" href="../_images/gettingstarted6.png"><img alt="../_images/gettingstarted6.png" src="../_images/gettingstarted6.png" style="width: 904.0px; height: 332.5px;" /></a>
+<ol class="arabic simple" start="2">
+<li>The next parts contain the MATLAB code generation information</li>
+<li>and the output of the mbed Python tool generating a Makefile</li>
+</ol>
+<a class="reference internal image-reference" href="../_images/gettingstarted7.png"><img alt="../_images/gettingstarted7.png" src="../_images/gettingstarted7.png" style="width: 904.0px; height: 629.0px;" /></a>
+<ol class="arabic simple" start="4">
+<li>In the next step the mbed library and the generated C++ code is compiled. When the Simulink model is build the first time, this process can take a while.</li>
+</ol>
+<a class="reference internal image-reference" href="../_images/gettingstarted8.png"><img alt="../_images/gettingstarted8.png" src="../_images/gettingstarted8.png" style="width: 904.0px; height: 629.0px;" /></a>
+<ol class="arabic simple" start="5">
+<li>Finally, after a successful build, the sizes of the different sections (e.g. text - instruction code, data+bss - data memory) should be displayed. In one of the last lines the result of the flashing can be seen. For an mbed board it is just a copy command.</li>
+</ol>
+<a class="reference internal image-reference" href="../_images/gettingstarted9.png"><img alt="../_images/gettingstarted9.png" src="../_images/gettingstarted9.png" style="width: 904.5px; height: 276.0px;" /></a>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="getting_started_v2.html" title="3.2. Variant 2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="3. Getting Started"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="getting_started.html" >3. Getting Started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

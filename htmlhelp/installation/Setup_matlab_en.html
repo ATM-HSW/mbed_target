@@ -1,0 +1,89 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>2.2. Matlab Setup</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="3. Getting Started" href="../getting_started/getting_started.html" />
+    <link rel="prev" title="2.1. Installation prerequisites" href="Prerequisites_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../getting_started/getting_started.html" title="3. Getting Started"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Prerequisites_en.html" title="2.1. Installation prerequisites"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">2. Installation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="matlab-setup">
+<h1>2.2. Matlab Setup</h1>
+<p>The mbed_target folder can be copied somewhere into the directory tree. But it is recommendable to use a path as close as possible to the root. The usage of document or desktop folder may not work in some cases. Windows has a restriction in the maximum command line length and the mbed_target build process could exceed this length in certain circumstances. As a second requirement the folder name <em>mbed_target</em> must not be changed and has to be unique in the folder hierarchy.</p>
+<p>The root directory of mbed_target directory contains an m-file: <em>setup_mbed_target.m</em>. This files has to be run once before using mbed_target. It adds several folders to the Matlab path and checks/installs several tools in the following sequence:</p>
+<ol class="arabic simple">
+<li>Checking the folder mbed_target\blocks\mex if it contains compiled s-functions. If the mexw64 files are missing the setup tries to compile the c-sources. In this case an external c-compiler is necessary. Please see the documentation of <em>mex</em>.</li>
+<li>Checking the existence of the gcc_arm compiler. The windows commandline tool <em>where</em> is used for this. This can be done manually with <em>where arm-none-eabi-gcc</em>. The output should look like:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>C:<span class="se">\U</span>sers<span class="se">\o</span>h&gt;where arm-none-eabi-gcc
+E:<span class="se">\I</span>DEs<span class="se">\G</span>NUToolsARMEmbedded<span class="se">\6</span>_2017q1<span class="se">\b</span>in<span class="se">\a</span>rm-none-eabi-gcc.exe
+</pre></div>
+</div>
+<p>When the toolchain is not correctly installed, e.g. the entry in the path variable is missing, an error is generated. In this case the existence of the toolchain, the correct version and the correct Windows path has to be checked.</p>
+<p>The GNU ARM Embedded Toolchain version: gcc version 6.3.1 20170215 (release) [ARM/embedded-6-branch revision 245512] (GNU Tools for ARM Embedded Processors 6-2017-q1-update) is recommended for the included version mbed os 5.5.</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Checking the existence of Python. Please be aware that version 2.7 is necessary. The mbed build system is currently not compatible with Python 3! Because the Python package installer pip is used, a Python version newer than 2.7.9 is necessary or pip has to be installed manually. The version 2.7.13 is recommended for the included version mbed os 5.5.</li>
+<li>When the Python check was ok then the mbed requirements are installed. This can also be done manually with <em>pip install -r requirements.txt</em> in the mbed_target\targets\mbed-os folder.</li>
+<li>When the Python check was ok then a list of mbed os 5 compatible targets is displayed. This can also be done manually with <em>python toolsproject.py -S targets</em> in the mbed_target\targets\mbed-os folder.</li>
+<li>Checking the existence of <em>mbedls</em>. This is an additional, external mbed tool to check a connected target board. When the tool is not available the setup asked to install it. This can also be done manually with <em>pip install mbed-ls</em>.</li>
+<li>The last check is the verification of the mbed_target installation path. Only the name is checked and not the path length. Strange compiler or linker error later when generating a Simulink model can be an indication of a too long installation path.</li>
+</ol>
+<p>The output in the Matlab command window should be checked after the execution of <em>setup_mbed_target.m</em> if an error happened or a version number does not meets the requirements.</p>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../getting_started/getting_started.html" title="3. Getting Started"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Prerequisites_en.html" title="2.1. Installation prerequisites"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >2. Installation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>5.5.2. CAN Receive</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="5.5.3. CAN Send" href="CAN_Send_en.html" />
+    <link rel="prev" title="5.5.1. CAN Configuration" href="CAN_Config_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CAN_Send_en.html" title="5.5.3. CAN Send"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CAN_Config_en.html" title="5.5.1. CAN Configuration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_CAN_en.html" accesskey="U">5.5. CAN</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="can-receive">
+<h1>5.5.2. CAN Receive</h1>
+<div class="section" id="description">
+<h2>5.5.2.1. Description</h2>
+<p>This block reads CAN messages from a CAN instance specified with CAN Port.</p>
+<p>At Msg.new output port a rising edge is generated when a new message was received by an ISR. The message ID is output at Msg.id.
+Message data and length are output at d and n output ports.</p>
+<a class="reference internal image-reference" href="../_images/block_CAN_Receive.png"><img alt="../_images/block_CAN_Receive.png" src="../_images/block_CAN_Receive.png" style="width: 630.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="data-type-support">
+<h2>5.5.2.2. Data Type Support</h2>
+<p>Msg.new port writes values with <em>boolean</em> data type.</p>
+<p>Msg.id port writes values with <em>unit16</em> data type.</p>
+<p>d port writes values with <em>uint8</em> data type.</p>
+<p>n port writes values with <em>uint32</em> data type.</p>
+</div>
+<div class="section" id="parameters-dialog-box">
+<h2>5.5.2.3. Parameters Dialog Box</h2>
+<img alt="../_images/mask_CAN_Receive.png" src="../_images/mask_CAN_Receive.png" />
+<div class="section" id="can-port">
+<h3>CAN Port</h3>
+<p>Specifies an internally used CAN bus number. It is used to generate unique instance names when more CAN busses are included in the same model and to tie config, read and write blocks together.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h2>5.5.2.4. Example</h2>
+<p>Please see the <a class="reference internal" href="CAN_Config_en.html#serial-can-config-en-example-label"><span class="std std-ref">Examples</span></a> shown in CAN Config documentation.</p>
+</div>
+<div class="section" id="code-generation">
+<h2>5.5.2.5. Code Generation</h2>
+<p>Instance names of mbed CAN classes are created by concatenating <strong>can</strong> and <strong>&lt;CAN Port&gt;</strong> and <strong>variable name</strong> and <strong>&lt;CAN Port&gt;</strong> respectively.</p>
+<div class="section" id="global-parts">
+<h3>Global parts</h3>
+<p>Declares several variables globally:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="kt">char</span> <span class="n">can_buffer1</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">[]</span><span class="o">=</span> <span class="p">{</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span> <span class="p">};</span>
+<span class="n">uint16_T</span> <span class="n">can_id</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">can_len</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">can_new</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">CANMessage</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>and creates additionally a global (ISR) function that reads a CAN message whenever a new message arrived and sets the received flag:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">can_rcv_handler</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">can</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">message</span><span class="o">&gt;</span><span class="p">);</span>
+  <span class="n">can_new</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialize-function">
+<h3>Initialize Function</h3>
+<p>Creates a line that registers the above receive function as an ISR which is called whenever a CAN frame received.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">can</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="o">&amp;</span><span class="n">can_rcv_handler</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-function">
+<h3>Step Function</h3>
+<p>creates several lines in void <strong>&lt;Model Name&gt;</strong>_step(void) function</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// this part is executed when a new CAN message was received after the subsequent call of the step function</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">can_new</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">can_len</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+  <span class="n">can_id</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span>  <span class="o">=</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+  <span class="n">memcpy</span><span class="p">(</span><span class="n">can_buffer</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+  <span class="n">memcpy</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Addr</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">n</span><span class="o">&gt;</span>       <span class="o">=</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">Msg</span><span class="p">.</span><span class="n">id</span><span class="o">&gt;</span>  <span class="o">=</span> <span class="n">can_rcv_msg</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">Msg</span><span class="p">.</span><span class="k">new</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">can_new</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// this part is executed when a CAN message was never received</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">can_new</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">memcpy</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Addr</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">can_buffer</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">n</span><span class="o">&gt;</span>       <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">Msg</span><span class="p">.</span><span class="n">id</span><span class="o">&gt;</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">Msg</span><span class="p">.</span><span class="k">new</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">can_new1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// this part is executed when a new CAN message was not received after the last call of the step function</span>
+<span class="c1">// the last received CAN message is output but without a rising edge at Msg.new output port</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="n">memcpy</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Addr</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">can_buffer</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">can_len</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">);</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">n</span><span class="o">&gt;</span>       <span class="o">=</span> <span class="n">can_len</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">Msg</span><span class="p">.</span><span class="n">id</span><span class="o">&gt;</span>  <span class="o">=</span> <span class="n">can_id</span><span class="o">&lt;</span><span class="n">CAN</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="o">&lt;</span><span class="n">output</span> <span class="n">port</span> <span class="n">Msg</span><span class="p">.</span><span class="k">new</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CAN_Send_en.html" title="5.5.3. CAN Send"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CAN_Config_en.html" title="5.5.1. CAN Configuration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_CAN_en.html" >5.5. CAN</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

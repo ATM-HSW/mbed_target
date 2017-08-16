@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>10.7.4. MAX11300 Analog Input</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="10.7.5. MAX11300 Analog Output" href="Max11300_Analog_Output_en.html" />
+    <link rel="prev" title="10.7.3. MAX11300 Digital Output" href="Max11300_Digital_Output_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Max11300_Analog_Output_en.html" title="10.7.5. MAX11300 Analog Output"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Max11300_Digital_Output_en.html" title="10.7.3. MAX11300 Digital Output"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="MAX11300_en.html" accesskey="U">10.7. MAX11300</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="max11300-analog-input">
+<h1>10.7.4. MAX11300 Analog Input</h1>
+<p>Reads the analog voltage input at the specified pin of the MAX11300.</p>
+<div class="section" id="library">
+<h2>10.7.4.1. Library</h2>
+<p>/SPI</p>
+</div>
+<div class="section" id="description">
+<h2>10.7.4.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Max11300_Analog_Input_block.png"><img alt="../_images/Max11300_Analog_Input_block.png" src="../_images/Max11300_Analog_Input_block.png" style="width: 276.5px; height: 166.0px;" /></a>
+<p>This block configures the selected pin of the MAX11300 to act as an analog input. Input can be either
+single ended or differential. If differential input is configured a second pin must be used to act as the negative input.
+These negative input can be shared by other differential channels.
+To reduce noise it is possible to average up to 128 samples inside the MAX11300 before a new value is read at the output register.
+The reference voltage can be chosen per pin to be internal 2.5V or external.</p>
+</div>
+<div class="section" id="data-type-support">
+<h2>10.7.4.3. Data Type Support</h2>
+<p>The block’s output either int16 or single value depending on the <em>Mode</em> parameter.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>10.7.4.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Max11300_Analog_Input_mask.png" src="../_images/Max11300_Analog_Input_mask.png" />
+<div class="section" id="chip-select-port-and-pin">
+<h3>Chip Select Port and Pin</h3>
+<p>Configuration of the MCU Pin the device’s chip select input is connected to.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The chip select pin must be the same as in the corresponding <em>MAX11300 Config</em> block</p>
+</div>
+</div>
+<div class="section" id="input-type">
+<h3>Input type</h3>
+<p>Selects the input mode to single-ended or differential input.</p>
+</div>
+<div class="section" id="mode">
+<h3>Mode</h3>
+<p>Selects the output data type to raw (int16 -2048…2047) or relative (0…1)</p>
+</div>
+<div class="section" id="positive-input-pin">
+<h3>Positive input pin</h3>
+<p>Specifies the pin of the MAX11300 for analog input (single ended) or positive voltage input (differential).</p>
+</div>
+<div class="section" id="negative-input-pin">
+<h3>Negative input pin</h3>
+<p>Specifies the pin of the MAX11300 for the negative differential input.</p>
+</div>
+<div class="section" id="average-samples">
+<h3>Average samples</h3>
+<p>Number of samples to be averaged before new value is available.</p>
+</div>
+<div class="section" id="input-range">
+<h3>Input range</h3>
+<p>Specifies the input range of the configured pin to</p>
+<ul class="simple">
+<li>0V to 10V</li>
+<li>-5V to 5V</li>
+<li>-10V to 0V</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To measure negative input voltages the supply voltage of the MAX11300 must be -12V Vss and +12Vdd.</p>
+</div>
+</div>
+<div class="section" id="reference-voltage">
+<h3>Reference voltage</h3>
+<p>Select the ADC reference voltage for the specified pin</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Max11300_Analog_Output_en.html" title="10.7.5. MAX11300 Analog Output"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Max11300_Digital_Output_en.html" title="10.7.3. MAX11300 Digital Output"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="MAX11300_en.html" >10.7. MAX11300</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

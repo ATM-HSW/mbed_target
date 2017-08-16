@@ -44,5 +44,4 @@
 **/slprj/*
 **/*_slprj/*
 **/Debug/*
-doc/_build/**/*
-htmlhelp/**/*
+htmlhelp/.buildinfo

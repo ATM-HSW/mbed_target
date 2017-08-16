@@ -1,0 +1,154 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>5.3.2. I2C Read</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="5.3.3. I2C Write" href="I2C_Write_en.html" />
+    <link rel="prev" title="5.3.1. I2C Configuration" href="I2C_Config_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="I2C_Write_en.html" title="5.3.3. I2C Write"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="I2C_Config_en.html" title="5.3.1. I2C Configuration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_I2C_en.html" accesskey="U">5.3. I2C</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="i2c-read">
+<h1>5.3.2. I2C Read</h1>
+<div class="section" id="description">
+<h2>5.3.2.1. Description</h2>
+<p>This block reads one or multiple bytes from a device at the given bus address. The address must be provided as an 8 bit address regardless of the value of the LSB (read/write bit).</p>
+<p>The block interface can be configured by the Parameters Dialog Box:</p>
+<ul class="simple">
+<li>The minimal variant has a static i2c address and reads a predefined number of bytes from the device.</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/block_I2C_Read_min.png"><img alt="../_images/block_I2C_Read_min.png" src="../_images/block_I2C_Read_min.png" style="width: 626.5px; height: 253.5px;" /></a>
+<ul class="simple">
+<li>The maximal variant allows a dynamic i2c address and a dynamic number of bytes to be read. The ack port outputs communication errors.</li>
+</ul>
+<a class="reference internal image-reference" href="../_images/block_I2C_Read_max.png"><img alt="../_images/block_I2C_Read_max.png" src="../_images/block_I2C_Read_max.png" style="width: 630.0px; height: 254.5px;" /></a>
+</div>
+<div class="section" id="data-type-support">
+<h2>5.3.2.2. Data Type Support</h2>
+<p>All input ports expect an <em>uint8</em> data type.
+The output port writes values with an <em>uint8</em> data type.</p>
+</div>
+<div class="section" id="parameters-dialog-box">
+<h2>5.3.2.3. Parameters Dialog Box</h2>
+<img alt="../_images/mask_I2C_Read.png" src="../_images/mask_I2C_Read.png" />
+<div class="section" id="i2c-port">
+<h3>I2C Port</h3>
+<p>specifies an internal used I2C port number. It is used to generate unique instance names when more I2C busses are used in the same model and to tie config, read and write blocks together.</p>
+</div>
+<div class="section" id="enable-address-input-port">
+<h3>Enable address input port</h3>
+<p>Enables an input port that provides the device address from which the mcu should read data.</p>
+<p>The address input port allows reading from different devices with the same read block by changing the value at the address input port.</p>
+</div>
+<div class="section" id="slave-address">
+<h3>Slave address</h3>
+<p>8bit address of the i2c bus device.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the Enable address input port checkbox is checked the Slave address field is ignored.</p>
+</div>
+</div>
+<div class="section" id="enable-byte-count-input-port">
+<h3>Enable byte count input port</h3>
+<p>If the number of data to be read changes during program execution the external byte count port can be activated to provide the amount of data to be read from the device.</p>
+</div>
+<div class="section" id="number-of-bytes-to-read">
+<h3>Number of bytes to read</h3>
+<p>This parameter serves two purposes.</p>
+<ol class="arabic simple">
+<li>If external byte count is disabled, the block reads the configured amount of bytes every time it is executed.</li>
+<li>If external byte count is enabled, the parameter sets the maximum number of bytes (i.e. the data port width in simulink) which can be read.</li>
+</ol>
+</div>
+<div class="section" id="repeated">
+<h3>Repeated</h3>
+<p>If enabled no I2C STOP condition is send after completing the read operation.</p>
+</div>
+<div class="section" id="enable-ack-output-port">
+<h3>Enable ack output port</h3>
+<p>Enables a block output port where the success of the operation can be read. Please see the mbed documentation for further information.</p>
+<ul class="simple">
+<li>“0” output: no error during communication</li>
+<li>“1” output: error during communication</li>
+</ul>
+</div>
+</div>
+<div class="section" id="example">
+<h2>5.3.2.4. Example</h2>
+<p>In the example data read from a PCF8574 at address 0x40 is bitmasked. Bits 0 and 1, used as inputs, are written to LED1 and LED2.</p>
+<p>The user button is written to bit 3 of the PCF8574. Unused bits and both input bits has to be set to 1 (please see the datasheet). The result is written back to the PCF8574.</p>
+<a class="reference internal image-reference" href="../_images/example_I2C.png"><img alt="../_images/example_I2C.png" src="../_images/example_I2C.png" style="width: 895.0px; height: 570.0px;" /></a>
+</div>
+<div class="section" id="code-generation">
+<h2>5.3.2.5. Code Generation</h2>
+<p>Instance names of mbed I2C classes are created by concatenating <strong>i2c</strong> and <strong>&lt;I2C Port&gt;</strong>.</p>
+<div class="section" id="step-function">
+<h3>Step Function</h3>
+<p>creates one line in void <strong>&lt;Model Name&gt;</strong>_step(void) function</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">lvalue</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8_T</span><span class="p">)</span><span class="n">i2c</span><span class="o">&lt;</span><span class="n">I2C</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Slave</span> <span class="n">address</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Addr</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Length</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Repeated</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>when Enable ack output port is checked or</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">i2c</span><span class="o">&lt;</span><span class="n">I2C</span> <span class="n">Port</span><span class="o">&gt;</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Slave</span> <span class="n">address</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Addr</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Length</span> <span class="n">of</span> <span class="n">Outputbuffer</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Repeated</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>when Enable ack output port is unchecked. &lt;Slave address&gt; and &lt;Length of Outputbuffer&gt; are defined by the block mask or can come from input ports.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="I2C_Write_en.html" title="5.3.3. I2C Write"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="I2C_Config_en.html" title="5.3.1. I2C Configuration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_I2C_en.html" >5.3. I2C</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

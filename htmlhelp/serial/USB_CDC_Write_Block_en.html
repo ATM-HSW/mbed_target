@@ -1,0 +1,107 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>5.2.3. USB CDC Write Block</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="5.3. I2C" href="_I2C_en.html" />
+    <link rel="prev" title="5.2.2. USB CDC Read" href="USB_CDC_Read_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="_I2C_en.html" title="5.3. I2C"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="USB_CDC_Read_en.html" title="5.2.2. USB CDC Read"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_USB_en.html" accesskey="U">5.2. USB (CDC)</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="usb-cdc-write-block">
+<h1>5.2.3. USB CDC Write Block</h1>
+<div class="section" id="description">
+<h2>5.2.3.1. Description</h2>
+<p>Writes the one dimensional vector of <em>uint8</em> at input port <em>d</em> to the USB CDC device driver. The length of the vector can be dynamically submitted at input port <em>n</em> or is statically read from input port <em>d</em> configuration.</p>
+<p>Please be aware that not every target supports the mbed USB library. Maybe the mcu does not support USB or the mbed USB library is not supported.</p>
+<a class="reference internal image-reference" href="../_images/block_USB_SerialWriteBlock.png"><img alt="../_images/block_USB_SerialWriteBlock.png" src="../_images/block_USB_SerialWriteBlock.png" style="width: 605.0px; height: 229.0px;" /></a>
+</div>
+<div class="section" id="data-type-support">
+<h2>5.2.3.2. Data Type Support</h2>
+<p>The input port d expects an <em>uint8</em> data type and input port n expects an <em>uint32</em> data type</p>
+</div>
+<div class="section" id="parameters-dialog-box">
+<h2>5.2.3.3. Parameters Dialog Box</h2>
+<img alt="../_images/mask_USB_SerialWriteBlock.png" src="../_images/mask_USB_SerialWriteBlock.png" />
+<div class="section" id="enable-datasize-port">
+<h3>Enable datasize Port</h3>
+<p>When this check box is checked the optional input port n is enabled.</p>
+</div>
+<div class="section" id="sample-time">
+<h3>Sample Time</h3>
+<p>specifies the time interval between samples. To inherit the sample time, set this parameter to -1.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h2>5.2.3.4. Example</h2>
+<p>In the example data read from USB CDC driver input are written back to the USB CDC driver output without modification.</p>
+<a class="reference internal image-reference" href="../_images/example_USB_CDC.png"><img alt="../_images/example_USB_CDC.png" src="../_images/example_USB_CDC.png" style="width: 662.0px; height: 325.0px;" /></a>
+</div>
+<div class="section" id="code-generation">
+<h2>5.2.3.5. Code Generation</h2>
+<div class="section" id="global-parts">
+<h3>Global parts</h3>
+<p>creates one line in void <strong>&lt;Model Name&gt;</strong>_step(void) function</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">usbSerial</span><span class="p">.</span><span class="n">writeBlock</span><span class="p">((</span><span class="n">uint8_T</span><span class="o">*</span><span class="p">)</span><span class="n">pointer_to_data</span><span class="p">,</span> <span class="n">length_of_data</span><span class="p">);</span> <span class="c1">// length_of_data is initialised with the dimension of the input signal or with n</span>
+</pre></div>
+</div>
+<p>in <strong>&lt;Model Name&gt;</strong>.cpp.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="_I2C_en.html" title="5.3. I2C"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="USB_CDC_Read_en.html" title="5.2.2. USB CDC Read"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >5. Serial Buses</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="_USB_en.html" >5.2. USB (CDC)</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

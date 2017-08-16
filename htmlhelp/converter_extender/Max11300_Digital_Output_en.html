@@ -1,0 +1,104 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>10.7.3. MAX11300 Digital Output</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="10.7.4. MAX11300 Analog Input" href="Max11300_Analog_Input_en.html" />
+    <link rel="prev" title="10.7.2. MAX11300 Digital Input" href="Max11300_Digital_Input_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Max11300_Analog_Input_en.html" title="10.7.4. MAX11300 Analog Input"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Max11300_Digital_Input_en.html" title="10.7.2. MAX11300 Digital Input"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="MAX11300_en.html" accesskey="U">10.7. MAX11300</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="max11300-digital-output">
+<h1>10.7.3. MAX11300 Digital Output</h1>
+<p>Outputs a digital high or low value to the specified MAX11300 pin.</p>
+<div class="section" id="library">
+<h2>10.7.3.1. Library</h2>
+<p>/SPI</p>
+</div>
+<div class="section" id="description">
+<h2>10.7.3.2. Description</h2>
+<a class="reference internal image-reference" href="../_images/Max11300_Digital_Output_block.png"><img alt="../_images/Max11300_Digital_Output_block.png" src="../_images/Max11300_Digital_Output_block.png" style="width: 377.5px; height: 164.5px;" /></a>
+<p>This block configures the selected pin of the MAX11300 to act as a digital output. The voltage level of logical high can
+be configured between 0V and 10V by an output level parameter.</p>
+</div>
+<div class="section" id="data-type-support">
+<h2>10.7.3.3. Data Type Support</h2>
+<p>The block’s input parameter expects a uint8 value of either “0” (low level output) or “1” (high level output)</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>10.7.3.4. Parameters and Dialog Box</h2>
+<img alt="../_images/Encoder_input_mask.png" src="../_images/Encoder_input_mask.png" />
+<div class="section" id="chip-select-port-and-pin">
+<h3>Chip Select Port and Pin</h3>
+<p>Configuration of the MCU Pin the device’s chip select input is connected to.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The chip select pin must be the same as in the corresponding <em>MAX11300 Config</em> block</p>
+</div>
+</div>
+<div class="section" id="pin-number">
+<h3>Pin Number</h3>
+<p>Specifies the pin of the MAX11300 which should be used as digital output.</p>
+</div>
+<div class="section" id="output-level">
+<h3>Output level</h3>
+<p>12 bit value to configure the high level voltage output between 0V = 0 and 10V = 4095.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Max11300_Analog_Input_en.html" title="10.7.4. MAX11300 Analog Input"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Max11300_Digital_Input_en.html" title="10.7.2. MAX11300 Digital Input"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >10. Converter and I/O Extender</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="MAX11300_en.html" >10.7. MAX11300</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

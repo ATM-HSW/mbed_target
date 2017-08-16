@@ -1,0 +1,150 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    <title>6.1. Thread</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="next" title="6.2. Thread::wait" href="Threadwait_en.html" />
+    <link rel="prev" title="6. RTOS" href="_index_en.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Threadwait_en.html" title="6.2. Thread::wait"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="6. RTOS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" accesskey="U">6. RTOS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="thread">
+<h1>6.1. Thread</h1>
+<div class="section" id="description">
+<h2>6.1.1. Description</h2>
+<p>Creates a RTOS thread with the specified priority.</p>
+<p>Stack size can be DEFAULT_STACK_SIZE or have an individual value. DEFAULT_STACK_SIZE is compiler and target specific.</p>
+<p>The function call subsystem is called in an endless loop without wait calls when Timing == 0 or a Thread:wait as last method call at the end of the endless loop.</p>
+<a class="reference internal image-reference" href="../_images/block_RTOSThread.png"><img alt="../_images/block_RTOSThread.png" src="../_images/block_RTOSThread.png" style="width: 630.0px; height: 318.0px;" /></a>
+</div>
+<div class="section" id="data-type-support">
+<h2>6.1.2. Data Type Support</h2>
+<p>The Thread block outputs a signal of type <em>fcn_call</em>.</p>
+</div>
+<div class="section" id="parameters-and-dialog-box">
+<h2>6.1.3. Parameters and Dialog Box</h2>
+<img alt="../_images/mask_RTOSThread.png" src="../_images/mask_RTOSThread.png" />
+<div class="section" id="thread-priority">
+<h3>6.1.3.1. Thread Priority</h3>
+<p>specifies the thread priority argument for calling the Thread constructor.</p>
+<ul class="simple">
+<li>idle (lowest)</li>
+<li>low</li>
+<li>below normal</li>
+<li>normal (default)</li>
+<li>above normal</li>
+<li>high</li>
+<li>realtime (highest)</li>
+</ul>
+</div>
+<div class="section" id="stack-size">
+<h3>6.1.3.2. Stack size</h3>
+<p>specifies the stacksize argument for calling the Thread constructor. <em>Default</em> uses the size defined in mbed, <em>User defined</em> allows to overwrite this value.</p>
+</div>
+<div class="section" id="size-bytes">
+<h3>6.1.3.3. Size (bytes):</h3>
+<p>specifies the value of the user defined stack size of this thread.</p>
+</div>
+<div class="section" id="timing-ms">
+<h3>6.1.3.4. Timing (ms):</h3>
+<p>a Thread::Wait with the specified waiting time in ms is called as the last method in the endless while. Please be aware that the behaviour is non-equidistant.</p>
+</div>
+</div>
+<div class="section" id="example">
+<h2>6.1.4. Example</h2>
+<p>In the example two LEDs are blinking. LED1 is blinking in the same way like in the Blinky example. LED2 is controled by a Thread which executions the function-call subsystem in an endless loop with a Thread::wait call at the loop end.</p>
+<p>The periode is 500ms+execution time of the subsystem.</p>
+<a class="reference internal image-reference" href="../_images/example_RTOS_Thread_Blinky.png"><img alt="../_images/example_RTOS_Thread_Blinky.png" src="../_images/example_RTOS_Thread_Blinky.png" style="width: 1330.5px; height: 423.0px;" /></a>
+</div>
+<div class="section" id="code-generation">
+<h2>6.1.5. Code Generation</h2>
+<p>Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (<strong>&lt;Model Name&gt;</strong>_(<strong>&lt;Subblock Name&gt;</strong>_…)<strong>&lt;Block Name&gt;</strong>). Space and minus characters are substituted by underscore (‘_’) characters.</p>
+<p>In <strong>ert_main</strong>.cpp</p>
+<ul class="simple">
+<li>an external reference</li>
+</ul>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="k">extern</span> <span class="kt">void</span> <span class="o">&lt;</span><span class="n">instance</span> <span class="n">name</span><span class="o">&gt;</span><span class="n">_RTOS_Thread_thread</span><span class="p">();</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>and a Thread instance creation+start in the main function</li>
+</ul>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">Thread</span> <span class="o">&lt;</span><span class="n">instance</span> <span class="n">name</span><span class="o">&gt;</span><span class="n">_blinky_RTOS_Thread</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Thread</span> <span class="n">Priority</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Size</span> <span class="p">(</span><span class="n">bytes</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">or</span> <span class="n">DEFAULT_STACK_SIZE</span><span class="p">);</span>
+<span class="o">&lt;</span><span class="n">instance</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">callback</span><span class="p">(</span><span class="o">&lt;</span><span class="n">instance</span> <span class="n">name</span><span class="o">&gt;</span><span class="n">_RTOS_Thread_thread</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>are created. The callback function &lt;instance name&gt;_RTOS_Thread_thread is generated in <strong>&lt;Model Name&gt;</strong>.cpp.</p>
+<p>In <strong>&lt;Model Name&gt;</strong>.cpp a separate function for the whole function-call subblock, the Thread callback function with an enclosing <em>while(1)</em>,</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="o">&lt;</span><span class="n">instance</span> <span class="n">name</span><span class="o">&gt;</span><span class="n">_RTOS_Thread_thread</span><span class="p">(</span><span class="kt">void</span> <span class="k">const</span> <span class="o">*</span><span class="n">argument</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Output and update for function-call system: &#39;&lt;Root&gt;/FunctionCall Subsystem&#39;</span>
+    <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="n">Thread</span><span class="o">::</span><span class="n">wait</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Timing</span><span class="o">&gt;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>is created.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">With Timing = 0 the while loop runs with the maximal speed - no waits! Please use mechanisms like blocking read or write from Mail queue class or a wait block.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Threadwait_en.html" title="6.2. Thread::wait"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="_index_en.html" title="6. RTOS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../Index.html">mbed_target_doc 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="_index_en.html" >6. RTOS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, CEA/ATM RG, HS Wismar.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>
