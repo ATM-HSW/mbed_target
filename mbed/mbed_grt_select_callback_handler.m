@@ -13,7 +13,7 @@
 %  See the License for the specific language governing permissions and
 %  limitations under the License.
 
-function mbed_select_callback_handler(hDlg, hSrc)
+function mbed_grt_select_callback_handler(hDlg, hSrc)
   % The target is model reference compliant
   slConfigUISetVal(hDlg, hSrc, 'ModelReferenceCompliant', 'on');
   slConfigUISetEnabled(hDlg, hSrc, 'ModelReferenceCompliant', false);
@@ -30,21 +30,12 @@ function mbed_select_callback_handler(hDlg, hSrc)
   % Set the TargetLibSuffix
   slConfigUISetVal(hDlg, hSrc, 'TargetLibSuffix', '.a');
 
-  % For real-time builds, we must generate ert_main.c
-  slConfigUISetVal(hDlg, hSrc, 'ERTCustomFileTemplate', 'mbed_file_process.tlc');
-  slConfigUISetVal(hDlg, hSrc, 'CustomSource', '');
-
-  % switch on dialog to be able to configure custom step/init function names
-  slConfigUISetVal(hDlg,hSrc,'ModelStepFunctionPrototypeControlCompliant','on');
-  slConfigUISetEnabled(hDlg,hSrc,'ModelStepFunctionPrototypeControlCompliant',false);
-
+  % add the static main.cpp
+  slConfigUISetVal(hDlg, hSrc, 'CustomSource', 'mbed_grt_main.cpp');
 
   slConfigUISetVal(hDlg,hSrc,'GenerateReport','off');
 
   slConfigUISetVal(hDlg,hSrc,'MbedVersion','mbed-os 5');
-  slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',0);
-  slConfigUISetEnabled(hDlg, hSrc,'UseMbedRTOS',0);
-  slConfigUISetVal(hDlg, hSrc, 'UseMbedRTOS', 1);
 
 %  slConfigUISetVal(hDlg, hSrc, 'GenCodeOnly', 'on');
 

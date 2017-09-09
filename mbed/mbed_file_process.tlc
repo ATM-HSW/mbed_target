@@ -7,7 +7,7 @@
 %%   executed just prior to writing the generated source files to disk.
 %%
 %% Copyright 1994-2014 The MathWorks, Inc.
-%%           2014 Dr. Olaf Hagendorf, HS Wismar
+%%           2014-2017 Dr. Olaf Hagendorf, HS Wismar
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %selectfile NULL_FILE
@@ -17,18 +17,17 @@
 
 %% Create a simple main.
 %if UseRTOS == 0
-
   %if LibIsSingleRateModel() || LibIsSingleTasking()
-  	%if ExtMode
-        %% We use extra file for main generation with External Mode
-    	%include "mbed_srmain_ExtMode.tlc"
+    %if ExtMode
+      %% We use extra file for main generation with External Mode
+      %include "mbed_srmain_ExtMode.tlc"
     %else
-        %% Simplified main generation w/o External Mode
-    	%include "mbed_srmain.tlc"
+      %% Simplified main generation w/o External Mode
+      %include "mbed_srmain.tlc"
     %endif
     %<FcnSingleTaskingMain()>
   %else
-  	%% For the moment, multitasking is not supported
+    %% For the moment, multitasking is not supported
     %include "mbed_srmain.tlc"
     %<FcnSingleTaskingMain()>
   %endif

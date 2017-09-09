@@ -1,0 +1,42 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Abstract:
+%%   Code generation custom file processing template.
+%%
+%%   Note: This file can contain any valid TLC code, which is
+%%   executed just prior to writing the generated source files to disk.
+%%
+%% Copyright 1994-2014 The MathWorks, Inc.
+%%           2014-2017 Dr. Olaf Hagendorf, HS Wismar
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%selectfile NULL_FILE
+
+%assign ModelName = CompiledModel.Name
+
+%% Create header file
+%assign model_script_file = "mbed_grt_custom.h"
+
+%% %matlab disp(model_script_file)
+
+%openfile bld_file = "%<model_script_file>"
+%%   void (*stepFctPtr)(void) = &%<LibGetModelName()>_step;
+%%   void (*initFctPtr)(void) = &%<LibGetModelName()>_initialize;
+%%   void (*termFctPtr)(void) = &%<LibGetModelName()>_terminate;
+
+  %% Get fundamental step time
+  %assign SAMPLETIME = CompiledModel.FundamentalStepSize
+  %if SAMPLETIME < 0.000001
+      %% Because micro second ticker function are used, this is the shortest periode, nevertheless the target supports it.
+      %<LibReportError("The minimum supported sample time is 1 microseconds. Change the Step size parameter under Solver in the model Configuration Parameters dialog.")>
+  %endif
+  %if SAMPLETIME < 0.0001
+      %<LibReportWarning("Please check if the target can support this step size, e.g. NUCLEO_F767ZI supports 1µs without RTOS. But it needs 10µs with RTOS. A NUCLEO_F411RE needs 10µs or more without RTOS.")>
+  %endif
+  %assign SampleRate_us  = %<SAMPLETIME> * 1000000
+  %assign SampleRate_ms  = %<SAMPLETIME> * 1000
+
+  #define STEP_SIZE_US %<SampleRate_us>F /* Sample Time in microseconds */
+  #define STEP_SIZE_MS %<SampleRate_ms>F /* and in milliseconds */
+
+%closefile bld_file

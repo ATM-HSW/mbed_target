@@ -1,5 +1,9 @@
+%% File: block_common_includes.tlc
+%%
 %%  MbedTarget Simulink target
+%%  Copyright 2002-2010 The MathWorks, Inc.
 %%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright 2015 M. Marquardt, HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -13,12 +17,6 @@
 %%  See the License for the specific language governing permissions and
 %%  limitations under the License.
 
-%% File: block_common_includes.tlc
-%%
-%% Copyright 2002-2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.Olaf Hagendorf, HS Wismar
-%% Copyright 2015 M. Marquardt, HS Wismar
-
 %function SLibCodeGenForSim() void
   %if (CompiledModel.TargetStyle=="SimulationTarget")
     %return 1
@@ -28,24 +26,34 @@
 %endfunction
 
 %function MbedCommonBlockTypeSetup(block, system) void
-
   %if EXISTS("_DONE_COMMON_BLOCK_TYPE_SETUP_") == 0
-    %assign _DONE_COMMON_BLOCK_TYPE_SETUP_ = 1
+    %assign ::_DONE_COMMON_BLOCK_TYPE_SETUP_ = 1
 
     %if !SLibCodeGenForSim()
       %if ExtMode
         %% Remove double re-definition in Integer-only case
         %<LibAddToCommonIncludes("remDouble.h")>
       %endif
-      %%
+
       %<LibAddToCommonIncludes("mbed.h")>
-	  
-	  %% mm
-	  %if UseMbedRTOS
-		%<LibAddToCommonIncludes("rtos.h")>
-	  %endif
-	  %% /mm
-      %%
+
+      %if UseMbedRTOS
+        %<LibAddToCommonIncludes("rtos.h")>
+      %endif
+
+      %assign srcFile = LibGetModelDotCFile()
+
+      %if (MbedTarget == "mbed_grt")
+
+        %openfile tmpBuf
+        void (*stepFctPtr)(void) = &%<LibGetModelName()>_step;
+        void (*initFctPtr)(void) = &%<LibGetModelName()>_initialize;
+        void (*termFctPtr)(void) = &%<LibGetModelName()>_terminate;
+        %closefile tmpBuf
+
+        %<LibSetSourceFileSection(srcFile,"Declarations",tmpBuf)>
+      %endif
+
     %endif
   %endif
 %endfunction
