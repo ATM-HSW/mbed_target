@@ -1,5 +1,4 @@
-%% SYSTLC: MbedTarget (Embedded Target for Embedded Coder) TMF: mbed.tmf MAKE: make_rtw \
-%%   EXTMODE: ext_comm
+%% SYSTLC: MbedTarget (Embedded Target for Embedded Coder) TMF: mbed.tmf MAKE: make_rtw EXTMODE: ext_comm
 
 
 %%  MbedTarget Simulink target
@@ -50,7 +49,7 @@
   rtwoptions(oIdx).prompt        = 'Mbed options';
   rtwoptions(oIdx).type          = 'Category';
   rtwoptions(oIdx).enable        = 'on';
-  rtwoptions(oIdx).default       = 11;  % number of items under this category excluding this one.
+  rtwoptions(oIdx).default       = 12;  % number of items under this category excluding this one.
   rtwoptions(oIdx).popupstrings  = '';
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
@@ -58,44 +57,40 @@
   rtwoptions(oIdx).closecallback = '';
   rtwoptions(oIdx).makevariable  = '';
 
-
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Version: ';
+  rtwoptions(oIdx).prompt         = 'MbedOS 5 Target: ';
   rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = 'mbed 2|mbed-os 5';
-  rtwoptions(oIdx).tlcvariable    = 'MbedVersion';
-  rtwoptions(oIdx).makevariable   = 'MBEDVERSION';
-  rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed version']);
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedVersion'')';
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbed 2 Target: ';
-  rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets('');
-  rtwoptions(oIdx).tlcvariable    = 'MbedTarget';
-  rtwoptions(oIdx).makevariable   = 'MBEDTARGET';
-  rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
-  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget'')';
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbed os 5 Target: ';
-  rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets('mbed-os 5');
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets();
   rtwoptions(oIdx).tlcvariable    = 'MbedTarget5';
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET5';
   rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. NUCLEO_F446RE']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget5'')';
-
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'detect mbed target (mbedls)';
+  rtwoptions(oIdx).prompt         = 'MbedOS additional project config: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getAppConfigs();
+  rtwoptions(oIdx).tlcvariable    = 'MbedAppConfig';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedAppConfig'')';
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'Create additional IDE project: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getIDEs(true);
+  rtwoptions(oIdx).tlcvariable    = 'MbedAddProjectFiles';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['e.g. uvision for µVision project files']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedCreateIDEProject'')';
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'detect Mbed target (mbedls)';
   rtwoptions(oIdx).type           = 'Pushbutton';
   rtwoptions(oIdx).default        = '';
   rtwoptions(oIdx).tlcvariable    = '';
@@ -103,7 +98,6 @@
   rtwoptions(oIdx).enable         = '';
   rtwoptions(oIdx).tooltip        = sprintf(['']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedls'')';
-
 
   oIdx = oIdx + 1;
 
@@ -115,7 +109,6 @@
   rtwoptions(oIdx).tooltip        = ['use mbedls to detect mbed Virtual Drive and Virtual COM Port before flashing'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedlsAutodetect'')';
 
-
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'Flash Application';
@@ -125,7 +118,6 @@
   rtwoptions(oIdx).makevariable   = 'DOWNLOADAPPLICATION';
   rtwoptions(oIdx).tooltip        = ['Flash application: copy to Virtual Drive'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadApplication'')';
-
 
   oIdx = oIdx + 1;
 
@@ -138,7 +130,6 @@
   rtwoptions(oIdx).tooltip        = sprintf(['Downloadfunktion: mbed - copy to mbed Virtual Drive, STLink - batch file calling STLink CLI']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadMethod'')';
 
-
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'mbed Virtual Drive: ';
@@ -149,7 +140,6 @@
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedDrive'')';
-
 
   oIdx = oIdx + 1;
 
@@ -171,7 +161,6 @@
   rtwoptions(oIdx).makevariable   = 'USEMBEDRTOS';
   rtwoptions(oIdx).tooltip        = sprintf(['Add mbed RTOS.']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''UseMbedRTOS'')';
-
 
   oIdx = oIdx + 1;
 

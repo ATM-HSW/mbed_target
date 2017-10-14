@@ -15,20 +15,20 @@
 
 function mbed_tlc_callback(hDlg, hSrc, paramName)
 
-if isequal(paramName, 'MbedVersion')
-    mbedversion = (slConfigUIGetVal(hDlg, hSrc, paramName));
-    mbed.Prefs.setMbedVersion(mbedversion);
-    if isequal(mbedversion, 'mbed-os 5')
-        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',0);
-        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget5',1);
-        slConfigUISetEnabled(hDlg, hSrc,'UseMbedRTOS',0);
-        slConfigUISetVal(hDlg, hSrc, 'UseMbedRTOS', 1);
-    else
-        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',1);
-        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget5',0);
-        slConfigUISetEnabled(hDlg, hSrc,'UseMbedRTOS',1);
-    end
-end
+%if isequal(paramName, 'MbedVersion')
+%     mbedversion = (slConfigUIGetVal(hDlg, hSrc, paramName));
+%     mbed.Prefs.setMbedVersion(mbedversion);
+%    if isequal(mbedversion, 'mbed-os 5')
+%        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',0);
+%        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget5',1);
+%        slConfigUISetEnabled(hDlg, hSrc,'UseMbedRTOS',0);
+%        slConfigUISetVal(hDlg, hSrc, 'UseMbedRTOS', 1);
+%    else
+%        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',1);
+%        slConfigUISetEnabled(hDlg, hSrc,'MbedTarget5',0);
+%        slConfigUISetEnabled(hDlg, hSrc,'UseMbedRTOS',1);
+%    end
+%end
 
 if isequal(paramName, 'mbedls')
     [ MbedDrive, ComPort, MbedTarget5 ] = mbed_mbedls();

@@ -41,8 +41,8 @@ function mbed_select_callback_handler(hDlg, hSrc)
 
   slConfigUISetVal(hDlg,hSrc,'GenerateReport','off');
 
-  slConfigUISetVal(hDlg,hSrc,'MbedVersion','mbed-os 5');
-  slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',0);
+%  slConfigUISetVal(hDlg,hSrc,'MbedVersion','mbed-os 5');
+%  slConfigUISetEnabled(hDlg, hSrc,'MbedTarget',0);
   slConfigUISetEnabled(hDlg, hSrc,'UseMbedRTOS',0);
   slConfigUISetVal(hDlg, hSrc, 'UseMbedRTOS', 1);
 

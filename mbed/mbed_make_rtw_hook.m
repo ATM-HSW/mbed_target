@@ -126,27 +126,19 @@ if ~isempty(getenv('C_INCLUDE_PATH'))
         'window.']);
 end
 
-mbedversion = get_param(bdroot,'MbedVersion');
-if isequal(mbedversion, 'mbed-os 5')
-    mbedautodetect = get_param(bdroot,'MbedlsAutodetect');
-    if isequal(mbedautodetect, 'on')
-        [MbedDrive, ComPort, MbedTarget5] = mbed_mbedls();
-        if strlength(MbedDrive) > 1
-            set_param(bdroot,'MbedDrive', MbedDrive);
-            set_param(bdroot,'ComPort', ComPort);
-            set_param(bdroot,'MbedTarget5', MbedTarget5);
-        else
-            error('mbedls did not detect a target or more than one target is connected');
-        end
+mbedautodetect = get_param(bdroot,'MbedlsAutodetect');
+if isequal(mbedautodetect, 'on')
+    [MbedDrive, ComPort, MbedTarget5] = mbed_mbedls();
+    if strlength(MbedDrive) > 1
+        set_param(bdroot,'MbedDrive', MbedDrive);
+        set_param(bdroot,'ComPort', ComPort);
+        set_param(bdroot,'MbedTarget5', MbedTarget5);
+    else
+        error('mbedls did not detect a target or more than one target is connected');
     end
 end
 
-mbedversion = get_param(bdroot,'MbedVersion');
-if isequal(mbedversion, 'mbed-os 5')
-    mbedtarget = get_param(bdroot,'MbedTarget5')
-else
-    mbedtarget = get_param(bdroot,'MbedTarget')
-end
+mbedtarget = get_param(bdroot,'MbedTarget5')
 disp(['### Starting mbed build procedure for ', 'model: ',modelName, ' Target: ', mbedtarget]);
 
 if ~isempty(strfind(pwd,' ')) || ~isempty(strfind(pwd,'&'))
@@ -162,7 +154,7 @@ disp('###')
 disp('### mbed environment settings:')
 disp('###')
 fprintf('###     Name:            %s\n', mbedtarget);
-fprintf('###     Version:         %s\n', mbedversion);
+fprintf('###     Version:         %s\n', 'mbed-os 5');
 fprintf('###     RTOS:            %s\n', get_param(bdroot,'UseMbedRTOS'));
 fprintf('###     Fixed step size: %ss\n', get_param(bdroot,'FixedStep'));
 fprintf('###     mbed Drive:      %s\n', get_param(bdroot,'MbedDrive'));
@@ -189,15 +181,13 @@ end
 
 function i_write_mbed_files()
 
-mbedversion = get_param(bdroot,'MbedVersion');
 [~,modelName,~] = fileparts( which (bdroot));
 
-if isequal(mbedversion, 'mbed-os 5')
     target = get_param(bdroot,'MbedTarget5');
     
     %    pathstr = mbed_getTargetRootPath();
     %    buildAreaDstFolder = fullfile(pathstr,'targets',[modelName '_slprj']);
-    buildAreaDstFolder = mbed_getTargetDestFolder( mbedversion );
+    buildAreaDstFolder = mbed_getTargetDestFolder();
     if exist(buildAreaDstFolder, 'dir')
         try
             delete(fullfile(buildAreaDstFolder,'BUILD','*.*'));
@@ -267,33 +257,12 @@ if isequal(mbedversion, 'mbed-os 5')
     [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i simulink --source . --source ..\mbed-os --source ..\libraries']);
     cd(oldpath);
     disp(cmdout);
-    
-else
-    target = get_param(bdroot,'MbedTarget');
-    buildAreaDstFolder = mbed_getTargetDestFolder( mbedversion );
-    if ~exist(buildAreaDstFolder, 'dir')
-        mkdir (buildAreaDstFolder);
-    end
-    
-    % copy and unzip  mbed target zip file into the build area
-    srcFile = fullfile(mbed_getTargetRootPath(), 'targets', [target '.zip']);
-    unzip(srcFile, buildAreaDstFolder);
-    
-    % copy library folder into the build area
-    srcFile = fullfile(mbed_getTargetRootPath(), 'blocks', 'libraries', '*');
-    copyfile(srcFile, buildAreaDstFolder);
-end
+
 end
 
 function i_download(modelName, bFlash, flashMethod)
-mbedversion = get_param(bdroot,'MbedVersion');
-if isequal(mbedversion, 'mbed-os 5')
-    pathstr = mbed_getTargetDestFolder(mbedversion);
+    pathstr = mbed_getTargetDestFolder();
     srcname = fullfile(pathstr, 'BUILD', [modelName '.bin']);
-else
-    pathstr = mbed_getTargetDestFolder(mbedversion);
-    srcname = fullfile(pathstr, [modelName '.bin']);
-end
 
 if bFlash && strcmp(flashMethod,'mbed')
     destname = get_param(modelName,'MbedDrive');

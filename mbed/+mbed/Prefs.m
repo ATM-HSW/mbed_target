@@ -15,13 +15,13 @@
 
 classdef Prefs
 %PREFS gives access to mbed preferences file
-    
+
     methods (Static, Access=public)
         %%
         function setPILSpeed(speed)
             mbed.Prefs.setPref('PILSpeed', speed);
         end
-        
+
         %%
         function speed = getPILSpeed
             speed = mbed.Prefs.getPref('PILSpeed');
@@ -29,64 +29,52 @@ classdef Prefs
                 speed = 9600;    % take default speed
             end
         end
-        
-        %%
-        function setMbedVersion(version)
-            mbed.Prefs.setPref('MbedVersion', version);
-        end
-        
-        %%
-        function version = getMbedVersion
-            version = mbed.Prefs.getPref('MbedVersion');
-        end
-        
-        
+
         %%
         function setMbedTarget(target)
             mbed.Prefs.setPref('MbedTarget', target);
         end
-        
+
         %%
         function board = getMbedTarget
             board = mbed.Prefs.getPref('MbedTarget');
         end
-        
+
         %%
         function setMbedTarget5(target)
             mbed.Prefs.setPref('MbedTarget5', target);
         end
-        
+
         %%
         function board = getMbedTarget5
             board = mbed.Prefs.getPref('MbedTarget5');
         end
-        
+
         %%
         function setMbedPath(toolPath)
-            
             if ~exist('toolPath', 'var') || ~ischar(toolPath)
                 nl = sprintf('\n');
                 error('RTW:mbed:invalidMbedPath', ['Mbed path must be a string, e.g.' nl '   mbed.Prefs.setMbedPath(''c:\\GitHub\\mbed'')']);
             end
-            
+
             if ~exist(toolPath,'dir')
                 error('RTW:mbed:invalidMbedPath', 'The specified folder (%s) does not exist', toolPath);
             end
-            
+
             if ~exist(fullfile(toolPath, 'mbed'), 'dir')
                 error('RTW:mbed:invalidMbedPath', 'The specified folder (%s) does not contain library folder', toolPath);
             end
-            
+
             % remove trailing backslashes
             toolPath = regexprep(toolPath, '\\+$', '');
-            
+
             % Alternate form of path to handle spaces
             % altPath = RTW.transformPaths(toolPath,'pathType','alternate');
-            
+
             mbed.Prefs.setPref('MbedPath', toolPath);
             %disp(mbed.Prefs.getPref('MbedPath'));
         end
-        
+
         %%
         function toolPath = getMbedPath
             toolPath = mbed.Prefs.getPref('MbedPath');
@@ -100,7 +88,7 @@ classdef Prefs
                     '   mbed.Prefs.setMbedPath(''c:\\GitHub\\mbed'')']);
             end
         end
-        
+
         %%
         function setMbedProgrammer(programmer)
             mbed.Prefs.setPref('Programmer', programmer);
@@ -110,67 +98,67 @@ classdef Prefs
         function programmer = getMbedProgrammer
             programmer =  mbed.Prefs.getPref('Programmer');
         end
-        
+
         %%
         function setMbedDownload(val)
             mbed.Prefs.setPref('MbedDownload', val);
         end
-        
+
         %%
         function val = getMbedDownload
             val =  mbed.Prefs.getPref('MbedDownload');
         end
-        
+
         %%
         function setMbedRTOS(val)
             mbed.Prefs.setPref('MbedRTOS', val);
         end
-        
+
         %%
         function val = getMbedRTOS
             val =  mbed.Prefs.getPref('MbedRTOS');
         end
-        
+
         %%
         function setMbedDrive(devicePath)
             % remove trailing backslashes
             devicePath = regexprep(devicePath, '\\+$', '');
-            
+
             mbed.Prefs.setPref('MbedDrive', devicePath);
         end
-        
+
         %%
         function devicePath = getMbedDrive
             devicePath = mbed.Prefs.getPref('MbedDrive');
         end
-        
+
         %%
         function setGccPath(toolPath)
-            
+
             if ~exist('toolPath', 'var') || ~ischar(toolPath)
                 nl = sprintf('\n');
                 error('RTW:mbed:invalidGccPath', ...
                     ['Gcc path must be a string, e.g.' nl ...
                     '   mbed.Prefs.setGccPath(''C:\\GCC\\Sourcery_CodeBench_Lite_for_ARM_EABI\\bin'')']);
             end
-            
+
             if ~exist(toolPath,'dir')
                 error('RTW:mbed:invalidGccPath', 'The specified folder (%s) does not exist', toolPath);
             end
-            
+
             if ~exist(fullfile(toolPath, 'arm-none-eabi-gcc.exe'), 'file')
                 error('RTW:mbed:invalidGccPath', 'The specified folder (%s) does not contain arm-none-eabi-gcc.exe', toolPath);
             end
-            
+
             % remove trailing backslashes
             toolPath = regexprep(toolPath, '\\+$', '');
-            
+
             % Alternate form of path to handle spaces
             altPath = RTW.transformPaths(toolPath,'pathType','alternate');
-            
+
             mbed.Prefs.setPref('GccPath', altPath);
         end
-        
+
         %%
         function toolPath = getGccPath
             toolPath = mbed.Prefs.getPref('GccPath');
@@ -184,7 +172,7 @@ classdef Prefs
                     '   mbed.Prefs.setGccPath(''C:\\GCC\\Sourcery_CodeBench_Lite_for_ARM_EABI\\bin'')']);
             end
         end
-        
+
         %%
         function setPythonPath(toolPath)
             if ~exist('toolPath', 'var') || ~ischar(toolPath)
@@ -193,24 +181,24 @@ classdef Prefs
                     ['Python path must be a string, e.g.' nl ...
                     '   mbed.Prefs.setPythonPath(''C:\\Python27'')']);
             end
-            
+
             if ~exist(toolPath,'dir')
                 error('RTW:mbed:invalidPythonPath', 'The specified folder (%s) does not exist', toolPath);
             end
-            
+
             if ~exist(fullfile(toolPath, 'python.exe'), 'file')
                 error('RTW:mbed:invalidPythonPath', 'The specified folder (%s) does not contain python.exe', toolPath);
             end
-            
+
             % remove trailing backslashes
             toolPath = regexprep(toolPath, '\\+$', '');
-            
+
             % Alternate form of path to handle spaces
             altPath = RTW.transformPaths(toolPath,'pathType','alternate');
-            
+
             mbed.Prefs.setPref('PythonPath', altPath);
         end
-        
+
         %%
         function toolPath = getPythonPath
             toolPath = mbed.Prefs.getPref('PythonPath');
@@ -224,7 +212,7 @@ classdef Prefs
                     '   mbed.Prefs.setPythonPath(''C:\\Python27'')']);
             end
         end
-        
+
         %%
         function port = getComPort
             port = mbed.Prefs.getPref('ComPort');
@@ -241,7 +229,7 @@ classdef Prefs
             %         error('RTW:mbed:invalidComPort', msg);
             %     end
         end
-        
+
         %%
         function setComPort(port)
             if ~exist('port', 'var') || ~ischar(port) || isempty(port)
@@ -255,24 +243,24 @@ classdef Prefs
         %%
         function port = getMbedAutoDetect
             port = mbed.Prefs.getPref('MbedAutoDetect');
-            
+
         end
-        
+
         %%
        function setMbedAutodetect(port)
            mbed.Prefs.setPref('MbedAutoDetect', port);
        end
     end
-    
+
     %%
     methods(Static,Access=private)
-        
+
         %%
         function setPref(prefName, prefValue)
             prefGroup = 'MbedGeneric';
             setpref(prefGroup, prefName, prefValue);
         end
-        
+
         %%
         function prefValue = getPref(prefName)
             prefGroup = 'MbedGeneric';
@@ -283,5 +271,5 @@ classdef Prefs
             end
         end
     end
-    
+
 end

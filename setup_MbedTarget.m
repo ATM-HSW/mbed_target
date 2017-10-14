@@ -111,7 +111,7 @@ if okPython
 end
 if okPython
     %[status,out]=system('targets\mbed-os\tools\project.py -S targets');
-    [a,b,c]=mbed_getTargets('mbed-os 5');
+    [a,b,c]=mbed_getTargets();
     if(c>0)
         disp(' ');
         disp('supported mbed os 5 boards:')

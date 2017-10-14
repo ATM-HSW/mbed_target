@@ -33,6 +33,7 @@
 %assign InlineSetEventsForThisBaseRateFcn  = TLC_TRUE
 %assign SuppressMultiTaskScheduler = TLC_TRUE
 %assign UseRTOS = TLC_FALSE
+%assign MbedVersion = 'mbed-os 5'
 %include "codegenentry.tlc"
 %include "mbed_grt_genfiles.tlc"
 
@@ -59,30 +60,36 @@
   rtwoptions(oIdx).closecallback = '';
   rtwoptions(oIdx).makevariable  = '';
 
-
-  oIdx = oIdx + 1;
-
-  rtwoptions(oIdx).prompt         = 'mbed Version: ';
-  rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).default        = 'mbed-os 5';
-  rtwoptions(oIdx).popupstrings   = 'mbed-os 5';
-  rtwoptions(oIdx).tlcvariable    = 'MbedVersion';
-  rtwoptions(oIdx).makevariable   = 'MBEDVERSION';
-  rtwoptions(oIdx).enable         = 'off';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed version']);
-  rtwoptions(oIdx).callback       = '';
-
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'mbed os 5 Target: ';
   rtwoptions(oIdx).type           = 'Popup';
-  rtwoptions(oIdx).popupstrings   = mbed_getTargets('mbed-os 5');
+  rtwoptions(oIdx).popupstrings   = mbed_getTargets();
   rtwoptions(oIdx).tlcvariable    = 'MbedTarget5';
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET5';
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget5'')';
 
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'MbedOS additional project config: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getAppConfigs();
+  rtwoptions(oIdx).tlcvariable    = 'MbedAppConfig';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedAppConfig'')';
+
+  oIdx = oIdx + 1;
+
+  rtwoptions(oIdx).prompt         = 'Create additional IDE project: ';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = mbed_getIDEs(true);
+  rtwoptions(oIdx).tlcvariable    = 'MbedAddProjectFiles';
+  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).tooltip        = sprintf(['e.g. uvision for µVision project files']);
+  rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedCreateIDEProject'')';
 
   oIdx = oIdx + 1;
 
@@ -95,7 +102,6 @@
   rtwoptions(oIdx).tooltip        = sprintf(['']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''mbedls'')';
 
-
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'use mbedls autodetect';
@@ -106,7 +112,6 @@
   rtwoptions(oIdx).tooltip        = ['use mbedls to detect mbed Virtual Drive and Virtual COM Port before flashing'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedlsAutodetect'')';
 
-
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'Flash Application';
@@ -116,7 +121,6 @@
   rtwoptions(oIdx).makevariable   = 'DOWNLOADAPPLICATION';
   rtwoptions(oIdx).tooltip        = ['Flash application: copy to Virtual Drive'];
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadApplication'')';
-
 
   oIdx = oIdx + 1;
 
@@ -129,7 +133,6 @@
   rtwoptions(oIdx).tooltip        = sprintf(['Downloadfunktion: mbed - copy to mbed Virtual Drive, STLink - batch file calling STLink CLI']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''DownloadMethod'')';
 
-
   oIdx = oIdx + 1;
 
   rtwoptions(oIdx).prompt         = 'mbed Virtual Drive: ';
@@ -140,7 +143,6 @@
   rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Virtual USB Drive (E:)']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedDrive'')';
-
 
   oIdx = oIdx + 1;
 

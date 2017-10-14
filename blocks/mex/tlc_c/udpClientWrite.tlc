@@ -96,5 +96,5 @@
     %endswitch
   %endroll
   %%send the data
-  oUDPSocket_%<sock_id>.sendTo(oEndpoint_%<sock_id>,Send_Buffer_%<sock_id>,%<nBuffer>);
+  oUDPSocket_%<sock_id>.sendTo(host_ip_address_%<socket_id>, host_port_%<socket_id>, Send_Buffer_%<sock_id>, %<nBuffer>);
 %endfunction

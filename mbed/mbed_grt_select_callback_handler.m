@@ -35,7 +35,7 @@ function mbed_grt_select_callback_handler(hDlg, hSrc)
 
   slConfigUISetVal(hDlg,hSrc,'GenerateReport','off');
 
-  slConfigUISetVal(hDlg,hSrc,'MbedVersion','mbed-os 5');
+%  slConfigUISetVal(hDlg,hSrc,'MbedVersion','mbed-os 5');
 
 %  slConfigUISetVal(hDlg, hSrc, 'GenCodeOnly', 'on');
 

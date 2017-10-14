@@ -31,7 +31,7 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
-  %assign sock_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+  %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
 
   %assign enable_number_of_bytes_val = LibBlockParameterValue(enable_number_of_bytes,0)
   %if enable_number_of_bytes_val
@@ -44,5 +44,6 @@
 
   %%send the data
   char* ptr = (char*)%<u1_ptr>;
-  oUDPSocket_%<sock_id>.sendTo(oEndpoint_%<sock_id>, ptr, %<number_of_bytes>);
+  ret = oUDPSocket_%<socket_id>.sendto(host_ip_address_%<socket_id>, host_port_%<socket_id>, ptr, %<number_of_bytes>);
+  printf("sendto %d\n", ret);
 %endfunction

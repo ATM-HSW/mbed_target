@@ -27,7 +27,6 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
   %if !SLibCodeGenForSim()
 
     %assign socket_id  = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
@@ -36,16 +35,17 @@
 
     %openfile declbuf
     UDPSocket oUDPSocket_%<socket_id>;
-    Endpoint oEndpoint_%<socket_id>;
+    static const char* host_ip_address_%<socket_id> = "%<destination_ip>";
+    static const uint16_t host_port_%<socket_id> = %<destination_port>;
+    nsapi_size_or_error_t ret;
     %closefile declbuf 
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
-    oUDPSocket_%<socket_id>.init();
-    oEndpoint_%<socket_id>.set_address("%<destination_ip>",%<destination_port>);
-  %endif
+    oUDPSocket_%<socket_id>.open(&net);
 
+  %endif
 %endfunction
 
 

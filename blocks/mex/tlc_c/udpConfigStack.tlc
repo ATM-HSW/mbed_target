@@ -23,11 +23,12 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
+  %<LibAddToCommonIncludes("EthernetInterface.h")>
+
 %endfunction
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
   %if !SLibCodeGenForSim()
 
     %assign ip =      SFcnParamSettings.IP
@@ -44,31 +45,32 @@
     #define LWIP_TIMEVAL_PRIVATE 0
     %closefile declbuf
 
-    %assign srcFile = LibGetModelDotHFile()
-    %<LibSetSourceFileSection(srcFile, "Includes", declbuf)>
-    %<LibAddToCommonIncludes("EthernetInterface.h")>
-
     %%Add Ethernet things to the variable declarations
     %openfile declbuf
-    // %<Type> (udpConfigStack): '%<Name>'
-    EthernetInterface %<name>;
+    #ifndef ETHERNETINTERFACE
+      #define ETHERNETINTERFACE
+      // %<Type> (udpConfigStack): 'net'
+      EthernetInterface net;
+    #endif
     %closefile declbuf 
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
-  %endif
-
-  %if !SLibCodeGenForSim()
     %assign val_dhcp = LibBlockParameterValue(dhcp,0)
 
     %if %<val_dhcp>==0
-    %<name>.init("%<ip>","%<submask>","%<gateway>");
-    %<name>.connect();
+      net.set_network("%<ip>","%<submask>","%<gateway>");
+      printf("set IP address: %s\n", "%<ip>");
     %else
-    %<name>.init();
-    %<name>.connect();
+      printf("try dhcp\n");
     %endif
+    wait(1);
+    int retnet = net.connect();
+    printf("eth connect ret: %d\n", retnet);
+    // Show the network address
+    const char *ip = net.get_ip_address();
+    printf("IP address is: %s\n", ip ? ip : "No IP");
 
   %endif
 
