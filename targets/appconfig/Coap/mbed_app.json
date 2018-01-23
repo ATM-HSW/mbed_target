@@ -1,0 +1,10 @@
+{
+    "target_overrides": {
+        "*": {
+            "target.features_add": ["COMMON_PAL"],
+            "platform.stdio-baud-rate": 115200,
+            "platform.stdio-convert-newlines": true,
+            "mbed-trace.enable": 0
+        }
+    }
+}
