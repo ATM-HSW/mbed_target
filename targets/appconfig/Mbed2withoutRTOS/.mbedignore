@@ -1,0 +1,4 @@
+events/*.*
+features/*.*
+rtos/*.*
+TESTS/*.*

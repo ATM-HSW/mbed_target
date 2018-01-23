@@ -13,16 +13,14 @@
 %  See the License for the specific language governing permissions and
 %  limitations under the License.
 
-function [ret1, ret2, count]= mbed_getTargets()
+function ret = mbed_getAppConfigs()
 
   pathstr = mbed_getTargetRootPath();
-  newpath = fullfile(pathstr,'targets','mbed-os','tools');
-  oldpath=cd(newpath);
-  [~,cmdout]=system('python make.py -S targets');
-  ret2=regexprep(cmdout,'\n\n','');
-  ret1=regexprep(ret2,'\n','|');
-  ret1=ret1(1:end-1);
-  count=size(strfind(ret1,'|'),2)+1;
-  cd(oldpath);
+  targetsfiles = ls(fullfile(pathstr,'targets','appconfig'));
+  ret=['none'];
+  for i=3:size(targetsfiles,1)
+      [~,name,~] = fileparts(targetsfiles(i,:));
+      ret = [ret '|' name]; %#ok<AGROW>
+  end
 
 end
