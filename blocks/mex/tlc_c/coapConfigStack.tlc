@@ -1,0 +1,138 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%implements coapConfigStack "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+
+  %<LibAddToCommonIncludes("sn_nsdl.h")>
+  %<LibAddToCommonIncludes("sn_coap_protocol.h")>
+  %<LibAddToCommonIncludes("sn_coap_header.h")>
+  %<LibAddToCommonIncludes("EthernetInterface.h")>
+
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+
+    %assign ip =      SFcnParamSettings.IP
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %%Add Ethernet things to the includes
+    %openfile declbuf
+	
+	EthernetInterface net;
+    UDPSocket socket;           // Socket to talk CoAP over
+    Thread recvfromThread;      // Thread to receive messages over CoAP
+
+    struct coap_s* coapHandle;
+    coap_version_e coapVersion = COAP_VERSION_1;
+
+    // CoAP HAL
+    void* coap_malloc(uint16_t size) {
+      return malloc(size);
+    }
+
+    void coap_free(void* addr) {
+      free(addr);
+    }
+ 
+    // tx_cb and rx_cb are not used in this program
+    uint8_t coap_tx_cb(uint8_t *a, uint16_t b, sn_nsdl_addr_s *c, void *d) {
+        printf("coap tx cb\n");
+        return 0;
+    }
+     
+    int8_t coap_rx_cb(sn_coap_hdr_s *a, sn_nsdl_addr_s *b, void *c) {
+        printf("coap rx cb\n");
+        return 0;
+    }
+
+    // Main function for the recvfrom thread
+    void recvfromMain() {
+        SocketAddress addr;
+        uint8_t* recv_buffer = (uint8_t*)malloc(1280); // Suggested is to keep packet size under 1280 bytes
+
+        nsapi_size_or_error_t ret;
+
+        while ((ret = socket.recvfrom(&addr, recv_buffer, 1280)) >= 0) {
+            // to see where the message came from, inspect addr.get_addr() and addr.get_port()
+
+            printf("Received a message of length '%d'\n", ret);
+
+//            sn_coap_hdr_s* parsed = sn_coap_parser(coapHandle, ret, recv_buffer, &coapVersion);
+
+//            // We know the payload is going to be a string
+//            std::string payload((const char*)parsed->payload_ptr, parsed->payload_len);
+//
+//            printf("\tmsg_id:           %d\n", parsed->msg_id);
+//            printf("\tmsg_code:         %d\n", parsed->msg_code);
+//            printf("\tcontent_format:   %d\n", parsed->content_format);
+//            printf("\tpayload_len:      %d\n", parsed->payload_len);
+//            printf("\tpayload:          %s\n", payload.c_str());
+//            printf("\toptions_list_ptr: %p\n", parsed->options_list_ptr);
+        }
+
+        free(recv_buffer);
+
+        printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
+    }
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+  %endif
+
+  %if !SLibCodeGenForSim()
+    if(0 != net.connect()) {
+        printf("Error connecting\n");
+        //return -1;
+        while(1) ;
+    }
+ 
+    printf("Connected to the network. Opening a socket...\n");
+
+    // Open a socket on the network interface
+    socket.open(&net);
+
+    // Initialize the CoAP protocol handle, pointing to local implementations on malloc/free/tx/rx functions
+    coapHandle = sn_coap_protocol_init(&coap_malloc, &coap_free, &coap_tx_cb, &coap_rx_cb);
+
+    // UDPSocket::recvfrom is blocking, so run it in a separate RTOS thread
+    recvfromThread.start(&recvfromMain);
+
+  %endif
+
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+%endfunction
