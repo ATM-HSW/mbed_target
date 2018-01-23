@@ -1,0 +1,99 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%implements coapClientWrite "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+
+  %<LibAddToCommonIncludes("EthernetInterface.h")>
+  %<LibAddToCommonIncludes("sn_nsdl.h")>
+  %<LibAddToCommonIncludes("sn_coap_protocol.h")>
+  %<LibAddToCommonIncludes("sn_coap_header.h")>
+  %<LibAddToCommonIncludes("<string>")>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+
+  %if !SLibCodeGenForSim()
+    %assign IP     = SFcnParamSettings.IP
+    %assign MSG_ID = LibBlockParameterValue(MsgID, 0)
+    %assign PATH   = SFcnParamSettings.Path
+    %assign METHOD = LibBlockParameterValue(Method, 0)
+
+%%    %openfile declbuf
+%%
+%%    %closefile declbuf
+%%
+%%    %assign srcFile = LibGetModelDotCFile()
+%%    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+%%
+    // Main function from Cpp
+    char hostIP[]= "%<IP>"; 
+    const char* coap_uri_path ="%<PATH>" ;
+    uint16_t ID= %<MSG_ID> ;
+%%    uint8_t Input = %<Input>;
+%%
+%%   if (Input ==1)
+%%    {
+%%    // See ns_coap_header.h
+%%    sn_coap_hdr_s *coap_res_ptr = (sn_coap_hdr_s*)calloc(sizeof(sn_coap_hdr_s), 1);
+%%    coap_res_ptr->uri_path_ptr = (uint8_t*)coap_uri_path;       // Path
+%%    coap_res_ptr->uri_path_len = strlen(coap_uri_path);
+    %if METHOD == 1
+      coap_res_ptr->msg_code = COAP_MSG_CODE_REQUEST_GET;         // CoAP method
+    %else
+      coap_res_ptr->msg_code = COAP_MSG_CODE_REQUEST_PUT;         // CoAP method
+    %endif
+%%    //coap_res_ptr->msg_code = 1;         
+%%    coap_res_ptr->content_format = COAP_CT_TEXT_PLAIN;          // CoAP content type
+%%    coap_res_ptr->payload_len = 0;                              // Body length
+%%    coap_res_ptr->payload_ptr = 0;                              // Body pointer
+%%    coap_res_ptr->options_list_ptr = 0;                         // Optional: options list
+%%    coap_res_ptr->msg_id = ID;
+%%
+%%    // Calculate the CoAP message size, allocate the memory and build the message
+%%    uint16_t message_len = sn_coap_builder_calc_needed_packet_data_size(coap_res_ptr);
+%%    printf("Calculated message length: %d bytes\n", message_len);
+%%
+%%    uint8_t* message_ptr = (uint8_t*)malloc(message_len);
+%%    sn_coap_builder(message_ptr, coap_res_ptr);
+%%
+%%    socket.sendto(hostIP, 5683, message_ptr, message_len);
+%%
+%%    free(coap_res_ptr);
+%%    free(message_ptr);
+%%
+%%    Thread::wait(1000);
+%%    //socket.close();
+%%    
+%%    }
+%%
+  %endif
+
+%endfunction
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+
+%endfunction
