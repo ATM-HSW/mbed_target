@@ -51,7 +51,7 @@
   #define STEP_SIZE_MS %<SampleRate_ms>F /* and in milliseconds */
 
   %if UseMbedRTOS
-    osThreadId step_id;
+    osThreadId step_id=NULL;
     Thread step_1_thread;
     Ticker step_1_ticker;
   %else
@@ -73,7 +73,8 @@
     }
 
     void step_callback(){
-      osSignalSet(step_id, 0x1);
+      if(step_id!=NULL)
+        osSignalSet(step_id, 0x1);
     }
     %closefile declbuf
 
@@ -89,13 +90,13 @@
 
     /* with RTOS */
     int main(void) {
-      step_1_thread.start(callback(step_thread));
-      step_1_ticker.attach_us(callback(step_callback), (timestamp_t)STEP_SIZE_US);
-      %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_loc_decl")>
-      %<LibGetSourceFileCustomSection(cFile,"Ert_main_loc_decl")>
-
       /* initialize model */
       %<LibCallModelInitialize()>\
+
+      step_1_ticker.attach_us(callback(step_callback), (timestamp_t)STEP_SIZE_US);
+      step_1_thread.start(callback(step_thread));
+      %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_loc_decl")>
+      %<LibGetSourceFileCustomSection(cFile,"Ert_main_loc_decl")>
 
       %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_after_init")>
       %<LibGetSourceFileCustomSection(cFile,"Ert_main_after_init")>

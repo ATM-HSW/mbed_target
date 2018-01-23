@@ -252,6 +252,16 @@ function i_write_mbed_files()
     catch
     end
     
+    targetconfig = get_param(bdroot,'MbedAppConfig');
+    if ~isempty(targetconfig)
+        path = fullfile(mbed_getTargetRootPath(), 'targets', 'appconfig', targetconfig);
+        try
+            srcFile = fullfile(path, '*.*');
+            copyfile(srcFile, buildAreaDstFolder);
+        catch
+        end
+    end
+    
     % generate make file with mbed tools
     oldpath=cd(buildAreaDstFolder);
     [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i simulink --source . --source ..\mbed-os --source ..\libraries']);
