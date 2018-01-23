@@ -61,16 +61,16 @@
 
     %if %<val_dhcp>==0
       net.set_network("%<ip>","%<submask>","%<gateway>");
-      printf("set IP address: %s\n", "%<ip>");
+      //printf("set IP address: %s\n", "%<ip>");
     %else
-      printf("try dhcp\n");
+      //printf("try dhcp\n");
     %endif
-    wait(1);
+    //wait(1);
     int retnet = net.connect();
-    printf("eth connect ret: %d\n", retnet);
+    //printf("eth connect ret: %d\n", retnet);
     // Show the network address
     const char *ip = net.get_ip_address();
-    printf("IP address is: %s\n", ip ? ip : "No IP");
+    //printf("IP address is: %s\n", ip ? ip : "No IP");
 
   %endif
 
