@@ -1,5 +1,6 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2018 Dr.O.Hagendorf, HS Wismar
+%%                2018 Yi-Chen Hsu, HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -23,12 +24,10 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
-
   %<LibAddToCommonIncludes("sn_nsdl.h")>
   %<LibAddToCommonIncludes("sn_coap_protocol.h")>
   %<LibAddToCommonIncludes("sn_coap_header.h")>
   %<LibAddToCommonIncludes("EthernetInterface.h")>
-
 
 %endfunction
 
@@ -45,10 +44,12 @@
 
     %%Add Ethernet things to the includes
     %openfile declbuf
-	
-	EthernetInterface net;
+
+    EthernetInterface net;
     UDPSocket socket;           // Socket to talk CoAP over
     Thread recvfromThread;      // Thread to receive messages over CoAP
+    uint8_t recv[4];
+    uint8_t recvvalue[4];
 
     struct coap_s* coapHandle;
     coap_version_e coapVersion = COAP_VERSION_1;
@@ -75,32 +76,72 @@
 
     // Main function for the recvfrom thread
     void recvfromMain() {
-        SocketAddress addr;
-        uint8_t* recv_buffer = (uint8_t*)malloc(1280); // Suggested is to keep packet size under 1280 bytes
+      uint8_t idx, value, token_len;
+      uint16_t msg_id, token;
+      printf("Get in recfromMain....\n");
+      SocketAddress addr;
+      uint8_t* recv_buffer = (uint8_t*)malloc(1280); // Suggested is to keep packet size under 1280 bytes
+      nsapi_size_or_error_t ret;
+      sn_coap_hdr_s* parsed;
 
-        nsapi_size_or_error_t ret;
+      while(1) {
+        if ((ret = socket.recvfrom(&addr, recv_buffer, 1280)) >= 0) {
+          // to see where the message came from, inspect addr.get_addr() and addr.get_port()
+          printf("Received a message of length '%d'\n", ret);
+          
+          parsed = sn_coap_parser(coapHandle, ret, recv_buffer, &coapVersion);
+           
+          msg_id = parsed->msg_id;
+          token = (uint16_t)parsed->token_ptr[0];
+          value = (uint8_t)(parsed->payload_ptr[0])-'0';
+          token_len = parsed->token_len;
 
-        while ((ret = socket.recvfrom(&addr, recv_buffer, 1280)) >= 0) {
-            // to see where the message came from, inspect addr.get_addr() and addr.get_port()
+          sn_coap_parser_release_allocated_coap_msg_mem(coapHandle, parsed);
+          
+          printf("\tmsg_id:           %d\n", msg_id);
+          printf("\tpayload:          %d\n", value);
+          printf("\ttokenlen:         %d\n", token_len);
+          printf("\ttoken:            %d\n", token);
 
-            printf("Received a message of length '%d'\n", ret);
+          switch(token) {
+            case 1:
+              printf(" Recieved from MSG_ID1\n");
+              idx=1;
+              break;
+          	case 2:
+              printf(" Recieved from MSG_ID2\n");
+              idx=2;
+              break;
+          	case 3:
+              printf(" Recieved from MSG_ID3\n");
+              idx=3;
+              break;
+          	case 4:
+              printf(" Recieved from MSG_ID4\n");
+              idx=0;
+              break;
+            default:
+	            idx=0;
+	            break;
+          }
+          recv[idx]= 1;
+          recvvalue[idx]=value;
 
-//            sn_coap_hdr_s* parsed = sn_coap_parser(coapHandle, ret, recv_buffer, &coapVersion);
-
-//            // We know the payload is going to be a string
-//            std::string payload((const char*)parsed->payload_ptr, parsed->payload_len);
-//
-//            printf("\tmsg_id:           %d\n", parsed->msg_id);
-//            printf("\tmsg_code:         %d\n", parsed->msg_code);
-//            printf("\tcontent_format:   %d\n", parsed->content_format);
-//            printf("\tpayload_len:      %d\n", parsed->payload_len);
-//            printf("\tpayload:          %s\n", payload.c_str());
-//            printf("\toptions_list_ptr: %p\n", parsed->options_list_ptr);
+          printf(" The Recv Array: ");
+          for(int i = 0; i < 4; i++) {
+            printf("%d ", recv[i]);
+          } 
+          printf("\n");
+          printf("The Value Array: ");
+          for(int i = 0; i < 4; i++) {
+            printf("%d ", recvvalue[i]);
+          } 
+          printf("\n");
+        } else {
+          printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
         }
-
-        free(recv_buffer);
-
-        printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
+      }
+      free(recv_buffer);
     }
     %closefile declbuf
 
@@ -112,20 +153,18 @@
   %if !SLibCodeGenForSim()
     if(0 != net.connect()) {
         printf("Error connecting\n");
-        //return -1;
-        while(1) ;
-    }
- 
-    printf("Connected to the network. Opening a socket...\n");
+       // return -1;
+      }
+    printf("Connected to the network....\n");
 
-    // Open a socket on the network interface
-    socket.open(&net);
+   // Open a socket on the network interface
+     socket.open(&net);
 
     // Initialize the CoAP protocol handle, pointing to local implementations on malloc/free/tx/rx functions
     coapHandle = sn_coap_protocol_init(&coap_malloc, &coap_free, &coap_tx_cb, &coap_rx_cb);
 
-    // UDPSocket::recvfrom is blocking, so run it in a separate RTOS thread
-    recvfromThread.start(&recvfromMain);
+   //UDPSocket::recvfrom is blocking, so run it in a separate RTOS thread
+  recvfromThread.start(&recvfromMain);
 
   %endif
 
@@ -135,4 +174,17 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
+  %if !SLibCodeGenForSim()
+  %assign MSG_ID = LibBlockParameterValue(MsgID, 0)
+   
+   %if !LibBlockOutputSignalIsExpr(0)
+     %assign y1 = LibBlockOutputSignal(0, "", "", 0)
+     %assign y2 = LibBlockOutputSignal(1, "", "", 0)
+
+    %<y1>=  recv[%<MSG_ID>];
+    %<y2>=  recvvalue[%<MSG_ID>];
+    recv[%<MSG_ID>]=0;
+
+    %endif
+  %endif
 %endfunction
