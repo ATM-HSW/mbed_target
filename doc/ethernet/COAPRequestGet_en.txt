@@ -1,0 +1,92 @@
+COAPRequestGet
+==============
+
+Description
+-----------
+
+This block sends a request out to ask for the information of a resource stored in the server. The ouput  *Recieve* shows if it just recieved a response from the server. The output *Value* shows the data value that it recieved. 
+
+.. image:: ../images/block_CoAPRequestGet.png
+   :scale: 40 %
+
+Data Type Support
+-----------------
+
+The data type of  output port *Recieve* is *uint8*.
+The data type of  output port *Value* is *uint8*.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_CoAPRequestGet.png
+
+Token (ID)
+...........
+
+The token specifies the different message uses. (For now, there are maximum four ID numbers (1 to 4) to be selected. )
+Thus, the same token number should not be used repeatedly for different blocks in one model. 
+
+
+Path
+...........
+
+The URI-path of the resource should be given.
+
+Sample Time
+...........
+
+Simulink® allows you to specify a block sample time directly as a numerical value (s) or symbolically by defining a sample time vector. 
+In the case of a discrete sample time, the vector is [Ts, To] where Ts is the sampling period (Here, it represents the time intervel between sending requests) and To is the initial time offset. 
+
+
+Example
+-------
+
+In the example  the data stored in the resource *LED1*  will be read and written to the digital input of LED1.
+
+.. image:: ../images/example_CoAPRequestGet.png
+   :scale: 60 %
+
+
+Code Generation
+---------------
+
+Step Function
+.................
+
+creates some lines in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+    uint16_t token_%<TOKEN> =  %<TOKEN> ;                    
+    const char* coap_uri_path_%<TOKEN> ="%<PATH>" ;
+    uint16_t ID_%<TOKEN>=(rand() % 60000) +1 ;        
+	
+    //CoAP message header and body
+    sn_coap_hdr_s *coap_res_ptr_%<TOKEN> = (sn_coap_hdr_s*)calloc(sizeof(sn_coap_hdr_s), 1);
+    coap_res_ptr_%<TOKEN>->uri_path_ptr = (uint8_t*)coap_uri_path_%<TOKEN>;     //Path
+    coap_res_ptr_%<TOKEN>->uri_path_len = strlen(coap_uri_path_%<TOKEN>);     // Path length
+    coap_res_ptr_%<TOKEN>->msg_code = COAP_MSG_CODE_REQUEST_GET;             // CoAP method	
+    coap_res_ptr_%<TOKEN>->content_format = COAP_CT_TEXT_PLAIN;	            // CoAP content type
+    coap_res_ptr_%<TOKEN>->payload_len = 0;             // Body length
+    coap_res_ptr_%<TOKEN>->payload_ptr = 0;            // Body pointer
+    coap_res_ptr_%<TOKEN>->options_list_ptr = 0;      // Optional: options list
+    coap_res_ptr_%<TOKEN>->msg_id = ID_%<TOKEN>++;                  // Message ID
+    coap_res_ptr_%<TOKEN>->token_len=sizeof(token_%<TOKEN> );       // Token length
+    coap_res_ptr_%<TOKEN>->token_ptr=(uint8_t*)&token_%<TOKEN> ;   // Token 
+
+    //build a  message in CoAP message formate
+    uint16_t message_len_%<TOKEN> = sn_coap_builder_calc_needed_packet_data_size(coap_res_ptr_%<TOKEN>);
+    uint8_t* message_ptr_%<TOKEN> = (uint8_t*)malloc(message_len_%<TOKEN>);
+    sn_coap_builder(message_ptr_%<TOKEN>, coap_res_ptr_%<TOKEN>);
+	
+    //Error message
+    nsapi_size_or_error_t ret_%<TOKEN>; 
+	
+    //Send out the message 
+    ret_%<TOKEN>=socket.sendto(hostIP, 5683, message_ptr_%<TOKEN>, message_len_%<TOKEN>); 
+
+    free(coap_res_ptr_%<TOKEN>);
+    free(message_ptr_%<TOKEN>);
+
+in \ **<Model Name>**\ .cpp.

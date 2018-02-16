@@ -19,9 +19,9 @@
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
 #define SAMPLE_TIME  (ssGetSFcnParam(S, 0))
 
-#define HOST_IP  (mxArrayToString(ssGetSFcnParam(S,1)))
+//#define HOST_IP  (mxArrayToString(ssGetSFcnParam(S,1)))
 //#define ID       (mxArrayToString(ssGetSFcnParam(S,2)))
-#define PATH     (mxArrayToString(ssGetSFcnParam(S,3)))
+#define PATH     (mxArrayToString(ssGetSFcnParam(S,2)))
 //#define METHOD   (mxArrayToString(ssGetSFcnParam(S,4)))
 
 
@@ -89,7 +89,7 @@ static void mdlCheckParameters(SimStruct *S) {
 
 static void mdlInitializeSizes(SimStruct *S) {
  /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 5);
+  ssSetNumSFcnParams(S, 4);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -112,10 +112,10 @@ static void mdlInitializeSizes(SimStruct *S) {
 #endif
 
   ssSetSFcnParamTunable(S, 0, 0);  //sampletime
-  ssSetSFcnParamTunable(S, 1, 0);  //IP
-  ssSetSFcnParamTunable(S, 2, 0);  //ID
-  ssSetSFcnParamTunable(S, 3, 0);  //PATH
-  ssSetSFcnParamTunable(S, 4, 0);  //METHOD
+ // ssSetSFcnParamTunable(S, 1, 0);  //IP
+  ssSetSFcnParamTunable(S, 1, 0);  //TOKEN
+  ssSetSFcnParamTunable(S, 2, 0);  //PATH
+  ssSetSFcnParamTunable(S, 3, 0);  //METHOD
 
 
   if (!ssSetNumInputPorts(S, 0)) return;
@@ -127,7 +127,25 @@ static void mdlInitializeSizes(SimStruct *S) {
   /*
    * Configure the output ports. First set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S,0)) return;
+   if (!ssSetNumOutputPorts(S, 2))
+    return;
+	 /*
+   * Configure the output port 1
+   */
+  ssSetOutputPortDataType(S, 0, SS_UINT8);
+  ssSetOutputPortWidth(S, 0, 1);
+  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+ // ssSetOutputPortOutputExprInRTW(S, 0, 1);
+  
+  /*
+   * Configure the output port 2
+   */
+  ssSetOutputPortDataType(S, 1, SS_UINT8);
+  ssSetOutputPortWidth(S, 1, 1);
+  ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+ // ssSetOutputPortOutputExprInRTW(S, 1, 1);
 
   ssSetNumSampleTimes(   S, 1);   /* number of sample times */
 
@@ -181,8 +199,8 @@ static void mdlInitializeSampleTimes(SimStruct *S)
     return;
 
   /* Register run-time parameters  */
-  ssRegDlgParamAsRunTimeParam(S, 2, 0, "MsgID", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 4, 1, "Method", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "Token", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 1, "Method", ssGetDataTypeId(S, "uint8"));
 
   }
 #endif /* MDL_SET_WORK_WIDTHS */
@@ -218,8 +236,8 @@ static void mdlRTW(SimStruct *S)
 //  {
 //    return;
 //  }
-  if(!ssWriteRTWParamSettings(S, 2,
-                                SSWRITE_VALUE_QSTR, "IP", HOST_IP,
+  if(!ssWriteRTWParamSettings(S, 1,
+                              //  SSWRITE_VALUE_QSTR, "IP", HOST_IP,
                                 SSWRITE_VALUE_QSTR, "Path", PATH))
     return;
 }

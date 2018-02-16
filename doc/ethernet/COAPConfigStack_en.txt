@@ -1,0 +1,152 @@
+COAPConfigStack
+===============
+
+Description
+-----------
+
+This Block sets up the Ethernet interface, the UDP socket and the other configuration required for a CoAP message exchange   
+
+.. image:: ../images/block_CoAPConfigStack.png
+   :scale: 50 %
+
+
+
+Parameters Dialog Box
+---------------------
+The IP address of the server should be given here
+
+.. image:: ../images/mask_CoAPConfigStack.png
+
+
+
+Code Generation
+---------------
+
+Global parts
+............
+
+Creats global instances for Ethernet interface and  UDP socket 
+
+.. code-block:: c++
+
+    EthernetInterface net;
+    UDPSocket socket;           
+	
+Set-up for the CoAP message 
+
+.. code-block:: c++
+
+    struct coap_s* coapHandle;
+    coap_version_e coapVersion = COAP_VERSION_1;
+
+    void* coap_malloc(uint16_t size) {
+      return malloc(size);
+    }
+
+    void coap_free(void* addr) {
+      free(addr);
+    }
+ 
+    uint8_t coap_tx_cb(uint8_t *a, uint16_t b, sn_nsdl_addr_s *c, void *d) {
+        printf("coap tx cb\n");
+        return 0;
+    }
+     
+    int8_t coap_rx_cb(sn_coap_hdr_s *a, sn_nsdl_addr_s *b, void *c) {
+        printf("coap rx cb\n");
+        return 0;
+    }	
+	
+ 	
+	
+A thread for handling the response from the server's side
+
+.. code-block:: c++	
+
+    Thread recvfromThread;     	 
+	void recvfromMain() {
+	 
+      uint8_t idx, value, token_len;
+      uint16_t msg_id, token;
+      SocketAddress addr;
+      uint8_t* recv_buffer = (uint8_t*)malloc(1280); // Suggested is to keep packet size under 1280 bytes
+      nsapi_size_or_error_t ret;
+      sn_coap_hdr_s* parsed;
+
+	    	while(1) {
+	        if ((ret = socket.recvfrom(&addr, recv_buffer, 1280)) >= 0) {
+
+	          printf("Received a message of length '%d'\n", ret);
+	          
+	          parsed = sn_coap_parser(coapHandle, ret, recv_buffer, &coapVersion);
+	           
+	          msg_id = parsed->msg_id;
+	          token = (uint16_t)parsed->token_ptr[0];
+	          value = (uint8_t)(parsed->payload_ptr[0])-'0';
+	          token_len = parsed->token_len;
+
+	          sn_coap_parser_release_allocated_coap_msg_mem(coapHandle, parsed);
+	        
+		   //Save the recieved data according to their token number.
+	        	switch(token) {		   
+			case 1:              
+			idx=0;              
+			break;            
+			case 2:            
+			idx=1;
+	                break;			  
+	          	case 3:              
+			idx=2;			  
+	                break;          	
+			case 4:              
+			idx=3;			  
+	                break;            
+			default:	            
+			idx=0;				
+		        break;				
+	          }		  
+	          recv[idx]= 1;
+	          recvvalue[idx]=value;		  
+	        }		
+		else {
+		printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
+			 }	
+		  }	  
+	    }
+	
+
+
+
+
+
+Initialization Function
+..................................
+
+Connect to the Internet through Ethernet
+
+.. code-block:: c++
+
+    if(0 != net.connect()) {
+        printf("Error connecting\n");
+
+      }
+	  
+    printf("Connected to the network....\n");
+	
+Open a socket
+
+.. code-block:: c++
+
+     socket.open(&net);
+
+Initialize the CoAP protocol handle
+
+.. code-block:: c++
+	 
+    coapHandle = sn_coap_protocol_init(&coap_malloc, &coap_free, &coap_tx_cb, &coap_rx_cb);
+
+Start the thread for handling the response
+
+.. code-block:: c++
+
+  recvfromThread.start(&recvfromMain);

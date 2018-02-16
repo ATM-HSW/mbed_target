@@ -1,17 +1,14 @@
 /* Copyright 2010 The MathWorks, Inc. */
+/* Copyright 2016 Dr.O.Hagendorf, HS Wismar  */
 /*
- *   sfunar_udp_conf.c Simple C-MEX S-function for function call.
- *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
+ *   digitalInputUserButton.c Simple C-MEX S-function for function call.
  *
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                coapConfigStack
+#define S_FUNCTION_NAME                digitalInputUserButtonCount
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -21,10 +18,12 @@
 #include "simstruc.h"
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
+#define SAMPLE_TIME                    (ssGetSFcnParam(S, 0))
 
- #define IP_ADDR        (mxArrayToString(ssGetSFcnParam(S,0)))
-
-
+/*
+ * Utility function prototypes.
+ */
+static bool IsRealMatrix(const mxArray * const m);
 
 #define MDL_CHECK_PARAMETERS
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
@@ -38,6 +37,49 @@
  */
 static void mdlCheckParameters(SimStruct *S)
 {
+  /*
+   * Check the parameter 1 (sample time)
+   */
+  if EDIT_OK(S, 0) {
+    const double * sampleTime = NULL;
+    const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
+
+    /* Sample time must be a real scalar value or 2 element array. */
+    if (IsRealMatrix(SAMPLE_TIME) &&
+        (stArraySize == 1 || stArraySize == 2) ) {
+      sampleTime = mxGetPr(SAMPLE_TIME);
+    } else {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Sample time must be a real scalar value or an array of two real values.");
+      return;
+    }
+
+    if (sampleTime[0] < 0.0 && sampleTime[0] != -1.0) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Period must be non-negative or -1 (for inherited).");
+      return;
+    }
+
+    if (stArraySize == 2 && sampleTime[0] > 0.0 &&
+        sampleTime[1] >= sampleTime[0]) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. Offset must be smaller than period.");
+      return;
+    }
+
+    if (stArraySize == 2 && sampleTime[0] == -1.0 && sampleTime[1] != 0.0) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. When period is -1, offset must be 0.");
+      return;
+    }
+
+    if (stArraySize == 2 && sampleTime[0] == 0.0 &&
+        !(sampleTime[1] == 1.0)) {
+      ssSetErrorStatus(S,
+                       "Invalid sample time. When period is 0, offset must be 1.");
+      return;
+    }
+  }
 }
 
 #endif
@@ -74,7 +116,7 @@ static void mdlInitializeSizes(SimStruct *S)
 
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
- ssSetSFcnParamTunable(S, 1, 0);
+
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
@@ -89,9 +131,17 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of output ports.
    */
-  if (!ssSetNumOutputPorts(S, 0))
+  if (!ssSetNumOutputPorts(S, 1))
     return;
-	
+
+  /*
+   * Configure the output port 1
+   */
+  ssSetOutputPortDataType(S, 0, SS_UINT8);
+  ssSetOutputPortWidth(S, 0, 1);
+  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 0, 1);
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -101,7 +151,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of sample time.
    */
-  ssSetNumSampleTimes(S, 0);
+  ssSetNumSampleTimes(S, 1);
 
   /*
    * All options have the form SS_OPTION_<name> and are documented in
@@ -126,8 +176,15 @@ static void mdlInitializeSizes(SimStruct *S)
  */
 static void mdlInitializeSampleTimes(SimStruct *S)
 {
-  ssSetSampleTime(S, 0, INHERITED_SAMPLE_TIME);
-  ssSetOffsetTime(S, 0, FIXED_IN_MINOR_STEP_OFFSET);
+  const double * const sampleTime = mxGetPr(SAMPLE_TIME);
+  const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
+  ssSetSampleTime(S, 0, sampleTime[0]);
+  if (stArraySize == 1) {
+    ssSetOffsetTime(S, 0, (sampleTime[0] == CONTINUOUS_SAMPLE_TIME?
+      FIXED_IN_MINOR_STEP_OFFSET: 0.0));
+  } else {
+    ssSetOffsetTime(S, 0, sampleTime[1]);
+  }
 
 #if defined(ssSetModelReferenceSampleTimeDefaultInheritance)
 
@@ -155,8 +212,6 @@ static void mdlSetWorkWidths(SimStruct *S)
   /* Set number of run-time parameters */
   if (!ssSetNumRunTimeParams(S, 0))
     return;
-	
-	
 }
 
 #endif
@@ -209,18 +264,38 @@ static void mdlTerminate(SimStruct *S)
  */
 static void mdlRTW(SimStruct *S)
 {
-  // We need to register some Parameters in the RTW-File for accessing them and
-  // use it for code generation
-  // see sfun_frmad.tlc or sswritertwparamsettings (ssWriteRTWStr ?)
-  // it is called record field and can access by SFcnParameters.IP .....
-  if(!ssWriteRTWParamSettings(S, 1, SSWRITE_VALUE_QSTR, "IP", IP_ADDR))
-  {
-    return;
-  }
+    UNUSED_PARAMETER(S);
 }
 
 #endif
 
+/* Function: IsRealMatrix =================================================
+ * Abstract:
+ *      Verify that the mxArray is a real (double) finite matrix
+ */
+static bool IsRealMatrix(const mxArray * const m)
+{
+  if (mxIsNumeric(m) &&
+      mxIsDouble(m) &&
+      !mxIsLogical(m) &&
+      !mxIsComplex(m) &&
+      !mxIsSparse(m) &&
+      !mxIsEmpty(m) &&
+      mxGetNumberOfDimensions(m) == 2) {
+    const real_T * const data = mxGetPr(m);
+    const size_t numEl = mxGetNumberOfElements(m);
+    size_t i;
+    for (i = 0; i < numEl; i++) {
+      if (!mxIsFinite(data[i])) {
+        return(false);
+      }
+    }
+
+    return(true);
+  } else {
+    return(false);
+  }
+}
 
 /*
  * Required S-function trailer

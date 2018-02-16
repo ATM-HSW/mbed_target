@@ -8,3 +8,4 @@ Contents:
    :maxdepth: 1
 
    _udp_en
+   _coap_en

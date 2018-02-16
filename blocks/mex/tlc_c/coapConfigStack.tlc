@@ -50,6 +50,7 @@
     Thread recvfromThread;      // Thread to receive messages over CoAP
     uint8_t recv[4];
     uint8_t recvvalue[4];
+	char hostIP[] = "%<ip>"; 
 
     struct coap_s* coapHandle;
     coap_version_e coapVersion = COAP_VERSION_1;
@@ -74,11 +75,10 @@
         return 0;
     }
 
-    // Main function for the recvfrom thread
+    // Recieve Thread
     void recvfromMain() {
       uint8_t idx, value, token_len;
       uint16_t msg_id, token;
-      printf("Get in recfromMain....\n");
       SocketAddress addr;
       uint8_t* recv_buffer = (uint8_t*)malloc(1280); // Suggested is to keep packet size under 1280 bytes
       nsapi_size_or_error_t ret;
@@ -95,6 +95,8 @@
           token = (uint16_t)parsed->token_ptr[0];
           value = (uint8_t)(parsed->payload_ptr[0])-'0';
           token_len = parsed->token_len;
+		
+		  printf("Value: %d\n", value) ;
 
           sn_coap_parser_release_allocated_coap_msg_mem(coapHandle, parsed);
           
@@ -104,21 +106,21 @@
           printf("\ttoken:            %d\n", token);
 
           switch(token) {
-            case 1:
-              printf(" Recieved from MSG_ID1\n");
+		    	case 1:
+              printf(" Recieved from Token1\n");
+              idx=0;
+              break;
+            case 2:
+              printf(" Recieved from Token2\n");
               idx=1;
               break;
-          	case 2:
-              printf(" Recieved from MSG_ID2\n");
+          	case 3:
+              printf(" Recieved from Token3\n");
               idx=2;
               break;
-          	case 3:
-              printf(" Recieved from MSG_ID3\n");
-              idx=3;
-              break;
           	case 4:
-              printf(" Recieved from MSG_ID4\n");
-              idx=0;
+              printf(" Recieved from Token4\n");
+              idx=3;
               break;
             default:
 	            idx=0;
@@ -141,7 +143,6 @@
           printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
         }
       }
-      free(recv_buffer);
     }
     %closefile declbuf
 
@@ -151,9 +152,10 @@
   %endif
 
   %if !SLibCodeGenForSim()
+  %% Main Function
+  
     if(0 != net.connect()) {
         printf("Error connecting\n");
-       // return -1;
       }
     printf("Connected to the network....\n");
 
@@ -174,17 +176,4 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
 
-  %if !SLibCodeGenForSim()
-  %assign MSG_ID = LibBlockParameterValue(MsgID, 0)
-   
-   %if !LibBlockOutputSignalIsExpr(0)
-     %assign y1 = LibBlockOutputSignal(0, "", "", 0)
-     %assign y2 = LibBlockOutputSignal(1, "", "", 0)
-
-    %<y1>=  recv[%<MSG_ID>];
-    %<y2>=  recvvalue[%<MSG_ID>];
-    recv[%<MSG_ID>]=0;
-
-    %endif
-  %endif
 %endfunction
