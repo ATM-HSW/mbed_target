@@ -119,8 +119,8 @@
     %endswitch
 
 
-    %if ISEQUAL(MbedTarget,"DISCO_F407VG") || ISEQUAL(MbedTarget,"DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget,"DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget, "NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE") || 	ISEQUAL(MbedTarget,"DISCO_F746NG")
-  
+    %if ISEQUAL(MbedTarget5,"DISCO_F407VG") || ISEQUAL(MbedTarget5,"DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget5,"DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget5, "NUCLEO_F446RE") || ISEQUAL(MbedTarget5, "STAMP_F446RE") || ISEQUAL(MbedTarget5, "NUCLEO_F401RE") || ISEQUAL(MbedTarget5, "NUCLEO_F411RE") || 	ISEQUAL(MbedTarget5,"DISCO_F746NG")
+
         %switch(TimerNumber_val)
             %case 1
                 %assign timer_name = "TIM1" 
@@ -157,7 +157,7 @@
                 %break
         %endswitch	
 
-    %elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE")
+    %elseif ISEQUAL(MbedTarget5, "NUCLEO_F303RE")
 
         %switch(TimerNumber_val)
             %case 1
