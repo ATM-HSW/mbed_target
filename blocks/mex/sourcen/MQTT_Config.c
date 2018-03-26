@@ -1,17 +1,13 @@
 /* Copyright 2010 The MathWorks, Inc. */
 /*
- *   sfunar_udp_conf.c Simple C-MEX S-function for function call.
- *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
+ *   I2C_Config.c Simple C-MEX S-function for function call.
  *
  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                udpConfigStack
+#define S_FUNCTION_NAME                MQTT_Config
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -21,12 +17,6 @@
 #include "simstruc.h"
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-
- #define IP_ADDR        (mxArrayToString(ssGetSFcnParam(S,0)))
- #define SUB_MASK       (mxArrayToString(ssGetSFcnParam(S,1)))
- #define GATEWAY        (mxArrayToString(ssGetSFcnParam(S,2)))
-
-
 
 #define MDL_CHECK_PARAMETERS
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
@@ -52,7 +42,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 2);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -77,8 +67,6 @@ static void mdlInitializeSizes(SimStruct *S)
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
-  ssSetSFcnParamTunable(S, 2, 0);
-  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -105,7 +93,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of sample time.
    */
-  ssSetNumSampleTimes(S, 0);
+  ssSetNumSampleTimes(S, 1);
 
   /*
    * All options have the form SS_OPTION_<name> and are documented in
@@ -157,10 +145,14 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 1))
+  if (!ssSetNumRunTimeParams(S, 2))
     return;
 
-  ssRegDlgParamAsRunTimeParam(S, 3, 0, "dhcp", ssGetDataTypeId(S, "uint8"));
+  /*
+   * Register the run-time parameters
+   */
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "broker_ip", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "broker_port", ssGetDataTypeId(S, "uint16"));
 }
 
 #endif
@@ -202,32 +194,6 @@ static void mdlTerminate(SimStruct *S)
 {
     UNUSED_PARAMETER(S);
 }
-
-#define MDL_RTW
-#if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
-
-/* Function: mdlRTW =======================================================
- * Abstract:
- *    This function is called when the Real-Time Workshop is generating
- *    the model.rtw file.
- */
-static void mdlRTW(SimStruct *S)
-{
-  // We need to register some Parameters in the RTW-File for accessing them and
-  // use it for code generation
-  // see sfun_frmad.tlc or sswritertwparamsettings (ssWriteRTWStr ?)
-  // it is called record field and can access by SFcnParameters.IP .....
-  if(!ssWriteRTWParamSettings(S,3,
-                                SSWRITE_VALUE_QSTR, "IP", IP_ADDR,
-                                SSWRITE_VALUE_QSTR, "submask", SUB_MASK,
-                                SSWRITE_VALUE_QSTR, "gateway", GATEWAY))
-  {
-    return;
-  }
-}
-
-#endif
-
 
 /*
  * Required S-function trailer

@@ -13,7 +13,7 @@
 %%  See the License for the specific language governing permissions and
 %%  limitations under the License.
 
-%implements udpClientReceive "C"
+%implements udpClientSend "C"
 
 %include "block_common_includes.tlc"
 
@@ -29,12 +29,13 @@
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
 
-    %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
-    %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
+    %assign sock_id       = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+    %assign nBufferBytes  = CAST("Number",SFcnParamSettings.NBUFFERBYTES)
+    %assign nInputs       = LibBlockNumInputPorts(block)
 
     %openfile declbuf
-    // %<Type> (udpClientReceive): '%<Name>'
-    char udpClientRecvBuffer_%<socket_id>[%<nBuffer>] = {'\0'};
+    // %<Type> (udpClientSend): '%<Name>'
+    char udpClientSendBuffer_%<sock_id>[%<nBufferBytes>] = {'\0'};
     %closefile declbuf 
 
     %assign srcFile = LibGetModelDotCFile()
@@ -43,59 +44,55 @@
   %endif
 %endfunction
 
-
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
 
     %assign rollVars = ["U", "Y"]
-    %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
-    %assign nOutputs = LibBlockNumOutputPorts(block)-1
+    %assign nBuffer  =  CAST("Number",SFcnParamSettings.NBUFFERBYTES-1)
+    %assign nInputs  = LibBlockNumInputPorts(block)-1
     %assign Buffidx  = 0
-    %assign rolling  = [0: %<nOutputs>]
-
-    %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
-
-    %% receive data and distribute them to the outputs
-    // %<Type> (udpClientReceive): '%<Name>'
-    oUDPSocket_%<socket_id>.recvfrom(&udpConfigSocketSocketAddr_%<socket_id>,udpClientRecvBuffer_%<socket_id>,%<nBuffer>);
+    %assign rolling  = [0: %<nInputs>]
+  
+    %assign sock_id       = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+  
+    %%collect input signals and send them via UDP
+    // %<Type> (udpClientSend): '%<Name>'
 
     %roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
-      %switch LibBlockOutputSignalDataTypeId(sigIdx)
+      %switch LibBlockInputSignalDataTypeId(sigIdx)
         %% uint8
         %case 3
-          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
-          %<y> = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u>;
           %assign Buffidx = Buffidx + 1
-          %break
-
+        %break
+  
         %%uint16
         %case 5
-          %assign y = LibBlockOutputSignal(0, "", lcv,sigIdx)
-          %<y> = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
-          %assign Buffidx = Buffidx + 1
-          (%<y>&0xff00) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 8;
-          %assign Buffidx = Buffidx + 1
-          %break
-
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          (uint16_t)udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u>;
+          %assign Buffidx = Buffidx + 2
+        %break
+  
         %%uint32
         %case 7
-          %assign y = LibBlockOutputSignal(0, "", lcv,sigIdx)
-          %<y> = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u> & 0x00ff;
           %assign Buffidx = Buffidx + 1
-          (%<y>&0xff00) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 8;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (%<u> & 0xff00) >> 8;
           %assign Buffidx = Buffidx + 1
-          (%<y> & 0xff0000) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 16;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (%<u> & 0xff0000) >> 16;
           %assign Buffidx = Buffidx + 1
-          (%<u> & 0xff000000) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 32;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (%<u> & 0xff000000) >> 24;
           %assign Buffidx = Buffidx + 1
-          %break
-
+        %break
+  
         %default
         %break
       %endswitch
-
     %endroll
-
+    %%send the data
+    oUDPSocket_%<sock_id>.sendto(udpConfigSocketIPAddr_%<sock_id>, udpConfigSocketIPPort_%<sock_id>, udpClientSendBuffer_%<sock_id>, %<nBuffer>);
   %endif
 %endfunction

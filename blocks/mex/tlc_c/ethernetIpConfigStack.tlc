@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 %%  See the License for the specific language governing permissions and
 %%  limitations under the License.
 
-%implements udpConfigStack "C"
+%implements ethernetIpConfigStack "C"
 
 %include "block_common_includes.tlc"
 
@@ -41,7 +41,7 @@
 
     %%Add Ethernet things to the includes
     %openfile declbuf
-    // %<Type> (udpConfigStack): '%<Name>'
+    // %<Type> (ethernetIpConfigStack): '%<Name>'
     #define LWIP_TIMEVAL_PRIVATE 0
     %closefile declbuf
 
@@ -49,7 +49,7 @@
     %openfile declbuf
     #ifndef ETHERNETINTERFACE
       #define ETHERNETINTERFACE
-      // %<Type> (udpConfigStack): 'net'
+      // %<Type> (ethernetIpConfigStack): 'net'
       EthernetInterface net;
     #endif
     %closefile declbuf 
@@ -61,16 +61,16 @@
 
     %if %<val_dhcp>==0
       net.set_network("%<ip>","%<submask>","%<gateway>");
-      //printf("set IP address: %s\n", "%<ip>");
+      printf("set IP address: %s\n", "%<ip>");
     %else
       //printf("try dhcp\n");
     %endif
     //wait(1);
     int retnet = net.connect();
-    //printf("eth connect ret: %d\n", retnet);
+    printf("eth connect ret: %d\n", retnet);
     // Show the network address
     const char *ip = net.get_ip_address();
-    //printf("IP address is: %s\n", ip ? ip : "No IP");
+    printf("IP address is: %s\n", ip ? ip : "No IP");
 
   %endif
 

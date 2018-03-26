@@ -1,0 +1,4 @@
+BUILD/*.*
+DebugConfig/*.*
+libraries/*.*
+mbed-os/*.*

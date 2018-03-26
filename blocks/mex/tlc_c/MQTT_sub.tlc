@@ -1,0 +1,101 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : CANReceive.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2017 E.Warnicke, HS Wismar
+%% Copyright 2017 Dr.O.Hagendorf, HS Wismar
+
+%implements MQTT_sub "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %%assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
+    %assign topic ="\""+LibBlockParameterString(MQTT_topic)+"\""
+    
+    %openfile declbuf
+    // %<Type> (MQTT_sub): '%<Name>'
+    
+    %%int m_in_len=1;
+    char m_in_buf[100]={0};
+
+    MQTT::Message message;
+    %%message.payloadlen=2;
+    %%message.payload=(void*)buf;
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (MQTT_sub): '%<Name>'
+    %%void can_rcv_handler%<CAN_num>(){
+    %%  can%<CAN_num>.read(can_rcv_msg%<CAN_num>);
+    %%  can_new%<CAN_num>=1;
+    %%}
+
+    void messageArrived(MQTT::MessageData& md){
+        %%MQTT::Message &message = md.message;
+        message=md.message;
+        %%m_in_len = message.payloadlen;
+        %%memcpy(m_in_buf,message.payload,message.payloadlen);
+        wait_ms(100);
+    }
+    %closefile declbuf
+
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+    // %<Type> (MQTT_sub): '%<Name>'
+    %%can%<CAN_num>.attach(&can_rcv_handler%<CAN_num>);
+    message.payloadlen=2;
+    message.payload=(void*)m_in_buf;
+    Client->subscribe(%<topic>,MQTT::QOS2,messageArrived);
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %if !LibBlockOutputSignalIsExpr(0)
+      
+      %assign y_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
+      %assign msg_len = LibBlockOutputSignal(1, "", "", 0)
+
+      %%%<msg_len>=m_in_len;
+      %%memcpy(%<y_ptr>,m_in_buf,m_in_len);
+
+      %<msg_len>=message.payloadlen;
+      memcpy(%<y_ptr>,message.payload,message.payloadlen);
+      Client->yield(10);
+    
+      
+    %endif
+  %endif
+%endfunction

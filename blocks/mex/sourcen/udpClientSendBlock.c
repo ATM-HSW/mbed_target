@@ -1,10 +1,10 @@
 /*
- * File: udp_client_sendarray.c
+ * File: udpClientWriteBlock.c
  *
- * Copyright 2016 Dr.O.Hagendorf
+ * Copyright 2017-2018 Dr.O.Hagendorf, HS Wismar
  */
 
-#define S_FUNCTION_NAME  udpClientWriteBlock
+#define S_FUNCTION_NAME  udpClientSendBlock
 #define S_FUNCTION_LEVEL 2
 
 #include "simstruc.h"
@@ -177,8 +177,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 
 #define MDL_SET_WORK_WIDTHS
 #if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
-  static void mdlSetWorkWidths(SimStruct *S)
-  {
+static void mdlSetWorkWidths(SimStruct *S) {
   /* Set number of run-time parameters */
   if (!ssSetNumRunTimeParams(S, 3))
     return;

@@ -1,11 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
-%%
-%%  Licensed under the Apache License, Version 2.0 (the "License");
-%%  you may not use this file except in compliance with the License.
-%%  You may obtain a copy of the License at
-%%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -19,7 +13,13 @@
 %%  See the License for the specific language governing permissions and
 %%  limitations under the License.
 
-%implements udpConfigSocket "C"
+%% File : CANSend.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2017 E.Warnicke, HS Wismar
+%% Copyright 2017 Dr.O.Hagendorf, HS Wismar
+
+%implements MQTT_pub "C"
 
 %include "block_common_includes.tlc"
 
@@ -31,33 +31,41 @@
 
 %endfunction
 
+
 %% Function: Start ========================================================
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
-
-    %assign socket_id  = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
-    %assign destination_ip   = SFcnParamSettings.DES_IP
-    %assign destination_port = FEVAL("int2str",LibBlockParameterValue(des_port,0))
-
     %openfile declbuf
-    // %<Type> (udpConfigSocket): '%<Name>'
-    UDPSocket oUDPSocket_%<socket_id>;
-    static const char* udpConfigSocketIPAddr_%<socket_id> = "%<destination_ip>";
-    static const uint16_t udpConfigSocketIPPort_%<socket_id> = %<destination_port>;
-    SocketAddress udpConfigSocketSocketAddr_%<socket_id>(udpConfigSocketIPAddr_%<socket_id>, udpConfigSocketIPPort_%<socket_id>);
-    nsapi_size_or_error_t ret;
-    %closefile declbuf 
-
+    // %<Type> (MQTT_pub): '%<Name>'
+        MQTT::Message pub_message;
+    char buf[100];
+    %closefile declbuf
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-
-    oUDPSocket_%<socket_id>.open(&net);
-
   %endif
 %endfunction
 
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %%assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
+    %%assign bEnableMsgIDInput = CAST("Number",LibBlockParameterValue(enableMsgID,0))
+    
+    %assign u1_ptr = LibBlockInputSignalAddr(0,"","",0)
+    %assign u1_width =LibBlockInputSignalWidth(0)
+    %assign topic = "\""+LibBlockParameterString(MQTT_topic)+"\""
 
+    sprintf(buf,"%d",*(%<u1_ptr>));
+        
+    pub_message.payload=(void*)buf;
+    //printf("payload %s",buf);
+    //fflush(stdout);
+    pub_message.payloadlen=strlen(buf)+1;
+    if(connected==3){
+        rc=Client->publish(%<topic>,pub_message);
+        if(rc!=0)printf("publish error %d\r\n",rc);
+    }
+
+  %endif
 %endfunction

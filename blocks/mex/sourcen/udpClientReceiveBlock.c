@@ -4,7 +4,7 @@
  * Copyright 2017-2018 Dr.O.Hagendorf, HS Wismar
  */
 
-#define S_FUNCTION_NAME  udpClientReceive
+#define S_FUNCTION_NAME  udpClientReceiveBlock
 #define S_FUNCTION_LEVEL 2
 
 #include "simstruc.h"
@@ -78,13 +78,12 @@ static void mdlInitializeSizes(SimStruct *S)
     int i;
     int_T nOutputPorts = 0;  /* number of output ports */
 
-    ssSetNumSFcnParams(S, 4);  /* Number of expected parameters */
+    ssSetNumSFcnParams(S, 3);  /* Number of expected parameters */
     if (ssGetNumSFcnParams(S) != ssGetSFcnParamsCount(S)) return;
 
     ssSetSFcnParamTunable(S, 0, 0);
     ssSetSFcnParamTunable(S, 1, 0);
     ssSetSFcnParamTunable(S, 2, 0);
-    ssSetSFcnParamTunable(S, 3, 0);
 
     /* Register the number and type of states the S-Function uses */
 
@@ -96,29 +95,26 @@ static void mdlInitializeSizes(SimStruct *S)
      */
     if (!ssSetNumInputPorts(S, 0)) return;
 
-    // Now we need two know how many Outputports we must set
-    nOutputPorts  = mxGetNumberOfElements(ssGetSFcnParam(S,2));
     /*
      * Configure the output ports. First set the number of output ports.
      */
-    if (!ssSetNumOutputPorts(S, nOutputPorts)) return;
+    if (!ssSetNumOutputPorts(S, 2)) return;
 
     /*
      * Set output port dimensions for each output port index starting at 0.
      * See comments for setting input port dimensions.
      */
-    for(i = 0; i< nOutputPorts; i++) {
-      ssSetOutputPortWidth(S, i, 1);
+    ssSetOutputPortDataType(S, 0, SS_UINT8);
+    ssSetOutputPortWidth(S, 0, 1);
+    ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 0, 1);
 
-      if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
-        ssSetOutputPortDataType(S, i, SS_UINT8);
-      else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
-        ssSetOutputPortDataType(S, i, SS_UINT16);
-      else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
-        ssSetOutputPortDataType(S, i, SS_UINT32);
-      else
-        mexWarnMsgTxt("One or more Ports Datatypes not set");
-    }
+    ssSetOutputPortDataType(S, 1, SS_UINT16);
+    ssSetOutputPortWidth(S, 1, 1);
+    ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 1, 1);
 
     ssSetNumSampleTimes(   S, 1);   /* number of sample times                */
 
@@ -164,7 +160,7 @@ static void mdlSetWorkWidths(SimStruct *S) {
    * Register the run-time parameters
    */
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "sock_ID", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 1, "BufferSize", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "BufferSize", ssGetDataTypeId(S, "uint16"));
   }
 #endif /* MDL_SET_WORK_WIDTHS */
 
