@@ -31,16 +31,6 @@ classdef Prefs
         end
 
         %%
-        function setMbedTarget(target)
-            mbed.Prefs.setPref('MbedTarget', target);
-        end
-
-        %%
-        function board = getMbedTarget
-            board = mbed.Prefs.getPref('MbedTarget');
-        end
-
-        %%
         function setMbedTarget5(target)
             mbed.Prefs.setPref('MbedTarget5', target);
         end

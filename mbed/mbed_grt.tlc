@@ -33,7 +33,7 @@
 %assign InlineSetEventsForThisBaseRateFcn  = TLC_TRUE
 %assign SuppressMultiTaskScheduler = TLC_TRUE
 %assign UseRTOS = TLC_FALSE
-%assign MbedVersion = 'mbed-os 5'
+%assign MbedVersion = "mbed-os 5"
 %include "codegenentry.tlc"
 %include "mbed_grt_genfiles.tlc"
 
@@ -52,7 +52,7 @@
   rtwoptions(oIdx).prompt        = 'Mbed options';
   rtwoptions(oIdx).type          = 'Category';
   rtwoptions(oIdx).enable        = 'on';
-  rtwoptions(oIdx).default       = 11;  % number of items under this category excluding this one.
+  rtwoptions(oIdx).default       = 12;  % number of items under this category excluding this one.
   rtwoptions(oIdx).popupstrings  = '';
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
@@ -62,18 +62,18 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed os 5 Target: ';
+  rtwoptions(oIdx).prompt         = 'Mbed OS 5 Target: ';
   rtwoptions(oIdx).type           = 'Popup';
   rtwoptions(oIdx).popupstrings   = mbed_getTargets();
   rtwoptions(oIdx).tlcvariable    = 'MbedTarget5';
   rtwoptions(oIdx).makevariable   = 'MBEDTARGET5';
   rtwoptions(oIdx).enable         = 'on';
-  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. DISCO_F407VG1']);
+  rtwoptions(oIdx).tooltip        = sprintf(['mbed target e.g. NUCLEO_F446RE']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''MbedTarget5'')';
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'MbedOS additional project config: ';
+  rtwoptions(oIdx).prompt         = 'Mbed OS additional project config: ';
   rtwoptions(oIdx).type           = 'Popup';
   rtwoptions(oIdx).popupstrings   = mbed_getAppConfigs();
   rtwoptions(oIdx).tlcvariable    = 'MbedAppConfig';
@@ -93,7 +93,7 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'detect mbed target (mbedls)';
+  rtwoptions(oIdx).prompt         = 'detect Mbed target (mbedls)';
   rtwoptions(oIdx).type           = 'Pushbutton';
   rtwoptions(oIdx).default        = '';
   rtwoptions(oIdx).tlcvariable    = '';
@@ -135,7 +135,7 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Virtual Drive: ';
+  rtwoptions(oIdx).prompt         = 'Mbed Virtual Drive: ';
   rtwoptions(oIdx).type           = 'Edit';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedDrive();
   rtwoptions(oIdx).tlcvariable    = 'MbedDrive';
@@ -146,7 +146,7 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Virtual COM Port: ';
+  rtwoptions(oIdx).prompt         = 'Mbed Virtual COM Port: ';
   rtwoptions(oIdx).type           = 'Edit';
   rtwoptions(oIdx).default        = mbed.Prefs.getComPort();
   rtwoptions(oIdx).tlcvariable    = 'ComPort';
@@ -157,7 +157,7 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'Use mbed RTOS';
+  rtwoptions(oIdx).prompt         = 'Use Mbed RTOS';
   rtwoptions(oIdx).type           = 'Checkbox';
   rtwoptions(oIdx).default        = 1;
   rtwoptions(oIdx).tlcvariable    = 'UseMbedRTOS';
@@ -181,6 +181,3 @@
   END_RTW_OPTIONS
 
 %/
-
-%% %selectfile STDOUT
-%% %matlab disp(MbedTarget)

@@ -13,12 +13,13 @@
 %  See the License for the specific language governing permissions and
 %  limitations under the License.
 
-function [ path ] = mbed_getTargetDestFolder()
+function [ path, folder ] = mbed_getTargetDestFolder()
 
   [~,modelName,~] = fileparts( which (bdroot));
   pathstr = mbed_getTargetRootPath();
   target = get_param(bdroot,'MbedTarget5');
-  path = fullfile(pathstr,'targets', [modelName '_' target '_slprj'], '');
+  folder = [modelName '_' target '_slprj'];
+  path = fullfile(pathstr,'targets', folder, '');
 
 end
 

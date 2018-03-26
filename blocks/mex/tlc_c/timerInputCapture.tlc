@@ -142,21 +142,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Target specific options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget, "DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget, "NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget, "NUCLEO_F401RE") || ISEQUAL(MbedTarget, "NUCLEO_F411RE") || ISEQUAL(MbedTarget, "DISCO_F746NG") || ISEQUAL(MbedTarget, "NUCLEO_F767ZI")
+%if ISEQUAL(MbedTarget5, "DISCO_F407VG") || ISEQUAL(MbedTarget5, "DISCO_F429ZI_168MHz") || ISEQUAL(MbedTarget5, "DISCO_F429ZI_180MHz") || ISEQUAL(MbedTarget5, "NUCLEO_F446RE") || ISEQUAL(MbedTarget5, "STAMP_F446RE") || ISEQUAL(MbedTarget5, "NUCLEO_F401RE") || ISEQUAL(MbedTarget5, "NUCLEO_F411RE") || ISEQUAL(MbedTarget5, "DISCO_F746NG") || ISEQUAL(MbedTarget5, "NUCLEO_F767ZI")
   
-  %if ISEQUAL(MbedTarget, "DISCO_F407VG") || ISEQUAL(MbedTarget, "DISCO_F429ZI_168MHz")
+  %if ISEQUAL(MbedTarget5, "DISCO_F407VG") || ISEQUAL(MbedTarget5, "DISCO_F429ZI_168MHz")
     %assign fck_apb1 =  84000000
 	%assign fck_apb2 = 168000000
-  %elseif ISEQUAL(MbedTarget, "NUCLEO_F446RE") || ISEQUAL(MbedTarget, "STAMP_F446RE") || ISEQUAL(MbedTarget, "DISCO_F429ZI_180MHz")
+  %elseif ISEQUAL(MbedTarget5, "NUCLEO_F446RE") || ISEQUAL(MbedTarget5, "STAMP_F446RE") || ISEQUAL(MbedTarget5, "DISCO_F429ZI_180MHz")
     %assign fck_apb1 =  90000000
 	%assign fck_apb2 = 180000000
-  %elseif  ISEQUAL(MbedTarget, "NUCLEO_F411RE")
+  %elseif  ISEQUAL(MbedTarget5, "NUCLEO_F411RE")
     %assign fck_apb1 = 96000000
 	%assign fck_apb2 = 96000000
-  %elseif  ISEQUAL(MbedTarget, "NUCLEO_F401RE")
+  %elseif  ISEQUAL(MbedTarget5, "NUCLEO_F401RE")
     %assign fck_apb1 = 84000000
 	%assign fck_apb2 = 84000000
-  %elseif ISEQUAL(MbedTarget, "DISCO_F746NG") || ISEQUAL(MbedTarget, "NUCLEO_F767ZI")
+  %elseif ISEQUAL(MbedTarget5, "DISCO_F746NG") || ISEQUAL(MbedTarget5, "NUCLEO_F767ZI")
     %assign fck_apb1 = 108000000
 	%assign fck_apb2 = 216000000
   %endif
@@ -281,7 +281,7 @@
   %endswitch
 
 
-%elseif ISEQUAL(MbedTarget, "NUCLEO_F303RE") || ISEQUAL(MbedTarget, "NUCLEO_F303K8_nanolib") || ISEQUAL(MbedTarget, "NUCLEO_F303K8_nanolib_with_printf_float") || ISEQUAL(MbedTarget, "NUCLEO_F303K8_stdlib") || ISEQUAL(MbedTarget, "DISCO_F303VC")
+%elseif ISEQUAL(MbedTarget5, "NUCLEO_F303RE") || ISEQUAL(MbedTarget5, "NUCLEO_F303K8_nanolib") || ISEQUAL(MbedTarget5, "NUCLEO_F303K8_nanolib_with_printf_float") || ISEQUAL(MbedTarget5, "NUCLEO_F303K8_stdlib") || ISEQUAL(MbedTarget5, "DISCO_F303VC")
 
   %assign fck = 72000000
 

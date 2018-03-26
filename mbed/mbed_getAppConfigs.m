@@ -1,5 +1,5 @@
 %  MbedTarget Simulink target
-%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
 %
 %  Licensed under the Apache License, Version 2.0 (the "License");
 %  you may not use this file except in compliance with the License.
@@ -16,11 +16,19 @@
 function ret = mbed_getAppConfigs()
 
   pathstr = mbed_getTargetRootPath();
-  targetsfiles = ls(fullfile(pathstr,'targets','appconfig'));
-  ret=['none'];
-  for i=3:size(targetsfiles,1)
-      [~,name,~] = fileparts(targetsfiles(i,:));
-      ret = [ret '|' name]; %#ok<AGROW>
+  targetsfiles = dir(fullfile(pathstr,'targets','appconfig'));
+  ret='none';
+  for i=1:size(targetsfiles,1)
+      if strcmp(targetsfiles(i).name, '.')
+          continue;
+      end
+      if strcmp(targetsfiles(i).name, '..')
+          continue;
+      end
+      if targetsfiles(i).isdir==0
+          continue;
+      end
+      ret = [ret '|' targetsfiles(i).name]; %#ok<AGROW>
   end
 
 end

@@ -25,26 +25,26 @@ switch hookMethod
         % during the build, then this hook will not be called.  Valid arguments
         % at this stage are hookMethod and modelName. This enables cleaning up
         % any static or global data used by this hook file.
-        disp(['### Build procedure for model: ''' modelName ''' aborted due to an error.(' hookMethod ')']);
+        %disp(['### Build procedure for model: ''' modelName ''' aborted due to an error.(' hookMethod ')']);
         
     case 'entry'
         % Called at start of code generation process (before anything happens.)
         % Valid arguments at this stage are hookMethod, modelName, and buildArgs.
-        disp('entry');
+        %disp('entry');
         i_mbed_setup(modelName);
-        disp('entry out');
+        %disp('entry out');
         
     case 'before_tlc'
         % Called just prior to invoking TLC Compiler (actual code generation.)
         % Valid arguments at this stage are hookMethod, modelName, and
         % buildArgs
-        disp('before_tlc');
+        %disp('before_tlc');
         
     case 'after_tlc'
         % Called just after to invoking TLC Compiler (actual code generation.)
         % Valid arguments at this stage are hookMethod, modelName, and
         % buildArgs
-        disp('after_tlc');
+        %disp('after_tlc');
         
         % Safely check if model contains property 'UseRTOS'
         param = get_param(modelName, 'ObjectParameters');
@@ -64,15 +64,15 @@ switch hookMethod
         % Called after code generation is complete, and just prior to kicking
         % off make process (assuming code generation only is not selected.)  All
         % arguments are valid at this stage.
-        disp('before_make');
+        %disp('before_make');
         i_write_mbed_files();
         disp(sprintf(['\n### Code Format : %s'],buildOpts.codeFormat));%#ok
-        disp('before_make out');
+        %disp('before_make out');
         
     case 'after_make'
         % Called after make process is complete. All arguments are valid at
         % this stage.
-        disp('after_make');
+        %disp('after_make');
         if ( strcmp(get_param(gcs,'DownloadApplication'),'on') )
             downloadApplication = 1;
         else
@@ -84,7 +84,7 @@ switch hookMethod
             %disp('i_download');
             i_download(modelName, downloadApplication, downloadMethod)
         end
-        disp('after_make out');
+        %disp('after_make out');
         
     case 'exit'
         % Called at the end of the build process.  All arguments are valid at this
@@ -137,7 +137,7 @@ if isequal(mbedautodetect, 'on')
         error('mbedls did not detect a target or more than one target is connected');
     end
 end
-mbedtarget = get_param(bdroot,'MbedTarget5')
+mbedtarget = get_param(bdroot,'MbedTarget5');
 disp(['### Starting mbed build procedure for ', 'model: ',modelName, ' Target: ', mbedtarget]);
 
 if ~isempty(strfind(pwd,' ')) || ~isempty(strfind(pwd,'&'))
@@ -148,17 +148,33 @@ if ~isempty(strfind(pwd,' ')) || ~isempty(strfind(pwd,'&'))
         'a path that does not contain either of these characters.'], pwd);
 end
 
+libraryversion='';
+try
+    fid=fopen(fullfile(mbed_getTargetRootPath(), 'targets', 'mbed-os', 'mbed.h'), 'r');
+    text = textscan(fid,'%s','Delimiter','','endofline','');
+    text = text{1}{1};
+    fclose(fid);
+    libraryversion = regexp(text,'MBED_LIBRARY_VERSION[\s\.=]+(\d+)','tokens');
+    libraryversion=string(libraryversion);
+catch ME
+end
+
 % Display current settings in build log
 disp('###')
 disp('### mbed environment settings:')
 disp('###')
 fprintf('###     Name:            %s\n', mbedtarget);
-fprintf('###     Version:         %s\n', 'mbed-os 5');
+fprintf('###     Version:         %s, library version %s\n', 'Mbed-OS 5', libraryversion);
 fprintf('###     RTOS:            %s\n', get_param(bdroot,'UseMbedRTOS'));
 fprintf('###     Fixed step size: %ss\n', get_param(bdroot,'FixedStep'));
 fprintf('###     mbed Drive:      %s\n', get_param(bdroot,'MbedDrive'));
 fprintf('###     Com Port:        %s\n', get_param(bdroot,'ComPort'));
 fprintf('###     Programmer:      %s\n', mbed.Prefs.getMbedProgrammer()); %get_param(bdroot,'MbedProgrammer'))
+additionalProjectFiles = get_param(bdroot,'MbedAddProjectFiles');
+if ~isequal(additionalProjectFiles,'none')
+    [buildAreaDstFolder, folder] = mbed_getTargetDestFolder();
+fprintf('###     add. project file: %s\n', fullfile(buildAreaDstFolder, [folder '.xxx']));
+end
 disp('###')
 end
 
@@ -180,13 +196,14 @@ end
 
 function i_write_mbed_files()
 
-[~,modelName,~] = fileparts( which (bdroot));
+    [~,modelName,~] = fileparts( which (bdroot));
 
     target = get_param(bdroot,'MbedTarget5');
     
     %    pathstr = mbed_getTargetRootPath();
     %    buildAreaDstFolder = fullfile(pathstr,'targets',[modelName '_slprj']);
-    buildAreaDstFolder = mbed_getTargetDestFolder();
+    [buildAreaDstFolder, folder] = mbed_getTargetDestFolder();
+    additionalProjectFiles = fullfile(buildAreaDstFolder, [folder '.*']);
     if exist(buildAreaDstFolder, 'dir')
         try
             delete(fullfile(buildAreaDstFolder,'BUILD','*.*'));
@@ -214,6 +231,10 @@ function i_write_mbed_files()
         end
         try
             delete(fullfile(buildAreaDstFolder,'*.bat'));
+        catch
+        end
+        try
+            delete(additionalProjectFiles);
         catch
         end
     else
@@ -251,9 +272,23 @@ function i_write_mbed_files()
     catch
     end
     
+    targetconfig = get_param(bdroot,'MbedAppConfig');
+    if ~isempty(targetconfig)
+        path = fullfile(mbed_getTargetRootPath(), 'targets', 'appconfig', targetconfig);
+        try
+            srcFile = fullfile(path, '*.*');
+            copyfile(srcFile, buildAreaDstFolder);
+        catch
+        end
+    end
+    
     % generate make file with mbed tools
     oldpath=cd(buildAreaDstFolder);
     [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i simulink --source . --source ..\mbed-os --source ..\libraries']);
+    additionalProjectFiles = get_param(bdroot,'MbedAddProjectFiles');
+    if ~isequal(additionalProjectFiles,'none')
+      [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i ' additionalProjectFiles ' --source . --source ..\mbed-os --source ..\libraries']);
+    end
     cd(oldpath);
     disp(cmdout);
 

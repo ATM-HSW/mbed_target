@@ -24,15 +24,17 @@ function makeCmd = mbed_grt_wrap_make_cmd_hook(args)
         [~,modelName,~] = fileparts( which (bdroot));
         lCodeGenFolder = Simulink.fileGenControl('getConfig').CodeGenFolder;
         buildAreaSrcFolder = fullfile(lCodeGenFolder, [modelName '_slprj']);
-%        pathstr = mbed_getTargetRootPath();
-%        buildAreaDstFolder = fullfile(pathstr,'targets',[modelName '_slprj']);
-        makeexepath = fullfile(mbed_getTargetRootPath(), 'buildtools', 'bin', 'make.exe');
+        makeexepath = fullfile(mbed_getTargetRootPath(), 'buildtools', 'bin');
+        makeexefullpath = fullfile(makeexepath, 'make.exe');
         buildAreaDstFolder = mbed_getTargetDestFolder();
-%        args.makeCmd = ['@echo off & copy "' fullfile(buildAreaSrcFolder, [args.modelName '.mk']) '" "' fullfile(buildAreaDstFolder, 'BUILD', 'Makefile') '" & copy "' fullfile(buildAreaDstFolder, 'target_tools.mk') '" "' fullfile(buildAreaDstFolder, 'BUILD', 'target_tools.mk') '" & cd ' buildAreaDstFolder ' & make.exe -C BUILD'];
         copy1 = ['copy "' fullfile(buildAreaSrcFolder, [args.modelName '.mk']) '" "' fullfile(buildAreaDstFolder, 'BUILD', 'Makefile') '"'];
         copy2 = ['copy "' fullfile(buildAreaDstFolder, 'target_tools.mk') '" "' fullfile(buildAreaDstFolder, 'BUILD', 'target_tools.mk') '"'];
         copy3 = ['copy "' fullfile(buildAreaSrcFolder, [args.modelName '.bat']) '" "' buildAreaDstFolder '"'];
-        args.makeCmd = ['@echo off & ' copy1 ' & ' copy2  ' & ' copy3 ' & cd ' buildAreaDstFolder ' & ' makeexepath ' -C BUILD'];
+        cd1   = [buildAreaDstFolder(1:2)];
+        cd2   = ['cd "' buildAreaDstFolder '"'];
+        set1  = ['set PATH=' makeexepath ';%PATH%'];
+        gcc_path = ['PATH=..\..\..\buildtools\gcc-arm-none-eabi-6-2017-q2\bin\'];
+        args.makeCmd = ['@echo off & ' copy1 ' & ' copy2 ' & ' copy3 ' & ' cd1 ' & ' cd2 ' & ' set1 ' & ' makeexefullpath ' -C BUILD ' gcc_path];
         args.verbose = 1;
         makeCmd = setup_for_default(args);
     else

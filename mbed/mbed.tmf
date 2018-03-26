@@ -342,7 +342,7 @@ endif
 ifeq ($(BUILD_MODE), real_time)
 $(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS) $(MODEL).link_script.ld
 	@echo "### BUILD_MODE $(BUILD_MODE)"
-	@$(LD) $(MBED_LD_FLAGS) -T$(MODEL).link_script.ld $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ $^ $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
+	@$(LD) $(MBED_LD_FLAGS) -T$(filter-out %.o, $^) $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ $(filter %.o, $^) $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
 	@echo "### Generated $@"
 endif
 

@@ -1,4 +1,5 @@
-%% SYSTLC: MbedTarget (Embedded Target for Embedded Coder) TMF: mbed.tmf MAKE: make_rtw EXTMODE: ext_comm
+%% SYSTLC: MbedTarget (Embedded Target for Embedded Coder) TMF: mbed.tmf MAKE: make_rtw
+%%    EXTMODE: ext_comm
 
 
 %%  MbedTarget Simulink target
@@ -32,6 +33,7 @@
 %assign InlineSetEventsForThisBaseRateFcn  = TLC_TRUE
 %assign SuppressMultiTaskScheduler = TLC_TRUE
 %assign UseRTOS = TLC_FALSE
+%assign MbedVersion = "mbed-os 5"
 %include "codegenentry.tlc"
 
 %% The contents between 'BEGIN_RTW_OPTIONS' and 'END_RTW_OPTIONS' in this file
@@ -132,7 +134,7 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Virtual Drive: ';
+  rtwoptions(oIdx).prompt         = 'Mbed Virtual Drive: ';
   rtwoptions(oIdx).type           = 'Edit';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedDrive();
   rtwoptions(oIdx).tlcvariable    = 'MbedDrive';
@@ -143,7 +145,7 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'mbed Virtual COM Port: ';
+  rtwoptions(oIdx).prompt         = 'Mbed Virtual COM Port: ';
   rtwoptions(oIdx).type           = 'Edit';
   rtwoptions(oIdx).default        = mbed.Prefs.getComPort();
   rtwoptions(oIdx).tlcvariable    = 'ComPort';
@@ -154,11 +156,12 @@
 
   oIdx = oIdx + 1;
 
-  rtwoptions(oIdx).prompt         = 'Use mbed RTOS';
+  rtwoptions(oIdx).prompt         = 'Use Mbed RTOS';
   rtwoptions(oIdx).type           = 'Checkbox';
-  rtwoptions(oIdx).default        = mbed.Prefs.getMbedRTOS();
+  rtwoptions(oIdx).default        = 1;
   rtwoptions(oIdx).tlcvariable    = 'UseMbedRTOS';
   rtwoptions(oIdx).makevariable   = 'USEMBEDRTOS';
+  rtwoptions(oIdx).enable         = 'on';
   rtwoptions(oIdx).tooltip        = sprintf(['Add mbed RTOS.']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''UseMbedRTOS'')';
 
