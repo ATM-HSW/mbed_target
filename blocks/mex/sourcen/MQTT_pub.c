@@ -90,9 +90,10 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-	//int numInput;
+  int numInput;
+
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 2);
+  ssSetNumSFcnParams(S, 4);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -117,6 +118,8 @@ static void mdlInitializeSizes(SimStruct *S)
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -126,20 +129,32 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-      if (!ssSetNumInputPorts(S,1))
+    numInput = (int_T)mxGetScalar(ssGetSFcnParam(S, 2));
+    if (!ssSetNumInputPorts(S, numInput?2:1))
       return;
 
-    /*
-     * Configure the input port 0 (message data - byte vector)
-     */
-    ssSetInputPortDataType(S, 0, SS_UINT8);
-    ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
-    ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
-    ssSetInputPortDirectFeedThrough(S, 0, 1);
-    ssSetInputPortAcceptExprInRTW(S, 0, 0);
-    ssSetInputPortOverWritable(S, 0, 0);
-    ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-    ssSetInputPortRequiredContiguous(S, 0, 1);
+  /*
+   * Configure the input port 0 (message data - byte vector)
+   */
+  ssSetInputPortDataType(S, 0, SS_UINT8);
+  ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED);
+  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetInputPortDirectFeedThrough(S, 0, 1);
+  ssSetInputPortAcceptExprInRTW(S, 0, 0);
+  ssSetInputPortOverWritable(S, 0, 0);
+  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetInputPortRequiredContiguous(S, 0, 1);
+
+  if(numInput) {
+    ssSetInputPortDataType(S, 1, SS_UINT16);
+    ssSetInputPortWidth(S, 1, 1);
+    ssSetInputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, 1, 1);
+    ssSetInputPortAcceptExprInRTW(S, 1, 0);
+    ssSetInputPortOverWritable(S, 1, 0);
+    ssSetInputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, 1, 1);
+  }
 
   /*
    * Set the number of output ports.
@@ -214,10 +229,12 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 1))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "MQTT_topic", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "NumDataPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "BufferSize", ssGetDataTypeId(S, "uint16"));
 }
 
 #endif

@@ -1,5 +1,6 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
+%%                     2018 E.Warnicke, HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -35,13 +36,17 @@
 %% Function: Start ========================================================
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
+
+    %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
     %openfile declbuf
     // %<Type> (MQTT_pub): '%<Name>'
-        MQTT::Message pub_message;
-    char buf[100];
+    MQTT::Message pub_message;
+    char mqttPubBuf[%<nBuffer>];
     %closefile declbuf
+
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
   %endif
 %endfunction
 
@@ -49,22 +54,33 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
-    %%assign CAN_num = CAST("Number",LibBlockParameterValue(CANInstanceID,0))
-    %%assign bEnableMsgIDInput = CAST("Number",LibBlockParameterValue(enableMsgID,0))
-    
+
     %assign u1_ptr = LibBlockInputSignalAddr(0,"","",0)
     %assign u1_width =LibBlockInputSignalWidth(0)
-    %assign topic = "\""+LibBlockParameterString(MQTT_topic)+"\""
 
-    sprintf(buf,"%d",*(%<u1_ptr>));
-        
-    pub_message.payload=(void*)buf;
-    //printf("payload %s",buf);
-    //fflush(stdout);
-    pub_message.payloadlen=strlen(buf)+1;
-    if(connected==3){
-        rc=Client->publish(%<topic>,pub_message);
-        if(rc!=0)printf("publish error %d\r\n",rc);
+    %assign topic = "\""+LibBlockParameterString(MQTT_topic)+"\""
+    %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
+
+    %assign enNumberOfBytes = LibBlockParameterValue(NumDataPort,0)
+    %if enNumberOfBytes
+      %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+    %else
+      %assign number_of_bytes = %<LibBlockInputSignalWidth(0)>
+    %endif
+    
+    memcpy(mqttPubBuf, %<u1_ptr>, %<u1_width><%<nBuffer>?%<u1_width>:%<nBuffer>);
+
+    pub_message.payload = mqttPubBuf;
+    pub_message.payloadlen = %<u1_width><%<nBuffer>?%<u1_width>:%<nBuffer>;
+    pub_message.qos = MQTT::QOS0;
+    pub_message.retained = false;
+    if(Client->isConnected()) {
+      %if %<::vSerialDebugInfo>==0
+        Client->publish(%<topic>, pub_message);
+      %else
+        retmqtt = Client->publish(%<topic>, pub_message);
+        printf("MQTT publish: %d\n", retmqtt);
+      %endif
     }
 
   %endif

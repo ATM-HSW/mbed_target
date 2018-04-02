@@ -87,8 +87,9 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
+  int_T nOutputSize = 0;
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 2);
+  ssSetNumSFcnParams(S, 3);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -113,6 +114,7 @@ static void mdlInitializeSizes(SimStruct *S)
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -134,8 +136,9 @@ static void mdlInitializeSizes(SimStruct *S)
    /*
    * Configure the output port 1 (MessageContent)
    */
+  nOutputSize = mxGetScalar(ssGetSFcnParam(S,2));
   ssSetOutputPortDataType(S, 0, SS_UINT8);
-  ssSetOutputPortWidth(S, 0, 1);
+  ssSetOutputPortWidth(S, 0, nOutputSize);
   ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 1);
@@ -148,25 +151,6 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 1, 1);
-
-//   /*
-//    * Configure the output port 3 (Message data)
-//    */
-//   ssSetOutputPortDataType(S, 2, SS_UINT8);
-//   ssSetOutputPortWidth(S, 2, 16);  
-//   ssSetOutputPortComplexSignal(S, 2, COMPLEX_NO);
-//   ssSetOutputPortOptimOpts(S, 2, SS_REUSABLE_AND_LOCAL);
-//   ssSetOutputPortOutputExprInRTW(S, 2, 1);
-
-//   /*
-//    * Configure the output port 4 (Message length)
-//    */
-//   ssSetOutputPortDataType(S, 3, SS_UINT32);
-//   ssSetOutputPortWidth(S, 3, 1);
-//   ssSetOutputPortComplexSignal(S, 3, COMPLEX_NO);
-//   ssSetOutputPortOptimOpts(S, 3, SS_REUSABLE_AND_LOCAL);
-//   ssSetOutputPortOutputExprInRTW(S, 3, 1);
-
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -235,10 +219,11 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 1))
+  if (!ssSetNumRunTimeParams(S, 2))
     return;
 
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "MQTT_topic", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "BufferSize", ssGetDataTypeId(S, "uint16"));
 }
 
 #endif

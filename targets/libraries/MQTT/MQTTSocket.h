@@ -2,13 +2,13 @@
 #define MQTTSOCKET_H
 
 #include "MQTTmbed.h"
-#include <EthernetInterface.h>
+#include <NetworkInterface.h>
 #include <Timer.h>
 
 class MQTTSocket
 {
 public:
-    MQTTSocket(EthernetInterface *anet)
+    MQTTSocket(NetworkInterface *anet)
     {
         net = anet;
         open = false;
@@ -89,7 +89,7 @@ private:
 
     bool open;
     TCPSocket mysock;
-    EthernetInterface *net;
+    NetworkInterface *net;
     Timer timer;
 
 };

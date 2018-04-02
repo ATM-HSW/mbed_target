@@ -1,5 +1,6 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
+%%                     2018 E.Warnicke, HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -29,61 +30,78 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
+  %<LibAddToCommonIncludes("EthernetInterface.h")>
+  %<LibAddToCommonIncludes("MQTTNetwork.h")>
+  %<LibAddToCommonIncludes("MQTTSocket.h")>
+  %<LibAddToCommonIncludes("MQTTmbed.h")>
+  %<LibAddToCommonIncludes("MQTTClient.h")>
+
 %endfunction
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
+
     %assign hostname = "\""+LibBlockParameterString(broker_ip)+"\""
     %assign port = CAST("Number",LibBlockParameterValue(broker_port,0))
 
     %openfile declbuf
     // %<Type> (MQTT_Config): '%<Name>'
-    #define MQTTCLIENT_QOS2 1
+    //#define MQTTCLIENT_QOS2 1
 
-    NetworkInterface* network = NULL;
-    EthernetInterface eth;
-    MQTT::Client<MQTTNetwork, Countdown>* Client;
-    int rc;
-    int connected=0;
-    Serial pc(USBTX, USBRX);
+    MQTTNetwork *mqttNetwork;
+    MQTTSocket *mqttIPStack;
+    //MQTT::Client<MQTTNetwork, Countdown>* Client;
+    MQTT::Client<MQTTSocket, Countdown>* Client;
+    %if %<::vSerialDebugInfo>!=0
+    int retmqtt;
+    %endif
     %closefile declbuf
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-    %<LibAddToCommonIncludes("EthernetInterface.h")>
-    %<LibAddToCommonIncludes("MQTTNetwork.h")>
-    %<LibAddToCommonIncludes("MQTTmbed.h")>
-    %<LibAddToCommonIncludes("MQTTClient.h")>
 
     // %<Type> (MQTT_Config): '%<Name>'
-    pc.printf("Hello MQTT Version 0.6");
-    eth.set_dhcp(false);
-    eth.set_network("192.168.0.105","255.255.255.0","192.168.0.1");
-    network = &eth;
-    //eth.connect();
-    if((eth.connect())<0)printf("eth connect error");
-    fflush(stdout);
-    connected++;
-	const char *ip_addr  = network->get_ip_address();
-	pc.printf("IP address %s\n", ip_addr);
-    if (!network) {
-        printf("network NULL\r\n");
-    }
+    //mqttNetwork = new MQTTNetwork(&net);
+    //Client = new MQTT::Client<MQTTNetwork, Countdown>(*mqttNetwork);
 
-    MQTTNetwork mqttNetwork(network);
-    MQTT::Client<MQTTNetwork, Countdown> client(mqttNetwork);
-    Client=&client;
+    mqttIPStack = new MQTTSocket(&net);
+    Client = new MQTT::Client<MQTTSocket, Countdown>(*mqttIPStack);
 
-    rc=mqttNetwork.connect(%<hostname>, %<port>);
-    if (rc != 0)printf("rc from TCP connect is %d\r\n", rc);
-    fflush(stdout);
-    connected++;
-    //MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
-    rc=Client->connect(/*data*/);
-    if(rc!=0)printf("rc from MQTT connect is %d\r\n", rc);
-    fflush(stdout);
-    connected++;
+    %if %<::vSerialDebugInfo>==0
+      //mqttNetwork->connect(%<hostname>, %<port>);
+      mqttIPStack->connect(%<hostname>, %<port>);
+    %else
+      //retmqtt = mqttNetwork->connect(%<hostname>, %<port>);
+      retmqtt = mqttIPStack->connect(%<hostname>, %<port>);
+      printf("MQTT network connect: %d\r\n", retmqtt);
+    %endif
+
+    MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
+    data.MQTTVersion = 3;
+    data.clientID.cstring = "mbed-sample";
+    data.username.cstring = "testuser";
+    data.password.cstring = "testpassword";
+
+    %if %<::vSerialDebugInfo>==0
+      Client->connect(data);
+    %else
+      retmqtt = Client->connect(data);
+      printf("MQTT client connect: %d\n", retmqtt);
+    %endif
+
 %endif
+%endfunction
 
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %if %<::vSerialDebugInfo>==0
+      Client->yield(0);
+    %else
+      retmqtt = Client->yield(0);
+      //printf("MQTT client yield: %d\n", retmqtt);
+    %endif
+  %endif
 %endfunction

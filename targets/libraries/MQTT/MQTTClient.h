@@ -562,12 +562,12 @@ int MQTT::Client<Network, Timer, a, b>::yield(unsigned long timeout_ms)
     Timer timer;
 
     timer.countdown_ms(timeout_ms);
-    while (!timer.expired())
+    //while (!timer.expired())
     {
         if (cycle(timer) < 0)
         {
             rc = FAILURE;
-            break;
+//            break;
         }
     }
 
