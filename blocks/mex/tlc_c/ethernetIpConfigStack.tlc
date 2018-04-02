@@ -31,13 +31,9 @@
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
 
-    %assign ip =      SFcnParamSettings.IP
-    %assign submask = SFcnParamSettings.submask
-    %assign gateway = SFcnParamSettings.gateway
-
-    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-    %assign name = FEVAL("strrep",name," ","_")
-    %assign name = FEVAL("strrep",name,"-","_")
+    %assign vIP = LibBlockParameterString(ip_addr)
+    %assign vSubmask = LibBlockParameterString(sub_mask)
+    %assign vGateway = LibBlockParameterString(gateway)
 
     %%Add Ethernet things to the includes
     %openfile declbuf
@@ -57,20 +53,23 @@
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
-    %assign val_dhcp = LibBlockParameterValue(dhcp,0)
+    %assign vDHCP = LibBlockParameterValue(dhcp,0)
+    %assign ::vSerialDebugInfo = LibBlockParameterValue(SerialDebugInfo, 0)
 
-    %if %<val_dhcp>==0
-      net.set_network("%<ip>","%<submask>","%<gateway>");
-      printf("set IP address: %s\n", "%<ip>");
+    %if %<vDHCP>==0
+      net.set_network("%<vIP>","%<vSubmask>","%<vGateway>");
     %else
-      //printf("try dhcp\n");
+      net.set_dhcp(true);
     %endif
-    //wait(1);
-    int retnet = net.connect();
-    printf("eth connect ret: %d\n", retnet);
-    // Show the network address
-    const char *ip = net.get_ip_address();
-    printf("IP address is: %s\n", ip ? ip : "No IP");
+
+    %if %<::vSerialDebugInfo>==0
+      net.connect();
+    %else
+      int retnet = net.connect();
+      printf("eth connect ret: %d\n", retnet);
+      const char *ip = net.get_ip_address();
+      printf("IP address is: %s\n", ip ? ip : "No IP");
+    %endif
 
   %endif
 

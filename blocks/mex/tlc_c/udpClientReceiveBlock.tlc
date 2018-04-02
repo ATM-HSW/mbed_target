@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -29,15 +29,24 @@
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
 
-      %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
-      %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
+    %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+    %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
+    %assign bBlocking = FEVAL("int2str",LibBlockParameterValue(Blocking,0))
 
-      %openfile declbuf
-      char Recv_Buffer_%<socket_id>[%<nBuffer>] = {'\0'};
-      %closefile declbuf 
+    %openfile declbuf
+    char udpClientRecvBuffer_%<socket_id>[%<nBuffer>] = {'\0'};
+    %closefile declbuf 
 
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %if %<bBlocking>==0
+    //oUDPSocket_%<socket_id>.set_blocking(false);
+    oUDPSocket_%<socket_id>.set_timeout(0);
+    %else
+    //oUDPSocket_%<socket_id>.set_blocking(true);
+    oUDPSocket_%<socket_id>.set_timeout(-1);
+    %endif
 
   %endif
 %endfunction
@@ -47,53 +56,25 @@
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
 
-    %assign rollVars = ["U", "Y"]
     %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
-    %assign nOutputs = LibBlockNumOutputPorts(block)-1
-    %assign Buffidx  = 0
-    %assign rolling  = [0: %<nOutputs>]
+    %assign bErrorOutputport = FEVAL("int2str",LibBlockParameterValue(ErrorOutputport,0))
 
     %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
 
-    %% receive data and distribute them to the outputs
-    oUDPSocket_%<socket_id>.recvfrom(&socketAddr_%<socket_id>,Recv_Buffer_%<socket_id>,%<nBuffer>);
+    int retrecv_%<socket_id> = oUDPSocket_%<socket_id>.recvfrom(&udpConfigSocketSocketAddr_%<socket_id>,udpClientRecvBuffer_%<socket_id>,%<nBuffer>);
+    %if %<::vSerialDebugInfo>!=0
+      printf("udp recvfrom ret: %d\n", retrecv_%<socket_id>);
+    %endif
 
-    %%distribute data
-    %roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
-      %switch LibBlockOutputSignalDataTypeId(sigIdx)
-        %% uint8
-        %case 3
-          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
-          %<y> = Recv_Buffer_%<socket_id>[%<Buffidx>];
-          %assign Buffidx = Buffidx + 1
-          %break
+    %assign y_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
+    %assign y1 = LibBlockOutputSignal(1, "", "", 0)
+    %<y1> = retrecv_%<socket_id>>0?retrecv_%<socket_id>:0;
+    memcpy(%<y_ptr>, udpClientRecvBuffer_%<socket_id>, %<nBuffer>);
 
-        %%uint16
-        %case 5
-          %assign y = LibBlockOutputSignal(0, "", lcv,sigIdx)
-          %<y> = Recv_Buffer_%<socket_id>[%<Buffidx>];
-          %assign Buffidx = Buffidx + 1
-          (%<y>&0xff00) = Recv_Buffer_%<socket_id>[%<Buffidx>] << 8;
-          %assign Buffidx = Buffidx + 1
-          %break
+    %if bErrorOutputport
+      %assign y2 = LibBlockOutputSignal(2, "", "", 0)
+      %<y2> = retrecv_%<socket_id>>0?false:true;
+    %endif
 
-        %%uint32
-        %case 7
-          %assign y = LibBlockOutputSignal(0, "", lcv,sigIdx)
-          %<y> = Recv_Buffer_%<socket_id>[%<Buffidx>];
-          %assign Buffidx = Buffidx + 1
-          (%<y>&0xff00) = Recv_Buffer_%<socket_id>[%<Buffidx>] << 8;
-          %assign Buffidx = Buffidx + 1
-          (%<y> & 0xff0000) = Recv_Buffer_%<socket_id>[%<Buffidx>] << 16;
-          %assign Buffidx = Buffidx + 1
-          (%<u> & 0xff000000) = Recv_Buffer_%<socket_id>[%<Buffidx>] << 32;
-          %assign Buffidx = Buffidx + 1
-          %break
-
-        %default
-        %break
-      %endswitch
-
-    %endroll
   %endif
 %endfunction

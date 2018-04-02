@@ -126,13 +126,30 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetInputPortWidth(S, i, 1);
     
     if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
-      ssSetInputPortDataType(S, i, 3);
+      ssSetInputPortDataType(S, i, SS_UINT8);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int8"))
+      ssSetInputPortDataType(S, i, SS_INT8);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
-      ssSetInputPortDataType(S, i, 5);
+      ssSetInputPortDataType(S, i, SS_UINT16);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int16"))
+      ssSetInputPortDataType(S, i, SS_INT16);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
-      ssSetInputPortDataType(S, i, 7);
+      ssSetInputPortDataType(S, i, SS_UINT32);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int32"))
+      ssSetInputPortDataType(S, i, SS_INT32);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "single"))
+      ssSetInputPortDataType(S, i, SS_SINGLE);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "double"))
+      ssSetInputPortDataType(S, i, SS_DOUBLE);
     else
-      mexWarnMsgTxt("One or more Ports Datatypes not set");
+      mexWarnMsgTxt("udpClientSend: One or more Ports Datatypes not set");
+    ssSetInputPortWidth(S, i, 1);
+    ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
+    ssSetInputPortDirectFeedThrough(S, i, 1);
+    ssSetInputPortAcceptExprInRTW(S, i, 0);
+    ssSetInputPortOverWritable(S, i, 1);
+    ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
+    ssSetInputPortRequiredContiguous(S, i, 1);
     //if (!ssSetInputPortDimensionInfo(S, i, DYNAMICALLY_SIZED)) return;
     //mxFree(str);
   }
@@ -558,14 +575,26 @@ static void mdlTerminate(SimStruct *S)
   //Now Calculate the Bytes of the Send Buffer
   for (i = 0; i < mxGetNumberOfElements(ssGetSFcnParam(S, 2)); i++)
   {
-    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
+    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int8"))
       nBufferBytes++;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
+      nBufferBytes++;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int16"))
+      nBufferBytes += 2;
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
       nBufferBytes += 2;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int32"))
+      nBufferBytes += 4;
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
       nBufferBytes += 4;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
+      nBufferBytes += 4;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "single"))
+      nBufferBytes += 4;
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "double"))
+      nBufferBytes += 8;
     else
-      mexWarnMsgTxt("One or more Ports Datatypes not set");
+      mexWarnMsgTxt("udpClientSend: One or more Ports Datatypes not set");
   }
 
   //now we wanted to write some Parameters to the rtw-file and

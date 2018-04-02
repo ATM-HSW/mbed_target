@@ -31,6 +31,7 @@
 
     %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
     %assign nBuffer = FEVAL("int2str",LibBlockParameterValue(BufferSize,0))
+    %assign bBlocking = FEVAL("int2str",LibBlockParameterValue(Blocking,0))
 
     %openfile declbuf
     // %<Type> (udpClientReceive): '%<Name>'
@@ -39,6 +40,14 @@
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %if %<bBlocking>==0
+    //oUDPSocket_%<socket_id>.set_blocking(false);
+    oUDPSocket_%<socket_id>.set_timeout(0);
+    %else
+    //oUDPSocket_%<socket_id>.set_blocking(true);
+    oUDPSocket_%<socket_id>.set_timeout(-1);
+    %endif
 
   %endif
 %endfunction
@@ -55,13 +64,58 @@
     %assign rolling  = [0: %<nOutputs>]
 
     %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+    %assign bErrorOutputport = FEVAL("int2str",LibBlockParameterValue(ErrorOutputport,0))
 
     %% receive data and distribute them to the outputs
     // %<Type> (udpClientReceive): '%<Name>'
-    oUDPSocket_%<socket_id>.recvfrom(&udpConfigSocketSocketAddr_%<socket_id>,udpClientRecvBuffer_%<socket_id>,%<nBuffer>);
+    int retrecv_%<socket_id> = oUDPSocket_%<socket_id>.recvfrom(&udpConfigSocketSocketAddr_%<socket_id>,udpClientRecvBuffer_%<socket_id>,%<nBuffer>);
+    %if %<::vSerialDebugInfo>!=0
+      printf("udp recvfrom ret: %d\n", retrecv_%<socket_id>);
+    %endif
 
     %roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
       %switch LibBlockOutputSignalDataTypeId(sigIdx)
+        %% double
+        %case 0
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          ((uint8_t*)(&%<y>))[0] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[1] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[2] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[3] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[4] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[5] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[6] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[7] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          %break
+
+        %% single
+        %case 1
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          ((uint8_t*)(&%<y>))[0] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[1] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[2] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[3] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          %break
+
+        %% int8
+        %case 2
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          %<y> = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          %break
+
         %% uint8
         %case 3
           %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
@@ -69,30 +123,58 @@
           %assign Buffidx = Buffidx + 1
           %break
 
-        %%uint16
-        %case 5
-          %assign y = LibBlockOutputSignal(0, "", lcv,sigIdx)
-          %<y> = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+        %% int16
+        %case 4
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          ((uint8_t*)(&%<y>))[0] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
           %assign Buffidx = Buffidx + 1
-          (%<y>&0xff00) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 8;
+          ((uint8_t*)(&%<y>))[1] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
           %assign Buffidx = Buffidx + 1
           %break
 
-        %%uint32
+        %% uint16
+        %case 5
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          ((uint8_t*)(&%<y>))[0] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[1] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          %break
+
+        %% int32
+        %case 6
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          ((uint8_t*)(&%<y>))[0] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[1] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[2] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          ((uint8_t*)(&%<y>))[3] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign Buffidx = Buffidx + 1
+          %break
+
+        %% uint32
         %case 7
-          %assign y = LibBlockOutputSignal(0, "", lcv,sigIdx)
-          %<y> = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          ((uint8_t*)(&%<y>))[0] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
           %assign Buffidx = Buffidx + 1
-          (%<y>&0xff00) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 8;
+          ((uint8_t*)(&%<y>))[1] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
           %assign Buffidx = Buffidx + 1
-          (%<y> & 0xff0000) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 16;
+          ((uint8_t*)(&%<y>))[2] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
           %assign Buffidx = Buffidx + 1
-          (%<u> & 0xff000000) = udpClientRecvBuffer_%<socket_id>[%<Buffidx>] << 32;
+          ((uint8_t*)(&%<y>))[3] = udpClientRecvBuffer_%<socket_id>[%<Buffidx>];
           %assign Buffidx = Buffidx + 1
+          %break
+
+        %% boolean - that is the error output port
+        %case 8
+          %assign y = LibBlockOutputSignal(sigIdx, "", lcv,sigIdx)
+          %<y> = retrecv_%<socket_id>>0?false:true;
           %break
 
         %default
-        %break
+          %break
       %endswitch
 
     %endroll

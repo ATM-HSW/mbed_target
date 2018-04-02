@@ -48,6 +48,23 @@
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
 
+    %openfile declbuf
+    // %<Type> (udpClientSend): '%<Name>'
+    #ifndef UDPCLIENTSEND_CNVT
+    #define UDPCLIENTSEND_CNVT
+    uint8_t convertsingle2uint8(float x, uint8_t idx) {
+      return ((uint8_t*)(&x))[idx];
+    }
+
+    uint8_t convertdouble2uint8(double x, uint8_t idx) {
+      return ((uint8_t*)(&x))[idx];
+    }
+    #endif
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
     %assign rollVars = ["U", "Y"]
     %assign nBuffer  =  CAST("Number",SFcnParamSettings.NBUFFERBYTES-1)
     %assign nInputs  = LibBlockNumInputPorts(block)-1
@@ -61,38 +78,108 @@
 
     %roll sigIdx = rolling, lcv = RollThreshold, block, "Roller", rollVars
       %switch LibBlockInputSignalDataTypeId(sigIdx)
+        %% double
+        %case 0
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 0); // double
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 1);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 2);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 3);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 4);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 5);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 6);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertdouble2uint8(%<u>, 7);
+          %assign Buffidx = Buffidx + 1
+        %break
+
+        %% single
+        %case 1
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertsingle2uint8(%<u>, 0); // single
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertsingle2uint8(%<u>, 1);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertsingle2uint8(%<u>, 2);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = convertsingle2uint8(%<u>, 3);
+          %assign Buffidx = Buffidx + 1
+        %break
+
+        %% int8
+        %case 2
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u>; // int8
+          %assign Buffidx = Buffidx + 1
+        %break
+
         %% uint8
         %case 3
           %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
-          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u>;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)%<u>; // uint8
           %assign Buffidx = Buffidx + 1
         %break
-  
-        %%uint16
+
+        %% int16
+        %case 4
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)(%<u> & 0x00ff); // int16
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff00) >> 8);
+          %assign Buffidx = Buffidx + 1
+        %break
+
+        %% uint16
         %case 5
           %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
-          (uint16_t)udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u>;
-          %assign Buffidx = Buffidx + 2
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)(%<u> & 0x00ff); // uint16
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff00) >> 8);
+          %assign Buffidx = Buffidx + 1
         %break
-  
-        %%uint32
+
+        %% int32
+        %case 6
+          %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)(%<u> & 0x00ff); // int32
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff00) >> 8);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff0000) >> 16);
+          %assign Buffidx = Buffidx + 1
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff000000) >> 24);
+          %assign Buffidx = Buffidx + 1
+        %break
+
+        %% uint32
         %case 7
           %assign u = LibBlockInputSignal(sigIdx, "", lcv,sigIdx)
-          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = %<u> & 0x00ff;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)(%<u> & 0x00ff); // uint32
           %assign Buffidx = Buffidx + 1
-          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (%<u> & 0xff00) >> 8;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff00) >> 8);
           %assign Buffidx = Buffidx + 1
-          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (%<u> & 0xff0000) >> 16;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff0000) >> 16);
           %assign Buffidx = Buffidx + 1
-          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (%<u> & 0xff000000) >> 24;
+          udpClientSendBuffer_%<sock_id>[%<Buffidx>] = (uint8_t)((%<u> & 0xff000000) >> 24);
           %assign Buffidx = Buffidx + 1
         %break
-  
+
         %default
         %break
       %endswitch
     %endroll
     %%send the data
-    oUDPSocket_%<sock_id>.sendto(udpConfigSocketIPAddr_%<sock_id>, udpConfigSocketIPPort_%<sock_id>, udpClientSendBuffer_%<sock_id>, %<nBuffer>);
+    %if %<::vSerialDebugInfo>==0
+      oUDPSocket_%<sock_id>.sendto(udpConfigSocketIPAddr_%<sock_id>, udpConfigSocketIPPort_%<sock_id>, udpClientSendBuffer_%<sock_id>, %<nBuffer>);
+    %else
+      int retsend_%<sock_id> = oUDPSocket_%<sock_id>.sendto(udpConfigSocketIPAddr_%<sock_id>, udpConfigSocketIPPort_%<sock_id>, udpClientSendBuffer_%<sock_id>, %<nBuffer>);
+      printf("udp sendto ret: %d\n", retsend_%<sock_id>);
+    %endif
   %endif
 %endfunction

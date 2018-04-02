@@ -1,17 +1,16 @@
-/*
- * File: udp_client_sendarray.c
- *
- * Copyright 2016 Dr.O.Hagendorf
- */
+/* Copyright 2010 The MathWorks, Inc. */
+/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
 
+/*
+ * Must specify the S_FUNCTION_NAME as the name of the S-function.
+ */
 #define S_FUNCTION_NAME  udpConfigSocket
 #define S_FUNCTION_LEVEL 2
 
-#define sock_id      (mxArrayToString(ssGetSFcnParam(S,0)))
-#define des_ip       (mxArrayToString(ssGetSFcnParam(S,1)))
-#define des_port     (mxGetData(ssGetSFcnParam(S,2)))
-
-
+/*
+ * Need to include simstruc.h for the definition of the SimStruct and
+ * its associated macro definitions.
+ */
 #include "simstruc.h"
 #include "matrix.h"
 #include "string.h"
@@ -121,14 +120,15 @@ static void mdlInitializeSampleTimes(SimStruct *S)
   static void mdlSetWorkWidths(SimStruct *S)
   {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   /*
-   * Register the run-time parameter 1
+   * Register the run-time parameters
    */
-  ssRegDlgParamAsRunTimeParam(S, 0, 0, "sock_ID",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "des_port", ssGetDataTypeId(S, "uint32"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "sock_ID", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "DestIPAddr", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "DestIPport", ssGetDataTypeId(S, "uint16"));
   }
 #endif /* MDL_SET_WORK_WIDTHS */
 #define MDL_START
@@ -168,18 +168,6 @@ static void mdlTerminate(SimStruct *S)
 {
     UNUSED_PARAMETER(S);
 }
-
-#define MDL_RTW
-#if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
-  static void mdlRTW(SimStruct *S)
-  {
-  //now we wanted to write some Parameters to the rtw-file and
-  //use them for sending data to the right destination
-  if (!ssWriteRTWParamSettings(S, 1,
-    SSWRITE_VALUE_QSTR, "DES_IP", des_ip))
-    return;
-  }
-#endif /* MDL_RTW */
 
 /*=============================*
  * Required S-function trailer *

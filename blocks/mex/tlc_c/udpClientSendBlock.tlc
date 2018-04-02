@@ -30,20 +30,27 @@
 
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
 
-  %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+    %assign socket_id = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
 
-  %assign enable_number_of_bytes_val = LibBlockParameterValue(enable_number_of_bytes,0)
-  %if enable_number_of_bytes_val
-    %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
-  %else
-    %assign number_of_bytes = %<LibBlockInputSignalWidth(0)>
+    %assign enNumberOfBytes = LibBlockParameterValue(enable_number_of_bytes,0)
+    %if enNumberOfBytes
+      %assign number_of_bytes = LibBlockInputSignal(1, "", "", 0)
+    %else
+      %assign number_of_bytes = %<LibBlockInputSignalWidth(0)>
+    %endif
+
+    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+
+    %%send the data
+    char* ptr = (char*)%<u1_ptr>;
+    %if %<::vSerialDebugInfo>==0
+      oUDPSocket_%<socket_id>.sendto(udpConfigSocketIPAddr_%<socket_id>, udpConfigSocketIPPort_%<socket_id>, ptr, %<number_of_bytes>);
+    %else
+      int retsend_%<socket_id> = oUDPSocket_%<socket_id>.sendto(udpConfigSocketIPAddr_%<socket_id>, udpConfigSocketIPPort_%<socket_id>, ptr, %<number_of_bytes>);
+      printf("udp sendto ret: %d\n", retsend_%<socket_id>);
+    %endif
+
   %endif
-
-  %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
-
-  %%send the data
-  char* ptr = (char*)%<u1_ptr>;
-  ret = oUDPSocket_%<socket_id>.sendto(host_ip_address_%<socket_id>, host_port_%<socket_id>, ptr, %<number_of_bytes>);
-  printf("sendto %d\n", ret);
 %endfunction

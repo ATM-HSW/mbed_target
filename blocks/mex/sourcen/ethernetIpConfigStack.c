@@ -15,11 +15,6 @@
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
 
- #define IP_ADDR        (mxArrayToString(ssGetSFcnParam(S,0)))
- #define SUB_MASK       (mxArrayToString(ssGetSFcnParam(S,1)))
- #define GATEWAY        (mxArrayToString(ssGetSFcnParam(S,2)))
-
-
 
 #define MDL_CHECK_PARAMETERS
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
@@ -45,7 +40,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 5);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -72,7 +67,8 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
   ssSetSFcnParamTunable(S, 3, 0);
-
+  ssSetSFcnParamTunable(S, 4, 0);
+  
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
@@ -150,10 +146,14 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 1))
+  if (!ssSetNumRunTimeParams(S, 5))
     return;
 
-  ssRegDlgParamAsRunTimeParam(S, 3, 0, "dhcp", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "ip_addr", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "sub_mask", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 2, "gateway", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 3, "dhcp", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 4, "SerialDebugInfo", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
@@ -210,13 +210,13 @@ static void mdlRTW(SimStruct *S)
   // use it for code generation
   // see sfun_frmad.tlc or sswritertwparamsettings (ssWriteRTWStr ?)
   // it is called record field and can access by SFcnParameters.IP .....
-  if(!ssWriteRTWParamSettings(S,3,
-                                SSWRITE_VALUE_QSTR, "IP", IP_ADDR,
-                                SSWRITE_VALUE_QSTR, "submask", SUB_MASK,
-                                SSWRITE_VALUE_QSTR, "gateway", GATEWAY))
-  {
-    return;
-  }
+//  if(!ssWriteRTWParamSettings(S,3,
+//                                SSWRITE_VALUE_QSTR, "IP", IP_ADDR,
+//                                SSWRITE_VALUE_QSTR, "submask", SUB_MASK,
+//                                SSWRITE_VALUE_QSTR, "gateway", GATEWAY))
+//  {
+//    return;
+//  }
 }
 
 #endif

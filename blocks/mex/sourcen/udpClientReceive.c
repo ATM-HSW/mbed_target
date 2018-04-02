@@ -75,60 +75,90 @@ static void mdlCheckParameters(SimStruct *S)
  *=====================================*/
 static void mdlInitializeSizes(SimStruct *S)
 {
-    int i;
-    int_T nOutputPorts = 0;  /* number of output ports */
+  int errorOutputEnable;
+  int i;
+  int_T nOutputPorts = 0;  /* number of output ports */
 
-    ssSetNumSFcnParams(S, 4);  /* Number of expected parameters */
-    if (ssGetNumSFcnParams(S) != ssGetSFcnParamsCount(S)) return;
+  ssSetNumSFcnParams(S, 6);  /* Number of expected parameters */
+  if (ssGetNumSFcnParams(S) != ssGetSFcnParamsCount(S)) return;
 
-    ssSetSFcnParamTunable(S, 0, 0);
-    ssSetSFcnParamTunable(S, 1, 0);
-    ssSetSFcnParamTunable(S, 2, 0);
-    ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 0, 0);
+  ssSetSFcnParamTunable(S, 1, 0);
+  ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
+  ssSetSFcnParamTunable(S, 5, 0);
 
-    /* Register the number and type of states the S-Function uses */
+  /* Register the number and type of states the S-Function uses */
 
-    ssSetNumContStates(    S, 0);   /* number of continuous states           */
-    ssSetNumDiscStates(    S, 0);   /* number of discrete states             */
+  ssSetNumContStates(    S, 0);   /* number of continuous states           */
+  ssSetNumDiscStates(    S, 0);   /* number of discrete states             */
 
-    /*
-     * Configure the input ports. First set the number of input ports.
-     */
-    if (!ssSetNumInputPorts(S, 0)) return;
+  /*
+   * Configure the input ports. First set the number of input ports.
+   */
+  if (!ssSetNumInputPorts(S, 0)) return;
 
-    // Now we need two know how many Outputports we must set
-    nOutputPorts  = mxGetNumberOfElements(ssGetSFcnParam(S,2));
-    /*
-     * Configure the output ports. First set the number of output ports.
-     */
+  // Now we need two know how many Outputports we must set
+  nOutputPorts  = mxGetNumberOfElements(ssGetSFcnParam(S,2));
+  errorOutputEnable = mxGetScalar(ssGetSFcnParam(S,5));
+
+  /*
+   * Configure the output ports. First set the number of output ports.
+   */
+  if (errorOutputEnable) {
+    if (!ssSetNumOutputPorts(S, nOutputPorts+1)) return;
+  } else {
     if (!ssSetNumOutputPorts(S, nOutputPorts)) return;
+  }
 
-    /*
-     * Set output port dimensions for each output port index starting at 0.
-     * See comments for setting input port dimensions.
-     */
-    for(i = 0; i< nOutputPorts; i++) {
-      ssSetOutputPortWidth(S, i, 1);
+  /*
+   * Set output port dimensions for each output port index starting at 0.
+   * See comments for setting input port dimensions.
+   */
+  for(i = 0; i < nOutputPorts; i++) {
+    ssSetOutputPortWidth(S, i, 1);
 
-      if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
-        ssSetOutputPortDataType(S, i, SS_UINT8);
-      else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
-        ssSetOutputPortDataType(S, i, SS_UINT16);
-      else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
-        ssSetOutputPortDataType(S, i, SS_UINT32);
-      else
-        mexWarnMsgTxt("One or more Ports Datatypes not set");
-    }
+    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint8"))
+      ssSetOutputPortDataType(S, i, SS_UINT8);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int8"))
+      ssSetOutputPortDataType(S, i, SS_INT8);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint16"))
+      ssSetOutputPortDataType(S, i, SS_UINT16);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int16"))
+      ssSetOutputPortDataType(S, i, SS_INT16);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "uint32"))
+      ssSetOutputPortDataType(S, i, SS_UINT32);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "int32"))
+      ssSetOutputPortDataType(S, i, SS_INT32);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "single"))
+      ssSetOutputPortDataType(S, i, SS_SINGLE);
+    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, 2), i)), "double"))
+      ssSetOutputPortDataType(S, i, SS_DOUBLE);
+    else
+      mexWarnMsgTxt("udpClientReceive: One or more Ports Datatypes not set");
+    ssSetOutputPortWidth(S, i, 1);
+    ssSetOutputPortComplexSignal(S, i, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, i, 1);
+  }
+  if(errorOutputEnable) {
+    ssSetOutputPortDataType(S, i, SS_BOOLEAN);
+    ssSetOutputPortWidth(S, i, 1);
+    ssSetOutputPortComplexSignal(S, i, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, i, 1);
+  }
 
-    ssSetNumSampleTimes(   S, 1);   /* number of sample times                */
+  ssSetNumSampleTimes(   S, 1);   /* number of sample times                */
 
-    ssSetOptions(S,
-               SS_OPTION_USE_TLC_WITH_ACCELERATOR |
-               SS_OPTION_CAN_BE_CALLED_CONDITIONALLY |
-               SS_OPTION_EXCEPTION_FREE_CODE |
-               SS_OPTION_WORKS_WITH_CODE_REUSE |
-               SS_OPTION_SFUNCTION_INLINED_FOR_RTW |
-               SS_OPTION_DISALLOW_CONSTANT_SAMPLE_TIME);    /* general options (SS_OPTION_xx)        */
+  ssSetOptions(S,
+             SS_OPTION_USE_TLC_WITH_ACCELERATOR |
+             SS_OPTION_CAN_BE_CALLED_CONDITIONALLY |
+             SS_OPTION_EXCEPTION_FREE_CODE |
+             SS_OPTION_WORKS_WITH_CODE_REUSE |
+             SS_OPTION_SFUNCTION_INLINED_FOR_RTW |
+             SS_OPTION_DISALLOW_CONSTANT_SAMPLE_TIME);    /* general options (SS_OPTION_xx)        */
 
 } /* end mdlInitializeSizes */
 
@@ -157,7 +187,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 #if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
 static void mdlSetWorkWidths(SimStruct *S) {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 4))
     return;
 
   /*
@@ -165,6 +195,8 @@ static void mdlSetWorkWidths(SimStruct *S) {
    */
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "sock_ID", ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 3, 1, "BufferSize", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 2, "Blocking", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 5, 3, "ErrorOutputport", ssGetDataTypeId(S, "boolean"));
   }
 #endif /* MDL_SET_WORK_WIDTHS */
 

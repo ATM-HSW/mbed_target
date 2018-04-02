@@ -35,9 +35,9 @@
 %function Start(block, system) Output
   %if !SLibCodeGenForSim()
 
-    %assign socket_id  = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
-    %assign destination_ip   = SFcnParamSettings.DES_IP
-    %assign destination_port = FEVAL("int2str",LibBlockParameterValue(des_port,0))
+    %assign socket_id        = FEVAL("int2str",LibBlockParameterValue(sock_ID,0))
+    %assign destination_ip   = LibBlockParameterString(DestIPAddr)
+    %assign destination_port = FEVAL("int2str",LibBlockParameterValue(DestIPport,0))
 
     %openfile declbuf
     // %<Type> (udpConfigSocket): '%<Name>'
@@ -45,7 +45,6 @@
     static const char* udpConfigSocketIPAddr_%<socket_id> = "%<destination_ip>";
     static const uint16_t udpConfigSocketIPPort_%<socket_id> = %<destination_port>;
     SocketAddress udpConfigSocketSocketAddr_%<socket_id>(udpConfigSocketIPAddr_%<socket_id>, udpConfigSocketIPPort_%<socket_id>);
-    nsapi_size_or_error_t ret;
     %closefile declbuf 
 
     %assign srcFile = LibGetModelDotCFile()
