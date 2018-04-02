@@ -33,7 +33,6 @@ end
 sl_refresh_customizations
 
 %% setting the default configuration for a new Simulink model
-mbed.Prefs.setMbedTarget('DISCO_F407VG');
 mbed.Prefs.setMbedDrive('D:');
 mbed.Prefs.setMbedDownload('on');
 mbed.Prefs.setMbedRTOS('off');
@@ -41,8 +40,6 @@ mbed.Prefs.setMbedProgrammer('mbed');
 
 
 %% set user specific variables:
-% setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\GNU Tools ARM Embedded\4.9 2015q1\bin']);
-% setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\GNU Tools ARM Embedded\make-3.81\bin']);
 % setenv('PATH', [getenv('PATH') ';C:\Program Files (x86)\STMicroelectronics\STM32 ST-LINK Utility\ST-LINK Utility']);
 % setenv('PATH', [getenv('PATH') ';C:\Python27']);
 if exist('setup_userprefs.m','file')>0
@@ -63,17 +60,17 @@ if(size(ret,1)<=4 && size(ret1,1)>2)
 end
 
 
-[ok, where, version] = getGCC();
-if ok
-    disp(' ');
-    disp('found gcc version:');
-    disp(version);
-    disp('in folder:');
-    disp(where);
-    disp('All versions newer than 4.8 are OK for mbed_target');
-else
-    error('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain: gcc version 6.3.1 20170215 (release) [ARM/embedded-6-branch revision 245512] (GNU Tools for ARM Embedded Processors 6-2017-q1-update) and add the bin folder to System or User Path');
-end
+% [ok, where, version] = getGCC();
+% if ok
+%     disp(' ');
+%     disp('found gcc version:');
+%     disp(version);
+%     disp('in folder:');
+%     disp(where);
+%     disp('All versions newer than 4.8 are OK for mbed_target');
+% else
+%     error('Can not find arm-none-eabi-gcc.exe. Please install GNU ARM Embedded Toolchain: gcc version 6.3.1 20170215 (release) [ARM/embedded-6-branch revision 245512] (GNU Tools for ARM Embedded Processors 6-2017-q1-update) and add the bin folder to System or User Path');
+% end
 
 % [ok, where, version] = getMake();
 % if ok
@@ -206,68 +203,68 @@ if ok
 end
 end
 
-function [ok, where, version] = getGCC
-[status,out]=system('where arm-none-eabi-gcc');
-ok = false;
-where = '';
-version = '';
-if status ~= 0
-    return;
-end
-lines=strfind(out,10);
-where = out(1:lines(1)-1);
-[status,out]=system('arm-none-eabi-gcc --version');
-if status ~= 0
-    ok = false;
-else
-    ok = true;
-end
-if ok
-    version = out(1:strfind(out,10)-1);
-end
-end
+% function [ok, where, version] = getGCC
+% [status,out]=system('where arm-none-eabi-gcc');
+% ok = false;
+% where = '';
+% version = '';
+% if status ~= 0
+%     return;
+% end
+% lines=strfind(out,10);
+% where = out(1:lines(1)-1);
+% [status,out]=system('arm-none-eabi-gcc --version');
+% if status ~= 0
+%     ok = false;
+% else
+%     ok = true;
+% end
+% if ok
+%     version = out(1:strfind(out,10)-1);
+% end
+% end
 
-function [ok, where, version] = getMake
-[status,out]=system('where make');
-ok = false;
-where = '';
-version = '';
-if status ~= 0
-    return;
-end
-lines=strfind(out,10);
-where = out(1:lines(1)-1);
-[status,out]=system('make -v');
-if status ~= 0
-    ok = false;
-else
-    ok = true;
-end
-if ok
-    version = out(1:strfind(out,10)-1);
-end
-end
+% function [ok, where, version] = getMake
+% [status,out]=system('where make');
+% ok = false;
+% where = '';
+% version = '';
+% if status ~= 0
+%     return;
+% end
+% lines=strfind(out,10);
+% where = out(1:lines(1)-1);
+% [status,out]=system('make -v');
+% if status ~= 0
+%     ok = false;
+% else
+%     ok = true;
+% end
+% if ok
+%     version = out(1:strfind(out,10)-1);
+% end
+% end
 
-function [ok, where, version] = getMbed
-[status,out]=system('where mbed');
-ok = false;
-where = '';
-version = '';
-if status ~= 0
-    return;
-end
-lines=strfind(out,10);
-where = out(1:lines(1)-1);
-[status,out]=system('mbed --version');
-if status ~= 0
-    ok = false;
-else
-    ok = true;
-end
-if ok
-    version = out(1:strfind(out,10)-1);
-end
-end
+% function [ok, where, version] = getMbed
+% [status,out]=system('where mbed');
+% ok = false;
+% where = '';
+% version = '';
+% if status ~= 0
+%     return;
+% end
+% lines=strfind(out,10);
+% where = out(1:lines(1)-1);
+% [status,out]=system('mbed --version');
+% if status ~= 0
+%     ok = false;
+% else
+%     ok = true;
+% end
+% if ok
+%     version = out(1:strfind(out,10)-1);
+% end
+% end
 
 function [ok, where, version] = getMbedls
 [status,out]=system('where mbedls');

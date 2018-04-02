@@ -135,8 +135,7 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumInputPorts(S, 0))
     return;
-    
- 
+
   errorOutputEnable = mxGetScalar(ssGetSFcnParam(S,3));
 
   /*
@@ -144,21 +143,21 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if(errorOutputEnable)
   {
-	  if (!ssSetNumOutputPorts(S, 2))
-		return;
+    if (!ssSetNumOutputPorts(S, 2))
+      return;
   }
   else
   {
-	  if (!ssSetNumOutputPorts(S, 1))
-		return;
-  }    
-		  
-	ssSetOutputPortDataType(S, 0, SS_SINGLE);
-	ssSetOutputPortWidth(S, 0, 1);
-	ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-	ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-	ssSetOutputPortOutputExprInRTW(S, 0, 1);
-  
+    if (!ssSetNumOutputPorts(S, 1))
+      return;
+  }
+
+  ssSetOutputPortDataType(S, 0, SS_SINGLE);
+  ssSetOutputPortWidth(S, 0, 1);
+  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetOutputPortOutputExprInRTW(S, 0, 1);
+
   if(errorOutputEnable)
   {
       ssSetOutputPortDataType(S, 1, SS_BOOLEAN);
@@ -167,7 +166,7 @@ static void mdlInitializeSizes(SimStruct *S)
       ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
       ssSetOutputPortOutputExprInRTW(S, 1, 1);
   }
-  
+
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */

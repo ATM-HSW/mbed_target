@@ -53,7 +53,6 @@
     %%
     #if DEVICE_SERIAL_ASYNCH
     %<nameSerial>.write((const uint8_t*)%<u1_ptr>, %<number_of_bytes>, 0, 0);
-
     #else
     const char* ptr%<name> = (const char*)%<u1_ptr>;
     const char* end%<name> = ptr%<name> + %<number_of_bytes>;
