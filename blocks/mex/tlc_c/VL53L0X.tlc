@@ -1,0 +1,107 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%implements VL53L0X "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+  %<LibAddToCommonIncludes("VL53L0X.h")>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+  %%
+  %<LibBlockSetIsExpressionCompliant(block)>
+  %%
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign i2c_port = CAST("Number",LibBlockParameterValue(i2cbus, 0))
+    %assign i2c_name = "i2c" + FEVAL("int2str",%<i2c_port>)
+
+    %assign i2c_subaddress = CAST("Number",LibBlockParameterValue(SubAddress, 0))
+
+    %assign nIntPortName = CAST("Number",LibBlockParameterValue(IntPortName, 0))
+    %assign nIntPinNumber  = CAST("Number",LibBlockParameterValue(IntPinNumber, 0))
+    %assign pIntName = "P" + FEVAL("char",nIntPortName+64) + "_" + FEVAL("int2str",nIntPinNumber-1)
+    %assign nShutPortName = CAST("Number",LibBlockParameterValue(ShutPortName, 0))
+    %assign nShutPinNumber  = CAST("Number",LibBlockParameterValue(ShutPinNumber, 0))
+    %assign pShutName = "P" + FEVAL("char",nShutPortName+64) + "_" + FEVAL("int2str",nShutPinNumber-1)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+
+    // %<Type> (VL53L0X): '%<Name>'
+    DigitalOut %<name>_shutdown_pin(%<pShutName>);
+    VL53L0X %<name>(%<i2c_name>, &%<name>_shutdown_pin, pIntName);
+    VL53L0X_RangingMeasurementData_t %<name>_data;
+    int %<name>_status;
+
+    void %<name>_Interrupt() {
+      %<name>_status = %<name>.get_measurement(range_continuous_interrupt, &%<name>_data);
+    }
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    // %<Type> (VL53L0X): '%<Name>'
+    %<name>.init_sensor(%<i2c_subaddress>);
+    %<name>_status = %<name>.start_measurement(range_continuous_interrupt, %<name>_Interrupt);
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    MeasureData_t VL6180X_data;
+
+    %assign enableerror = CAST("Number",LibBlockParameterValue(EnableError, 0))
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    // %<Type> (VL53L0X): '%<Name>'
+    %if enableerror
+      if(%<name>_status == VL53L0X_ERROR_NONE && %<name>_data.RangeStatus == 0) {
+        %<LibBlockOutputSignal(0,"","",0)> = %<name>_data.RangeMilliMeter;
+        %<LibBlockOutputSignal(1, "", "", 0)>=false;
+      } else {
+        %<LibBlockOutputSignal(0,"","",0)> = 0;
+        %<LibBlockOutputSignal(1, "", "", 0)>=true;
+      }
+    %else
+      %<LibBlockOutputSignal(0,"","",0)> = %<name>_data.RangeMilliMeter;
+    %endif
+
+  %endif
+%endfunction
