@@ -46,3 +46,15 @@
 **/Debug/*
 htmlhelp/.buildinfo
 htmlhelp/*
+
+buildtools/*
+!buildtools/build-tools-uninstall.exe
+!buildtools/INFO.txt
+!buildtools/bin
+!buildtools/bin/**
+!buildtools/gcc-arm-none-eabi-6-2017-q2
+!buildtools/gcc-arm-none-eabi-6-2017-q2/**
+!buildtools/gnuarmeclipse
+!buildtools/gnuarmeclipse/**
+!buildtools/license
+!buildtools/license/**
