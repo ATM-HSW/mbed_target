@@ -59,12 +59,16 @@
 
     // %<Type> (VL53L0X): '%<Name>'
     DigitalOut %<name>_shutdown_pin(%<pShutName>);
-    VL53L0X %<name>(%<i2c_name>, &%<name>_shutdown_pin, pIntName);
+    VL53L0X %<name>(&%<i2c_name>, &%<name>_shutdown_pin, %<pIntName>);
     VL53L0X_RangingMeasurementData_t %<name>_data;
     int %<name>_status;
-
-    void %<name>_Interrupt() {
+    %%
+    void %<name>_Event() {
       %<name>_status = %<name>.get_measurement(range_continuous_interrupt, &%<name>_data);
+    }
+    
+    void %<name>_Interrupt() {
+      eventQueueNormal.call(&%<name>_Event);
     }
 
     %closefile declbuf
@@ -81,8 +85,6 @@
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
-
-    MeasureData_t VL6180X_data;
 
     %assign enableerror = CAST("Number",LibBlockParameterValue(EnableError, 0))
 

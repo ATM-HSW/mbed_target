@@ -48,7 +48,7 @@
 #include "PinNames.h"
 #include "VL53L0X_def.h"
 #include "VL53L0X_platform.h"
-#include "Stmpe1600.h"
+//#include "Stmpe1600.h"
 
 
 /**
@@ -286,6 +286,8 @@ typedef enum {
 /** default device address */
 #define VL53L0X_DEFAULT_ADDRESS		0x52 /* (8-bit) */
 
+#define TEMP_BUF_SIZE 32
+
 /* Classes -------------------------------------------------------------------*/
 /** Class representing a VL53L0 sensor component
  */
@@ -297,14 +299,14 @@ public:
      * @param[in] &pin_gpio1 pin Mbed InterruptIn PinName to be used as component GPIO_1 INT
      * @param[in] dev_addr device address, 0x29 by default
      */
-    VL53L0X(DevI2C *i2c, DigitalOut *pin, PinName pin_gpio1, uint8_t dev_addr = VL53L0X_DEFAULT_ADDRESS) : _dev_i2c(i2c),
+    VL53L0X(I2C *i2c, DigitalOut *pin, PinName pin_gpio1, uint8_t dev_addr = VL53L0X_DEFAULT_ADDRESS) : _i2c(i2c),
         _gpio0(pin)
     {
         _my_device.I2cDevAddr = dev_addr;
         _my_device.comms_type = 1; // VL53L0X_COMMS_I2C
         _my_device.comms_speed_khz = 400;
         _device = &_my_device;
-        _expgpio0 = NULL;
+//        _expgpio0 = NULL;
         if (pin_gpio1 != NC) {
             _gpio1Int = new InterruptIn(pin_gpio1);
         } else {
@@ -312,26 +314,26 @@ public:
         }
     }
 
-    /** Constructor 2 (STMPE1600DigiOut)
-     * @param[in] i2c device I2C to be used for communication
-     * @param[in] &pin Gpio Expander STMPE1600DigiOut pin to be used as component GPIO_0 CE
-     * @param[in] pin_gpio1 pin Mbed InterruptIn PinName to be used as component GPIO_1 INT
-     * @param[in] device address, 0x29 by default
-     */
-    VL53L0X(DevI2C *i2c, Stmpe1600DigiOut *pin, PinName pin_gpio1,
-            uint8_t dev_addr = VL53L0X_DEFAULT_ADDRESS) : _dev_i2c(i2c), _expgpio0(pin)
-    {
-        _my_device.I2cDevAddr = dev_addr;
-        _my_device.comms_type = 1; // VL53L0X_COMMS_I2C
-        _my_device.comms_speed_khz = 400;
-        _device = &_my_device;
-        _gpio0 = NULL;
-        if (pin_gpio1 != NC) {
-            _gpio1Int = new InterruptIn(pin_gpio1);
-        } else {
-            _gpio1Int = NULL;
-        }
-    }
+//    /** Constructor 2 (STMPE1600DigiOut)
+//     * @param[in] i2c device I2C to be used for communication
+//     * @param[in] &pin Gpio Expander STMPE1600DigiOut pin to be used as component GPIO_0 CE
+//     * @param[in] pin_gpio1 pin Mbed InterruptIn PinName to be used as component GPIO_1 INT
+//     * @param[in] device address, 0x29 by default
+//     */
+//    VL53L0X(I2C *i2c, Stmpe1600DigiOut *pin, PinName pin_gpio1,
+//            uint8_t dev_addr = VL53L0X_DEFAULT_ADDRESS) : _i2c(i2c), _expgpio0(pin)
+//    {
+//        _my_device.I2cDevAddr = dev_addr;
+//        _my_device.comms_type = 1; // VL53L0X_COMMS_I2C
+//        _my_device.comms_speed_khz = 400;
+//        _device = &_my_device;
+//        _gpio0 = NULL;
+//        if (pin_gpio1 != NC) {
+//            _gpio1Int = new InterruptIn(pin_gpio1);
+//        } else {
+//            _gpio1Int = NULL;
+//        }
+//    }
 
     /** Destructor
      */
@@ -354,9 +356,9 @@ public:
         if (_gpio0) {
             *_gpio0 = 1;
         } else {
-            if (_expgpio0) {
-                *_expgpio0 = 1;
-            }
+//            if (_expgpio0) {
+//                *_expgpio0 = 1;
+//            }
         }
         wait_ms(10);
     }
@@ -371,9 +373,9 @@ public:
         if (_gpio0) {
             *_gpio0 = 0;
         } else {
-            if (_expgpio0) {
-                *_expgpio0 = 0;
-            }
+//            if (_expgpio0) {
+//                *_expgpio0 = 0;
+//            }
         }
         wait_ms(10);
     }
@@ -2777,15 +2779,43 @@ private:
 
     int range_meas_int_continuous_mode(void (*fptr)(void));
 
+    /**
+     * @brief  Writes a buffer towards the I2C peripheral device.
+     * @param  pBuffer pointer to the byte-array data to send
+     * @param  DeviceAddr specifies the peripheral device slave address.
+     * @param  RegisterAddr specifies the internal address register
+     *         where to start writing to (must be correctly masked).
+     * @param  NumByteToWrite number of bytes to be written.
+     * @retval 0 if ok,
+     * @retval -1 if an I2C error has occured, or
+     * @retval -2 on temporary buffer overflow (i.e. NumByteToWrite was too high)
+     * @note   On some devices if NumByteToWrite is greater
+     *         than one, the RegisterAddr must be masked correctly!
+     */
+		int i2c_write(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr, uint16_t NumByteToWrite);
+		
+   /**
+     * @brief  Reads a buffer from the I2C peripheral device.
+     * @param  pBuffer pointer to the byte-array to read data in to
+     * @param  DeviceAddr specifies the peripheral device slave address.
+     * @param  RegisterAddr specifies the internal address register
+     *         where to start reading from (must be correctly masked).
+     * @param  NumByteToRead number of bytes to be read.
+     * @retval 0 if ok,
+     * @retval -1 if an I2C error has occured
+     * @note   On some devices if NumByteToWrite is greater
+     *         than one, the RegisterAddr must be masked correctly!
+     */
+		int i2c_read(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr, uint16_t NumByteToRead);
 
     VL53L0X_DeviceInfo_t _device_info;
 
     /* IO Device */
-    DevI2C *_dev_i2c;
+    I2C *_i2c;
     /* Digital out pin */
     DigitalOut *_gpio0;
     /* GPIO expander */
-    Stmpe1600DigiOut *_expgpio0;
+//    Stmpe1600DigiOut *_expgpio0;
     /* Measure detection IRQ */
     InterruptIn *_gpio1Int;
     /* Device data */

@@ -50,8 +50,6 @@
 
 /****************** define for i2c configuration *******************************/
 
-#define TEMP_BUF_SIZE   64
-
 /** Maximum buffer size to be used in i2c */
 #define VL53L0X_MAX_I2C_XFER_SIZE   64 /* Maximum buffer size to be used in i2c */
 #define VL53L0X_I2C_USER_VAR         /* none but could be for a flag var to get/pass to mutex interruptible  return flags and try again */
@@ -5137,7 +5135,7 @@ VL53L0X_Error VL53L0X::VL53L0X_i2c_write(uint8_t DeviceAddr, uint8_t RegisterAdd
 {
     int ret;
 
-    ret = _dev_i2c->i2c_write(p_data, DeviceAddr, RegisterAddr, NumByteToWrite);
+    ret = i2c_write(p_data, DeviceAddr, RegisterAddr, NumByteToWrite);
 
     if (ret) {
         return -1;
@@ -5150,7 +5148,7 @@ VL53L0X_Error VL53L0X::VL53L0X_i2c_read(uint8_t DeviceAddr, uint8_t RegisterAddr
 {
     int ret;
 
-    ret = _dev_i2c->i2c_read(p_data, DeviceAddr, RegisterAddr, NumByteToRead);
+    ret = i2c_read(p_data, DeviceAddr, RegisterAddr, NumByteToRead);
 
     if (ret) {
         return -1;
@@ -5509,5 +5507,61 @@ int VL53L0X::handle_irq(OperatingMode operating_mode, VL53L0X_RangingMeasurement
     return status;
 }
 
+    /**
+     * @brief  Writes a buffer towards the I2C peripheral device.
+     * @param  pBuffer pointer to the byte-array data to send
+     * @param  DeviceAddr specifies the peripheral device slave address.
+     * @param  RegisterAddr specifies the internal address register
+     *         where to start writing to (must be correctly masked).
+     * @param  NumByteToWrite number of bytes to be written.
+     * @retval 0 if ok,
+     * @retval -1 if an I2C error has occured, or
+     * @retval -2 on temporary buffer overflow (i.e. NumByteToWrite was too high)
+     * @note   On some devices if NumByteToWrite is greater
+     *         than one, the RegisterAddr must be masked correctly!
+     */
+    int VL53L0X::i2c_write(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+                  uint16_t NumByteToWrite) {
+        int ret;
+        uint8_t tmp[TEMP_BUF_SIZE];
+
+        if(NumByteToWrite >= TEMP_BUF_SIZE) return -2;
+
+        /* First, send device address. Then, send data and STOP condition */
+        tmp[0] = RegisterAddr;
+        memcpy(tmp+1, pBuffer, NumByteToWrite);
+
+        ret = _i2c->write(DeviceAddr, (const char*)tmp, NumByteToWrite+1, false);
+
+        if(ret) return -1;
+        return 0;
+    }
+
+    /**
+     * @brief  Reads a buffer from the I2C peripheral device.
+     * @param  pBuffer pointer to the byte-array to read data in to
+     * @param  DeviceAddr specifies the peripheral device slave address.
+     * @param  RegisterAddr specifies the internal address register
+     *         where to start reading from (must be correctly masked).
+     * @param  NumByteToRead number of bytes to be read.
+     * @retval 0 if ok,
+     * @retval -1 if an I2C error has occured
+     * @note   On some devices if NumByteToWrite is greater
+     *         than one, the RegisterAddr must be masked correctly!
+     */
+    int VL53L0X::i2c_read(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+                 uint16_t NumByteToRead) {
+        int ret;
+
+        /* Send device address, with no STOP condition */
+        ret = _i2c->write(DeviceAddr, (const char*)&RegisterAddr, 1, true);
+        if(!ret) {
+            /* Read data, with STOP condition  */
+            ret = _i2c->read(DeviceAddr, (char*)pBuffer, NumByteToRead, false);
+        }
+
+        if(ret) return -1;
+        return 0;
+    }
 
 /******************************************************************************/
