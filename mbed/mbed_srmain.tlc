@@ -54,6 +54,9 @@
     osThreadId step_id=NULL;
     Thread step_1_thread;
     Ticker step_1_ticker;
+    
+    EventQueue eventQueueLow;
+    EventQueue eventQueueNormal;
   %else
     Ticker timer;
   %endif
@@ -88,8 +91,27 @@
     %<LibAddSourceFileCustomSection(cFile,"Declarations","Ert_main_fcn_decl")>
     %<LibGetSourceFileCustomSection(cFile,"Ert_main_fcn_decl")>
 
+    %openfile declbuf
+
+    // Eventqueues defined in ert_main.cpp '%<Name>'
+    extern EventQueue eventQueueLow;
+    extern EventQueue eventQueueNormal;
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Definitions", declbuf)>
+
+
     /* with RTOS */
     int main(void) {
+  		// low priority thread for events
+      Thread eventThreadLow(osPriorityLow);
+      eventThreadLow.start(callback(&eventQueueLow, &EventQueue::dispatch_forever));
+
+  		// normal priority thread for events
+		  Thread eventThreadNormal(osPriorityNormal);
+		  eventThreadNormal.start(callback(&eventQueueNormal, &EventQueue::dispatch_forever));
+     
       /* initialize model */
       %<LibCallModelInitialize()>\
 
