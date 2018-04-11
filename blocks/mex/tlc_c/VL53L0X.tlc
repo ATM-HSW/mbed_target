@@ -60,11 +60,15 @@
     // %<Type> (VL53L0X): '%<Name>'
     DigitalOut %<name>_shutdown_pin(%<pShutName>);
     VL53L0X %<name>(&%<i2c_name>, &%<name>_shutdown_pin, %<pIntName>);
-    VL53L0X_RangingMeasurementData_t %<name>_data;
+    volatile uint16_t %<name>_RangeMilliMeter;
+    volatile uint8_t %<name>_RangeStatus;
     int %<name>_status;
     %%
     void %<name>_Event() {
+      VL53L0X_RangingMeasurementData_t %<name>_data;
       %<name>_status = %<name>.get_measurement(range_continuous_interrupt, &%<name>_data);
+      %<name>_RangeMilliMeter = %<name>_data.RangeMilliMeter;
+      %<name>_RangeStatus     = %<name>_data.RangeStatus;
     }
     
     void %<name>_Interrupt() {
@@ -76,7 +80,7 @@
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
     // %<Type> (VL53L0X): '%<Name>'
-    %<name>.init_sensor(%<i2c_subaddress>);
+    %<name>.init_sensor(0x%<i2c_subaddress>);
     %<name>_status = %<name>.start_measurement(range_continuous_interrupt, %<name>_Interrupt);
   %endif
 %endfunction
@@ -94,15 +98,19 @@
 
     // %<Type> (VL53L0X): '%<Name>'
     %if enableerror
-      if(%<name>_status == VL53L0X_ERROR_NONE && %<name>_data.RangeStatus == 0) {
-        %<LibBlockOutputSignal(0,"","",0)> = %<name>_data.RangeMilliMeter;
+      if(%<name>_status == VL53L0X_ERROR_NONE && %<name>_RangeStatus == 0) {
+        %<LibBlockOutputSignal(0,"","",0)> = %<name>_RangeMilliMeter;
         %<LibBlockOutputSignal(1, "", "", 0)>=false;
       } else {
         %<LibBlockOutputSignal(0,"","",0)> = 0;
         %<LibBlockOutputSignal(1, "", "", 0)>=true;
       }
     %else
-      %<LibBlockOutputSignal(0,"","",0)> = %<name>_data.RangeMilliMeter;
+      if(%<name>_status == VL53L0X_ERROR_NONE && %<name>_RangeStatus == 0) {
+        %<LibBlockOutputSignal(0,"","",0)> = %<name>_RangeMilliMeter;
+      } else {
+        %<LibBlockOutputSignal(0,"","",0)> = 0;
+      }
     %endif
 
   %endif
