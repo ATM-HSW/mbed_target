@@ -139,7 +139,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortDirectFeedThrough(S, 0, 1);
   ssSetInputPortAcceptExprInRTW(S, 0, 0);
   ssSetInputPortOverWritable(S, 0, 0);
-  ssSetInputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
+  ssSetInputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL );
   ssSetInputPortRequiredContiguous(S, 0, 1);
 
   if(numInput) {
