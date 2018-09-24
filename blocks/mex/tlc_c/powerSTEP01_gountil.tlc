@@ -32,7 +32,6 @@
   %<LibAddToCommonIncludes("DevSPI.h")>
   %<LibAddToCommonIncludes("powerstep01_class.h")>
 
-%<LibAddToModelSources("powerstep01_class")>  
 %endfunction
 
 
