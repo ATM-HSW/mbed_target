@@ -1,11 +1,17 @@
 Ethernet
 ========
 
+.. attention::
+
+  Most parts of documentation are missing.
+
 
 Contents:
 
 .. toctree::
    :maxdepth: 1
 
+   _ethernet_en
    _udp_en
+   _mqtt_en
    _coap_en

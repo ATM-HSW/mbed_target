@@ -7,13 +7,8 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   UDPConfigStack_en
    UDPConfigSocket_en
-   UDPServerWrite_en
-   UDPServerWriteCSV_en
-   UDPServerRead_en
-   UDPServerReadCSV_en
-   UDPClientWrite_en
-   UDPClientWriteCSV_en
-   UDPClientRead_en
-   UDPClientReadCSV_en
+   UDPClientSend_en
+   UDPClientSendBlock_en
+   UDPClientReceive_en
+   UDPClientReceiveBlock_en

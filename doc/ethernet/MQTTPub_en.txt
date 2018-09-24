@@ -1,12 +1,12 @@
-UDPConfigSocket
-===============
+MQTTPublish
+===========
 
 Description
 -----------
 
 description
 
-.. image:: ../images/block_UDPConfigSocket.png
+.. image:: ../images/block_MQTTPub.png
    :scale: 50 %
 
 Data Type Support
@@ -18,7 +18,7 @@ The input port expects values with *real32* or *uint16* data types.
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/mask_UDPConfigSocket.png
+.. image:: ../images/mask_MQTTPub.png
 
 Port Name/Pin Number
 ....................

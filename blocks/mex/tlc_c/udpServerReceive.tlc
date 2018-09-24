@@ -27,7 +27,6 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
   %if !SLibCodeGenForSim()
 
       %assign sock_id       = SFcnParamSettings.SOCK_ID
@@ -42,15 +41,15 @@
       %%assign pname = "P" + FEVAL("char",p2_val+64) + "_" + FEVAL("int2str",p1_val-1)
 
       %openfile declbuf
-       %%nBufferBytes wird als Flieﬂkomma interpretiert!!!!!!
+      %%nBufferBytes wird als Flieﬂkomma interpretiert!!!!!!
       char Recv_Buffer_%<sock_id>[%<nBufferBytes>] = {'\0'};
-    UDPSocket %<name>_%<sock_id>;
+      UDPSocket %<name>_%<sock_id>;
       Endpoint Endpoint_%<sock_id>;
       %closefile declbuf 
 
       %assign srcFile = LibGetModelDotCFile()
       %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
-      
+
   %endif
 
   %if !SLibCodeGenForSim()
@@ -84,13 +83,13 @@
       %% uint8
       %case 3
         %assign u = LibBlockOutputSignal(0, "", lcv,sigIdx)
-         %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
+        %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
         %assign Buffidx = Buffidx + 1
       %break
       %%uint16
       %case 5
         %assign u = LibBlockOutputSignal(0, "", lcv,sigIdx)
-         %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
+        %<y> = Recv_Buffer_%<sock_id>[%<Buffidx>];
         %assign Buffidx = Buffidx + 1
         (%<y>&0xff00) = Recv_Buffer_%<sock_id>[%<Buffidx>] << 8;
         %assign Buffidx = Buffidx + 1

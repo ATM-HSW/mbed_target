@@ -1,12 +1,5 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/*
- *   sfunar_udp_conf.c Simple C-MEX S-function for function call.
- *
- *   ABSTRACT:
- *     The purpose of this SFunction is to call a simple legacy
- *     function during simulation:
- *
- */
+/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
@@ -19,11 +12,6 @@
  * its associated macro definitions.
  */
 #include "simstruc.h"
-#define EDIT_OK(S, P_IDX) \
- (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-
- #define IP_ADDR        (mxArrayToString(ssGetSFcnParam(S,0)))
-
 
 
 #define MDL_CHECK_PARAMETERS
@@ -60,7 +48,7 @@ static void mdlInitializeSizes(SimStruct *S)
      * to the number of parameters entered in the dialog box return.
      * Simulink will generate an error indicating that there is a
      * parameter mismatch.
-     */
+    */
     mdlCheckParameters(S);
     if (ssGetErrorStatus(S) != NULL) {
       return;
@@ -74,7 +62,6 @@ static void mdlInitializeSizes(SimStruct *S)
 
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
- ssSetSFcnParamTunable(S, 1, 0);
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
@@ -91,7 +78,6 @@ static void mdlInitializeSizes(SimStruct *S)
    */
   if (!ssSetNumOutputPorts(S, 0))
     return;
-	
 
   /*
    * This S-function can be used in referenced model simulating in normal mode.
@@ -153,10 +139,13 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 0))
+  if (!ssSetNumRunTimeParams(S, 1))
     return;
-	
-	
+
+  /*
+   * Register the run-time parameters
+   */
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "ip_addr", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
@@ -172,7 +161,7 @@ static void mdlSetWorkWidths(SimStruct *S)
  */
 static void mdlStart(SimStruct *S)
 {
-    UNUSED_PARAMETER(S);
+  UNUSED_PARAMETER(S);
 }
 
 #endif
@@ -185,8 +174,8 @@ static void mdlStart(SimStruct *S)
  */
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
-    UNUSED_PARAMETER(S);
-    UNUSED_PARAMETER(tid);
+  UNUSED_PARAMETER(S);
+  UNUSED_PARAMETER(tid);
 }
 
 /* Function: mdlTerminate =================================================
@@ -196,31 +185,8 @@ static void mdlOutputs(SimStruct *S, int_T tid)
  */
 static void mdlTerminate(SimStruct *S)
 {
-    UNUSED_PARAMETER(S);
+  UNUSED_PARAMETER(S);
 }
-
-#define MDL_RTW
-#if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
-
-/* Function: mdlRTW =======================================================
- * Abstract:
- *    This function is called when the Real-Time Workshop is generating
- *    the model.rtw file.
- */
-static void mdlRTW(SimStruct *S)
-{
-  // We need to register some Parameters in the RTW-File for accessing them and
-  // use it for code generation
-  // see sfun_frmad.tlc or sswritertwparamsettings (ssWriteRTWStr ?)
-  // it is called record field and can access by SFcnParameters.IP .....
-  if(!ssWriteRTWParamSettings(S, 1, SSWRITE_VALUE_QSTR, "IP", IP_ADDR))
-  {
-    return;
-  }
-}
-
-#endif
-
 
 /*
  * Required S-function trailer

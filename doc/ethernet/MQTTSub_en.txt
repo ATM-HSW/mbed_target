@@ -1,12 +1,12 @@
-UDPConfigSocket
-===============
+MQTTSubscribe
+=============
 
 Description
 -----------
 
 description
 
-.. image:: ../images/block_UDPConfigSocket.png
+.. image:: ../images/block_MQTTSub.png
    :scale: 50 %
 
 Data Type Support
@@ -18,7 +18,7 @@ The input port expects values with *real32* or *uint16* data types.
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/mask_UDPConfigSocket.png
+.. image:: ../images/mask_MQTTSub.png
 
 Port Name/Pin Number
 ....................

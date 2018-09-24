@@ -1,12 +1,12 @@
-UDPClientReadCSV
-================
+Ethernet IP Config Stack
+========================
 
 Description
 -----------
 
 description
 
-.. image:: ../images/emptyblock.png
+.. image:: ../images/block_EthernetIPConfigStack.png
    :scale: 50 %
 
 Data Type Support
@@ -18,7 +18,7 @@ The input port expects values with *real32* or *uint16* data types.
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/emptymask.png
+.. image:: ../images/mask_EthernetIPConfigStack.png
 
 Port Name/Pin Number
 ....................

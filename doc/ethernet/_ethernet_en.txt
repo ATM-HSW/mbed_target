@@ -1,0 +1,9 @@
+Ethernet
+========
+
+Contents:
+
+.. toctree::
+   :maxdepth: 1
+
+   EthernetIPConfigStack_en

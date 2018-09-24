@@ -33,24 +33,23 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
   %if !SLibCodeGenForSim()
 
-    %assign ip =      SFcnParamSettings.IP
+    %%assign ip =      SFcnParamSettings.IP
+    %assign ip = LibBlockParameterString(ip_addr)
 
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
     %assign name = FEVAL("strrep",name,"-","_")
 
-    %%Add Ethernet things to the includes
+    %%Add network things to the includes
     %openfile declbuf
 
-    EthernetInterface net;
     UDPSocket socket;           // Socket to talk CoAP over
     Thread recvfromThread;      // Thread to receive messages over CoAP
     uint8_t recv[4];
     uint8_t recvvalue[4];
-	char hostIP[] = "%<ip>"; 
+    char hostIP[] = "%<ip>"; 
 
     struct coap_s* coapHandle;
     coap_version_e coapVersion = COAP_VERSION_1;
@@ -63,16 +62,20 @@
     void coap_free(void* addr) {
       free(addr);
     }
- 
+
     // tx_cb and rx_cb are not used in this program
     uint8_t coap_tx_cb(uint8_t *a, uint16_t b, sn_nsdl_addr_s *c, void *d) {
+      %if %<::vSerialDebugInfo>==0
         printf("coap tx cb\n");
-        return 0;
+      %endif
+      return 0;
     }
-     
+
     int8_t coap_rx_cb(sn_coap_hdr_s *a, sn_nsdl_addr_s *b, void *c) {
-        printf("coap rx cb\n");
-        return 0;
+      %if %<::vSerialDebugInfo>==0
+          printf("coap rx cb\n");
+      %endif
+      return 0;
     }
 
     // Recieve Thread
@@ -87,60 +90,78 @@
       while(1) {
         if ((ret = socket.recvfrom(&addr, recv_buffer, 1280)) >= 0) {
           // to see where the message came from, inspect addr.get_addr() and addr.get_port()
-          printf("Received a message of length '%d'\n", ret);
-          
+          %if %<::vSerialDebugInfo>==0
+            printf("Received a message of length '%d'\n", ret);
+          %endif
+
           parsed = sn_coap_parser(coapHandle, ret, recv_buffer, &coapVersion);
-           
+
           msg_id = parsed->msg_id;
           token = (uint16_t)parsed->token_ptr[0];
           value = (uint8_t)(parsed->payload_ptr[0])-'0';
           token_len = parsed->token_len;
-		
-		  printf("Value: %d\n", value) ;
+
+          %if %<::vSerialDebugInfo>==0
+            printf("Value: %d\n", value);
+          %endif
 
           sn_coap_parser_release_allocated_coap_msg_mem(coapHandle, parsed);
-          
-          printf("\tmsg_id:           %d\n", msg_id);
-          printf("\tpayload:          %d\n", value);
-          printf("\ttokenlen:         %d\n", token_len);
-          printf("\ttoken:            %d\n", token);
+
+          %if %<::vSerialDebugInfo>==0
+            printf("\tmsg_id:           %d\n", msg_id);
+            printf("\tpayload:          %d\n", value);
+            printf("\ttokenlen:         %d\n", token_len);
+            printf("\ttoken:            %d\n", token);
+          %endif
 
           switch(token) {
-		    	case 1:
-              printf(" Recieved from Token1\n");
+            case 1:
+              %if %<::vSerialDebugInfo>==0
+                printf(" Recieved from Token1\n");
+              %endif
               idx=0;
               break;
             case 2:
-              printf(" Recieved from Token2\n");
+              %if %<::vSerialDebugInfo>==0
+                printf(" Recieved from Token2\n");
+              %endif
               idx=1;
               break;
-          	case 3:
-              printf(" Recieved from Token3\n");
+            case 3:
+              %if %<::vSerialDebugInfo>==0
+                printf(" Recieved from Token3\n");
+              %endif
               idx=2;
               break;
-          	case 4:
-              printf(" Recieved from Token4\n");
+            case 4:
+              %if %<::vSerialDebugInfo>==0
+                printf(" Recieved from Token4\n");
+              %endif
               idx=3;
               break;
             default:
-	            idx=0;
-	            break;
+              idx=0;
+              break;
           }
           recv[idx]= 1;
           recvvalue[idx]=value;
 
-          printf(" The Recv Array: ");
-          for(int i = 0; i < 4; i++) {
-            printf("%d ", recv[i]);
-          } 
-          printf("\n");
-          printf("The Value Array: ");
-          for(int i = 0; i < 4; i++) {
-            printf("%d ", recvvalue[i]);
-          } 
-          printf("\n");
+          %if %<::vSerialDebugInfo>==0
+            printf(" The Recv Array: ");
+            for(int i = 0; i < 4; i++) {
+              printf("%d ", recv[i]);
+            }
+            printf("\n");
+            printf("The Value Array: ");
+            for(int i = 0; i < 4; i++) {
+              printf("%d ", recvvalue[i]);
+            }
+            printf("\n");
+          %endif
         } else {
-          printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
+          %if %<::vSerialDebugInfo>==0
+            printf("UDPSocket::recvfrom failed, error code %d. Shutting down receive thread.\n", ret);
+          %endif
         }
       }
     }
@@ -149,24 +170,17 @@
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
 
-  %endif
 
-  %if !SLibCodeGenForSim()
-  %% Main Function
-  
-    if(0 != net.connect()) {
-        printf("Error connecting\n");
-      }
-    printf("Connected to the network....\n");
+    %% Main Function
 
-   // Open a socket on the network interface
-     socket.open(&net);
+    // Open a socket on the network interface
+    socket.open(&net);
 
     // Initialize the CoAP protocol handle, pointing to local implementations on malloc/free/tx/rx functions
     coapHandle = sn_coap_protocol_init(&coap_malloc, &coap_free, &coap_tx_cb, &coap_rx_cb);
 
-   //UDPSocket::recvfrom is blocking, so run it in a separate RTOS thread
-  recvfromThread.start(&recvfromMain);
+    //UDPSocket::recvfrom is blocking, so run it in a separate RTOS thread
+    recvfromThread.start(&recvfromMain);
 
   %endif
 

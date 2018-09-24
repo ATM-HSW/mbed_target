@@ -19,9 +19,9 @@
  * Parameter handling methods. These methods are not supported by RTW *
  *====================================================================*/
 #if defined(MATLAB_MEX_FILE)
-  static void mdlCheckParameters(SimStruct *S)
-  {
-  }
+static void mdlCheckParameters(SimStruct *S)
+{
+}
 #endif /* MDL_CHECK_PARAMETERS */
 
 /*=====================================*
@@ -117,7 +117,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 }
 #define MDL_SET_WORK_WIDTHS
 #if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
-  static void mdlSetWorkWidths(SimStruct *S)
+static void mdlSetWorkWidths(SimStruct *S)
   {
   /* Set number of run-time parameters */
   if (!ssSetNumRunTimeParams(S, 3))

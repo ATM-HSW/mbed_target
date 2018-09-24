@@ -1,16 +1,10 @@
-/*
- * File: sfuntmpl_doc.c
- * Abstract:
- *       A 'C' template for a level 2 S-function. 
- *
- * Copyright 1990-2013 The MathWorks, Inc.
- */
+/* Copyright 2010 The MathWorks, Inc. */
+/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
 
 
 /*
  * You must specify the S_FUNCTION_NAME as the name of your S-function.
  */
-
 #define S_FUNCTION_NAME  coapRequestPut
 #define S_FUNCTION_LEVEL 2
 
@@ -18,11 +12,6 @@
 #define EDIT_OK(S, P_IDX) \
  (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
 #define SAMPLE_TIME  (ssGetSFcnParam(S, 0))
-
-//#define HOST_IP  (mxArrayToString(ssGetSFcnParam(S,1)))
-//#define ID       (mxArrayToString(ssGetSFcnParam(S,2)))
-#define PATH     (mxArrayToString(ssGetSFcnParam(S,2)))
-//#define METHOD   (mxArrayToString(ssGetSFcnParam(S,4)))
 
 
 /*
@@ -112,7 +101,6 @@ static void mdlInitializeSizes(SimStruct *S) {
 #endif
 
   ssSetSFcnParamTunable(S, 0, 0);  //sampletime
- // ssSetSFcnParamTunable(S, 1, 0);  //IP
   ssSetSFcnParamTunable(S, 1, 0);  //Token(ID)
   ssSetSFcnParamTunable(S, 2, 0);  //PATH
   ssSetSFcnParamTunable(S, 3, 0);  //METHOD
@@ -158,8 +146,7 @@ static void mdlInitializeSizes(SimStruct *S) {
 } /* end mdlInitializeSizes */
 
 
-static void mdlInitializeSampleTimes(SimStruct *S)
-{
+static void mdlInitializeSampleTimes(SimStruct *S) {
   double * const sampleTime = mxGetPr(SAMPLE_TIME);
   const  size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
@@ -182,17 +169,17 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 #define MDL_SET_WORK_WIDTHS   /* Change to #undef to remove function */
 #if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
 
-  static void mdlSetWorkWidths(SimStruct *S)
-  {
+static void mdlSetWorkWidths(SimStruct *S) {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   /* Register run-time parameters  */
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "Token", ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 1, "Method", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "Path", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "Method", ssGetDataTypeId(S, "uint8"));
 
-  }
+}
 #endif /* MDL_SET_WORK_WIDTHS */
 
 /* Function: mdlOutputs =======================================================
@@ -201,67 +188,43 @@ static void mdlInitializeSampleTimes(SimStruct *S)
  *    block. Generally outputs are placed in the output vector(s),
  *    ssGetOutputPortSignal.
  */
-static void mdlOutputs(SimStruct *S, int_T tid)
-{
+static void mdlOutputs(SimStruct *S, int_T tid) {
     UNUSED_PARAMETER(S);
     UNUSED_PARAMETER(tid);
-} 
+}
 
-static void mdlTerminate(SimStruct *S)
-{
+static void mdlTerminate(SimStruct *S) {
     UNUSED_PARAMETER(S);
 }
-
-
-#define MDL_RTW  /* Change to #undef to remove function */
-#if defined(MDL_RTW) && defined(MATLAB_MEX_FILE)
-
-static void mdlRTW(SimStruct *S)
-{
-
-//  if(!ssWriteRTWParamSettings(S,4,
-//                                SSWRITE_VALUE_QSTR, "hostIP", IP,
-//                                SSWRITE_VALUE_QSTR, "msg_id", ID,
-//                                SSWRITE_VALUE_QSTR, "path", PATH))
-//  {
-//    return;
-//  }
-  if(!ssWriteRTWParamSettings(S, 1,
-                               // SSWRITE_VALUE_QSTR, "IP", HOST_IP,
-                                SSWRITE_VALUE_QSTR, "Path", PATH))
-    return;
-}
-#endif /* MDL_RTW */
 
 /* Function: IsRealMatrix =================================================
  * Abstract:
  *      Verify that the mxArray is a real (double) finite matrix
  */
  // for Sample Time 
-static bool IsRealMatrix(const mxArray * const m)
-{
-    if (mxIsNumeric(m)  &&  
-        mxIsDouble(m)   && 
-        !mxIsLogical(m) &&
-        !mxIsComplex(m) &&  
-        !mxIsSparse(m)  && 
-        !mxIsEmpty(m)   &&
-        mxGetNumberOfDimensions(m) == 2) {
+static bool IsRealMatrix(const mxArray * const m) {
+  if (mxIsNumeric(m)  &&  
+      mxIsDouble(m)   && 
+      !mxIsLogical(m) &&
+      !mxIsComplex(m) &&  
+      !mxIsSparse(m)  && 
+      !mxIsEmpty(m)   &&
+      mxGetNumberOfDimensions(m) == 2) {
 
-        const double * const data = mxGetPr(m);
-        const size_t numEl = mxGetNumberOfElements(m);
-        size_t i;
+      const double * const data = mxGetPr(m);
+      const size_t numEl = mxGetNumberOfElements(m);
+      size_t i;
 
-        for (i = 0; i < numEl; i++) {
-            if (!mxIsFinite(data[i])) {
-                return(false);
-            }
-        }
+      for (i = 0; i < numEl; i++) {
+          if (!mxIsFinite(data[i])) {
+              return(false);
+          }
+      }
 
-        return(true);
-    } else {
-        return(false);
-    }
+      return(true);
+  } else {
+      return(false);
+  }
 }
 
 /*=============================*
