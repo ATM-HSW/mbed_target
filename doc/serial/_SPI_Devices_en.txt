@@ -1,0 +1,13 @@
+SPI devices
+===========
+
+Contents:
+
+.. toctree::
+   :maxdepth: 1
+
+   ../devices/DisplayCR12832_en
+   ../devices/LIS302DL_en
+   ../devices/L3GD20_en
+   ../devices/TMP123_en
+   ../devices/MAX6675_en

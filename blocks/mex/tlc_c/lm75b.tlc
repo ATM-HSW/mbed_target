@@ -30,7 +30,6 @@
   %<MbedCommonBlockTypeSetup(block, system)>
   
   %<LibAddToCommonIncludes("lm75b.h")>
-  %<LibAddToModelSources("lm75b")>
 
 %endfunction
 

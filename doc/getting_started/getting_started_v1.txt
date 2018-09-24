@@ -1,18 +1,26 @@
 Variant 1
 =========
 
-Create a new blinky model with all necessary option already set from the template list:
+Create a new blinky model for Embedded Coder with all necessary options already set from the template list:
 
 .. code-block:: shell
 
-  >> open_system(new_system('untitled','FromTemplate','mbed_target_template_blinky'))
+  >> open_system(new_system('untitled','FromTemplate','MbedTarget_template_blinky'))
 
 or out of the Simulink start page:
 
 .. image:: ../images/gettingstarted1.png
    :scale: 50 %
 
-resulting in a new model:
+When using the Simulink coder, the following command:
+
+.. code-block:: shell
+
+  >> open_system(new_system('untitled','FromTemplate','MbedTarget_grt_template_blinky'))
+
+creates a basic model.
+
+The resulting new model looks like:
 
 .. image:: ../images/gettingstarted2.png
    :scale: 50 %
@@ -21,12 +29,12 @@ This model \ **must**\  be saved before starting the code generation.
 
 .. _getting_started_label_v1-label:
 
-The correct mbed target installation can be checked with the integrated target detection. Please open the model configuration and go to \ **Mbed options**\ . After pressing the button \ **detect mbed target (mbedls)**\  the connected board should be shown in the line above the detect button:
+The correct Mbed Target installation can be checked with the integrated target detection. Please open the model configuration and go to \ **Mbed options**\ . After pressing the button \ **detect Mbed target (mbedls)**\  the connected board should be shown in the line above the detect button:
 
 .. image:: ../images/gettingstarted4.png
    :scale: 50 %
 
-When the connected board does not appear, please check the output of mbedls at the windows commandline. It should look like:
+When the connected board does not appear, please check the output of the commandline tool mbedls manually at the windows commandline. It should look like:
 
 .. code-block:: shell
 
@@ -37,7 +45,7 @@ When the connected board does not appear, please check the output of mbedls at t
   | NUCLEO_F767ZI | NUCLEO_F767ZI[0]     | D:          | COM4        | 08180221053160053A75F920 | 0221            |
   +---------------+----------------------+-------------+-------------+--------------------------+-----------------+
 
-When it does not look like the above example please check your mbed target documentation.
+When it does not look like the above example please check your Mbed Target documentation.
 
 When the board could be detected, the code generation can be started by 
 
@@ -57,24 +65,24 @@ After a short processing time, the diagnostic viewer can be opened:
 
 The diagnostic viewer shows the complete code generation process in detail.
 
-1. The first section shows the mbed target details
+1. The first section shows the Mbed Target details
    
 
 .. image:: ../images/gettingstarted6.png
    :scale: 50 %
 
 2. The next parts contain the MATLAB code generation information
-3. and the output of the mbed Python tool generating a Makefile
+3. and the output of the Mbed Python tool generating a Makefile
 
 .. image:: ../images/gettingstarted7.png
    :scale: 50 %
 
-4. In the next step the mbed library and the generated C++ code is compiled. When the Simulink model is build the first time, this process can take a while.
+4. In the next step the Mbed library and the generated C++ code is compiled. When the Simulink model is build the first time, this process can take a while.
 
 .. image:: ../images/gettingstarted8.png
    :scale: 50 %
 
-5. Finally, after a successful build, the sizes of the different sections (e.g. text - instruction code, data+bss - data memory) should be displayed. In one of the last lines the result of the flashing can be seen. For an mbed board it is just a copy command.
+5. Finally, after a successful build, the sizes of the different sections (e.g. text - instruction code, data+bss - data memory) should be displayed. In one of the last lines the result of the flashing can be seen. For an Mbed compatible board it is just a copy command.
 
 .. image:: ../images/gettingstarted9.png
    :scale: 50 %

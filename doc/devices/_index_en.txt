@@ -1,0 +1,38 @@
+Devices
+=======
+
+.. toctree::
+   :maxdepth: 1
+
+I2c Devices
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+| :numref:`%s<MPU9250>` :ref:`MPU9250`
+| :numref:`%s<MPU9250_AK8963>` :ref:`MPU9250`
+| :numref:`%s<LSM303DLHC>` :ref:`LSM303DLHC`
+| :numref:`%s<TMP102>` :ref:`TMP102`
+| :numref:`%s<LM75B>` :ref:`LM75B`
+| :numref:`%s<BMP180>` :ref:`BMP180`
+| :numref:`%s<VL6180X>` :ref:`VL6180X`
+| :numref:`%s<VL53L0X>` :ref:`VL53L0X`
+| :numref:`%s<DS3231>` :ref:`DS3231`
+
+SPI Devices
+-----------
+
+| :numref:`%s<DisplayCR12832>` :ref:`DisplayCR12832`
+| :numref:`%s<LIS302DL>` :ref:`LIS302DL`
+| :numref:`%s<L3GD20>` :ref:`L3GD20`
+| :numref:`%s<TMP123>` :ref:`TMP123`
+| :numref:`%s<MAX6675>` :ref:`MAX6675`
+
+OneWire
+-------
+
+.. toctree::
+   :maxdepth: 1
+
+| :numref:`%s<DS1820>` :ref:`DS1820`

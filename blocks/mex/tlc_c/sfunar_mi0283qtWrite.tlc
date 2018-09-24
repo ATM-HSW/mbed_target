@@ -29,9 +29,6 @@
   %<LibAddToCommonIncludes("cmd.h")>
   %<LibAddToCommonIncludes("lcd_scope.h")>
   %<LibAddToCommonIncludes("mi0283qt.h")>
-  
-  %<LibAddToModelSources("mi0283qt")>
-  %<LibAddToModelSources("lcd_scope")>
 
 %endfunction
 

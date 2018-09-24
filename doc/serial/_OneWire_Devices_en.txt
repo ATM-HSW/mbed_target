@@ -1,0 +1,9 @@
+One Wire Bus Devices
+====================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 1
+
+   ../devices/DS1820_en

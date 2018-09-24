@@ -7,9 +7,9 @@ Contents:
    :maxdepth: 1
 
    _UART_en
-   _USB_en
    _I2C_en
    _SPI_en
-   _CAN_en
    _OneWire_en
+   _CAN_en
    _Other_en
+..   _USB_en

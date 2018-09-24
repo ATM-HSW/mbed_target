@@ -49,8 +49,11 @@ function createStruct()
   addStruct('RTOSThreadwait',           'rtos/Threadwait_en');
   addStruct('SerialUARTConfig',         'serial/UART_Config_en');
   addStruct('SerialUARTConfigUSB',      'serial/UART_ConfigUSB_en');
+  addStruct('SerialUARTWrite',          'serial/UART_Write_en');
   addStruct('SerialUARTWriteBlock',     'serial/UART_Write_Block_en');
   addStruct('SerialUARTRead',           'serial/UART_Read_en');
+  addStruct('SerialUARTReadBlock',      'serial/UART_Read_Block_en');
+  addStruct('SerialUARTReadLine',       'serial/UART_Read_Line_en');
   addStruct('SerialUSBCDCConfig',       'serial/USB_CDC_Config_en');
   addStruct('SerialUSBCDCWrite',        'serial/USB_CDC_Write_Block_en');
   addStruct('SerialUSBCDCRead',         'serial/USB_CDC_Read_en');
@@ -108,16 +111,28 @@ function createStruct()
   addStruct('TLC5952Config',            'serial/TLC5952Config_en');
   addStruct('TLC5962Ventil',            'serial/TLC5962Ventil_en');
   addStruct('TLC5952Balken',            'serial/TLC5952Balken_en');
-  addStruct('UDPConfigStack',           'ethernet/UDPConfigStack_en');
+
+  addStruct('EthernetIPConfigStack',    'ethernet/EthernetIPConfigStack_en');
+
   addStruct('UDPConfigSocket',          'ethernet/UDPConfigSocket_en');
-  addStruct('UDPServerWrite',           'ethernet/UDPServerWrite_en');
-  addStruct('UDPServerWriteCSV',        'ethernet/UDPServerWriteCSV_en');
-  addStruct('UDPServerRead',            'ethernet/UDPServerRead_en');
-  addStruct('UDPServerReadCSV',         'ethernet/UDPServerReadCSV_en');
-  addStruct('UDPClientWrite',           'ethernet/UDPClientWrite_en');
-  addStruct('UDPClientWriteCSV',        'ethernet/UDPClientWriteCSV_en');
-  addStruct('UDPClientRead',            'ethernet/UDPClientRead_en');
-  addStruct('UDPClientReadCSV',         'ethernet/UDPClientReadCSV_en');
+  %addStruct('UDPServerWrite',           'ethernet/UDPServerWrite_en');
+  %addStruct('UDPServerWriteCSV',        'ethernet/UDPServerWriteCSV_en');
+  %addStruct('UDPServerRead',            'ethernet/UDPServerRead_en');
+  %addStruct('UDPServerReadCSV',         'ethernet/UDPServerReadCSV_en');
+  addStruct('UDPClientSendBlock',       'ethernet/UDPClientSendBlock_en');
+  addStruct('UDPClientSend',            'ethernet/UDPClientSend_en');
+  addStruct('UDPClientReceiveBlock',    'ethernet/UDPClientReceiveBlock_en');
+  addStruct('UDPClientRead',            'ethernet/UDPClientReceive_en');
+  addStruct('MQTTConfig',               'ethernet/MQTTConfig_en');
+  addStruct('MQTTPublish',              'ethernet/MQTTPub_en');
+  addStruct('MQTTSubscribe',            'ethernet/MQTTSub_en');
+  addStruct('CoAPConfigStack',          'ethernet/COAPConfigStack_en');
+  addStruct('CoAPGet',                  'ethernet/COAPRequestGet_en');
+  addStruct('CoAPPut',                  'ethernet/COAPRequestPut_en');
+%   addStruct('', '');
+%   addStruct('', '');
+%   addStruct('', '');
+%   addStruct('', '');
 %   addStruct('', '');
 %   addStruct('', '');
 end

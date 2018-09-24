@@ -1,6 +1,10 @@
 GPIO Runtime
 ============
 
+.. attention::
+
+  Parts of documentation are missing.
+
 This block toggels a GPIO pin for purpose of runtime measurements.
 
 

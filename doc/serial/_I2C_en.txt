@@ -9,3 +9,4 @@ Contents:
    I2C_Config_en
    I2C_Read_en
    I2C_Write_en
+   _I2C_Devices_en

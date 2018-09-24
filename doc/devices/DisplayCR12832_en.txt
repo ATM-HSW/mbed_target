@@ -1,5 +1,8 @@
-DisplayCR12832
-==============
+
+.. _DisplayCR12832:
+
+CR12832 Display
+===============
 
 Description
 -----------

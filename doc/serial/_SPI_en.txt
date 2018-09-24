@@ -11,3 +11,4 @@ Contents:
    SPI_Slave_Config_en
    SPI_Slave_Read_en
    SPI_Slave_Write_en
+   _SPI_Devices_en

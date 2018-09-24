@@ -1,5 +1,7 @@
 .. include:: <isoamsa.txt>
 
+.. _LIS302DL:
+
 LIS302DL Accelerometer
 ======================
 

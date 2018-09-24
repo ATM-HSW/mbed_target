@@ -1,0 +1,17 @@
+I2C Devices
+===========
+
+Contents:
+
+.. toctree::
+   :maxdepth: 1
+
+   ../devices/MPU9250_en
+   ../devices/MPU9250_AK8963_en
+   ../devices/LSM303DLHC_en
+   ../devices/TMP102_en
+   ../devices/LM75B_en
+   ../devices/BMP180_en
+   ../devices/VL6180X_en
+   ../devices/VL53L0X_en
+   ../devices/DS3231_en

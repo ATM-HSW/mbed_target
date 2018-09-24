@@ -1,5 +1,7 @@
-Digital Pressure Sensor
-=======================
+.. _BMP180:
+
+BMP180
+======
 
 Block enables the use of the BMP180 with the STM32 boards.
 

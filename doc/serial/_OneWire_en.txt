@@ -8,3 +8,4 @@ Contents:
 
    one_wire_config_en
    one_wire_search_rom_en
+   _OneWire_Devices_en

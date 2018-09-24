@@ -36,17 +36,12 @@ To compile the generated C++ code, the check box \ **Generate code only**\  has 
 .. image:: ../images/gettingstarted14.png
    :scale: 50 %
 
-Please chose mbed-sos 5:
-
-.. image:: ../images/gettingstarted15.png
-   :scale: 50 %
-
-and check if the mbed board is correctly connected:
+Please chose a Mbed OS 5 compatible board manually or use the autodetect mechanism:
 
 .. image:: ../images/gettingstarted4.png
    :scale: 50 %
 
-The result is identically to the step in the :ref:`Variant 1 <getting_started_label_v1-label>`.
+The resulting model configuration of these steps is identically to the step in the :ref:`Variant 1 <getting_started_label_v1-label>`.
 
 To construct the model, one possibility is the usage of the library browser:
 
@@ -54,9 +49,9 @@ To construct the model, one possibility is the usage of the library browser:
 .. image:: ../images/gettingstarted17.png
    :scale: 50 %
 
-Simulink allows the usage of a huge amount of blocks for the code generation. But not every block can be used.
+Simulink allows the usage of a huge amount of blocks for the code generation.
 
-mbed_target delivers an own subtree in the Simulink library browser with the mbed_target specific blocks:
+Mbed Target delivers an own subtree in the Simulink library browser with the Mbed Target specific blocks:
 
 .. image:: ../images/gettingstarted18.png
    :scale: 50 %
@@ -72,7 +67,7 @@ Please add the marked LED, Pulse Generator (with amplitude 1) and Data Type Conv
 .. image:: ../images/gettingstarted20.png
    :scale: 50 %
 
-After connecting the three blocks the model is identic to the model under Variant 1. 
+After connecting the three blocks the model is identical to the model under Variant 1. 
 
 The model \ **must**\  be saved before the next step.
 

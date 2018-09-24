@@ -1,5 +1,11 @@
-LSM303DLHC
-==========
+.. _DS3231:
+
+DS3231
+======
+
+.. attention::
+
+  Parts of documentation are missing.
 
 Description
 -----------
