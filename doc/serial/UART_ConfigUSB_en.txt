@@ -1,5 +1,5 @@
-Serial Configuration USB
-========================
+Serial Configuration USB (Debugger)
+===================================
 
 Description
 -----------
@@ -31,10 +31,7 @@ specifies the UART baud rate.
 Example
 -------
 
-In the example data from UART input are written back to the output of the same UART. Because the Read Block writes in every step function call a byte to the output port, the value has to be checked. When no byte was transmitted a -1 is written. The switch block handles this, to avoid writing 0xff characters t the UART output.
-
-.. image:: ../images/example_UART_Serial.png
-   :scale: 50 %
+see read/write byte :ref:`example_UART_write`.
 
 
 Code Generation

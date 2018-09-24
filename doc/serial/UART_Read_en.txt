@@ -4,9 +4,11 @@ Serial Read Byte
 Description
 -----------
 
-Reads one byte from the serial port on the mbed board.
+Reads one uint8 or int16 from the serial port. Data type depends on enabled/disabled new port.
 
-Outputs -1 if no data is available to be read.
+Without new port, outputs -1 if no readable data is available.
+
+When new port is enabled and new data is available, a rising edge is submitted.
 
 .. image:: ../images/block_UART_SerialReadByte.png
    :scale: 50 %
@@ -14,7 +16,9 @@ Outputs -1 if no data is available to be read.
 Data Type Support
 -----------------
 
-The output port writes values with *int32* data types.
+The output port d writes values with *uint8* (when new port ist enabled) or *int16* (when new port is disabled) data types.
+
+The output port new writes values with *uint8* data types.
 
 Parameters Dialog Box
 ---------------------
@@ -25,6 +29,10 @@ Serial Port
 ...........
 specifies an internal used serial port number. It is used to generate unique instance names when more UARTs are used in the same model and to tie config, read and write blocks together.
 
+Enable new data port
+....................
+enables/disables the new data port. The port submitts a rising edge when new data is received.
+
 Sample Time
 ...........
 specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
@@ -32,11 +40,7 @@ specifies the time interval between samples. To inherit the sample time, set thi
 Example
 -------
 
-In the example data from UART input are written back to the output of the same UART. Because the Read Block writes in every step function call a byte to the output port, the value has to be checked. When no byte was transmitted a -1 is written. The switch block handles this, to avoid writing 0xff characters t the UART output.
-
-.. image:: ../images/example_UART_Serial.png
-   :scale: 50 %
-
+see UART Write Byte block :ref:`example_UART_Write`.
 
 Code Generation
 ---------------
@@ -45,7 +49,7 @@ Instance names of mbed classes are created by concatenating model name (, submod
 Step Function
 .............
 
-creates the following block in void **<Model Name>**\ _step(void) function
+creates the following block in void **<Model Name>**\ _step(void) function without new data port
 
 .. code-block:: c++
 
@@ -53,4 +57,15 @@ creates the following block in void **<Model Name>**\ _step(void) function
     lvalue = <instance name>.getc();
   } else {
     lvalue = -1;
+  }
+
+and with new data port
+
+.. code-block:: c++
+
+  if (<instance name>.readable()) {
+    lvalue1 = <instance name>.getc();
+    lvalue2 = 1;
+  } else {
+    lvalue2 = 0;
   }

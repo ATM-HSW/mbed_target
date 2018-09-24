@@ -7,7 +7,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                UART_serialRead
+#define S_FUNCTION_NAME                UART_serialReadLine
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -91,7 +91,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 5);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -117,6 +117,8 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
+  ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -132,29 +134,65 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of output ports.
    */
-  int newDataPortEnable = mxGetScalar(ssGetSFcnParam(S, 2));
-  if (!ssSetNumOutputPorts(S, newDataPortEnable?2:1))
+  int dataSizePortEnable = mxGetScalar(ssGetSFcnParam(S, 3));
+  int newDataPortEnable = mxGetScalar(ssGetSFcnParam(S, 4));
+  if (!ssSetNumOutputPorts(S, 1+(dataSizePortEnable?1:0)+(newDataPortEnable?1:0)))
     return;
+
+printf("num oports %d\n", 1+(dataSizePortEnable?1:0)+(newDataPortEnable?1:0));
 
   /*
    * Configure the output port 1
    */
-  if(newDataPortEnable)
-    ssSetOutputPortDataType(S, 0, SS_UINT8);
-  else
-    ssSetOutputPortDataType(S, 0, SS_INT16);
-  ssSetOutputPortWidth(S, 0, 1);
+  int numElements = (int)mxGetScalar(ssGetSFcnParam(S, 2));
+  ssSetOutputPortDataType(S, 0, SS_UINT8);
+  ssSetOutputPortWidth(S, 0, numElements);
   ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
   ssSetOutputPortOutputExprInRTW(S, 0, 0);
 
-  if(newDataPortEnable) {
+  if(dataSizePortEnable && !newDataPortEnable) {
+  /*
+     * Configure the output port dataSizePortEnable
+     */
+    ssSetOutputPortDataType(S, 1, SS_UINT32);
+    ssSetOutputPortWidth(S, 1, 1);
+    ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 1, 0);
+ }
+  else if(!dataSizePortEnable && newDataPortEnable) {
+    /*
+     * Configure the output port newDataPortEnable
+     */
     ssSetOutputPortDataType(S, 1, SS_UINT8);
     ssSetOutputPortWidth(S, 1, 1);
     ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
     ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
     ssSetOutputPortOutputExprInRTW(S, 1, 0);
-  }
+ }
+  else if(dataSizePortEnable && newDataPortEnable) {
+    /*
+     * Configure the output port dataSizePortEnable
+     */
+    ssSetOutputPortDataType(S, 1, SS_UINT32);
+    ssSetOutputPortWidth(S, 1, 1);
+    ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 1, 0);
+
+    /*
+     * Configure the output port newDataPortEnable
+     */
+    ssSetOutputPortDataType(S, 2, SS_UINT8);
+    ssSetOutputPortWidth(S, 2, 1);
+    ssSetOutputPortComplexSignal(S, 2, COMPLEX_NO);
+    ssSetOutputPortOptimOpts(S, 2, SS_REUSABLE_AND_LOCAL);
+    ssSetOutputPortOutputExprInRTW(S, 2
+    , 0);
+
+ }
+
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -222,14 +260,16 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 4))
     return;
 
   /*
-   * Register the run-time parameters
+   * Register the run-time parameter(s)
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "SerialPort",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "NewDataPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 0, "SerialPort",   ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 1, "BufferSize",   ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 3, 2, "DataSizePort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 3, "NewDataPort",  ssGetDataTypeId(S, "uint8"));
 }
 
 #endif

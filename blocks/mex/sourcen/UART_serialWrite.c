@@ -1,13 +1,11 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/*
- *   UART_serialRead.c Simple C-MEX S-function for function call.
- *
- */
+/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
+
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                UART_serialRead
+#define S_FUNCTION_NAME                UART_serialWrite
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -90,8 +88,9 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
+  int numInput;
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 2);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -116,8 +115,6 @@ static void mdlInitializeSizes(SimStruct *S)
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
-  ssSetSFcnParamTunable(S, 2, 0);
-
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
@@ -126,35 +123,28 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Set the number of input ports.
    */
-  if (!ssSetNumInputPorts(S, 0))
+  if (!ssSetNumInputPorts(S, 1))
     return;
+
+  /*
+   * Configure the input ports
+   */
+  ssSetInputPortDataType(S, 0, SS_UINT8);
+  ssSetInputPortWidth(S, 0, 1);
+  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetInputPortDirectFeedThrough(S, 0, 1);
+  ssSetInputPortAcceptExprInRTW(S, 0, 0);
+  ssSetInputPortOverWritable(S, 0, 0);
+  ssSetInputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL );
+  ssSetInputPortRequiredContiguous(S, 0, 1);
+
 
   /*
    * Set the number of output ports.
    */
-  int newDataPortEnable = mxGetScalar(ssGetSFcnParam(S, 2));
-  if (!ssSetNumOutputPorts(S, newDataPortEnable?2:1))
+  if (!ssSetNumOutputPorts(S, 0))
     return;
 
-  /*
-   * Configure the output port 1
-   */
-  if(newDataPortEnable)
-    ssSetOutputPortDataType(S, 0, SS_UINT8);
-  else
-    ssSetOutputPortDataType(S, 0, SS_INT16);
-  ssSetOutputPortWidth(S, 0, 1);
-  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 0, SS_REUSABLE_AND_LOCAL);
-  ssSetOutputPortOutputExprInRTW(S, 0, 0);
-
-  if(newDataPortEnable) {
-    ssSetOutputPortDataType(S, 1, SS_UINT8);
-    ssSetOutputPortWidth(S, 1, 1);
-    ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
-    ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-    ssSetOutputPortOutputExprInRTW(S, 1, 0);
-  }
   /*
    * This S-function can be used in referenced model simulating in normal mode.
    */
@@ -222,16 +212,62 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 3))
     return;
 
   /*
-   * Register the run-time parameters
+   * Register the run-time parameter 1
    */
-  ssRegDlgParamAsRunTimeParam(S, 1, 0, "SerialPort",  ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 2, 1, "NewDataPort", ssGetDataTypeId(S, "uint8"));
+  ssRegDlgParamAsRunTimeParam(S, 0, 0, "SampleTime",      ssGetDataTypeId(S, "int32"));
+  ssRegDlgParamAsRunTimeParam(S, 1, 1, "SerialPort",      ssGetDataTypeId(S, "uint8"));
 }
 
+#endif
+#define MDL_SET_INPUT_PORT_DIMENSION_INFO
+#if defined(MDL_SET_INPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
+
+/* Function: mdlSetInputPortDimensionInfo =================================
+ * Abstract:
+ *    This method is called with the candidate dimensions for an input port
+ *    with unknown dimensions. If the proposed dimensions are acceptable, the
+ *    method should go ahead and set the actual port dimensions.
+ *    If they are unacceptable an error should be generated via
+ *    ssSetErrorStatus.
+ *    Note that any other input or output ports whose dimensions are
+ *    implicitly defined by virtue of knowing the dimensions of the given
+ *    port can also have their dimensions set.
+ *
+ */
+static void mdlSetInputPortDimensionInfo(SimStruct *S, int_T portIndex, const
+  DimsInfo_T *dimsInfo)
+{
+/* Set input port dimension */
+if(!ssSetInputPortDimensionInfo(S, portIndex, dimsInfo)) return;
+
+
+}
+#endif
+
+#define MDL_SET_OUTPUT_PORT_DIMENSION_INFO
+#if defined(MDL_SET_OUTPUT_PORT_DIMENSION_INFO) && defined(MATLAB_MEX_FILE)
+/* Function: mdlSetOutputPortDimensionInfo ================================
+ * Abstract:
+ *    This method is called with the candidate dimensions for an output port
+ *    with unknown dimensions. If the proposed dimensions are acceptable, the
+ *    method should go ahead and set the actual port dimensions.
+ *    If they are unacceptable an error should be generated via
+ *    ssSetErrorStatus.
+ *    Note that any other input or output ports whose dimensions are
+ *    implicitly defined by virtue of knowing the dimensions of the given
+ *    port can also have their dimensions set.
+ *
+ */
+static void mdlSetOutputPortDimensionInfo(SimStruct *S, int_T portIndex, const DimsInfo_T *dimsInfo)
+{
+    /* Set output port dimension */
+    if(!ssSetOutputPortDimensionInfo(S, portIndex, dimsInfo)) return;
+    
+}
 #endif
 
 
@@ -259,7 +295,6 @@ static void mdlTerminate(SimStruct *S)
 
 #define MDL_RTW
 #if defined(MATLAB_MEX_FILE) && defined(MDL_RTW)
-
 /* Function: mdlRTW =======================================================
  * Abstract:
  *    This function is called when the Real-Time Workshop is generating
@@ -269,7 +304,6 @@ static void mdlRTW(SimStruct *S)
 {
     UNUSED_PARAMETER(S);
 }
-
 #endif
 
 /* Function: IsRealMatrix =================================================
@@ -278,32 +312,35 @@ static void mdlRTW(SimStruct *S)
  */
 static bool IsRealMatrix(const mxArray * const m)
 {
-  if (mxIsNumeric(m) &&
-      mxIsDouble(m) &&
-      !mxIsLogical(m) &&
-      !mxIsComplex(m) &&
-      !mxIsSparse(m) &&
-      !mxIsEmpty(m) &&
-      mxGetNumberOfDimensions(m) == 2) {
-    const double * const data = mxGetPr(m);
-    const size_t numEl = mxGetNumberOfElements(m);
-    size_t i;
-    for (i = 0; i < numEl; i++) {
-      if (!mxIsFinite(data[i])) {
-        return(false);
-      }
-    }
+    if (mxIsNumeric(m)  &&  
+        mxIsDouble(m)   && 
+        !mxIsLogical(m) &&
+        !mxIsComplex(m) &&  
+        !mxIsSparse(m)  && 
+        !mxIsEmpty(m)   &&
+        mxGetNumberOfDimensions(m) == 2) {
 
-    return(true);
-  } else {
-    return(false);
-  }
+        const double * const data = mxGetPr(m);
+        const size_t numEl = mxGetNumberOfElements(m);
+        size_t i;
+
+        for (i = 0; i < numEl; i++) {
+            if (!mxIsFinite(data[i])) {
+                return(false);
+            }
+        }
+
+        return(true);
+    } else {
+        return(false);
+    }
 }
+
 
 /*
  * Required S-function trailer
  */
-#ifdef MATLAB_MEX_FILE
+#ifdef    MATLAB_MEX_FILE
 # include "simulink.c"
 #else
 # include "cg_sfun.h"

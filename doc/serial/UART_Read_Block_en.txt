@@ -1,0 +1,142 @@
+Serial Read Block
+=================
+
+Description
+-----------
+
+Reads exact Buffer Size uint8 or int16 from the serial port.
+
+When new data port is enable 
+
+- and new data are received, a rising edge is submitted at port new, at port d the received uint8 vector is submitted
+
+- and no new data are received, a 0 is submitted at port new, at port d the last received uint8 vector stays available
+
+
+When new data port is disabled 
+
+- and new data are received, at port d the received int16 vector is submitted
+
+- and no new data are received, at port d an int16 vector containing -1 and Buffer Size length is submitted
+
+.. image:: ../images/block_UART_SerialReadBlock.png
+   :scale: 50 %
+
+.. warning::
+
+  The block needs an Mbed board with DEVICE_SERIAL_ASYNCH defined.
+
+Data Type Support
+-----------------
+
+The output port d writes values with *uint8* or *int16* data types.
+
+The output port n writes values with *uint8* data types.
+
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_UART_SerialReadBlock.png
+
+Serial Port
+...........
+specifies an internal used serial port number. It is used to generate unique instance names when more UARTs are used in the same model and to tie config, read and write blocks together.
+
+Enable new data port
+....................
+enables an output port where a rising edge is submitted when a new data block is received
+
+Buffer Size
+...........
+specifies the exact number of bytes which must be received
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+see UART Write Block block :ref:`example_UART_Write_Block`.
+
+Code Generation
+---------------
+Instance names of mbed classes/variables/methods are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Global parts
+............
+
+.. code-block:: c++
+
+  #define <instance name>BUF_LEN \ **Buffer Size**\ 
+
+  uint8_t <instance name>buffer[<instance name>BUF_LEN];
+  uint8_t <instance name>buffer00[<instance name>BUF_LEN];
+  uint8_t <instance name>NewData = 0;
+
+  // async i/o callback handle
+  event_callback_t <instance name>serialEventCb;
+
+.. code-block:: c++
+
+  // interrupt sevice routine to handle the asynch i/o
+  void <instance name>Serial_Read_BlockserialCb(int events)
+  {
+    serial<Serial Port>.read(<instance name>buffer,
+                 <instance name>BUF_LEN,
+                 <instance name>serialEventCb,
+                 SERIAL_EVENT_RX_COMPLETE);
+    <instance name>NewData = 1;
+  }
+
+
+Initialization Function
+.......................
+
+.. code-block:: c++
+
+  // async i/o callback handle
+  <instance name>serialEventCb = <instance name>serialCb;
+
+  // buffer init
+  for (int idx = 0; idx < <instance name>BUF_LEN; idx++)
+    <instance name>buffer[idx] = 0;
+  for (int idx = 0; idx < <instance name>BUF_LEN; idx++)
+    <instance name>buffer00[idx] = 0;
+
+  // start async read
+  serial<Serial Port>.read(<instance name>buffer,
+               <instance name>BUF_LEN,
+               <instance name>serialEventCb,
+               SERIAL_EVENT_RX_COMPLETE);
+
+
+Step Function
+.............
+
+creates the following block in void **<Model Name>**\ _step(void) function
+
+When new data port is enabled:
+
+.. code-block:: c++
+
+  if (<instance name>NewData) {
+    memcpy(<d>, <instance name>buffer, <instance name>BUF_LEN);
+    <new> = 1;
+    <instance name>NewData = 0;
+  } else {
+    <new> = 0;
+  }
+
+
+or disabled:
+
+.. code-block:: c++
+
+  if (<instance name>NewData) {
+    memcpy(<d>, <instance name>buffer, <instance name>BUF_LEN);
+    <instance name>NewData = 0;
+  } else {
+    memcpy(<d>, <instance name>buffer00, <instance name>BUF_LEN);
+  }

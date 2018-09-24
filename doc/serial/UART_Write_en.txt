@@ -1,0 +1,64 @@
+Serial Write Byte
+=================
+
+Description
+-----------
+
+Writes an uint8 from port d to the serial port.
+
+.. image:: ../images/block_UART_SerialWriteByte.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+
+The input port d expects an *uint8* data type.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_UART_SerialWriteByte.png
+
+Serial Port
+...........
+specifies an internal used serial port number. It is used to generate unique instance names when more UARTs are used in the same model and to tie config, read and write blocks together.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+
+.. _example_UART_Write:
+
+Example
+-------
+
+In the first example an int16 is read from serial port and immediatly send back to it. When no data is available, a -1 is send back.
+
+.. image:: ../images/example_UART_ReadWriteByte1.png
+   :scale: 50 %
+
+In the second example only when new data is received it is send back. The rising edge at port new triggers the subsystem with the write block.
+
+.. image:: ../images/example_UART_ReadWriteByte2.png
+   :scale: 50 %
+
+Code Generation
+---------------
+Instance names of Mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<Serial Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+Step Function
+.............
+
+creates the following block in void **<Model Name>**\ _step(void) function
+
+.. code-block:: c++
+
+  #if DEVICE_SERIAL_ASYNCH
+    serial0.write((const uint8_t*)&UARTReadByteWriteByte_B.DataTypeConversion, 1, 0, 0);
+  #else
+    const char* ptrUARTReadByteWriteByte_Serial_Write_Byte = (const char*)&UARTReadByteWriteByte_B.DataTypeConversion;
+    serial0.putc(*ptrUARTReadByteWriteByte_Serial_Write_Byte++);
+  #endif
+
+When the Mbed board has a SERIAL_ASYNCH in "device_has" property in target.json, DEVICE_SERIAL_ASYNCH is defined. In this case sending data is interrupt and/or DMA controlled. Without this property, the model execution is blocked until data is send.

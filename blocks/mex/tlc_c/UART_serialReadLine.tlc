@@ -1,0 +1,159 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : sfunar_serialReadBlock.tlc
+%%
+%% Copyright 2010-2011 The MathWorks, Inc.
+%% Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar
+
+%implements UART_serialReadLine "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign buffersize_val = CAST("Number",LibBlockParameterValue(BufferSize, 0))
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
+    %assign serportname = "serial" + FEVAL("int2str",SerialPort_val-1)
+
+    %openfile declbuf
+    // %<Type> (UART_serialReadLine): '%<Name>'
+    #define %<name>BUF_LEN %<buffersize_val>
+    uint8_t %<name>idx=0;
+    uint8_t %<name>data[1];
+    uint8_t %<name>data0[] = {0};
+    uint8_t %<name>buffer0[%<name>BUF_LEN];
+    uint8_t %<name>buffer1[%<name>BUF_LEN];
+    uint32_t %<name>lenbuffer1;
+    uint8_t %<name>NewData = 0;
+
+    event_callback_t %<name>serialEventCb;
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (UART_serialReadBlock): '%<Name>'
+    // interrupt sevice routine to handle the asynch i/o
+    void %<name>serialCb(int events) {
+        if (*%<name>data == 10 || *%<name>data == 13) {
+            if (%<name>idx > 0) {
+                %<name>NewData = 1;
+                %<name>lenbuffer1 = %<name>idx;
+                memcpy(%<name>buffer1, %<name>buffer0, %<name>lenbuffer1);
+                %<name>buffer1[%<name>idx++] = 0;
+            } else {
+                %<name>NewData = 0;
+            }
+            %<name>idx = 0;
+        } else {
+            if (%<name>idx < %<name>BUF_LEN) {
+                %<name>buffer0[%<name>idx++] = %<name>data[0];
+            }
+            %<name>NewData = 0;
+        }
+        %<serportname>.read(%<name>data, 1, %<name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+    }
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+    // async i/o callback handle
+    %<name>serialEventCb = %<name>serialCb;
+
+    // buffer init
+    %<name>buffer0[0] = 0;
+    %<name>buffer1[0] = 0;
+
+    // start async read
+    %<serportname>.read(%<name>data, 1, %<name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+  %endif
+%endfunction
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign newport_val = CAST("Number",LibBlockParameterValue(NewDataPort, 0))
+    %assign sizeport_val = CAST("Number",LibBlockParameterValue(DataSizePort, 0))
+
+    %assign y1_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
+
+    %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
+    %assign serportname = "serial" + FEVAL("int2str",SerialPort_val-1)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    // newport %<newport_val>
+    // sizeport %<sizeport_val>
+    %if newport_val
+        %if sizeport_val
+            %assign y_sizeport_val = LibBlockOutputSignal(1, "", "", 0)
+            %assign y_newport_val = LibBlockOutputSignal(2, "", "", 0)
+        %else
+            %assign y_newport_val = LibBlockOutputSignal(1, "", "", 0)
+        %endif
+        %<y_newport_val> = %<name>NewData;
+        if (%<name>NewData) {
+            memcpy(%<y1_ptr>, %<name>buffer1,  %<name>lenbuffer1);
+            %if sizeport_val
+                %<y_sizeport_val> = %<name>lenbuffer1;
+            %endif
+       } else {
+            memcpy(%<y1_ptr>, %<name>data0, 1);
+            %if sizeport_val
+                %<y_sizeport_val> = 0;
+            %endif
+        }
+        %<name>NewData = 0;
+    %else
+        %if sizeport_val
+            %assign y_sizeport_val = LibBlockOutputSignal(1, "", "", 0)
+        %endif
+        if (%<name>NewData) {
+            memcpy(%<y1_ptr>, %<name>buffer1, %<name>lenbuffer1);
+            %if sizeport_val
+                %<y_sizeport_val> = %<name>lenbuffer1;
+            %endif
+        } else {
+            memcpy(%<y1_ptr>, %<name>data0, 1);
+            %if sizeport_val
+                %<y_sizeport_val> = 0;
+            %endif
+        }
+        %<name>NewData = 0;
+    %endif
+
+  %endif
+%endfunction

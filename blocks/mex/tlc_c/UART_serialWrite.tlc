@@ -1,0 +1,54 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : sfunar_serialWrite.tlc
+%%
+%% Copyright 2010-2011 The MathWorks, Inc.
+%% Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar
+
+%implements UART_serialWrite "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+    %% Ensure required header files are included
+    %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
+    %assign nameSerial = "serial" + FEVAL("int2str",SerialPort_val-1)
+
+    %assign u1_ptr = LibBlockInputSignalAddr(0, "", "", 0)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %%
+    #if DEVICE_SERIAL_ASYNCH
+    %<nameSerial>.write((const uint8_t*)%<u1_ptr>, 1, 0, 0);
+    #else
+    const char* ptr%<name> = (const char*)%<u1_ptr>;
+    %<nameSerial>.putc(*ptr%<name>++);
+    #endif
+    %%
+  %endif
+%endfunction

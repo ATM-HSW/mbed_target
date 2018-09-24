@@ -9,4 +9,7 @@ Contents:
    UART_Config_en
    UART_ConfigUSB_en
    UART_Read_en
+   UART_Read_Block_en
+   UART_Read_Line_en
+   UART_Write_en
    UART_Write_Block_en

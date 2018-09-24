@@ -1,0 +1,188 @@
+Serial Read Line
+================
+
+Description
+-----------
+
+Reads a vector with a max length of Buffer Size from the serial port until CR, LF or CR&LF is received. It corresponds to the gets method of the C standard lib.
+
+When data size port is enabled, the length of the received line is submitted.
+
+When new data port is enable 
+- and new data are received, a rising edge is submitted at port new, at port d the received line (uint8 vector) is submitted
+- and no new data are received, a 0 is submitted at port new, at port d the last received line stays available
+
+When new data port is disabled 
+- and new data are received, at port d the received line (uint8 vector) is submitted
+- and no new data are received, at port d an empty string (uint8 vector with 0 at idx 0) is submitted
+
+.. image:: ../images/block_UART_SerialReadLine.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+
+The output port d writes a vector with *uint8* data elements.
+
+The output port n writes an uint32 value.
+
+The output port new writes an uint8 value.
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_UART_SerialReadLine.png
+
+Serial Port
+...........
+specifies an internal used serial port number. It is used to generate unique instance names when more UARTs are used in the same model and to tie config, read and write blocks together.
+
+Enable data size port
+.....................
+enables the output of the readed line (string) length.
+
+Enable new data port
+....................
+enables an output port where a rising edge is submitted when a new data block is received
+
+Buffer Size
+...........
+specifies the max length of a line which can be received
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+In the first example, a line from UART RX is read. The line is analyzed in a matlab function. Acepted commands are *'on'* and *'off'*. Theire numerical representations are 1 and 2. An empty line or an unknown command is represented by a 0. A Stateflow model interprets the commands and switches a LED on or off.
+
+.. image:: ../images/example_UART_Read_Line1.png
+
+
+With the second example the behaviour of the output ports are shown in a PC terminal with a 4-tuple: output of state machine, input of state machine, number of received bytes, flag new received line.
+
+.. image:: ../images/example_UART_Read_Line2.png
+
+
+Code Generation
+---------------
+Instance names of mbed classes are created by concatenating model name (, submodelnames), block name and Serial Port number (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ \ **<Serial Port>**\ ). Space and minus characters are substituted by underscore ('_') characters.
+
+The block uses double buffering, buffer0 is used to store the received data byte by byte. When an ASCII char 10 or 13 is received, buffer0 is copied to buffer1. Buffer1 is used for the block output.
+
+Global parts
+............
+
+.. code-block:: c++
+
+  #define <instance name>BUF_LEN  \ **Buffer Size**\ 
+  uint8_t <instance name>idx=0;
+  uint8_t <instance name>data[1];
+  uint8_t <instance name>data0[] = {0};
+  uint8_t <instance name>buffer0[<instance name>BUF_LEN];
+  uint8_t <instance name>buffer1[<instance name>BUF_LEN];
+  uint32_t <instance name>lenbuffer1;
+  uint8_t <instance name>NewData = 0;
+
+  event_callback_t <instance name>serialEventCb;
+
+.. code-block:: c++
+
+  // interrupt sevice routine to handle the asynch i/o
+  void <instance name>serialCb(int events) {
+      if (*<instance name>data == 10 || *<instance name>data == 13) {
+          if (<instance name>idx > 0) {
+              <instance name>NewData = 1;
+              <instance name>lenbuffer1 = <instance name>idx;
+              memcpy(<instance name>buffer1, <instance name>buffer0, <instance name>lenbuffer1);
+              <instance name>buffer1[<instance name>idx++] = 0;
+          } else {
+              <instance name>NewData = 0;
+          }
+          <instance name>idx = 0;
+      } else {
+          if (<instance name>idx < <instance name>BUF_LEN) {
+              <instance name>buffer0[<instance name>idx++] = <instance name>data[0];
+          }
+          <instance name>NewData = 0;
+      }
+      serial<Serial Port>.read(<instance name>data, 1, <instance name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+  }
+
+
+Initialization Function
+.......................
+
+.. code-block:: c++
+
+  // async i/o callback handle
+  <instance name>serialEventCb = <instance name>serialCb;
+
+  // buffer init
+  for (int idx = 0; idx < <instance name>BUF_LEN; idx++)
+    <instance name>buffer[idx] = 0;
+  for (int idx = 0; idx < <instance name>BUF_LEN; idx++)
+    <instance name>buffer00[idx] = 0;
+
+  // start async read
+  serial0.read(<instance name>buffer,
+               <instance name>BUF_LEN,
+               <instance name>serialEventCb,
+               SERIAL_EVENT_RX_COMPLETE);
+
+
+    // async i/o callback handle
+    <instance name>serialEventCb = <instance name>serialCb;
+
+    // buffer init
+    <instance name>buffer0[0] = 0;
+    <instance name>buffer1[0] = 0;
+
+    // start async read
+    serial<Serial Port>.read(<instance name>data, 1, <instance name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+
+
+Step Function
+.............
+
+creates the following block in void **<Model Name>**\ _step(void) function
+
+When new data port is enabled:
+
+
+.. code-block:: c++
+
+  %<new> = <instance name>NewData;
+
+  if (<instance name>NewData) {
+      memcpy(<d>, <instance name>buffer1,  <instance name>lenbuffer1);
+      %if Enabled data size port
+          <n> = <instance name>lenbuffer1;
+      %endif
+ } else {
+      memcpy(<d>, <instance name>data0, 1);
+      %if Enabled data size port
+          <n> = 0;
+      %endif
+  }
+  <instance name>NewData = 0;
+
+
+or disabled:
+
+.. code-block:: c++
+
+  if (<instance name>NewData) {
+      memcpy(<d>, <instance name>buffer1, <instance name>lenbuffer1);
+      %if Enabled data size port
+          <n> = <instance name>lenbuffer1;
+      %endif
+  } else {
+      memcpy(<d>, <instance name>data0, 1);
+      %if Enabled data size port
+          <n> = 0;
+      %endif
+  }
+  <instance name>NewData = 0;

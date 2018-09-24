@@ -4,7 +4,13 @@ Serial Write Block
 Description
 -----------
 
-Writes the one dimensional vector of uint8 at input port d to the serial port on the mbed board. The length of the vector can be dynamically submitted at input port n or is statically read from input port d configuration.
+Writes the one dimensional uint8 vector from input port d to the serial port. 
+
+When datasize port is disable, the whole input vector is send.
+
+When datasize port is enabled, a vector lenght, read from input port n, is used.
+
+When the Mbed target supports DEVICE_SERIAL_ASYNCH, the asynchronous method is used i.e. the block does not delay the execution.
 
 .. image:: ../images/block_UART_SerialWriteBlock.png
    :scale: 50 %
@@ -25,18 +31,21 @@ specifies an internal used serial port number. It is used to generate unique ins
 
 Enable datasize Port
 ....................
-When this check box is checked the optional input port n is enabled.
+enables the optional input port n for the data vector length.
 
 Sample Time
 ...........
 specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
+
+.. _example_UART_Write_Block:
+
 Example
 -------
 
-In the example an input pin is read in by an Digital Input Block. This value is written to a pin by an Digital Output block.
+In the example a data block with 4 bytes is read from UART input. Each of these four bytes are converted to decimal numbers with the CSV Writer Block. The result is written back to the output of the same UART.
 
-.. image:: ../images/example_UART_Serial.png
+.. image:: ../images/example_UART_ReadWriteBlock.png
    :scale: 50 %
 
 
@@ -51,13 +60,19 @@ creates the following block in void **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
+  %if <enabled n port>
+      <num_bytes> = <n>
+  %else
+      <num_bytes> = sizeof(<d>)
+  %endif
+
   #if DEVICE_SERIAL_ASYNCH
-    const uint8_t* ptr = (const char*)&rtb_DataTypeConversion;
-    int len = rtb_Switch;
+    const uint8_t* ptr = (const char*)<d>;
+    int len = <num_bytes>;
     <instance name>.write(ptr, len, 0, 0);
   #else
-    const char* ptr = (const char*)&rtb_DataTypeConversion;
-    const char* end = ptr + rtb_Switch;
+    const char* ptr = (const char*)<d>;
+    const char* end = ptr + <n>;
     while (ptr != end) {
       if (<instance name>.putc(*ptr++) == EOF) {
         break;
@@ -65,4 +80,3 @@ creates the following block in void **<Model Name>**\ _step(void) function
     }
   #endif
 
-When the mbed target has a SERIAL_ASYNCH in "device_has" property in target.json, DEVICE_SERIAL_ASYNCH is defined. In this case sending data is interrupt and/or DMA controlled.
