@@ -10,5 +10,3 @@ Contents:
    RuntimeDac_en
    CsvWrite_en
    CsvRead_en
-   DisplayCR12832_en
-   DS3231_en.txt

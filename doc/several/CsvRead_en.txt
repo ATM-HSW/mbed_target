@@ -1,5 +1,5 @@
-CSVRead
-=======
+CSVReader
+=========
 
 Description
 -----------

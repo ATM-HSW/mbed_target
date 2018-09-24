@@ -4,7 +4,7 @@
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
  */
-#define S_FUNCTION_NAME                DataloggerPlain
+#define S_FUNCTION_NAME                CSVReader
 #define S_FUNCTION_LEVEL               2
 
 /*
@@ -14,7 +14,7 @@
 #include "simstruc.h"
 
 #define EDIT_OK(S, P_IDX) (!((ssGetSimMode(S)==SS_SIMMODE_SIZES_CALL_ONLY) && mxIsEmpty(ssGetSFcnParam(S, P_IDX))))
-#define SAMPLE_TIME                    (ssGetSFcnParam(S, 1))
+#define SAMPLE_TIME                    (ssGetSFcnParam(S, 0))
 
 /*
  * Utility function prototypes.
@@ -36,7 +36,6 @@ static void mdlCheckParameters(SimStruct *S)
   /*
    * Check the parameter: sample time
    */
-   printf("mdlCheckParameters\n");
   if EDIT_OK(S, 1) {
     const double *sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
@@ -80,12 +79,13 @@ static void mdlCheckParameters(SimStruct *S)
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-  int i, errorOutputEnable, numberOfVectorElements;
-  int_T numberOfInputs;
-  int idxTypeInputPorts, numElements;
+  int i, numberOfVectorElements;
+  int_T numberOfOutputs;
+  int idxTypeOutputPorts, numElements;
 
+printf("start\n");
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 3);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -111,91 +111,80 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
-  ssSetSFcnParamTunable(S, 3, 0);
 
   ssSetNumPWork(S, 0);
 
   if (!ssSetNumDWork(S, 0))
     return;
 
+  //printf("num input 2\n");
   /*
    * Set the number of input ports.
    */
-  idxTypeInputPorts = 0;
-  numberOfInputs  = (int_T)mxGetNumberOfElements(ssGetSFcnParam(S, idxTypeInputPorts))/2;
-  if (!ssSetNumInputPorts(S, numberOfInputs))
+  if (!ssSetNumInputPorts(S, 1))
     return;
 
   /*
    * Configure the input ports
    */
-  //printf("sfunar_DataloggerSDCard\r\n");
-  for (i = 0; i < numberOfInputs; i++) {
-    numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i+1));
-    //printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), numberOfVectorElements);
-    if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint8"))
-      ssSetInputPortDataType(S, i, SS_UINT8);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint16"))
-      ssSetInputPortDataType(S, i, SS_UINT16);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint32"))
-      ssSetInputPortDataType(S, i, SS_UINT32);
-//    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint64"))
-//      ssSetInputPortDataType(S, i, SS_UINT64);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int8"))
-      ssSetInputPortDataType(S, i, SS_INT8);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int16"))
-      ssSetInputPortDataType(S, i, SS_INT16);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int32"))
-      ssSetInputPortDataType(S, i, SS_INT32);
-//    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int64"))
-//      ssSetInputPortDataType(S, i, SS_UINT64);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "single"))
-      ssSetInputPortDataType(S, i, SS_SINGLE);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "double"))
-      ssSetInputPortDataType(S, i, SS_DOUBLE);
-    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "bool"))
-      ssSetInputPortDataType(S, i, SS_BOOLEAN);
-    else
-      mexWarnMsgTxt("One or more Ports Datatypes not set");
-
-    ssSetInputPortWidth(S, i, numberOfVectorElements);
-    ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
-    ssSetInputPortDirectFeedThrough(S, i, 1);
-    ssSetInputPortAcceptExprInRTW(S, i, 1);
-    ssSetInputPortOverWritable(S, i, 1);
-    ssSetInputPortOptimOpts(S, i, SS_REUSABLE_AND_LOCAL);
-    ssSetInputPortRequiredContiguous(S, i, 1);
-  }
+  numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 2)));
+  //printf("num elem %d\n", numElements);
+  ssSetInputPortDataType(S, 0, SS_UINT8);
+  ssSetInputPortWidth(S, 0, numElements );
+  ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
+  ssSetInputPortDirectFeedThrough(S, 0, 1);
+  ssSetInputPortAcceptExprInRTW(S, 0, 1);
+  ssSetInputPortOverWritable(S, 0, 1);
+  ssSetInputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL );
+  ssSetInputPortRequiredContiguous(S, 0, 1);
 
   /*
    * Inits the output ports.
    */
-  numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 3)));
-  errorOutputEnable = mxGetScalar(ssGetSFcnParam(S, 2));
-  if (!ssSetNumOutputPorts(S, errorOutputEnable?3:2))
+  idxTypeOutputPorts = 1;
+  const mxArray *TypeOutputPorts = ssGetSFcnParam(S, 1);
+  numberOfOutputs  = (int_T)mxGetNumberOfElements(TypeOutputPorts)/2;
+  //printf("number of output ports %d\n", numberOfOutputs);
+
+  if (!ssSetNumOutputPorts(S, numberOfOutputs))
     return;
 
-  ssSetOutputPortDataType(S, 0, SS_UINT8);
-  ssSetOutputPortWidth(S, 0, numElements);
-  ssSetOutputPortComplexSignal(S, 0, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 0, SS_NOT_REUSABLE_AND_GLOBAL );
-  ssSetOutputPortOutputExprInRTW(S, 0, 1);
+  /*
+   * Configure the output ports
+   */
+  //printf("sfunar_CSVRead\r\n");
+  for (i = 0; i < numberOfOutputs; i++) {
+    numberOfVectorElements = (int)mxGetScalar(mxGetCell(TypeOutputPorts, 2*i+1));
+    //Sprintf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), numberOfVectorElements);
+    if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "uint8"))
+      ssSetOutputPortDataType(S, i, SS_UINT8);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "uint16"))
+      ssSetOutputPortDataType(S, i, SS_UINT16);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "uint32"))
+      ssSetOutputPortDataType(S, i, SS_UINT32);
+//    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint64"))
+//      ssSetInputPortDataType(S, i, SS_UINT64);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "int8"))
+      ssSetOutputPortDataType(S, i, SS_INT8);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "int16"))
+      ssSetOutputPortDataType(S, i, SS_INT16);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "int32"))
+      ssSetOutputPortDataType(S, i, SS_INT32);
+//    else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "int64"))
+//      ssSetInputPortDataType(S, i, SS_UINT64);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "single"))
+      ssSetOutputPortDataType(S, i, SS_SINGLE);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "double"))
+      ssSetOutputPortDataType(S, i, SS_DOUBLE);
+    else if (strstr(mxArrayToString(mxGetCell(TypeOutputPorts, 2*i)), "bool"))
+      ssSetOutputPortDataType(S, i, SS_BOOLEAN);
+    else
+      mexWarnMsgTxt("One or more Ports Datatypes not set");
 
-  ssSetOutputPortDataType(S, 1, SS_UINT32);
-  ssSetOutputPortWidth(S, 1, 1);
-  ssSetOutputPortComplexSignal(S, 1, COMPLEX_NO);
-  ssSetOutputPortOptimOpts(S, 1, SS_REUSABLE_AND_LOCAL);
-  ssSetOutputPortOutputExprInRTW(S, 1, 1);
-
-  if(errorOutputEnable){
-    /*
-     * Configure the output port 3: error output
-     */
-    ssSetOutputPortDataType(S, 2, SS_BOOLEAN);
-    ssSetOutputPortWidth(S, 2, 1);
-    ssSetOutputPortComplexSignal(S, 2, COMPLEX_NO);
-    ssSetOutputPortOptimOpts(S, 2, SS_REUSABLE_AND_LOCAL);
-    ssSetOutputPortOutputExprInRTW(S, 2, 1);
+    ssSetOutputPortWidth(S, i, numberOfVectorElements);
+    ssSetInputPortComplexSignal(S, i, COMPLEX_NO);
+    ssSetInputPortOptimOpts(S, i, SS_NOT_REUSABLE_AND_GLOBAL);
+    ssSetOutputPortOutputExprInRTW(S, 1, 1);
   }
 
   /*
@@ -264,14 +253,13 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 2))
+  if (!ssSetNumRunTimeParams(S, 1))
     return;
 
   /*
   * Register the run-time parameter
   */
-  ssRegDlgParamAsRunTimeParam(S, 2, 0, "errEn",      ssGetDataTypeId(S, "uint8"));
-  ssRegDlgParamAsRunTimeParam(S, 3, 1, "buffer_size", ssGetDataTypeId(S, "uint16"));
+  ssRegDlgParamAsRunTimeParam(S, 2, 0, "buffer_size", ssGetDataTypeId(S, "uint16"));
   }
 
 #endif
