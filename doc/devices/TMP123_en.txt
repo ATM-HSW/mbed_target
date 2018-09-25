@@ -42,4 +42,4 @@ Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
 Chip Select Port and Pin
 ........................
 
-Configuration of the MCU Pin the device's chip select input is connected to.
+specifies the MCU Pin the device's chip select input is connected to.

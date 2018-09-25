@@ -7,36 +7,79 @@ CR12832 Display
 Description
 -----------
 
-description
+The block shows three text rows in a 128x32 display NHD-C12832A1Z
 
-.. image:: ../images/emptyblock.png
+In each row a variable number of inputs with different data types can be displayed.
+
+- For each row two options has to be configured:
+
+1. Type of Inputs:
+
+  a cell array with a data type for each input value whereas the data types are "boolean", "uint8", "int8", "uint16", "int16", "uint32", "int32", "single", "double", 
+
+
+2. printf
+
+  standard c printf format string with following format specifiers: boolean - %u, uint8 - %hu, int8 - %hd, uint16 - %u, int16 - %u, uint32 - %lu, int32 - %lu, single - %f, double - %lf
+
+  The number of cell array items in both config options has to be identical.
+
+
+- SPI Port - SPI Port Number configured in SPI init block
+
+- Pins for Chip Select, Reset and A0 for the CR12832 interface
+
+.. image:: ../images/block_CR12832.png
    :scale: 50 %
 
 Data Type Support
 -----------------
 
-The output port writes values with *real32* and *uint16* data types.
-The input port expects values with *real32* or *uint16* data types.
+The input port(s) expects values with the defined data types.
 
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/emptymask.png
+.. image:: ../images/mask_CR12832.png
 
-Port Name/Pin Number
+Types of Inputs (Row x) and printf
+..................................
+
+See the above description.
+
+
+SPI Port
+........
+
+Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+
+Chip Select Port and Pin
+........................
+
+specifies the MCU Pin the device's chip select input is connected to.
+
+
+Reset Port and Pin
 ....................
-specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+specifies the MCU Pin the device's reset input is connected to.
+
+A0 Port and Pin
+....................
+
+specifies the MCU Pin the device's address 0 input is connected to.
 
 Sample Time
 ...........
+
 specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
 Example
 -------
 
-In the example an analog input pin is read in by an Analog Input Block. This value is written to an analog output pin by an Analog Output block.
+The example is an test application for the Mbed Application shield. The values of an I2C temperature sensor, both analog potentiometer and the navigation switch are shown in the display.
 
-.. image:: ../images/emptyexample.png
+.. image:: ../images/example_CR12832.png
    :scale: 50 %
 
 
