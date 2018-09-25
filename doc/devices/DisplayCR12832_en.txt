@@ -77,7 +77,7 @@ specifies the time interval between samples. To inherit the sample time, set thi
 Example
 -------
 
-The example is an test application for the Mbed Application shield. The values of an I2C temperature sensor, both analog potentiometer and the navigation switch are shown in the display.
+The example is an test application for the Mbed Application shield. The values of an I2C temperature sensor, both analog potentiometers and the navigation switch are shown in the display.
 
 .. image:: ../images/example_CR12832.png
    :scale: 50 %
@@ -87,6 +87,8 @@ Code Generation
 ---------------
 Instance names of mbed classes are created by concatenating model name (, submodelnames) and block name (\ **<Model Name>**\ _(**<Subblock Name>**\ _...)\ **<Block Name>**\ ). Space and minus characters are substituted by underscore ('_') characters.
 
+The block utilizes the CR12832 library https://os.mbed.com/users/chris/code/C12832/ 
+
 Global parts
 ............
 
@@ -94,16 +96,38 @@ creates a global instance
 
 .. code-block:: c++
 
-  xx <instance name>(P<Port Name>_<Pin Number>);
+  <instance> = <SPI Port><Chip Select Port and Pin>;
+  C12832 c12832_%<instance>(&spi<SPI Port>, <Reset Port and Pin>, <A0 Port and Pin>, <Chip Select Port and Pin>);
 
-in \ **<Model Name>**\ .cpp.
+
+Initialization Function
+.......................
+
+creates a few initialization lines
+
+.. code-block:: c++
+
+  <instance> = <SPI Port><Chip Select Port and Pin>;
+  spi<SPI Port>.format(8,3);                 // 8 bit spi mode 3
+  c12832_<instance>.cls();
+
 
 Step Function
 .............
 
-creates two lines in void **<Model Name>**\ _step(void) function
+creates several lines in void **<Model Name>**\ _step(void) function. The creation of formatstrings \ **<textx>**\ and the parameter lists \ **<plistx>**\ is not shown here.
 
 .. code-block:: c++
 
   lvalue1  = (uint16_T)<instance name>.read_u16());
   lvalue2  = (real32_T)<instance name>.read();
+
+  <instance> = <SPI Port><Chip Select Port and Pin>;
+  c12832_%<instance>.locate(0,0);
+  c12832_%<instance>.printf("<text1>" <plist1>);
+
+  c12832_%<instance>.locate(0,11);
+  c12832_%<instance>.printf("<text2>" <plist2>);
+
+  c12832_%<instance>.locate(0,22);
+  c12832_%<instance>.printf("<text3>" <plist3>);

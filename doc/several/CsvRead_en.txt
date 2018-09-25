@@ -4,9 +4,21 @@ CSVReader
 Description
 -----------
 
-description
+Reads an input vector in the scanf style. The number of, the width and data type of each input port can be configured.
 
-.. image:: ../images/emptyblock.png
+Input port:
+vector of uint8 (character array)
+
+Type of Outputs:
+List of 2-tuples
+ 1st tuple item: Port width
+ 2nd tuple item: Port data type (single, double, int8, int16, int32, uint8, uint16, uint32, bool)
+ e.g.: {'8*uint8' '4*int8' '1*bool'}
+ 
+Output port:
+ The number of output ports, their width and data types corespond to the number of cell items in Type of Outputs config option.
+
+.. image:: ../images/block_CSVReader.png
    :scale: 50 %
 
 Data Type Support
@@ -18,7 +30,7 @@ The input port expects values with *real32* or *uint16* data types.
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/emptymask.png
+.. image:: ../images/mask_CSVReader.png
 
 Port Name/Pin Number
 ....................
@@ -33,7 +45,7 @@ Example
 
 In the example an analog input pin is read in by an Analog Input Block. This value is written to an analog output pin by an Analog Output block.
 
-.. image:: ../images/emptyexample.png
+.. image:: ../images/example_Several_CSVReaderWriter.png
    :scale: 50 %
 
 
