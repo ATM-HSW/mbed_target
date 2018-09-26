@@ -102,8 +102,8 @@ function createStruct()
   addStruct('fm25l16bWrite',            'memory/Fm25l16b_Fram_Write_en');
   addStruct('RuntimeDAC',               'several/RuntimeDac_en');
   addStruct('RuntimeGPIO',              'several/RuntimeGpio_en');
-  addStruct('WriteCSV',                 'several/CsvWrite_en');
-  addStruct('ReadCSV',                  'several/CsvRead_en');
+  addStruct('CSVWriter',                'several/CsvWriter_en');
+  addStruct('CSVReader',                'several/CsvReader_en');
   addStruct('randomNumber',             'targets/target_specific/Random_Number_Generator_en');
   addStruct('timerEncoderInput',        'targets/target_specific/Encoder_Input_en');
   addStruct('timerInputCapture',        'targets/target_specific/InputCapture_en');

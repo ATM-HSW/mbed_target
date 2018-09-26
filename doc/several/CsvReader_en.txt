@@ -1,40 +1,52 @@
-CSVWriter
+CSVReader
 =========
 
 Description
 -----------
 
-description
+Reads an input vector in the scanf style. The number of, the width and the data type of each input port can be configured.
 
-.. image:: ../images/emptyblock.png
+Input port:
+ - vector of uint8 (character array)
+
+Type of Outputs (List of 2-tuples):
+ - 1st tuple item: Port width
+ - 2nd tuple item: Port data type (single, double, int8, int16, int32, uint8, uint16, uint32, bool) 
+ - e.g.: {'8*uint8' '1*int16'} for the block below
+
+Output port:
+ The number of output ports, their width and data types correspond to the number of cell items in \ **Type of Outputs**\  config option.
+
+.. image:: ../images/block_several_CSVReader.png
    :scale: 50 %
 
 Data Type Support
 -----------------
 
-The output port writes values with *real32* and *uint16* data types.
-The input port expects values with *real32* or *uint16* data types.
+The input port expects a vector with *uint8* data type.
+
+The output port(s) writes values with the defined data types.
 
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/emptymask.png
+.. image:: ../images/mask_several_CSVReader.png
 
-Port Name/Pin Number
-....................
-specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+Types of Outputs
+................
+
+See the above description.
+
 
 Sample Time
 ...........
 specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
+
 Example
 -------
 
-In the example an analog input pin is read in by an Analog Input Block. This value is written to an analog output pin by an Analog Output block.
-
-.. image:: ../images/emptyexample.png
-   :scale: 50 %
+see CSV Write Block block :ref:`example_several_csvreaderwriter`
 
 
 Code Generation

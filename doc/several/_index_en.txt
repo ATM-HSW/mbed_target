@@ -8,5 +8,5 @@ Contents:
 
    RuntimeGpio_en
    RuntimeDac_en
-   CsvWrite_en
-   CsvRead_en
+   CsvWriter_en
+   CsvReader_en

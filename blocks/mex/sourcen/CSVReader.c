@@ -85,7 +85,7 @@ static void mdlInitializeSizes(SimStruct *S)
 
 printf("start\n");
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 3);
+  ssSetNumSFcnParams(S, 2);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -110,7 +110,6 @@ printf("start\n");
   /* Set the parameter's tunable status */
   ssSetSFcnParamTunable(S, 0, 0);
   ssSetSFcnParamTunable(S, 1, 0);
-  ssSetSFcnParamTunable(S, 2, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -127,10 +126,10 @@ printf("start\n");
   /*
    * Configure the input ports
    */
-  numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 2)));
+  //numElements = *(int_T*)(mxGetData(ssGetSFcnParam(S, 2)));
   //printf("num elem %d\n", numElements);
   ssSetInputPortDataType(S, 0, SS_UINT8);
-  ssSetInputPortWidth(S, 0, numElements );
+  ssSetInputPortWidth(S, 0, DYNAMICALLY_SIZED );
   ssSetInputPortComplexSignal(S, 0, COMPLEX_NO);
   ssSetInputPortDirectFeedThrough(S, 0, 1);
   ssSetInputPortAcceptExprInRTW(S, 0, 1);
@@ -253,13 +252,13 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 1))
+  if (!ssSetNumRunTimeParams(S, 0))
     return;
 
   /*
   * Register the run-time parameter
   */
-  ssRegDlgParamAsRunTimeParam(S, 2, 0, "buffer_size", ssGetDataTypeId(S, "uint16"));
+  //ssRegDlgParamAsRunTimeParam(S, 2, 0, "buffer_size", ssGetDataTypeId(S, "uint16"));
   }
 
 #endif
