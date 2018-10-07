@@ -29,27 +29,29 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
 
-  %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
-  %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
+%endfunction
 
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-  %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
-
+%% Function: Start ========================================================
+%function Start(block, system) Output
   %if !SLibCodeGenForSim()
-    %%
-	%<name>.write(0.0f);
-    %%
-  %endif
 
-  %if !SLibCodeGenForSim()
-      %openfile declbuf
+    %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
+    %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
+  
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
 
-      AnalogOut %<name>(%<pname>);
+    %openfile declbuf
+    // %<Type> (RuntimeDac): '%<Name>'
+    AnalogOut %<name>(%<pname>);
+    %closefile declbuf
 
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %<name>.write(0.0f);
+
   %endif
 %endfunction
 
@@ -57,26 +59,29 @@
 %% Function: Outputs ======================================================
 %%
 %function Outputs(block, system) Output
-
-  %assign Dacvalue = LibBlockParameterValue(DacValue, 0)
-  
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-  
   %if !SLibCodeGenForSim()
 
-  %% High setzen des Pins am Anfang eines Subsystems
-	%openfile buffer
-		real32_T %<name>_old = %<name>.read();
-		%<name>.write(%<Dacvalue>);		
-	%closefile buffer
-	%<LibSystemOutputCustomCode(system, buffer, "header")>
-	
-  %% LOW setzen des Pins am Anfang eines Subsystems
-	%openfile buffer
-		%<name>.write(%<name>_old);		
-	%closefile buffer
-	%<LibSystemOutputCustomCode(system, buffer, "trailer")>
+    %assign Dacvalue = LibBlockParameterValue(DacValue, 0)
+  
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+
+    %openfile buffer
+    // %<Type> (RuntimeDac): '%<Name>'
+    // High setzen des Pins am Anfang eines Subsystems
+    real32_T %<name>_old = %<name>.read();
+    %<name>.write(%<Dacvalue>);
+    %closefile buffer
+
+    %<LibSystemOutputCustomCode(system, buffer, "header")>
+
+    %openfile buffer
+    // %<Type> (RuntimeDac): '%<Name>'
+    // LOW setzen des Pins am Anfang eines Subsystems
+    %<name>.write(%<name>_old);
+    %closefile buffer
+
+    %<LibSystemOutputCustomCode(system, buffer, "trailer")>
 
   %endif
 %endfunction

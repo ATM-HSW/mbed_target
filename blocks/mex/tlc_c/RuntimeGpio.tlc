@@ -16,7 +16,7 @@
 %% File : RuntimeGpio.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar
 %% Copyright 2015 M. Marquardt, HS Wismar
 
 %implements RuntimeGpio "C"
@@ -33,29 +33,26 @@
 
 %% Function: Start ========================================================
 %function Start(block, system) Output
-
-  %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
-  %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
-
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-  %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
-
   %if !SLibCodeGenForSim()
-    %%
-	%<name>.output();
-	%<name>.mode(PullDefault);
-    %%
-  %endif
 
-  %if !SLibCodeGenForSim()
-      %openfile declbuf
+    %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
+    %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
 
-      DigitalInOut %<name>(%<pname>);
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
 
-      %closefile declbuf
-      %assign srcFile = LibGetModelDotCFile()
-      %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    %openfile declbuf
+    // %<Type> (RuntimeGpio): '%<Name>'
+    DigitalInOut %<name>(%<pname>);
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %<name>.output();
+    %<name>.mode(PullDefault);
+
   %endif
 %endfunction
 
@@ -63,23 +60,26 @@
 %% Function: Outputs ======================================================
 %%
 %function Outputs(block, system) Output
-
-  %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-  %assign name = FEVAL("strrep",name," ","_")
-  
   %if !SLibCodeGenForSim()
 
-  %% High setzen des Pins am Anfang eines Subsystems
-	%openfile buffer
-		%<name> = 1;		
-	%closefile buffer
-	%<LibSystemOutputCustomCode(system, buffer, "header")>
-	
-  %% LOW setzen des Pins am Anfang eines Subsystems
-	%openfile buffer
-		%<name> = 0;		
-	%closefile buffer
-	%<LibSystemOutputCustomCode(system, buffer, "trailer")>
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+
+    %openfile buffer
+    // %<Type> (RuntimeGpio): '%<Name>'
+    // set pin at the begin of subsystem
+    %<name> = 1;
+    %closefile buffer
+
+    %<LibSystemOutputCustomCode(system, buffer, "header")>
+
+    %openfile buffer
+    // %<Type> (RuntimeGpio): '%<Name>'
+    // reset pin at the end of subsystem
+    %<name> = 0;
+    %closefile buffer
+
+    %<LibSystemOutputCustomCode(system, buffer, "trailer")>
 
   %endif
 %endfunction
