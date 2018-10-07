@@ -41,7 +41,26 @@
 
     %openfile declbuf
     // %<Type> (CSVReader): '%<Name>'
-    uint8_t %<name>_dummy;
+    uint8_t %<name>_temp;
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (CSVReader): '%<Name>'
+    #ifdef __UVISION_VERSION
+    size_t strnlen (const char* s, size_t maxlen)
+    {
+      size_t len = 0;
+      while ((len <= maxlen) && (*s)) {
+        s++;
+        len++;
+      }
+      return len;
+    }
+
+    #endif    
     %closefile declbuf 
 
     %assign srcFile = LibGetModelDotCFile()
@@ -122,7 +141,11 @@
         %endforeach
     %endforeach
     %assign buffer = LibBlockInputSignalAddr(0, "", "", 0)
-    sscanf((const char*)%<buffer>, "%<formatstring>", %<varliste> %<name>_dummy);
+    %assign buflen = LibBlockInputSignalWidth(0)
+    %<name>_temp = strnlen((const char*)%<buffer>, %<buflen>);
+    if(%<name>_temp > 0)
+      sscanf((const char*)%<buffer>, "%<formatstring>", %<varliste> &%<name>_temp);
+
   %endif
 %endfunction
 

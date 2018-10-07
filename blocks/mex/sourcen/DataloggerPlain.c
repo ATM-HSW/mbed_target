@@ -36,7 +36,6 @@ static void mdlCheckParameters(SimStruct *S)
   /*
    * Check the parameter: sample time
    */
-   printf("mdlCheckParameters\n");
   if EDIT_OK(S, 1) {
     const double *sampleTime = NULL;
     const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
@@ -129,10 +128,8 @@ static void mdlInitializeSizes(SimStruct *S)
   /*
    * Configure the input ports
    */
-  //printf("sfunar_DataloggerSDCard\r\n");
   for (i = 0; i < numberOfInputs; i++) {
     numberOfVectorElements = (int)mxGetScalar(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i+1));
-    //printf("%d: %s\r\n%d\r\n", i, mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), numberOfVectorElements);
     if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint8"))
       ssSetInputPortDataType(S, i, SS_UINT8);
     else if (strstr(mxArrayToString(mxGetCell(ssGetSFcnParam(S, idxTypeInputPorts), 2*i)), "uint16"))

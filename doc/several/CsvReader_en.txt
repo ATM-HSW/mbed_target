@@ -4,7 +4,7 @@ CSVReader
 Description
 -----------
 
-Reads an input vector in the scanf style. The number of, the width and the data type of each input port can be configured.
+Reads an input vector in scanf style. The number of, the width and the data type of each input port can be configured.
 
 Input port:
  - vector of uint8 (character array)
@@ -23,7 +23,7 @@ Output port:
 Data Type Support
 -----------------
 
-The input port expects a vector with *uint8* data type.
+The input port **d** expects a vector with *uint8* data type. It has to be a 0-terminated string.
 
 The output port(s) writes values with the defined data types.
 
@@ -37,6 +37,9 @@ Types of Outputs
 
 See the above description.
 
+Buffer Size
+...........
+specifies the maximum number of uint8 which can be received at **d** 
 
 Sample Time
 ...........
@@ -60,16 +63,38 @@ creates a global instance
 
 .. code-block:: c++
 
-  xx <instance name>(P<Port Name>_<Pin Number>);
+  uint8_t <instance name>_temp;
+
+
+and a strnlen implementation for uVision. This function is a GNU C Lib extension and therefor not necessary within the code generation process when compiling with GNU ARM gcc. 
+
+.. code-block:: c++
+
+  #ifdef __UVISION_VERSION
+  size_t strnlen (const char* s, size_t maxlen)
+  {
+    size_t len = 0;
+    while ((len <= maxlen) && (*s)) {
+      s++;
+      len++;
+    }
+    return len;
+  }
+  #endif    
+
 
 in \ **<Model Name>**\ .cpp.
 
 Step Function
 .............
 
-creates two lines in void **<Model Name>**\ _step(void) function
+creates several lines in void \ **<Model Name>**\ _step(void) function
 
 .. code-block:: c++
 
-  lvalue1  = (uint16_T)<instance name>.read_u16());
-  lvalue2  = (real32_T)<instance name>.read();
+  <instance name>_temp = strnlen((const char*)<address of d>, <length of d>);
+  if(<instance name>_temp > 0)
+    sscanf((const char*)<address of d>, "<formatstring>", <varliste> &<instance name>_temp);
+
+
+where \ **<formatstring>**\  and \ **<varliste>**\  are build up from \ **Types of Outputs**\ 

@@ -16,7 +16,7 @@
 %% File : dataloggerPlain.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2015-2017 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2015-2018 Dr.O.Hagendorf, HS Wismar
 
 %implements DataloggerPlain "C"
 
@@ -45,7 +45,6 @@
     #define BUF_LEN%<name> %<buffersize_val>
     char buffer%<name>[BUF_LEN%<name>];
     int buf_idx%<name>=0;
-    FILE *fp%<name>;
     %closefile declbuf 
 
     %assign srcFile = LibGetModelDotCFile()

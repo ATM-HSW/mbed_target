@@ -4,7 +4,20 @@ CSVWriter
 Description
 -----------
 
-description
+Creates an output vector in printf style. The number of, the width and the data type of each input port can be configured.
+
+Type of Inputs (List of 2-tuples):
+ - 1st tuple item: Port width
+ - 2nd tuple item: Port data type (single, double, int8, int16, int32, uint8, uint16, uint32, bool) 
+ - e.g.: {'8*uint8' '1*bool'} for the block below
+
+Output ports:
+ d - vector of uint8 (character array)
+ n - size of vector d 
+ e - buffer too small for printf result
+
+Buffer Size:
+Estimated maximal size of one data line.
 
 .. image:: ../images/block_several_CSVWriter.png
    :scale: 50 %
@@ -12,17 +25,23 @@ description
 Data Type Support
 -----------------
 
-The output port writes values with *real32* and *uint16* data types.
-The input port expects values with *real32* or *uint16* data types.
+The input port(s) expect(s) values with the defined data types.
+
+The output port **d** writes a vector with *uint8* data type, **n** a value with data type *uint32* and **e** with data type *boolean*.
 
 Parameters Dialog Box
 ---------------------
 
 .. image:: ../images/mask_several_CSVWriter.png
 
-Port Name/Pin Number
-....................
-specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+Types of Inputs
+................
+
+See the above description.
+
+Buffer Size
+...........
+specifies the maximum length of the output. If the line is longer it is discarded and the error output is set to true. 
 
 Sample Time
 ...........
@@ -35,9 +54,13 @@ Example
 
 In the example, a string (line with CR, LF or CRLF at the end) is read and interpreted by the CSVReader block. The line has to contain at least 3 numbers of uint8, int16 and single data type. The first number is incremented, the second decremented and the last is not changed. An CSVWriter block takes these 3 numbers and creates a string from them. The string is send back to UART.
 
-.. image:: ../images/example_Several_CSVReaderWriter.png
+.. image:: ../images/example_Several_CSVReaderWriter1.png
    :scale: 70 %
 
+In a terminal programm it looks like shown below:
+
+.. image:: ../images/example_Several_CSVReaderWriter2.png
+   :scale: 70 %
 
 Code Generation
 ---------------
@@ -50,16 +73,40 @@ creates a global instance
 
 .. code-block:: c++
 
-  xx <instance name>(P<Port Name>_<Pin Number>);
+  // %<Type> (DataloggerPlain): '%<Name>'
+  #define <instance name>_BUF_LEN <Buffer Size>
+  char <instance name>_buffer[<instance name>_BUF_LEN];
+  int <instance name>_buf_idx=0;
 
 in \ **<Model Name>**\ .cpp.
 
 Step Function
 .............
 
-creates two lines in void **<Model Name>**\ _step(void) function
+creates several lines in void **<Model Name>**\ _step(void) function
+
+in a loop depending on **Types of Input** one or a few snprintf with different parameters are called 
 
 .. code-block:: c++
 
-  lvalue1  = (uint16_T)<instance name>.read_u16());
-  lvalue2  = (real32_T)<instance name>.read();
+  <instance name>_buf_idx+=snprintf(<instance name>_buffer + <instance name>_buf_idx, <instance name>_BUF_LEN, "%hhu", %<u>);
+
+followed by
+
+.. code-block:: c++
+
+    <instance name>_buf_idx+=snprintf(<instance name>_buffer + <instance name>_buf_idx, <instance name>_BUF_LEN, "\r\n" );
+
+    memcpy(<Addr of d>, <instance name>_buffer, <instance name>_buf_idx);
+    <n> = <instance name>_buf_idx;
+
+
+and when error output port is enabled finally
+
+.. code-block:: c++
+
+  if (<instance name>_BUF_LEN > <instance name>_buf_idx) {
+    <e> = 0;
+  } else {
+    <e> = 1;
+  }
