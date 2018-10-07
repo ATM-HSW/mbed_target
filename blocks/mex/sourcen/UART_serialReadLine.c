@@ -139,7 +139,6 @@ static void mdlInitializeSizes(SimStruct *S)
   if (!ssSetNumOutputPorts(S, 1+(dataSizePortEnable?1:0)+(newDataPortEnable?1:0)))
     return;
 
-printf("num oports %d\n", 1+(dataSizePortEnable?1:0)+(newDataPortEnable?1:0));
 
   /*
    * Configure the output port 1
