@@ -1,5 +1,5 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
@@ -165,7 +165,7 @@ static void mdlInitializeSizes(SimStruct *S)
  */
 static void mdlInitializeSampleTimes(SimStruct *S)
 {
-  const double * const sampleTime = mxGetPr(SAMPLE_TIME);
+  const double * sampleTime = mxGetPr(SAMPLE_TIME);
   const size_t stArraySize = mxGetM(SAMPLE_TIME) * mxGetN(SAMPLE_TIME);
   ssSetSampleTime(S, 0, sampleTime[0]);
   if (stArraySize == 1) {

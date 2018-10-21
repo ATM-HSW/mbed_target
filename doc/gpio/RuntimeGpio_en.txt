@@ -1,0 +1,39 @@
+GPIO Runtime
+============
+
+Description
+-----------
+
+This block generates square wave signal at a GPIO pin to measure computational time of a model or subsystem. Therefor the block sets an output pin at the very beging of the susystem's/model's 
+code. It resets the pin at the very end. So the duration of the high pulse is a measurement of the time needed to execute the code of the system the block is placed in.
+
+.. image:: ../images/block_RuntimeGPIO.png
+   :scale: 50 %
+
+Data Type Support
+-----------------
+
+This block has no input or output ports.
+
+
+Parameters Dialog Box
+---------------------
+
+.. image:: ../images/mask_RuntimeGPIO.png
+
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+Example
+-------
+
+.. image:: ../images/example_RuntimeGpio.png
+   :scale: 50 %
+
+.. image:: ../images/example_RuntimeGpio_scope.png
+   :scale: 50 %

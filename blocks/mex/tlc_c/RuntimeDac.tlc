@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -37,14 +37,18 @@
 
     %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
     %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
-  
-    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-    %assign name = FEVAL("strrep",name," ","_")
+
     %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
+    %assign name = "RunTimeDAC_" + pname
+    %assign nameDef = "RUNTIMEDAC_" + FEVAL("char",Portname+64) + FEVAL("int2str",Pinnumber-1)
 
     %openfile declbuf
     // %<Type> (RuntimeDac): '%<Name>'
+    #ifndef %<nameDef>
     AnalogOut %<name>(%<pname>);
+    real32_T %<name>_old=0.0;
+    #define %<nameDef>
+    #endif
     %closefile declbuf
 
     %assign srcFile = LibGetModelDotCFile()
@@ -61,27 +65,36 @@
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
 
+    %assign Portname = CAST("Number",LibBlockParameterValue(PortName, 0))
+    %assign Pinnumber = CAST("Number",LibBlockParameterValue(PinNumber, 0))
     %assign Dacvalue = LibBlockParameterValue(DacValue, 0)
-  
-    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-    %assign name = FEVAL("strrep",name," ","_")
+    %assign ModeValue = LibBlockParameterValue(Mode, 0)
 
-    %openfile buffer
-    // %<Type> (RuntimeDac): '%<Name>'
-    // High setzen des Pins am Anfang eines Subsystems
-    real32_T %<name>_old = %<name>.read();
-    %<name>.write(%<Dacvalue>);
-    %closefile buffer
+    %assign pname = "P" + FEVAL("char",Portname+64) + "_" + FEVAL("int2str",Pinnumber-1)
+    %assign name = "RunTimeDAC_" + pname
 
-    %<LibSystemOutputCustomCode(system, buffer, "header")>
+    %if ModeValue == 1
+      %<name>.write(%<Dacvalue>);
+    %else
+      %openfile buffer
+      // %<Type> (RuntimeDac): '%<Name>'
+      // Set DAC value at the beginning of subsystem/model
+      %<name>_old = %<name>.read();
+      %<name>.write(%<Dacvalue>);
+      %closefile buffer
 
-    %openfile buffer
-    // %<Type> (RuntimeDac): '%<Name>'
-    // LOW setzen des Pins am Anfang eines Subsystems
-    %<name>.write(%<name>_old);
-    %closefile buffer
+      %<LibSystemOutputCustomCode(system, buffer, "header")>
+    %endif
 
-    %<LibSystemOutputCustomCode(system, buffer, "trailer")>
+    %if ModeValue == 2
+      %openfile buffer
+      // %<Type> (RuntimeDac): '%<Name>'
+      // set DAC value to the old value at the end of a subsystem/model
+      %<name>.write(%<name>_old);
+      %closefile buffer
+
+      %<LibSystemOutputCustomCode(system, buffer, "trailer")>
+    %endif
 
   %endif
 %endfunction

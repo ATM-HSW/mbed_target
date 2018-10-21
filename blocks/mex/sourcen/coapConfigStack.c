@@ -1,5 +1,6 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2018 Yi-Chen Hsu, HS Wismar
+             2014-2018 Dr.O.Hagendorf, HS Wismar  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.

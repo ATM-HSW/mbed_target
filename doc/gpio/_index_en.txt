@@ -15,3 +15,5 @@ Contents:
    PWM_Output_en
    Servo_Output_en
    Interrupt_en
+   RuntimeGpio_en
+   RuntimeDac_en

@@ -42,6 +42,9 @@ function createStruct()
   addStruct('analogInput',              'gpio/Analog_Input_en');
   addStruct('PWMOutput',                'gpio/PWM_Output_en');
   addStruct('timerServoOutput',         'gpio/Servo_Output_en');
+  addStruct('RuntimeDAC',               'gpio/RuntimeDac_en');
+  addStruct('RuntimeGPIO',              'gpio/RuntimeGpio_en');
+
   addStruct('RTOScreateThread',         'rtos/Thread_en');
   addStruct('RTOScreateTimer',          'rtos/Timer_en');
   addStruct('RTOSmailSend',             'rtos/Mail_Send_en');
@@ -100,8 +103,6 @@ function createStruct()
   addStruct('DS3231',                   'several/DS3231_en');
   addStruct('fm25l16bRead',             'memory/Fm25l16b_Fram_Read_en');
   addStruct('fm25l16bWrite',            'memory/Fm25l16b_Fram_Write_en');
-  addStruct('RuntimeDAC',               'several/RuntimeDac_en');
-  addStruct('RuntimeGPIO',              'several/RuntimeGpio_en');
   addStruct('CSVWriter',                'several/CsvWriter_en');
   addStruct('CSVReader',                'several/CsvReader_en');
   addStruct('randomNumber',             'targets/target_specific/Random_Number_Generator_en');

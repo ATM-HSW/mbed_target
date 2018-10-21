@@ -1,0 +1,67 @@
+DAC Runtime
+===========
+
+Description
+-----------
+
+.. image:: ../images/block_RuntimeDAC.png
+   :scale: 40 %
+
+This block can be used to measure the runtime of several subsystems or blocks of a model or to determine the runtime of different tasks in a multitasking model. Only one controller pin with a digital to analog converter peripheral and a scope are necessary.
+
+To measure the runtime of blocks and/or subsystem each has to contain the *DAC Runtime* block with a different *DAC Value*.
+
+Two modes are possible:
+
+- Each time the execution of a subsystem starts, the DAC is set to the configered value. The correct execution order has to be choosen by block priorities as shown in example 2.
+
+- Each time the execution of a subsystem starts, the actual DAC value is stored and the DAC is set to the new one. After finishing the execution, the old DAC value is restored. 
+
+.. attention::
+  Not all pins can be used for DAC output so check the documentation of the used MCU.
+
+Data Type Support
+-----------------
+
+This block has no input or output ports.
+
+Parameters and Dialog Box
+-------------------------
+
+.. image:: ../images/mask_RuntimeDAC.png
+
+Port Name/Pin Number
+....................
+specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+
+Mode
+....
+specify the mode of setting DAC values: 
+- set the DAC to the configured DAC value 
+- store current value, set the new one at the beginning and set back the stored value at the end of submodel execution.
+
+DAC Value
+.........
+Value can between 0.0 and 1.0, i.e. 0V and 3.3V in most cases.
+
+Sample Time
+...........
+specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+
+.. note::
+  If the system is idle and none of the models code is executed the DAC Value is 0. So don't use 0 as the DAC Value for your code.
+
+Example
+-------
+
+.. image:: ../images/example_RuntimeDAC2.png
+   :scale: 50 %
+
+.. image:: ../images/example_RuntimeDAC2_scope.png
+   :scale: 50 %
+
+.. image:: ../images/example_RuntimeDAC1.png
+   :scale: 50 %
+
+.. image:: ../images/example_RuntimeDAC1_scope.png
+   :scale: 50 %

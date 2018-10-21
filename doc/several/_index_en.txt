@@ -6,7 +6,5 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   RuntimeGpio_en
-   RuntimeDac_en
    CsvWriter_en
    CsvReader_en

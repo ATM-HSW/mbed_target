@@ -1,5 +1,5 @@
 /* Copyright 2010 The MathWorks, Inc. */
-/* Copyright 2014-2017 Dr.O.Hagendorf, HS Wismar  */
+/* Copyright 2014-2018 Dr.O.Hagendorf, HS Wismar  */
 
 /*
  * Must specify the S_FUNCTION_NAME as the name of the S-function.
@@ -88,7 +88,7 @@ static void mdlCheckParameters(SimStruct *S)
 static void mdlInitializeSizes(SimStruct *S)
 {
   /* Number of expected parameters */
-  ssSetNumSFcnParams(S, 4);
+  ssSetNumSFcnParams(S, 5);
 
 #if defined(MATLAB_MEX_FILE)
 
@@ -115,6 +115,7 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetSFcnParamTunable(S, 1, 0);
   ssSetSFcnParamTunable(S, 2, 0);
   ssSetSFcnParamTunable(S, 3, 0);
+  ssSetSFcnParamTunable(S, 4, 0);
 
   ssSetNumPWork(S, 0);
 
@@ -200,7 +201,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
   /* Set number of run-time parameters */
-  if (!ssSetNumRunTimeParams(S, 3))
+  if (!ssSetNumRunTimeParams(S, 4))
     return;
 
   /*
@@ -209,6 +210,7 @@ static void mdlSetWorkWidths(SimStruct *S)
   ssRegDlgParamAsRunTimeParam(S, 1, 0, "PortName", ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 2, 1, "PinNumber", ssGetDataTypeId(S, "uint8"));
   ssRegDlgParamAsRunTimeParam(S, 3, 2, "DacValue", ssGetDataTypeId(S, "double"));
+  ssRegDlgParamAsRunTimeParam(S, 4, 3, "Mode", ssGetDataTypeId(S, "uint8"));
 }
 
 #endif
