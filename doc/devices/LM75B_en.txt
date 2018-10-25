@@ -6,36 +6,39 @@ LM75B
 Description
 -----------
 
-description
+Reads the last temperature measurement result of the LM75 sensor.
 
-.. image:: ../images/emptyblock.png
+The result is updated depending on the chosen samplerate: If no new result is ready the old one is given back.
+
+Only 8-Bit I2C address 0x90 is supported.
+
+.. image:: ../images/block_LM75B.png
    :scale: 50 %
 
 Data Type Support
 -----------------
 
-The output port writes values with *real32* and *uint16* data types.
-The input port expects values with *real32* or *uint16* data types.
+The output port writes values with *real32* data type.
 
 Parameters Dialog Box
 ---------------------
 
-.. image:: ../images/emptymask.png
+.. image:: ../images/mask_LM75B.png
 
-Port Name/Pin Number
-....................
-specify the mcu pin. This block supports the naming schema: 'P' + letter 'A', 'B', 'C', ... + '_' + number '0', '1', ... '15', e.g. PA_0.
+I2C Port
+........
+Selects the I2C peripheral which is configured by an *I2C Master Config* block.
 
 Sample Time
 ...........
-specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
+Specifies the time interval between samples. To inherit the sample time, set this parameter to -1.
 
 Example
 -------
 
-In the example an analog input pin is read in by an Analog Input Block. This value is written to an analog output pin by an Analog Output block.
+In the example a temperature is read in by an LM75B Block. This value is written as an ASCII string to a serial port..
 
-.. image:: ../images/emptyexample.png
+.. image:: ../images/example_LM75B.png
    :scale: 50 %
 
 
@@ -50,7 +53,8 @@ creates a global instance
 
 .. code-block:: c++
 
-  xx <instance name>(P<Port Name>_<Pin Number>);
+  <i2c_name> = "i2c" + <i2cport_val>
+  LM75B lm75b_<subaddress_val>(&<i2c_name>);
 
 in \ **<Model Name>**\ .cpp.
 

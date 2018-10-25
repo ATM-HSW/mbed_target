@@ -51,7 +51,7 @@ See the above description.
 SPI Port
 ........
 
-Selects the SPI peripheral wich is configured by an *SPI Master Config* block.
+Selects the SPI peripheral which is configured by an *SPI Master Config* block.
 
 Chip Select Port and Pin
 ........................
