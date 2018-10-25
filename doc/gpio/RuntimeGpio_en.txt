@@ -36,4 +36,4 @@ Example
    :scale: 50 %
 
 .. image:: ../images/example_RuntimeGpio_scope.png
-   :scale: 50 %
+

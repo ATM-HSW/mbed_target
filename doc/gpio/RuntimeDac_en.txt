@@ -53,15 +53,16 @@ specifies the time interval between samples. To inherit the sample time, set thi
 
 Example
 -------
-
-.. image:: ../images/example_RuntimeDAC2.png
-   :scale: 50 %
-
-.. image:: ../images/example_RuntimeDAC2_scope.png
-   :scale: 50 %
+The first example uses the set/reset modus. The runtime of each model level is depicted in the scope screendump. With the scope measurement features, the runtime of each submodel can be estimated.
 
 .. image:: ../images/example_RuntimeDAC1.png
    :scale: 50 %
 
 .. image:: ../images/example_RuntimeDAC1_scope.png
-   :scale: 50 %
+
+The second example uses the set modus. The execution order has to be set with the block priorities as can be seen in the model. The execution start of individual blocks can be measured without the usage of submodels as in the above example.
+
+.. image:: ../images/example_RuntimeDAC2.png
+   :scale: 40 %
+
+.. image:: ../images/example_RuntimeDAC2_scope.png
