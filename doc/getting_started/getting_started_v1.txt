@@ -47,6 +47,8 @@ When the connected board does not appear, please check the output of the command
 
 When it does not look like the above example please check your Mbed Target documentation.
 
+The build speed can be increase when configuring more than one make job. The job number should be lesser then the number of processor cores. Depending on the PC, compile errors can occur when configuring more then one job.
+
 When the board could be detected, the code generation can be started by 
 
 -	pressing the button \ **Build model**\ , 

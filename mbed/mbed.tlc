@@ -51,7 +51,7 @@
   rtwoptions(oIdx).prompt        = 'Mbed options';
   rtwoptions(oIdx).type          = 'Category';
   rtwoptions(oIdx).enable        = 'on';
-  rtwoptions(oIdx).default       = 12;  % number of items under this category excluding this one.
+  rtwoptions(oIdx).default       = 13;  % number of items under this category excluding this one.
   rtwoptions(oIdx).popupstrings  = '';
   rtwoptions(oIdx).tlcvariable   = '';
   rtwoptions(oIdx).tooltip       = '';
@@ -113,6 +113,17 @@
 
   oIdx = oIdx + 1;
 
+  rtwoptions(oIdx).prompt         = 'number of make jobs';
+  rtwoptions(oIdx).type           = 'Popup';
+  rtwoptions(oIdx).popupstrings   = '1|2|3|4|5|6|7|8';
+  rtwoptions(oIdx).default        = '1';
+  rtwoptions(oIdx).tlcvariable    = 'MakeJobs';
+  rtwoptions(oIdx).makevariable   = '';
+  rtwoptions(oIdx).tooltip        = ['use mbedls to detect mbed Virtual Drive and Virtual COM Port before flashing'];
+  rtwoptions(oIdx).callback       = '';
+
+  oIdx = oIdx + 1;
+
   rtwoptions(oIdx).prompt         = 'Flash Application';
   rtwoptions(oIdx).type           = 'Checkbox';
   rtwoptions(oIdx).default        = mbed.Prefs.getMbedDownload();
@@ -161,7 +172,7 @@
   rtwoptions(oIdx).default        = 1;
   rtwoptions(oIdx).tlcvariable    = 'UseMbedRTOS';
   rtwoptions(oIdx).makevariable   = 'USEMBEDRTOS';
-  rtwoptions(oIdx).enable         = 'on';
+  rtwoptions(oIdx).enable         = 'off';
   rtwoptions(oIdx).tooltip        = sprintf(['Add mbed RTOS.']);
   rtwoptions(oIdx).callback       = 'mbed_tlc_callback(hDlg, hSrc, ''UseMbedRTOS'')';
 

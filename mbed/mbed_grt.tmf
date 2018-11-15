@@ -338,9 +338,9 @@ $(MODEL)$(PROGRAM_FILE_EXT): $(PREBUILT_OBJS) $(OBJS) $(MODELLIB) $(MODELREF_LIN
 endif
 
 ifeq ($(BUILD_MODE), real_time)
-$(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS)
+$(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS) $(MODEL).link_script.ld
 	@echo "### BUILD_MODE $(BUILD_MODE)"
-	@$(LD) $(MBED_LD_FLAGS) -T$(MBED_LINKER_SCRIPT) $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ $^ $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
+	@$(LD) $(MBED_LD_FLAGS) -T$(filter-out %.o, $^) $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ $(filter %.o, $^) $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
 	@echo "### Generated $@"
 endif
 
@@ -383,6 +383,10 @@ endif
 	+@$(call MAKEDIR,$(dir $@))
 	@$(CPP) $(MBED_CPPC_FLAGS) $(MBED_CC_SYMBOLS) $(MBED_INCLUDE_PATHS) $(CXXFLAGS) $< $(CCOUTPUTFLAG) $@
 
+$(MODEL).link_script.ld : $(MBED_LINKER_SCRIPT)
+	@echo "Preprocessing: $<"
+	+@$(call MAKEDIR,$(dir $@))
+	@$(PREPROC) $< -o $@
 
 
 |>START_EXPAND_RULES<|%$(OBJ_EXT) : |>EXPAND_DIR_NAME<|/%.cpp

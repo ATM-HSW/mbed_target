@@ -116,16 +116,6 @@ if ~i_isPilSim
 %    end
 end
 
-% Check for C_INCLUDE_PATH
-if ~isempty(getenv('C_INCLUDE_PATH'))
-    error('RTW:mbed:nonEmptyCIncludePath',...
-        ['The environment variable C_INCLUDE_PATH is set. '...
-        'This may conflict with the gcc for AVR. You should '...
-        'clear this environment variable, e.g. by running '...
-        'setenv(''C_INCLUDE_PATH'','''') from the MATLAB command '...
-        'window.']);
-end
-
 mbedautodetect = get_param(bdroot,'MbedlsAutodetect');
 if isequal(mbedautodetect, 'on')
     [MbedDrive, ComPort, MbedTarget5] = mbed_mbedls();
@@ -167,6 +157,7 @@ fprintf('###     Name:            %s\n', mbedtarget);
 fprintf('###     Version:         %s, library version %s\n', 'Mbed-OS 5', libraryversion);
 fprintf('###     RTOS:            %s\n', get_param(bdroot,'UseMbedRTOS'));
 fprintf('###     Fixed step size: %ss\n', get_param(bdroot,'FixedStep'));
+fprintf('###     # of Make jobs:  %s\n', get_param(bdroot,'MakeJobs'));
 fprintf('###     mbed Drive:      %s\n', get_param(bdroot,'MbedDrive'));
 fprintf('###     Com Port:        %s\n', get_param(bdroot,'ComPort'));
 fprintf('###     Programmer:      %s\n', mbed.Prefs.getMbedProgrammer()); %get_param(bdroot,'MbedProgrammer'))
