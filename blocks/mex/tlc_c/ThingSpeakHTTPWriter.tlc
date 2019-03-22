@@ -1,0 +1,140 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2019 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : ThingSpeakHTTPWriter.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015-2019 Dr.O.Hagendorf, HS Wismar
+
+%implements DataloggerPlain "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign buffersize_val = CAST("Number",LibBlockParameterValue(buffer_size, 0))
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+    // %<Type> (DataloggerPlain): '%<Name>'
+    #define BUF_LEN%<name> %<buffersize_val>
+    char buffer%<name>[BUF_LEN%<name>];
+    int buf_idx%<name>=0;
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nInputs  = LibBlockNumInputPorts(block)
+    %assign rolling = [0: %<nInputs>]
+    %assign blockid = 1
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %assign rollVars = ["U"]
+    buf_idx%<name> = 0;
+    %assign start = 0
+    %foreach port = nInputs
+        %assign inputportwidth = LibBlockInputSignalWidth(port)
+        %foreach signal = inputportwidth
+            %assign u = LibBlockInputSignal(port, "", "", signal)
+            %assign datatype = LibBlockInputSignalDataTypeName(port, tRealPart)
+            // %<datatype>;
+            %if ISEQUAL(start, 1)
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, ",");
+            %else
+                %assign start = 1
+            %endif
+            %switch datatype
+              %case "uint8_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%hhu", %<u>);
+                %break
+              %case "int8_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%hhd", %<u>);
+                %break
+              %case "uint16_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%hu", %<u>);
+                %break
+              %case "int16_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%hd", %<u>);
+                %break
+              %case "uint32_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%u", %<u>);
+                %break
+              %case "int32_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%d", %<u>);
+                %break
+%%              %case "uint64_T"
+%%                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%lu", %<u>);
+%%                %break
+%%              %case "int64_T"
+%%                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%ld", %<u>);
+%%                %break
+              %case "real32_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%f", %<u>);
+                %break
+              %case "real_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "%lf", %<u>);
+              %break
+              %case "boolean_T"
+                buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, %<u>?"1":"0" );
+              %break
+              %default
+                %break
+            %endswitch
+
+        %endforeach
+    %endforeach
+    buf_idx%<name>+=snprintf(buffer%<name>+buf_idx%<name>, BUF_LEN%<name>, "\r\n" );
+    %assign y1_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
+    %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+
+    memcpy(%<y1_ptr>, buffer%<name>, buf_idx%<name>);
+    %<y2_val> = buf_idx%<name>;
+
+    %assign errEn_val = CAST("Number",LibBlockParameterValue(errEn, 0))
+    %if errEn_val
+      %assign y = LibBlockOutputSignal(2, "", "", 0)
+      if (BUF_LEN%<name>>buf_idx%<name>) {
+        %<y> = 0;
+      } else {
+        %<y> = 1;
+      }
+    %endif
+  %endif
+%endfunction
+

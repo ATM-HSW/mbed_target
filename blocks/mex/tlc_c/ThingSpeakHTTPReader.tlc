@@ -1,0 +1,151 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2018 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : ThingSpeakHTTPReader.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2015-2019 Dr.O.Hagendorf, HS Wismar
+
+%implements ThingSpeakHTTPRead "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+    // %<Type> (CSVReader): '%<Name>'
+    uint8_t %<name>_temp;
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (CSVReader): '%<Name>'
+    #ifdef __UVISION_VERSION
+    size_t strnlen (const char* s, size_t maxlen)
+    {
+      size_t len = 0;
+      while ((len <= maxlen) && (*s)) {
+        s++;
+        len++;
+      }
+      return len;
+    }
+
+    #endif    
+    %closefile declbuf 
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nOutputs  = LibBlockNumOutputPorts(block)
+    %assign rolling = [0: %<nOutputs>]
+    %assign blockid = 1
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %assign rollVars = ["U"]
+    %assign formatstring = ""
+    %assign varliste = ""
+    %foreach port = nOutputs
+        %assign outputportwidth = LibBlockOutputSignalWidth(port)
+        %foreach signal = outputportwidth
+            %assign u = LibBlockOutputSignalAddr(port, "", "", signal)
+            %assign datatype = LibBlockOutputSignalDataTypeName(port, tRealPart)
+            %switch datatype
+              %case "uint8_T"
+                %assign formatstring = formatstring + "%hhu" + ","
+                %assign varliste = varliste + u + ","
+                %break
+              %case "int8_T"
+                %assign formatstring = formatstring + "%hhd" + ","
+                %assign varliste = varliste + u + ","
+                %break
+              %case "uint16_T"
+                %assign formatstring = formatstring + "%hu" + ","
+                %assign varliste = varliste + u + ","
+                %break
+              %case "int16_T"
+                %assign formatstring = formatstring + "%hd" + ","
+                %assign varliste = varliste + u + ","
+                %break
+              %case "uint32_T"
+                %assign formatstring = formatstring + "%u" + ","
+                %assign varliste = varliste + u + ","
+                %break
+              %case "int32_T"
+                %assign formatstring = formatstring + "%d" + ","
+                %assign varliste = varliste + u + ","
+                %break
+%%              %case "uint64_T"
+%%                %assign formatstring = formatstring + "%lu" + ","
+%%                %assign varliste = varliste + u + ","
+%%                %break
+%%              %case "int64_T"
+%%                %assign formatstring = formatstring + "%ld" + ","
+%%                %assign varliste = varliste + u + ","
+%%                %break
+              %case "real32_T"
+                %assign formatstring = formatstring + "%f" + ","
+                %assign varliste = varliste + u + ","
+                %break
+              %case "real_T"
+                %assign formatstring = formatstring + "%lf" + ","
+                %assign varliste = varliste + u + ","
+              %break
+              %case "boolean_T"
+                %assign formatstring = formatstring + "%<u>" + ","
+                %assign varliste = varliste + u + ","
+              %break
+              %default
+                %break
+            %endswitch
+
+        %endforeach
+    %endforeach
+    %assign buffer = LibBlockInputSignalAddr(0, "", "", 0)
+    %assign buflen = LibBlockInputSignalWidth(0)
+    %<name>_temp = strnlen((const char*)%<buffer>, %<buflen>);
+    if(%<name>_temp > 0)
+      sscanf((const char*)%<buffer>, "%<formatstring>", %<varliste> &%<name>_temp);
+
+  %endif
+%endfunction
+

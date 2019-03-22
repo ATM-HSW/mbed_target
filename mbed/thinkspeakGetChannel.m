@@ -1,0 +1,1 @@
+[number, fnames] = thinkspeakGetChannelFields('719728', '2KY0I4OUX7V3U5LT');
