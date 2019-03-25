@@ -54,7 +54,7 @@
     osThreadId step_id=NULL;
     Thread step_1_thread;
     Ticker step_1_ticker;
-    
+
     EventQueue eventQueueLow;
     EventQueue eventQueueNormal;
   %else
@@ -104,14 +104,14 @@
 
     /* with RTOS */
     int main(void) {
-  		// low priority thread for events
+      // low priority thread for events
       Thread eventThreadLow(osPriorityLow);
       eventThreadLow.start(callback(&eventQueueLow, &EventQueue::dispatch_forever));
 
-  		// normal priority thread for events
-		  Thread eventThreadNormal(osPriorityNormal);
-		  eventThreadNormal.start(callback(&eventQueueNormal, &EventQueue::dispatch_forever));
-     
+      // normal priority thread for events
+      Thread eventThreadNormal(osPriorityNormal);
+      eventThreadNormal.start(callback(&eventQueueNormal, &EventQueue::dispatch_forever));
+
       /* initialize model */
       %<LibCallModelInitialize()>\
 
