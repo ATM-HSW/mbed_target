@@ -1,0 +1,147 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : Motor_Driver_Config.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
+
+%implements Motor_Driver_Config "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+  
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign PWMUport_val     = LibBlockParameterValue(PWMUport,0)
+    %assign PWMVport_val     = LibBlockParameterValue(PWMVport,0)
+    %assign PWMWport_val     = LibBlockParameterValue(PWMWport,0)
+    %assign PWMUpin_val      = LibBlockParameterValue(PWMUpin ,0)
+    %assign PWMVpin_val      = LibBlockParameterValue(PWMVpin ,0)
+    %assign PWMWpin_val      = LibBlockParameterValue(PWMWpin ,0)
+    %assign EnableUport_val  = LibBlockParameterValue(EnableUport,0)
+    %assign EnableVport_val  = LibBlockParameterValue(EnableVport,0)
+    %assign EnableWport_val  = LibBlockParameterValue(EnableWport,0)
+    %assign EnableUpin_val    = LibBlockParameterValue(EnableUpin ,0)
+    %assign EnableVpin_val    = LibBlockParameterValue(EnableVpin ,0)
+    %assign EnableWpin_val   = LibBlockParameterValue(EnableWpin ,0)
+
+    %% %assign name = "serial" + FEVAL("int2str",SerialPort_val)
+ 
+    %assign PnameU = "P" + FEVAL("char",PWMUport_val+64)    + "_" + FEVAL("int2str",PWMUpin_val-1)
+    %assign PnameV = "P" + FEVAL("char",PWMVport_val+64)    + "_" + FEVAL("int2str",PWMVpin_val-1)
+    %assign PnameW = "P" + FEVAL("char",PWMUport_val+64)    + "_" + FEVAL("int2str",PWMWpin_val-1)
+    %assign EnameU = "P" + FEVAL("char",EnableUport_val+64) + "_" + FEVAL("int2str",EnableUpin_val-1)
+    %assign EnameV = "P" + FEVAL("char",EnableVport_val+64) + "_" + FEVAL("int2str",EnableVpin_val-1)
+    %assign EnameW = "P" + FEVAL("char",EnableWport_val+64) + "_" + FEVAL("int2str",EnableWpin_val-1)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+
+    %openfile declbuf
+    // %<Type> (Motor_Driver_Config): '%<Name>'
+    %% Serial %<name>(%<pname1>, %<pname2>);
+    int calibrated=0;
+
+    DigitalOut Enablers[3]={%<EnameU>,%<EnameV>,%<EnameW>};
+    PwmOut     PWM[3]     ={%<PnameU>,%<PnameV>,%<PnameW>};
+
+    int step1[6]={1,0,0,1,1,0};
+    int step2[6]={1,0,0,1,0,1};
+    int step3[6]={0,1,0,0,1,1};
+    int step4[6]={0,1,0,1,1,0};
+    int step5[6]={0,0,1,1,0,1};
+    int step6[6]={0,0,1,0,1,1};
+    int step7[6]={1,1,1,1,1,1};
+
+    int is_step1[11]={28,121,208,289,375,457,541,624,709,791,868};    
+    int is_step2[11]={54,135,218,304,388,469,554,640,722,807,884};
+    int is_step3[11]={63,148,234,319,404,486,570,653,735,823,897};
+    int is_step4[11]={75,162,247,333,418,496,580,666,752,834,914};
+    int is_step5[11]={9,92,174,260,349,430,512,597,682,768,841};
+    int is_step6[11]={16,106,191,277,362,444,529,611,692,778,858};
+
+    %closefile declbuf
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+
+    void run(int step,int power){
+		switch(step){
+			case 1: for(int i=0;i<3;i++){
+                        Enablers[i]=step1[i+3];
+                        PWM[i]=step1[i]*power/100.00;
+					}
+					break;
+            case 2: for(int i=0;i<3;i++){
+                        Enablers[i]=step2[i+3];
+                        PWM[i]=step2[i]*power/100.00;
+   					}
+					break;
+			case 3:	for(int i=0;i<3;i++){
+                        Enablers[i]=step3[i+3];
+                        PWM[i]=step3[i]*power/100.00;
+					}
+					break;
+			case 4: for(int i=0;i<3;i++){
+                        Enablers[i]=step4[i+3];
+                        PWM[i]=step4[i]*power/100.00;
+					}
+					break;
+			case 5: for(int i=0;i<3;i++){
+                        Enablers[i]=step5[i+3];
+                        PWM[i]=step5[i]*power/100.00;
+					}
+					break;
+			case 6: for(int i=0;i<3;i++){
+                        Enablers[i]=step6[i+3];
+                        PWM[i]=step6[i]*power/100.00;
+					}
+					break;
+            case 7: for(int i=0;i<3;i++){
+                        Enablers[i]=step7[i+3];
+                        PWM[i]=step7[i];
+					}
+					break;
+			default:for(int i=0;i<3;i++){
+                        Enablers[i]=0;
+                        PWM[i]=0;
+					}	
+					break;
+		}
+    }
+    %closefile declbuf
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+    %%
+    %% %<name>.baud(%<BaudRate_val>);
+    PWM[0].period_us(200);
+    PWM[1].period_us(200);
+    PWM[2].period_us(200);
+    %%
+
+  %endif
+%endfunction

@@ -1,0 +1,130 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : BLDC_block_commutation.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements BLDC_block_commutation "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+
+  %<LibBlockSetIsExpressionCompliant(block)>
+
+%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nPower = LibBlockParameterValue(power, 0)
+    %assign nMode = FEVAL("int2str",LibBlockParameterValue(mode, 0))
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+   
+    %if FEVAL("strcmp",nMode,"1")
+       int step_counter=1;
+    %endif
+    
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    
+    %if nMode == "3"
+        //aktivieren des Positionskontroll algorithmuses wennn mode 3 gewählt
+       AS5048APositionControl=1;
+    %endif
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign nPower = FEVAL("int2str",LibBlockParameterValue(power, 0))
+    %assign nMode = LibBlockParameterValue(mode, 0)
+
+    %if nPower
+        %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+        %if nMode > 1
+            %assign u2_val = LibBlockInputSignal(1, "", "", 0)
+        %endif
+    %else
+        %if nMode > 1
+            %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+        %endif
+    %endif
+    
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    
+
+    %%
+    %if nMode == 1
+        if(step_counter==6)step_counter=1;
+        else    step_counter++;
+        %% %<name> = %<u1_val>;
+        %if nPower 
+        run(step_counter,%<u1_val>);
+        %else 
+        run(step_counter,100);
+        %endif
+    %endif
+    
+    %if nMode == 2
+        %if nPower
+        run(%<u2_val>,%<u1_val>);
+        %else 
+        run(%<u1_val>,100);
+        %endif
+    %endif
+    
+    if(calibrated){
+    %if nMode == 3
+        %if nPower 
+        //position(dutyT);
+        position(%<u2_val>);
+        run(n_posCon,%<u1_val>);
+        %else 
+        //position(dutyT);
+        position(%<u1_val>);
+        run(n_posCon,100);
+        %endif
+    %endif
+    }
+    %%
+  %endif
+%endfunction

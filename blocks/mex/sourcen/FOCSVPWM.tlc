@@ -1,0 +1,136 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : FOCSVPWM.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements FOCSVPWM "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%% %function BlockInstanceSetup(block, system) void
+
+%%  %<LibBlockSetIsExpressionCompliant(block)>
+
+%% %endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf    
+
+    float %<name>r,%<name>tetaL,%<name>tetaD,%<name>X,%<name>Y,%<name>XY,%<name>XYnorm,%<name>ReZ,%<name>ReX,%<name>ReY,%<name>ImZ,%<name>ImX,%<name>ImY;
+	int %<name>sektor,%<name>w1,%<name>w2;
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    //Umrechnung der alpha beta komponenten in rad winkel
+    float %<name>angleFromAB(float A,float B){
+        float tetaL;
+        if(A>0){ 
+			if( (tetaL=atan(B/A)) > 0) return tetaL;
+			else return tetaL+(2*3.14159);		
+        }else{
+			return tetaL=atan(B/A)+3.14159;
+        }
+    }
+    %closefile declbuf
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %if !LibBlockOutputSignalIsExpr(0)
+
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+    %assign u2_val = LibBlockInputSignal(1, "", "", 0)
+
+    %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+    %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+    %assign y3_val = LibBlockOutputSignal(2, "", "", 0)
+
+    
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %%
+	    
+
+    %<name>r=sqrt((%<u1_val>*%<u1_val>)+(%<u2_val>*%<u2_val>));
+    %<name>tetaL=%<name>angleFromAB(%<u1_val>,%<u2_val>);
+	if((%<name>tetaD=%<name>tetaL*180/3.14)<0)%<name>tetaD=360+%<name>tetaD;
+//pc.printf("neuer feldwinkel %f\n\r",%<name>tetaD);
+    // sektoren identifizieren
+    if(%<name>tetaD >   0 && %<name>tetaD <  60){ %<name>sektor=1;%<name>w1=  0;%<name>w2= 60;}
+    if(%<name>tetaD >  60 && %<name>tetaD < 120){ %<name>sektor=2;%<name>w1= 60;%<name>w2=120;}
+	if(%<name>tetaD > 120 && %<name>tetaD < 180){ %<name>sektor=3;%<name>w1=120;%<name>w2=180;}
+	if(%<name>tetaD > 180 && %<name>tetaD < 240){ %<name>sektor=4;%<name>w1=180;%<name>w2=240;}
+	if(%<name>tetaD > 240 && %<name>tetaD < 300){ %<name>sektor=5;%<name>w1=240;%<name>w2=300;}
+	if(%<name>tetaD > 300 && %<name>tetaD < 360){ %<name>sektor=6;%<name>w1=300;%<name>w2=360;}
+    //wichtungsfaktor der svpwm nach sektor berechnen
+	//gleichungssystem aufstellen
+    %<name>ReZ=%<name>r*cos(%<name>tetaD);%<name>ReX=100*cos((float)%<name>w1);%<name>ReY=100*cos((float)%<name>w2); 
+	%<name>ImZ=%<name>r*sin(%<name>tetaD);%<name>ImX=100*sin((float)%<name>w1);%<name>ImY=100*sin((float)%<name>w2);
+    //Gleichungssystem lösen
+    if((%<name>ImX>0 && %<name>ReX>0)||(%<name>ImX<0 && %<name>ReX<0) ){
+        %<name>ImY=%<name>ReY*%<name>ImX/%<name>ReX-%<name>ImY;
+        %<name>ImZ=%<name>ReZ*%<name>ImX/%<name>ReX-%<name>ImZ;
+        %<name>X=%<name>ImZ/%<name>ImY;
+        %<name>Y=(%<name>ReZ-(%<name>X*%<name>ReX))/%<name>ReY;
+    }//ImX zu 0 dadurch system lösbar
+	else{
+        %<name>ImY=%<name>ReY*%<name>ImX/%<name>ReX+%<name>ImY;
+        %<name>ImZ=%<name>ReZ*%<name>ImX/%<name>ReX+%<name>ImZ;
+        %<name>X=%<name>ImZ/%<name>ImY;%<name>Y=(%<name>ReZ-(%<name>X*%<name>ReX))/%<name>ReY;}
+	//X Y noch auf 1 scalieren für pwm
+	%<name>X=abs(%<name>X);
+	%<name>Y=abs(%<name>Y);
+	%<name>XY=%<name>X+%<name>Y;
+	%<name>XYnorm=%<name>XY/%<name>XY;
+    //die wichtungsfaktoren X u.Y wurden bestimmt jetzt durch identifikation der sektoren zu pwms zuordnen 
+	if(%<name>sektor==1){%<y3_val>=0;%<y1_val>=%<name>XYnorm;%<y2_val>=%<name>Y/%<name>XY;}
+	if(%<name>sektor==2){%<y3_val>=0;%<y2_val>=%<name>XYnorm;%<y1_val>=%<name>X/%<name>XY;}
+	if(%<name>sektor==3){%<y1_val>=0;%<y2_val>=%<name>XYnorm;%<y3_val>=%<name>Y/%<name>XY;}
+	if(%<name>sektor==4){%<y1_val>=0;%<y3_val>=%<name>XYnorm;%<y2_val>=%<name>X/%<name>XY;}
+	if(%<name>sektor==5){%<y2_val>=0;%<y3_val>=%<name>XYnorm;%<y1_val>=%<name>Y/%<name>XY;}
+	if(%<name>sektor==6){%<y2_val>=0;%<y1_val>=%<name>XYnorm;%<y3_val>=%<name>X/%<name>XY;}
+    %%
+    %endif
+  %endif
+%endfunction

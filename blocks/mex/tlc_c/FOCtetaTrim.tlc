@@ -1,0 +1,95 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : FOCtetaTrim.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+
+%implements FOCtetaTrim "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%%%% Function: BlockInstanceSetup ===========================================
+%%%function BlockInstanceSetup(block, system) void
+
+%%  %<LibBlockSetIsExpressionCompliant(block)>
+
+%%%endfunction
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+    float %<name>teta,%<name>pseudo;
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+    
+    %openfile declbuf
+    //berechnung des elektrischen Winkel aus dem physischen
+    float pseudoW(float tetaL){
+        float is_step1[11]={0 ,32.7272727272727 ,65.4545454545455 ,98.1818181818182,130.909090909091 ,163.636363636364	,196.363636363636	,229.090909090909	,261.818181818182	,294.545454545455	,327.272727272727};
+		int i;
+		tetaL=tetaL*360/914;
+		if(tetaL>32.72)i=(tetaL/32.72);
+		else i=0;
+		tetaL=((tetaL-is_step1[i])*60/5.4545);
+		return tetaL;	
+	}
+    %closefile declbuf
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign nTrim = LibBlockParameterValue(Trim, 0)
+    %assign u1_val = LibBlockInputSignal(0, "", "", 0)
+    %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+    %%
+    
+    //trim angle to be 0° at PhaseU
+//pc.printf("rotorwinkelraw %d\n\r",%<u1_val>);
+
+    %<u1_val>>%<nTrim>?%<name>teta= %<u1_val>-%<nTrim>:%<name>teta=914+ %<u1_val>-%<nTrim>;
+	//create a virtual angle for 22 pole machine 
+    (%<name>pseudo=pseudoW(%<name>teta))<10?%<name>pseudo+=350:%<name>pseudo-=10;//10->korrekturfaktor nötig da sonst virtueller rotor winkel größer als feldwinkel
+	%<y1_val>=%<name>pseudo*3.14/180;
+//pc.printf("rotorwinkel %f\n\r",%<y1_val>*180/3.14);
+    %%
+  %endif
+%endfunction
