@@ -16,7 +16,7 @@
 %% File : HX711_read.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2019 E.Warnicke, Dr.O.Hagendorf, HS Wismar
 
 %implements HX711_read "C"
 
@@ -48,15 +48,14 @@
 
     %assign nCalFac = LibBlockParameterValue(calibrationFactor, 0)
 
-
     %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
     %assign name = FEVAL("strrep",name," ","_")
     %assign name = FEVAL("strrep",name,"-","_")
 
     %openfile declbuf
-    // %<Type> (analogInput): '%<Name>'
+    // %<Type> (HX711_read): '%<Name>'
     %% AnalogIn %<name>(%<pname>);
-    HX711 waegesensor(%<pnameDT>, %<pnameSCK>,64);
+    HX711 waegesensor(%<pnameDT>, %<pnameSCK>, 64);
     %closefile declbuf
 
     %assign srcFile = LibGetModelDotCFile()
@@ -65,7 +64,7 @@
     waegesensor.setScale(0);
     waegesensor.tare();
     waegesensor.setScale(%<nCalFac>);
-    
+
   %endif
 %endfunction
 
@@ -82,10 +81,10 @@
       %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
       %assign name = FEVAL("strrep",name,"-","_")
-      %%
+
       %<y1_val> = waegesensor.getGram();
-      %<y2_val> = waegesensor.getGram()/1000 * 10 * %<nLever>;//M=F*l=m*g*l
-      %%
+      %<y2_val> = waegesensor.getGram()/1000 * 10 * %<nLever>; // M=F*l=m*g*l
+
     %endif 
   %endif
 %endfunction

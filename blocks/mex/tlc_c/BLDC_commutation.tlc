@@ -16,7 +16,7 @@
 %% File : BLDC_commutation.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2019 E.Warnicke, Dr.O.Hagendorf, HS Wismar
 
 %implements BLDC_commutation "C"
 
@@ -51,7 +51,7 @@
     %assign name = FEVAL("strrep",name,"-","_")
 
     %openfile declbuf
-    // %<Type> (digitalOutput): '%<Name>'
+    // %<Type> (BLDC_commutation): '%<Name>'
     %% DigitalInOut %<name>(%<pname>);
     %closefile declbuf
 
@@ -72,11 +72,6 @@
     %assign u5_val = LibBlockInputSignal(4, "", "", 0)
     %assign u6_val = LibBlockInputSignal(5, "", "", 0)
 
-    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
-    %assign name = FEVAL("strrep",name," ","_")
-    %assign name = FEVAL("strrep",name,"-","_")
-    %%
-    %% %<name> = %<u1_val>;
     step7[0] = %<u1_val>;
     step7[1] = %<u2_val>;
     step7[2] = %<u3_val>;
@@ -84,6 +79,5 @@
     step7[4] = %<u5_val>;
     step7[5] = %<u6_val>;
     run(7,1);
-    %%
   %endif
 %endfunction

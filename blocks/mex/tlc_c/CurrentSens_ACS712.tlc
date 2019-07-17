@@ -16,7 +16,7 @@
 %% File : CurrentSens_ACS712.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2019 E.Warnicke, Dr.O.Hagendorf, HS Wismar
 
 %implements CurrentSens_ACS712 "C"
 
@@ -44,7 +44,7 @@
     %assign name = FEVAL("strrep",name,"-","_")
 
     %openfile declbuf
-    // %<Type> (analogInput): '%<Name>'
+    // %<Type> (CurrentSens_ACS712): '%<Name>'
     AnalogIn %<name>(%<pname>);
     %closefile declbuf
 
@@ -64,16 +64,12 @@
       %assign nVref = LibBlockParameterValue(Vref, 0)
       %assign nSensitivity = LibBlockParameterValue(Sensitivity, 0)
 
-
       %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
       %assign name = FEVAL("strrep",name," ","_")
       %assign name = FEVAL("strrep",name,"-","_")
-      %%
+
       %<y1_val> = %<name>.read_u16();
       %<y2_val> = ((%<name>.read() * %<nVref>) - 2.49)/%<nSensitivity>;
-       //pc.printf("current %f\n\r",%<y2_val>);
-
-      %%
     %endif 
   %endif
 %endfunction

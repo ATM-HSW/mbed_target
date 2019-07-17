@@ -16,7 +16,7 @@
 %% File : AS5048A_calibrate.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2014-2016 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2019 E.Warnicke, Dr.O.Hagendorf, HS Wismar
 
 %implements AS5048A_calibrate "C"
 
