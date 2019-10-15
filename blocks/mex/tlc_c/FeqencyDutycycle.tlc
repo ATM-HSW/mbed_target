@@ -1,0 +1,100 @@
+%%  MbedTarget Simulink target
+%%  Copyright (c) 2014-2019 Dr.O.Hagendorf , HS Wismar
+%%
+%%  Licensed under the Apache License, Version 2.0 (the "License");
+%%  you may not use this file except in compliance with the License.
+%%  You may obtain a copy of the License at
+%%
+%%      http://www.apache.org/licenses/LICENSE-2.0
+%%
+%%  Unless required by applicable law or agreed to in writing, software
+%%  distributed under the License is distributed on an "AS IS" BASIS,
+%%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%%  See the License for the specific language governing permissions and
+%%  limitations under the License.
+
+%% File : FeqencyDutycycle.tlc
+%%
+%% Copyright 2010 The MathWorks, Inc.
+%% Copyright 2019 Dr.O.Hagendorf, HS Wismar
+
+%implements FeqencyDutycycle "C"
+
+%include "block_common_includes.tlc"
+
+%% Function: BlockTypeSetup ===============================================
+%function BlockTypeSetup(block, system) void
+
+  %% Ensure required header files are included
+  %<MbedCommonBlockTypeSetup(block, system)>
+
+%endfunction
+
+
+%% Function: BlockInstanceSetup ===========================================
+%function BlockInstanceSetup(block, system) void
+
+  %<LibBlockSetIsExpressionCompliant(block)>
+
+%endfunction
+
+
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign nPortName = LibBlockParameterValue(PortName, 0)
+    %assign nPinNumber = LibBlockParameterValue(PinNumber, 0)
+    %assign pname = "P" + FEVAL("char",nPortName+64) + "_" + FEVAL("int2str",nPinNumber-1)
+
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %openfile declbuf
+    // %<Type> (FeqencyDutycycle): '%<Name>'
+    Timer t;
+    InterruptIn %<name>(%<pname>);
+
+    uint32_T startT = 0;
+    uint32_T startTold = 0;
+    uint32_T periodeT = 0;
+    uint32_T dutyT = 0;
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (FeqencyDutycycle): '%<Name>'
+    void dutycycle() {
+      uint32_t tmp = t.read_high_resolution_us();
+      dutyT = tmp>startT ? tmp - startT : dutyT;
+    }
+
+    void period() {
+      startT = t.read_high_resolution_us();
+      periodeT = startT > startTold ? startT - startTold : periodeT;
+      startTold = startT;
+    }
+    %closefile declbuf
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+    t.start();
+    %<name>.rise(&period);
+    %<name>.fall(&dutycycle);
+  %endif
+%endfunction
+
+
+%% Function: Outputs ======================================================
+%function Outputs(block, system) Output
+  %if !SLibCodeGenForSim()
+    %if !LibBlockOutputSignalIsExpr(0)
+      %assign y1_val = LibBlockOutputSignal(0, "", "", 0)
+      %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
+
+      %<y1_val>=periodeT;
+      %<y2_val>=dutyT;
+    %endif
+  %endif
+%endfunction
