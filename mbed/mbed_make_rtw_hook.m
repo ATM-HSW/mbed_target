@@ -141,12 +141,21 @@ end
 
 libraryversion='';
 try
-    fid=fopen(fullfile(mbed_getTargetRootPath(), 'targets', 'mbed-os', 'mbed.h'), 'r');
+%     fid=fopen(fullfile(mbed_getTargetRootPath(), 'targets', 'mbed-os', 'mbed.h'), 'r');
+%     text = textscan(fid,'%s','Delimiter','','endofline','');
+%     text = text{1}{1};
+%     fclose(fid);
+%     libraryversion = regexp(text,'MBED_LIBRARY_VERSION[\s\.=]+(\d+)','tokens');
+%     libraryversion=string(libraryversion);
+
+    fid=fopen(fullfile(mbed_getTargetRootPath(), 'targets', 'mbed-os', 'platform', 'mbed_version.h'), 'r');
     text = textscan(fid,'%s','Delimiter','','endofline','');
     text = text{1}{1};
     fclose(fid);
-    libraryversion = regexp(text,'MBED_LIBRARY_VERSION[\s\.=]+(\d+)','tokens');
-    libraryversion=string(libraryversion);
+    major = regexp(text,'MBED_MAJOR_VERSION[\s\.=]+(\d+)','tokens');
+    minor = regexp(text,'MBED_MINOR_VERSION[\s\.=]+(\d+)','tokens');
+    patch = regexp(text,'MBED_PATCH_VERSION[\s\.=]+(\d+)','tokens');
+    libraryversion=string(major) + "." + string(minor) + "." + string(patch);
 catch ME
 end
 
@@ -155,7 +164,7 @@ disp('###')
 disp('### mbed environment settings:')
 disp('###')
 fprintf('###     Name:            %s\n', mbedtarget);
-fprintf('###     Version:         %s, library version %s\n', 'Mbed-OS 5', libraryversion);
+fprintf('###     Version:         Mbed-OS v%s\n', libraryversion);
 fprintf('###     RTOS:            %s\n', get_param(bdroot,'UseMbedRTOS'));
 fprintf('###     Fixed step size: %ss\n', get_param(bdroot,'FixedStep'));
 fprintf('###     # of Make jobs:  %s\n', get_param(bdroot,'MakeJobs'));
@@ -305,7 +314,7 @@ function i_write_mbed_files()
     [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i simulink --source . --source ..\mbed-os --source ..\libraries']);
 
     % generate additional project config files for µVision, IAR, ...
-    additionalProjectFiles = get_param(bdroot,'MbedAddProjectFiles');
+    additionalProjectFiles = 'uvision6'; % get_param(bdroot,'MbedAddProjectFiles');
     if ~isequal(additionalProjectFiles,'none')
       [~,cmdout]=system(['python ..\mbed-os\tools\project.py -m ' target ' -i ' additionalProjectFiles ' --source . --source ..\mbed-os --source ..\libraries']);
     end
