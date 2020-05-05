@@ -60,7 +60,7 @@
 #define STATUS_OK              0x00
 #define STATUS_FAIL            0x01
 
-#define VL53L0X_OsDelay(...) wait_ms(2) // 2 msec delay. can also use wait(float secs)/wait_us(int)
+#define VL53L0X_OsDelay(...) thread_sleep_for(2) // 2 msec delay. can also use wait(float secs)/wait_us(int)
 
 #ifdef USE_EMPTY_STRING
 #define  VL53L0X_STRING_DEVICE_INFO_NAME                             ""
@@ -360,7 +360,7 @@ public:
 //                *_expgpio0 = 1;
 //            }
         }
-        wait_ms(10);
+        thread_sleep_for(10);
     }
 
     /**
@@ -377,7 +377,7 @@ public:
 //                *_expgpio0 = 0;
 //            }
         }
-        wait_ms(10);
+        thread_sleep_for(10);
     }
 
 

@@ -65,7 +65,7 @@ void BMP180::BMP180Calibration()
 {
   long ut = 0;
   writeByte(BMP180_ADDRESS, 0xF4, 0x2E); // start temperature measurement
-  wait(0.005);	// Max. conversion time = 4.5 ms
+  thread_sleep_for(5);	// Max. conversion time = 4.5 ms
   uint8_t rawData[2] = {0, 0};
   readBytes(BMP180_ADDRESS, 0xF6, 2, &rawData[0]); // read raw temperature measurement
   ut = (((long) rawData[0] << 8) | rawData[1]);
@@ -86,7 +86,7 @@ long BMP180::BMP180GetPressure()
 {
   long up = 0;
   writeByte(BMP180_ADDRESS, 0xF4, 0x34 | OSS << 6); // Configure pressure measurement for highest resolution
-  wait((26.0f/1000.0f)); // delay 5 ms at lowest resolution, 26 ms at highest
+  thread_sleep_for(26); // delay 5 ms at lowest resolution, 26 ms at highest
   uint8_t rawData[3] = {0, 0, 0};
   readBytes(BMP180_ADDRESS, 0xF6, 3, &rawData[0]); // read raw pressure measurement of 19 bits
   up = (((long) rawData[0] << 16) | ((long)rawData[1] << 8) | rawData[2]) >> (8 - OSS);

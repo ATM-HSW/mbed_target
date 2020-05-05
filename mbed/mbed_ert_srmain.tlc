@@ -68,14 +68,14 @@
 
     %openfile declbuf
     void step_thread() {
-      step_id = Thread::gettid();
-      while(1){
-        Thread::signal_wait(0x1,osWaitForever);
+      step_id = ThisThread::get_id();
+      while(1) {
+        ThisThread::flags_wait_all(0x1, true);
         %<LibCallModelStep(0)>
       }
     }
 
-    void step_callback(){
+    void step_callback() {
       if(step_id!=NULL)
         osSignalSet(step_id, 0x1);
     }
@@ -128,7 +128,7 @@
       %endif
 
       /* main task waits forever */
-      Thread::wait(osWaitForever);
+      while(1) ThisThread::sleep_for(osWaitForever);
 
       /* deinitialize model */
       %<LibCallModelTerminate()>\

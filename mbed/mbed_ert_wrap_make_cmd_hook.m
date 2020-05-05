@@ -13,7 +13,7 @@
 %  See the License for the specific language governing permissions and
 %  limitations under the License.
 
-function makeCmd = mbed_wrap_make_cmd_hook(args)
+function makeCmd = mbed_ert_wrap_make_cmd_hook(args)
 
     if ispc
         %disp('ispc');
@@ -40,7 +40,8 @@ function makeCmd = mbed_wrap_make_cmd_hook(args)
         else
             jobs = '';
         end
-        args.makeCmd = ['@echo off & ' copy1 ' & ' copy2 ' & ' copy3 ' & ' cd1 ' & ' cd2 ' & ' set1 ' & ' makeexefullpath ' ' jobs ' -C BUILD ' gcc_path];
+        CR=sprintf('\n');
+        args.makeCmd = ['@echo off & ' CR copy1 ' & ' CR copy2 ' & ' CR copy3 ' & ' CR cd1 ' & ' CR cd2 ' & ' CR set1 ' & ' CR makeexefullpath ' ' jobs ' -C BUILD ' gcc_path];
         args.verbose = 1;
         makeCmd = setup_for_default(args);
     else

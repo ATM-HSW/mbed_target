@@ -72,7 +72,7 @@
     %endswitch
   
     %if valStackOption == 1
-      %assign nStackSize = "DEFAULT_STACK_SIZE"
+      %assign nStackSize = "OS_STACK_SIZE"
     %else
       %assign nStackSize = valStackSize
     %endif
@@ -102,7 +102,9 @@
     void %<name>_thread() {
       while(1) {
         %<LibBlockExecuteFcnCall(block,0)>
-        Thread::wait(%<valTiming>);
+        %if (valTiming > 0)
+        ThisThread::sleep_for(%<valTiming>);
+        %endif
       }
     }
     %closefile declbuf

@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2020 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -54,8 +54,8 @@
     uint32_t %<name>lenbuffer1;
     uint8_t %<name>NewData = 0;
 
-    event_callback_t %<name>serialEventCb;
-    %closefile declbuf 
+    event_callback_t %<name>serialRXEventCb;
+    %closefile declbuf
 
     %assign srcFile = LibGetModelDotCFile()
     %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
@@ -63,24 +63,25 @@
     %openfile declbuf
     // %<Type> (UART_serialReadBlock): '%<Name>'
     // interrupt sevice routine to handle the asynch i/o
-    void %<name>serialCb(int events) {
+    void %<name>serialRXCb(int events) {
         if (*%<name>data == 10 || *%<name>data == 13) {
             if (%<name>idx > 0) {
                 %<name>NewData = 1;
                 %<name>lenbuffer1 = %<name>idx;
-                memcpy(%<name>buffer1, %<name>buffer0, %<name>lenbuffer1);
+                mymemcpy(%<name>buffer1, %<name>buffer0, %<name>lenbuffer1);
                 %<name>buffer1[%<name>idx++] = 0;
-            } else {
-                %<name>NewData = 0;
             }
             %<name>idx = 0;
         } else {
             if (%<name>idx < %<name>BUF_LEN) {
                 %<name>buffer0[%<name>idx++] = %<name>data[0];
             }
-            %<name>NewData = 0;
         }
-        %<serportname>.read(%<name>data, 1, %<name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+        #if DEVICE_SERIAL_ASYNCH
+        %<serportname>.read(%<name>data, 1, %<name>serialRXEventCb, SERIAL_EVENT_RX_COMPLETE);
+        #else
+          #error no DEVICE_SERIAL_ASYNCH defined
+        #endif
     }
     %closefile declbuf
 
@@ -88,14 +89,18 @@
     %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
 
     // async i/o callback handle
-    %<name>serialEventCb = %<name>serialCb;
+    %<name>serialRXEventCb = %<name>serialRXCb;
 
     // buffer init
     %<name>buffer0[0] = 0;
     %<name>buffer1[0] = 0;
 
     // start async read
-    %<serportname>.read(%<name>data, 1, %<name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+    #if DEVICE_SERIAL_ASYNCH
+    %<serportname>.read(%<name>data, 1, %<name>serialRXEventCb, SERIAL_EVENT_RX_COMPLETE);
+    #else
+      #error no DEVICE_SERIAL_ASYNCH defined
+    #endif
   %endif
 %endfunction
 
@@ -115,8 +120,6 @@
     %assign name = FEVAL("strrep",name," ","_")
     %assign name = FEVAL("strrep",name,"-","_")
 
-    // newport %<newport_val>
-    // sizeport %<sizeport_val>
     %if newport_val
         %if sizeport_val
             %assign y_sizeport_val = LibBlockOutputSignal(1, "", "", 0)

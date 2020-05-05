@@ -52,7 +52,7 @@
 
     %openfile declbuf
     // %<Type> (UART_serialConfig): '%<Name>'
-    Serial %<name>(%<pname1>, %<pname2>);
+    RawSerial %<name>(%<pname1>, %<pname2>);
 
     %closefile declbuf
     %assign srcFile = LibGetModelDotCFile()

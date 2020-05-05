@@ -2,7 +2,7 @@
 %%
 %%  MbedTarget Simulink target
 %%  Copyright 2002-2010 The MathWorks, Inc.
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2020 Dr.O.Hagendorf , HS Wismar
 %%  Copyright 2015 M. Marquardt, HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +53,21 @@
 
         %<LibSetSourceFileSection(srcFile,"Declarations",tmpBuf)>
       %endif
+
+      %openfile declbuf
+      void mymemcpy(void *dest, void *src, size_t n) {
+        // Typecast src and dest addresses to (char *) 
+        char *csrc = (char *)src; 
+        char *cdest = (char *)dest; 
+
+        // Copy contents of src[] to dest[] 
+        for (uint32_t i=0; i<n; i++) 
+          cdest[i] = csrc[i]; 
+      }
+      %closefile declbuf
+
+      %assign srcFile = LibGetModelDotCFile()
+      %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
 
     %endif
   %endif

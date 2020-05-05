@@ -31,6 +31,7 @@ switch hookMethod
         % Called at start of code generation process (before anything happens.)
         % Valid arguments at this stage are hookMethod, modelName, and buildArgs.
         %disp('entry');
+        tic;
         i_mbed_setup(modelName);
         %disp('entry out');
         
@@ -66,7 +67,7 @@ switch hookMethod
         % arguments are valid at this stage.
         %disp('before_make');
         i_write_mbed_files();
-        disp(sprintf(['\n### Code Format : %s'],buildOpts.codeFormat));%#ok
+        %disp(sprintf(['\n### Code Format : %s'],buildOpts.codeFormat));%#ok
         %disp('before_make out');
         
     case 'after_make'
@@ -101,6 +102,7 @@ switch hookMethod
         %fprintf('### Linker Map file <a href="matlab:edit %s">mapFile.map</a>\n', fileMap);
         
         disp(['### Successful completion of build procedure for model: ', modelName]);
+        toc
 end
 end
 
@@ -110,7 +112,7 @@ function i_mbed_setup(modelName)
 if ~i_isPilSim
     % Check that the main function will be generated using the correct .tlc file
     if bdIsLoaded(modelName) && ~i_isModelReferenceBuild(modelName)
-        requiredSetting = 'mbed_file_process.tlc';
+        requiredSetting = 'mbed_ert_file_process.tlc';
         assert(strcmp(get_param(modelName, 'ERTCustomFileTemplate'), requiredSetting),...
             'The model %s must have ERTCustomFileTemplate set to %s.', modelName, requiredSetting);
     end

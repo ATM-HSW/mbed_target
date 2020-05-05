@@ -164,8 +164,6 @@ ADD_INCLUDES = \
 |>START_EXPAND_INCLUDES<|	-I|>EXPAND_DIR_NAME<| \
 |>END_EXPAND_INCLUDES<|
 
-ADD_INCLUDES += $(MBED_INCLUDE_PATHS)
-
 SHARED_INCLUDES =
 ifneq ($(SHARED_SRC_DIR),)
 SHARED_INCLUDES = -I$(SHARED_SRC_DIR)
@@ -185,7 +183,6 @@ CPP_REQ_DEFINES = -DMODEL=$(MODEL) -DNUMST=$(NUMST) -DNCSTATES=$(NCSTATES) \
 OPTS=
 CFLAGS += $(OPTS) $(CPP_REQ_DEFINES) $(EXT_CC_OPTS)
 CXXFLAGS +=	$(OPTS) $(CPP_REQ_DEFINES) $(EXT_CC_OPTS)
-
 
 CFLAGS += $(INCLUDES)
 CXXFLAGS += $(INCLUDES)
@@ -348,6 +345,7 @@ endif
 	@echo "Assembling: $<"
 	+@$(call MAKEDIR,$(dir $@))
 	@$(AS) $(MBED_ASM_FLAGS) -o $@ $<
+
 %$(OBJ_EXT): %.S
 	@echo "Assembling: $<"
 	+@$(call MAKEDIR,$(dir $@))
@@ -387,7 +385,6 @@ $(MODEL).link_script.ld : $(MBED_LINKER_SCRIPT)
 	@echo "Preprocessing: $<"
 	+@$(call MAKEDIR,$(dir $@))
 	@$(PREPROC) $< -o $@
-
 
 |>START_EXPAND_RULES<|%$(OBJ_EXT) : |>EXPAND_DIR_NAME<|/%.cpp
 	@echo "Compiling: $<"

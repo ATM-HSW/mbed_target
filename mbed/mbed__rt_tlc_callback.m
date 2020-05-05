@@ -13,7 +13,7 @@
 %  See the License for the specific language governing permissions and
 %  limitations under the License.
 
-function mbed_tlc_callback(hDlg, hSrc, paramName)
+function mbed__rt_tlc_callback(hDlg, hSrc, paramName)
 
 if isequal(paramName, 'mbedls')
     [ MbedDrive, ComPort, MbedTarget5 ] = mbed_mbedls();

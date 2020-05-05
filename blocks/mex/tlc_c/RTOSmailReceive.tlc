@@ -42,6 +42,8 @@
     %assign y1_ptr = LibBlockOutputSignalAddr(0, "", "", 0)
     %assign y2_val = LibBlockOutputSignal(1, "", "", 0)
 
+    *%<y1_ptr> = 0;
+    %<y2_val> = 0;
     %if valTimeout == 4294967295
       osEvent evt%<valMailNumber> = mail_box%<valMailNumber>.get(osWaitForever);
     %else

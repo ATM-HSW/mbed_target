@@ -33,6 +33,7 @@ BUILD               = yes
 SYS_TARGET_FILE     = any
 COMPILER_TOOL_CHAIN = default
 MAKEFILE_FILESEP = /
+DO_NOT_USE_CHECKSUMS = 1
 #---------------------- Tokens expanded by make_rtw ----------------------------
 MODEL                   = |>MODEL_NAME<|
 MODULES                 = |>MODEL_MODULES<|
@@ -41,7 +42,6 @@ MATLAB_ROOT             = |>MATLAB_ROOT<|
 ALT_MATLAB_ROOT         = |>ALT_MATLAB_ROOT<|
 MASTER_ANCHOR_DIR       = |>MASTER_ANCHOR_DIR<|
 START_DIR               = |>START_DIR<|
-S_FUNCTIONS             = |>S_FUNCTIONS<|
 S_FUNCTIONS_LIB         = |>S_FUNCTIONS_LIB<|
 NUMST                   = |>NUMST<|
 NCSTATES                = |>NCSTATES<|
@@ -62,10 +62,6 @@ EXTMODE_STATIC_SIZE     = |>EXTMODE_STATIC_ALLOC_SIZE<|
 MULTI_INSTANCE_CODE     = |>MULTI_INSTANCE_CODE<|
 TGT_FCN_LIB             = |>TGT_FCN_LIB<|
 MODELREFS               = |>MODELREFS<|
-SHARED_SRC              = |>SHARED_SRC<|
-SHARED_SRC_DIR          = |>SHARED_SRC_DIR<|
-SHARED_BIN_DIR          = |>SHARED_BIN_DIR<|
-SHARED_LIB              = |>SHARED_LIB<|
 GEN_SAMPLE_MAIN         = |>GEN_SAMPLE_MAIN<|
 TARGET_LANG_EXT         = |>TARGET_LANG_EXT<|
 PORTABLE_WORDSIZES      = |>PORTABLE_WORDSIZES<|
@@ -79,7 +75,6 @@ MBED_DRIVE              = |>MBEDDRIVE<|
 #--------------------------- Model and reference models -----------------------
 MODELLIB                  = |>MODELLIB<|
 MODELREF_LINK_LIBS        = |>MODELREF_LINK_LIBS<|
-MODELREF_INC_PATH         = |>START_MDLREFINC_EXPAND_INCLUDES<|-I|>MODELREF_INC_PATH<| |>END_MDLREFINC_EXPAND_INCLUDES<|
 RELATIVE_PATH_TO_ANCHOR   = |>RELATIVE_PATH_TO_ANCHOR<|
 MODELREF_TARGET_TYPE      = |>MODELREF_TARGET_TYPE<|
 
@@ -166,15 +161,8 @@ ADD_INCLUDES = \
 |>START_EXPAND_INCLUDES<|	-I|>EXPAND_DIR_NAME<| \
 |>END_EXPAND_INCLUDES<|
 
-ADD_INCLUDES += $(MBED_INCLUDE_PATHS)
-
-SHARED_INCLUDES =
-ifneq ($(SHARED_SRC_DIR),)
-SHARED_INCLUDES = -I$(SHARED_SRC_DIR)
-endif
-
 INCLUDES = -I. -I$(RELATIVE_PATH_TO_ANCHOR) $(MATLAB_INCLUDES) \
-           $(ADD_INCLUDES) $(MODELREF_INC_PATH) $(SHARED_INCLUDES) \
+           $(ADD_INCLUDES) $(MODELREF_INC_PATH) \
            $(TARGET_INCS)
 
 
@@ -233,7 +221,7 @@ endif
 
 #-------------- Source Files, Object Files and Dependency Files -----------
 
-SRCS = $(ADD_SRCS) $(S_FUNCTIONS)
+SRCS = $(ADD_SRCS)
 
 ifeq ($(BUILD_MODE), pil_prebuild)
   SRCS += $(MODULES) $(MODEL).$(TARGET_LANG_EXT) $(EXT_SRC)
@@ -265,9 +253,6 @@ LINK_OBJS = $(addsuffix $(OBJ_EXT), $(basename $(SRCS))) $(LOCAL_USER_OBJS) $(PR
 
 LIBS = $(S_FUNCTIONS_LIB)
 
-SHARED_SRC := $(wildcard $(SHARED_SRC))
-SHARED_OBJS = $(addsuffix $(OBJ_EXT), $(basename $(SHARED_SRC)))
-
 #-------------- Default target -----------
 TARGETS = $(PRODUCT)
 
@@ -290,14 +275,9 @@ flash:
 
 #--$(OBJS) : $(MAKEFILE) rtw_proj.tmw
 
-$(SHARED_LIB) : $(SHARED_OBJS)
-	@echo "### Creating $@"
-	@$(AR) $(ARFLAGS) $@ $(SHARED_OBJS)
-	@echo "### $@ Created"
-
 ##-------------------------- Support for building modules ----------------------
 ifeq ($(BUILD_MODE), pil_prebuild)
-$(PRODUCT) : $(OBJS) $(SHARED_LIB)
+$(PRODUCT) : $(OBJS)
 	@echo "### BUILD_MODE $(BUILD_MODE)"
 	@echo "### Created $(PRODUCT)"
 endif
@@ -324,7 +304,7 @@ $(PRODUCT) : $(MODEL)$(PROGRAM_FILE_EXT)
 endif
 
 ifeq ($(BUILD_MODE), model_reference)
-$(PRODUCT) : $(OBJS) $(SHARED_LIB) $(LIBS)
+$(PRODUCT) : $(OBJS) $(LIBS)
 	@echo "### BUILD_MODE $(BUILD_MODE)"
 	@echo "### Creating library ..."
 	@$(AR) $(ARFLAGS) $@ $(OBJS)
@@ -332,7 +312,7 @@ $(PRODUCT) : $(OBJS) $(SHARED_LIB) $(LIBS)
 endif
 
 ifeq ($(BUILD_MODE), pil_application)
-$(MODEL)$(PROGRAM_FILE_EXT): $(PREBUILT_OBJS) $(OBJS) $(MODELLIB) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS)
+$(MODEL)$(PROGRAM_FILE_EXT): $(PREBUILT_OBJS) $(OBJS) $(MODELLIB) $(MODELREF_LINK_LIBS) $(LIBS)
 	@echo "### BUILD_MODE $(BUILD_MODE)"
 	@$(AR) $(ARFLAGS) core.a $(filter-out pil_main.o,$^)
 	@$(LD) pil_main.o core.a $(filter-out %.o,$^) $(LDFLAGS) $(LDOUTPUTFLAG) $@
@@ -340,21 +320,23 @@ $(MODEL)$(PROGRAM_FILE_EXT): $(PREBUILT_OBJS) $(OBJS) $(MODELLIB) $(MODELREF_LIN
 endif
 
 ifeq ($(BUILD_MODE), real_time)
-$(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(SHARED_LIB) $(LIBS) $(MODEL).link_script.ld
+$(MODEL)$(PROGRAM_FILE_EXT): $(OBJS) $(MODELREF_LINK_LIBS) $(LIBS) $(MODEL).link_script.ld
 	@echo "### BUILD_MODE $(BUILD_MODE)"
-	@$(LD) $(MBED_LD_FLAGS) -T$(filter-out %.o, $^) $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ $(filter %.o, $^) $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
+	$(file > $@.in, $(filter %.o, $^))
+	@$(LD) $(MBED_LD_FLAGS) -T$(filter-out %.o, $^) $(MBED_LIBRARY_PATHS) $(LDOUTPUTFLAG) $@ @$@.in $(MBED_LIBRARIES) $(MBED_LD_SYS_LIBS)
 	@echo "### Generated $@"
 endif
 
 %$(OBJ_EXT): %.s
 	@echo "Assembling: $<"
 	+@$(call MAKEDIR,$(dir $@))
-	@$(AS) $(MBED_ASM_FLAGS) -o $@ $<
+	@$(AS) $(MBED_ASM_FLAGS) $(MBED_INCLUDE_PATHS) -o $@ $<
+
 %$(OBJ_EXT): %.S
 	@echo "Assembling: $<"
 	+@$(call MAKEDIR,$(dir $@))
-	@$(AS) $(MBED_ASM_FLAGS) -o $@ $<
-	
+	@$(AS) $(MBED_ASM_FLAGS) $(MBED_INCLUDE_PATHS) -o $@ $<
+
 %$(OBJ_EXT) : $(RELATIVE_PATH_TO_ANCHOR)/%.c
 	@echo "Compiling: $<"
 	+@$(call MAKEDIR,$(dir $@))
@@ -389,7 +371,6 @@ $(MODEL).link_script.ld : $(MBED_LINKER_SCRIPT)
 	@echo "Preprocessing: $<"
 	+@$(call MAKEDIR,$(dir $@))
 	@$(PREPROC) $< -o $@
-
 
 |>START_EXPAND_RULES<|%$(OBJ_EXT) : |>EXPAND_DIR_NAME<|/%.cpp
 	@echo "Compiling: $<"

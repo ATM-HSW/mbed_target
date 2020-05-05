@@ -29,7 +29,7 @@
   %% Ensure required header files are included
   %<MbedCommonBlockTypeSetup(block, system)>
   
-  %<LibAddToCommonIncludes("lm75b.h")>
+  %<LibAddToCommonIncludes("LM75B.h")>
 
 %endfunction
 

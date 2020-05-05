@@ -1352,7 +1352,7 @@ protected:
      */
     void Powerstep01_Board_Delay(uint32_t delay)
     {
-        wait_ms(delay);
+        thread_sleep_for(delay);
     }
 
     /**

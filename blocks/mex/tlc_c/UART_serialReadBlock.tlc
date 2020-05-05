@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2020 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -60,7 +60,11 @@
     // %<Type> (UART_serialReadBlock): '%<Name>'
     // interrupt sevice routine to handle the asynch i/o
     void %<name>serialCb(int events) {
+        #if DEVICE_SERIAL_ASYNCH
         %<serportname>.read(%<name>buffer, %<name>BUF_LEN, %<name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+        #else
+          #error no DEVICE_SERIAL_ASYNCH defined
+        #endif
         %<name>NewData = 1;
     }
     %closefile declbuf
@@ -76,7 +80,11 @@
     for(int idx=0; idx<%<name>BUF_LEN; idx++) %<name>buffer00[idx] = 0;
 
     // start async read
+    #if DEVICE_SERIAL_ASYNCH
     %<serportname>.read(%<name>buffer, %<name>BUF_LEN, %<name>serialEventCb, SERIAL_EVENT_RX_COMPLETE);
+    #else
+      #error no DEVICE_SERIAL_ASYNCH defined
+    #endif
   %endif
 %endfunction
 
@@ -97,7 +105,6 @@
     %assign name = FEVAL("strrep",name," ","_")
     %assign name = FEVAL("strrep",name,"-","_")
 
-    #if DEVICE_SERIAL_ASYNCH
     %if newport_val
       if (%<name>NewData) {
         memcpy(%<y1_ptr>, %<name>buffer, %<name>BUF_LEN);
@@ -114,9 +121,6 @@
         memcpy(%<y1_ptr>, %<name>buffer00, %<name>BUF_LEN);
       }
     %endif
-    #else
-      #error no DEVICE_SERIAL_ASYNCH defined
-    #endif
 
   %endif
 %endfunction

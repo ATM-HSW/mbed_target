@@ -626,7 +626,7 @@ int VL6180X::VL6180x_AlsPollMeasurement(VL6180xDev_t dev, VL6180x_AlsData_t *pAl
         if (IntStatus == RES_INT_STAT_GPIO_NEW_SAMPLE_READY) {
             break; /* break on new data (status is 0)  */
         }
-        wait_ms(10);
+        thread_sleep_for(10);
     };
  
     if (!status) {
@@ -837,7 +837,7 @@ int VL6180X::VL6180x_RangePollMeasurement(VL6180xDev_t dev, VL6180x_RangeData_t 
         if( IntStatus.status.Range == RES_INT_STAT_GPIO_NEW_SAMPLE_READY){
             break;
         }
-        wait_ms(10);
+        thread_sleep_for(10);
     }
  /* //![single_shot_snipet] */
  

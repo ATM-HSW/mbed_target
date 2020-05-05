@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2020 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -70,9 +70,9 @@
       %default
           %assign nThreadPriority = "osPriorityNormal"
     %endswitch
-  
+
     %if valStackOption == 1
-      %assign nStackSize = "DEFAULT_STACK_SIZE"
+      %assign nStackSize = "OS_STACK_SIZE"
     %else
       %assign nStackSize = valStackSize
     %endif
@@ -90,8 +90,7 @@
 
     %openfile declbuf
     // %<Type> (RTOScreateTimer): '%<Name>'
-    void %<name>_callback()
-    {
+    void %<name>_callback() {
       osSignalSet(%<name>_id, 0x1);
     }
     %closefile declbuf
@@ -102,7 +101,7 @@
     // %<Type> (RTOScreateTimer): '%<Name>'
     Thread %<name>(%<nThreadPriority>, %<nStackSize>);
     %<name>.start(callback(%<name>_thread));
-    RtosTimer %<name>_timer(callback(%<name>_callback), osTimerPeriodic);
+    Ticker %<name>_timer;
     %closefile declbuf
 
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_loc_decl")>
@@ -110,7 +109,7 @@
 
     %openfile buff
     // %<Type> (RTOScreateTimer): '%<Name>'
-    %<name>_timer.start(%<valTiming>);
+    %<name>_timer.attach_us(callback(%<name>_callback), (timestamp_t)%<valTiming>*1000);
     %closefile buff
 
     %<LibAddSourceFileCustomSection(ertMainFile,"Declarations","Ert_main_after_init")>
@@ -119,10 +118,10 @@
     %openfile declbuf
     // %<Type> (RTOScreateTimer): '%<Name>'
     void %<name>_thread() {
-      %<name>_id = Thread::gettid();
+      %<name>_id = ThisThread::get_id();
 
       while(1) {
-        Thread::signal_wait(0x1,osWaitForever);
+        ThisThread::flags_wait_all(0x1, true);
         %<LibBlockExecuteFcnCall(block,0)>
       }
     }

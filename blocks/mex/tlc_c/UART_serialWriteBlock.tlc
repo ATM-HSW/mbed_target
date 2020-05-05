@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2020 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -30,11 +30,47 @@
 
 %endfunction
 
+%% Function: Start ========================================================
+%function Start(block, system) Output
+  %if !SLibCodeGenForSim()
+    %assign name = FEVAL("strrep",LibGetFormattedBlockPath(block),"/","_")
+    %assign name = FEVAL("strrep",name," ","_")
+    %assign name = FEVAL("strrep",name,"-","_")
+
+    %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
+    %assign serportname = "serial" + FEVAL("int2str",SerialPort_val-1)
+
+    %openfile declbuf
+    // %<Type> (UART_serialWriteBlock): '%<Name>'
+    event_callback_t %<name>serialTXEventCb;
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Declarations", declbuf)>
+
+    %openfile declbuf
+    // %<Type> (UART_serialWriteBlock): '%<Name>'
+    // interrupt sevice routine to handle the asynch i/o
+    void %<name>serialTXCb(int events) {
+    #if DEVICE_SERIAL_ASYNCH
+      %<serportname>.abort_write();
+    #endif
+    }
+    %closefile declbuf
+
+    %assign srcFile = LibGetModelDotCFile()
+    %<LibSetSourceFileSection(srcFile, "Functions", declbuf)>
+
+    // async i/o callback handle
+    %<name>serialTXEventCb = %<name>serialTXCb;
+  %endif
+%endfunction
+
 %% Function: Outputs ======================================================
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
     %assign SerialPort_val = LibBlockParameterValue(SerialPort,0)
-    %assign nameSerial = "serial" + FEVAL("int2str",SerialPort_val-1)
+    %assign serportname = "serial" + FEVAL("int2str",SerialPort_val-1)
 
     %assign enNumberOfBytes_val = LibBlockParameterValue(enNumberOfBytes,0)
 
@@ -52,14 +88,14 @@
 
     %%
     #if DEVICE_SERIAL_ASYNCH
-    %<nameSerial>.write((const uint8_t*)%<u1_ptr>, %<number_of_bytes>, 0, 0);
+    %<serportname>.write((const uint8_t*)%<u1_ptr>, %<number_of_bytes>, %<name>serialTXEventCb, SERIAL_EVENT_TX_COMPLETE);
     #else
     const char* ptr%<name> = (const char*)%<u1_ptr>;
     const char* end%<name> = ptr%<name> + %<number_of_bytes>;
     while (ptr%<name> != end%<name>) {
-        if (%<nameSerial>.putc(*ptr%<name>++) == EOF) {
-            break;
-        }
+      if (%<serportname>.putc(*ptr%<name>++) == EOF) {
+        break;
+      }
     }
     #endif
     %%

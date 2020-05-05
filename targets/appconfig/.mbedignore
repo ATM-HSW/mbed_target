@@ -2,3 +2,4 @@ BUILD/*.*
 DebugConfig/*.*
 libraries/*.*
 mbed-os/*.*
+TESTS/*.*

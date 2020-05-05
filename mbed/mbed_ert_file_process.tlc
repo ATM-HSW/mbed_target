@@ -20,18 +20,18 @@
   %if LibIsSingleRateModel() || LibIsSingleTasking()
     %if ExtMode
       %% We use extra file for main generation with External Mode
-      %include "mbed_srmain_ExtMode.tlc"
+      %include "mbed_ert_srmain_ExtMode.tlc"
     %else
       %% Simplified main generation w/o External Mode
-      %include "mbed_srmain.tlc"
+      %include "mbed_ert_srmain.tlc"
     %endif
     %<FcnSingleTaskingMain()>
   %else
     %% For the moment, multitasking is not supported
-    %include "mbed_srmain.tlc"
+    %include "mbed_ert_srmain.tlc"
     %<FcnSingleTaskingMain()>
   %endif
 %else
-   %% %include "mbed_srmain.tlc"
+   %% %include "mbed_ert_srmain.tlc"
    %% %<FcnSingleTaskingMain()>
 %endif

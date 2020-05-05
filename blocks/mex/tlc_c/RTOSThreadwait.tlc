@@ -1,5 +1,5 @@
 %%  MbedTarget Simulink target
-%%  Copyright (c) 2014-2017 Dr.O.Hagendorf , HS Wismar
+%%  Copyright (c) 2014-2020 Dr.O.Hagendorf , HS Wismar
 %%
 %%  Licensed under the Apache License, Version 2.0 (the "License");
 %%  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 %% File : RTOSThreadwait.tlc
 %%
 %% Copyright 2010 The MathWorks, Inc.
-%% Copyright 2016 Dr.O.Hagendorf, HS Wismar
+%% Copyright 2020 Dr.O.Hagendorf, HS Wismar
 
 %implements RTOSThreadwait "C"
 
@@ -30,21 +30,13 @@
 
 %endfunction
 
-%% Function: Start ========================================================
-%function Start(block, system) Output
-  %if !SLibCodeGenForSim()
-
-  %endif
-%endfunction
-
-
 %% Function: Outputs ========================================================
 %function Outputs(block, system) Output
   %if !SLibCodeGenForSim()
 
     %assign valWaittime = LibBlockParameterValue(Waittime, 0)
 
-    Thread::wait(%<valWaittime>);
+    ThisThread::sleep_for(%<valWaittime>);
 
   %endif
 %endfunction

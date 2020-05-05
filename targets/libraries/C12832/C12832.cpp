@@ -102,9 +102,9 @@ void C12832::lcd_reset()
     _A0 = 0;
     _CS = 1;
     _reset = 0;                        // display reset
-    wait_ms(18);
+    thread_sleep_for(18);
     _reset = 1;                       // end reset
-    wait_ms(5);
+    thread_sleep_for(5);
 
     /* Start Initial Sequence ----------------------------------------------------*/
 

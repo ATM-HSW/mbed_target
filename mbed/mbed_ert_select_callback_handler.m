@@ -31,7 +31,7 @@ function mbed_select_callback_handler(hDlg, hSrc)
   slConfigUISetVal(hDlg, hSrc, 'TargetLibSuffix', '.a');
 
   % For real-time builds, we must generate ert_main.c
-  slConfigUISetVal(hDlg, hSrc, 'ERTCustomFileTemplate', 'mbed_file_process.tlc');
+  slConfigUISetVal(hDlg, hSrc, 'ERTCustomFileTemplate', 'mbed_ert_file_process.tlc');
   slConfigUISetVal(hDlg, hSrc, 'CustomSource', '');
 
   % switch on dialog to be able to configure custom step/init function names

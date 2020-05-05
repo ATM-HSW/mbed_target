@@ -1,0 +1,9 @@
+{
+  "target_overrides": {
+    "*": {
+      "platform.stdio-convert-newlines": true,
+      "platform.stdio-baud-rate": 115200,
+      "target.features_remove": ["LWIP"]
+    }
+  }
+}

@@ -1,3 +1,3 @@
 [submodule "targets/mbed-os"]
 	path = targets/mbed-os
-url=https://github.com/ATM-HSW/mbed-os.git
+url=https://github.com/ATM-HSW/mbed-os-5.14.2.git

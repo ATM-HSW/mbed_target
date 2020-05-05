@@ -17,8 +17,8 @@ function sl_customization(cm)
 % disp('Mbed sl_customization called');
 
 cm.registerTargetInfo(@loc_createSerialConfig);
-cm.ExtModeTransports.add('mbed.tlc', 'tcpip',  'ext_comm', 'Level1');
-cm.ExtModeTransports.add('mbed.tlc', 'serial', 'ext_serial_win32_comm', 'Level1');
+cm.ExtModeTransports.add('mbed_ert.tlc', 'tcpip',  'ext_comm', 'Level1');
+cm.ExtModeTransports.add('mbed_ert.tlc', 'serial', 'ext_serial_win32_comm', 'Level1');
 
 % local function
 function config = loc_createSerialConfig
@@ -28,10 +28,10 @@ config.ConfigName = 'Mbed connectivity config using serial';
 config.ConfigClass = 'mbed.ConnectivityConfig';
 
 % matching system target file
-config.SystemTargetFile = {'mbed.tlc'};
+config.SystemTargetFile = {'mbed_ert.tlc'};
 
 % match template makefile
-config.TemplateMakefile = {'mbed.tmf'};
+config.TemplateMakefile = {'mbed_ert.tmf'};
 
 % match any hardware implementation
 config.TargetHWDeviceType = {};

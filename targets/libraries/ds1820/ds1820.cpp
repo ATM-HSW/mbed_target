@@ -91,7 +91,7 @@ int DS1820::convert_temperature(bool wait, devices device)
 
 	if(wait) 
 	{
-		wait_ms(delay_time);
+		thread_sleep_for(delay_time);
 		delay_time = 0;
 	}
 
